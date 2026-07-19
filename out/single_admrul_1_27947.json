@@ -1,0 +1,73 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-19",
+  "period": {
+    "from_date": "2016-07-21",
+    "to_date": "2036-07-16"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "single-27947-2100000276692",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "27947"
+      ],
+      "laws": [
+        {
+          "law_id": "27947",
+          "law_type": "행정규칙",
+          "law_name": "(계약예규) 물품구매(제조)계약일반조건",
+          "internal_name": "(계약예규) 물품구매(제조)계약일반조건",
+          "dept_codes": [
+            "재정경제부"
+          ],
+          "old_serial_no": "2100000276692",
+          "new_serial_no": "2100000276692",
+          "enforce_date": "2026-04-01",
+          "revision_type": "일부개정",
+          "revision_reason": "◇ 제ㆍ개정 이유 ㅇ 선금 제도 합리화 방안 발표에 따른 후속조치(경제관계장관회의, ‘26.2.25) ◇ 주요내용 가. 반복적인 목적외 사용으로 계약이행에 상당한 지장을 초래할 것이 명백한 경우 계약담당공무원은 계약해지 가능",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000276692&type=HTML",
+          "articles": [
+            {
+              "article_label": "제26조",
+              "clause_no": "①",
+              "item_label": "7.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "7. 기타 계약조건을 위반하고 그 위반으로 인하여 계약의 목적을 달성할 수 없다고 인정될 경우",
+              "new_text": "7. 「정부입찰ㆍ계약 집행기준」 제36조제2항에 따른 선금사용내역서를 확인한 결과, 선금의 반복적인 목적 외 사용으로 계약 이행에 상당한 지장을 초래할 것이 명백한 경우",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제26조",
+              "clause_no": "①",
+              "item_label": "8.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "8. 기타 계약조건을 위반하고 그 위반으로 인하여 계약의 목적을 달성할 수 없다고 인정될 경우",
+              "match_status": "성공"
+            }
+          ],
+          "unchanged_clauses": {
+            "제26조": [
+              "①1.",
+              "①2.",
+              "①3.",
+              "①4.",
+              "①5.",
+              "①6.",
+              "②",
+              "③",
+              "④"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

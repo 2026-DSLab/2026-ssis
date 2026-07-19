@@ -153,6 +153,70 @@ class TestMassSubstitution:
         assert results[0].status is LocateStatus.SUCCESS
 
 
+class TestAnnotationStripping:
+    """★★ 실측(2026-07-16, (계약예규) 예정가격작성기준): 조문 문장 중간에
+    "<개정 2011.5.13., 2015.9.21., 2025.5.1.>" 같은 개정이력 각주가 섞여
+    있으면, 그 안의 날짜 조각("5.13." "9.21.")이 호 번호 패턴과 우연히
+    겹쳐 엉뚱하게 분해되어 검색에 실패했다. locate_change가 검색 직전에
+    이런 <...> 각주를 걷어내야 한다."""
+
+    def test_revision_annotation_with_dates_does_not_break_search(self):
+        old = (
+            "②일반관리비는 직접공사비와 간접공사비의 합계액에 일반관리비율을 "
+            "곱하여 계산한다. <개정 2011.5.13., 2015.9.21.>"
+        )
+        new = (
+            "일반관리비는 직접공사비와 간접공사비의 합계액에 일반관리비율을 "
+            "곱하여 계산한다. <개정 2011.5.13., 2015.9.21., 2025.5.1.>"
+        )
+        change = build_change(0, old, new)
+        units = [
+            unit(
+                "20", text="일반관리비는 직접공사비와 간접공사비의 합계액에 "
+                            "일반관리비율을 곱하여 계산한다.",
+            ),
+        ]
+        results = locate_change(change, units)
+        assert len(results) == 1
+        assert results[0].status is LocateStatus.SUCCESS
+
+    def test_img_tag_does_not_break_search(self):
+        old = "기존 표시 방법"
+        new = '비밀을 접수한 기관이 표시한다.<img id="160236309"></img>'
+        change = build_change(0, old, new)
+        units = [unit("9", text="비밀을 접수한 기관이 표시한다.")]
+        results = locate_change(change, units)
+        assert len(results) == 1
+        assert results[0].status is LocateStatus.SUCCESS
+
+    def test_bracket_annotation_does_not_break_search(self):
+        """실측(2026-07-16, (계약예규) 정부 입찰ㆍ계약 집행기준): "[본조신설
+        2018.3.20.][종전 제99조는 제100조로 이동…]" 처럼 대괄호로 감싼
+        조문 이력 각주도 검색 전에 제거돼야 한다."""
+        old = "시행령 제26조부터 제30조까지에 따라 체결하는 수의계약."
+        new = (
+            "시행령 제26조부터 제30조까지에 따라 체결하는 수의계약.[본조신설 "
+            "2018.3.20.][종전 제99조는 제100조로 이동  ]"
+        )
+        change = build_change(0, old, new)
+        units = [unit("100", clause="③", text="시행령 제26조부터 제30조까지에 따라 체결하는 수의계약.")]
+        results = locate_change(change, units)
+        assert len(results) == 1
+        assert results[0].status is LocateStatus.SUCCESS
+
+    def test_unclosed_trailing_annotation_does_not_break_search(self):
+        """실측(2026-07-16, (계약예규) 협상에 의한 계약체결기준): oldAndNew
+        블록 경계에서 "<개정 2020.9.24." 처럼 닫는 ">" 없이 각주가 잘리는
+        경우가 있다. 닫는 괄호가 없어도 문자열 끝까지 제거돼야 한다."""
+        old = "제안서를 계약담당공무원에게 제출하여야 한다."
+        new = "제안서를 계약담당공무원에게 제출하여야 한다. <개정 2020.9.24."
+        change = build_change(0, old, new)
+        units = [unit("6", clause="①", text="제안서를 계약담당공무원에게 제출하여야 한다.")]
+        results = locate_change(change, units)
+        assert len(results) == 1
+        assert results[0].status is LocateStatus.SUCCESS
+
+
 class TestAggregation:
     def test_locate_all_and_summarize(self):
         c1 = build_change(0, "<P>구1</P>", "<P>신규매칭될문구</P>")

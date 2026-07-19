@@ -1,0 +1,56 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-19",
+  "period": {
+    "from_date": "2016-07-21",
+    "to_date": "2036-07-16"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "single-013242-231661",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "013242"
+      ],
+      "laws": [
+        {
+          "law_id": "013242",
+          "law_type": "법률",
+          "law_name": "재외국민보호를 위한 영사조력법",
+          "internal_name": "영사조력법",
+          "dept_codes": [],
+          "old_serial_no": "231661",
+          "new_serial_no": "231661",
+          "enforce_date": "2021-04-20",
+          "revision_type": "일부개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 일반 국민이 법률을 보다 쉽게 이해할 수 있도록 일본식 한자어인 \"지불\"을 우리말 어법에 맞는 \"지급\"으로 순화하려는 것임. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=231661&type=HTML",
+          "articles": [
+            {
+              "article_label": "제19조",
+              "clause_no": "③",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "③ 외교부장관은 제1항 단서에 해당하지 아니하는 재외국민이 제1항 본문에 따라 자신이 부담하여야 할 비용을 즉시 지불하기 곤란한 경우로서 해외위난상황으로부터 해당 재외국민을 안전한 지역으로 이동시키기 위한 수단을 투입하는 경우에는 그 비용을 대신하여 지급할 수 있다. 이 경우 해당 재외국민은 외교부장관이 합리적인 범위 내에서 청구하는 비용을 상환하여야 한다.",
+              "new_text": "외교부장관은 제1항 단서에 해당하지 아니하는 재외국민이 제1항 본문에 따라 자신이 부담하여야 할 비용을 즉시 지급하기 곤란한 경우로서 해외위난상황으로부터 해당 재외국민을 안전한 지역으로 이동시키기 위한 수단을 투입하는 경우에는 그 비용을 대신하여 지급할 수 있다. 이 경우 해당 재외국민은 외교부장관이 합리적인 범위 내에서 청구하는 비용을 상환하여야 한다.",
+              "match_status": "성공"
+            }
+          ],
+          "unchanged_clauses": {
+            "제19조": [
+              "①",
+              "②",
+              "④",
+              "⑤"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

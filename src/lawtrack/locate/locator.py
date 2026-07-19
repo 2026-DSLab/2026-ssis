@@ -36,7 +36,13 @@ from enum import Enum
 from lawtrack.parse.fulltext import SearchUnit
 from lawtrack.parse.oldnew import ArticleChange, ChangeType
 from lawtrack.text.normalize import count_occurrences
-from lawtrack.text.split import Fragment, Level, searchable_fragments, strip_article_head
+from lawtrack.text.split import (
+    Fragment,
+    Level,
+    searchable_fragments,
+    strip_annotations,
+    strip_article_head,
+)
 
 log = logging.getLogger(__name__)
 
@@ -143,7 +149,7 @@ def locate_change(change: ArticleChange, units: list[SearchUnit]) -> list[Locate
             )
         ]
 
-    search_text = strip_article_head(change.new_clean)
+    search_text = strip_annotations(strip_article_head(change.new_clean))
     fragments = searchable_fragments(search_text)
     if not fragments:
         # 항/호 기호가 없는 단문 — 전체를 하나의 조각으로 취급.

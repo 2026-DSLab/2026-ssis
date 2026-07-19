@@ -76,12 +76,89 @@ class TestItemSplit:
         frags = split_by_item(text)
         assert len(frags) == 1  # 쪼개지지 않아야 함
 
+    def test_section_reference_not_mistaken_for_item(self):
+        """★★ 실측(2026-07-16, 조달청 협상에 의한 계약 제안서평가 세부기준
+        제9조①): 다른 문서의 장/절/관/편 하위번호를 가리키는 참조 표현
+        ("제7장 제3절의 4.(제안서의 평가)")이 이 조문 자체의 호 번호로
+        오인되면 안 된다. 실제로는 단어 하나("기획재정부"→"재정경제부")만
+        바뀐 안 쪼개져도 될 문장이었는데, 이 오인 때문에 둘로 쪼개지고
+        old_text가 양쪽에 전체 문장 그대로 중복 삽입되는 결과를 냈다."""
+        text = (
+            "행정안전부 예규 「지방자치단체 입찰시 낙찰자 결정기준」 제7장 "
+            "제3절의 4.(제안서의 평가)에 따른 분야별 배점한도를 기준으로 한다."
+        )
+        frags = split_by_item(text)
+        assert len(frags) == 1  # 쪼개지지 않아야 함
+
+    def test_real_item_after_section_word_still_splits(self):
+        """참조표현 방지 lookbehind가 진짜 호 목록까지 막으면 안 된다 —
+        "절"/"장" 등의 단어와 무관한 위치의 정상적인 호 나열은 그대로 쪼개져야."""
+        text = "1. 첫째 절차 2. 둘째 절차"
+        frags = split_by_item(text)
+        assert [f.marker for f in frags] == ["1.", "2."]
+
+    def test_paren_enclosed_reference_number_not_mistaken_for_item(self):
+        """★★ 실측(2026-07-18, 정보보호 및 개인정보보호 관리체계 인증 등에
+        관한 고시 제23조③2.): "별표 7의2 가목(1.1.2. 항목 제외) 및 나목"
+        처럼 괄호 안에 다른 문서(별표)의 세부항목 번호를 가리키는 참조
+        표현이 있으면, 그 안의 "1."이 진짜 호 경계로 오인되어 호2가
+        괄호 중간에서 잘리고 괄호 안 내용이 가짜 "호 1."로 떨어져
+        나갔었다."""
+        text = (
+            "1. 정보보호 및 개인정보보호 관리체계 인증 : 별표 7의2 가목부터 다목  "
+            "2. 정보보호 관리체계 인증 : 별표 7의2 가목(1.1.2. 항목 제외) 및 나목"
+        )
+        frags = split_by_item(text)
+        assert [f.marker for f in frags] == ["1.", "2."]
+        assert frags[1].text == "정보보호 관리체계 인증 : 별표 7의2 가목(1.1.2. 항목 제외) 및 나목"
+
+    def test_real_item_immediately_after_closing_paren_still_splits(self):
+        """대칭 회귀 방지: 괄호가 닫힌 *바로 다음*에 오는 진짜 호 경계는
+        마스킹의 영향을 받지 않고 정상적으로 쪼개져야 한다."""
+        text = "1. 내용(참고) 2. 다음 내용"
+        frags = split_by_item(text)
+        assert [f.marker for f in frags] == ["1.", "2."]
+
 
 class TestSubItemSplit:
     def test_korean_markers(self):
         text = "가. 첫째 목 나. 둘째 목 다. 셋째 목"
         frags = split_by_subitem(text)
         assert [f.marker for f in frags] == ["가.", "나.", "다."]
+
+    def test_sentence_ending_not_mistaken_for_subitem(self):
+        """실측(전자정부법 제56조의2 항①): '포함한다.'의 '다.'가 목 기호
+        '다.'와 우연히 겹쳐, 문장 중간이 잘리면 안 된다."""
+        text = (
+            "중앙사무관장기관의 장은 행정기관등의 장이 정보시스템(정보시스템 "
+            "운영시설을 포함한다. 이하 이 조에서 같다) 장애관리를 위한 계획을 "
+            "작성하여야 한다."
+        )
+        assert split_by_subitem(text) == []
+
+    def test_glued_subitems_after_sentence_ending_false_positive(self):
+        """실측(전자정부법 제2조제11호): 목 마커가 앞 목 내용에 공백 없이
+        바로 붙어있고(정보나.), 그 앞쪽 전제문에는 '말한다.'/'한정한다.'처럼
+        가짜 '다.' 후보가 섞여 있어도, 진짜 가~바 목록만 분해되어야 한다."""
+        text = (
+            "11.  “정보자원”이란 행정기관등이 보유하거나 이용하는 다음 각 목의 "
+            "자원을 말한다. 다만, 이용하는 경우에는 나목부터 라목까지에 "
+            "한정한다.가. 행정정보나. 정보시스템다. 정보시스템의 구축에 적용되는 "
+            "정보기술라. 정보시스템의 운영에 필요한 건축물 및 건축설비(이하 "
+            "“정보시스템 운영시설”이라 한다)마. 정보화 예산바. 정보화 인력"
+        )
+        frags = split_by_subitem(text)
+        markers = [f.marker for f in frags]
+        # 목록 시작 전 전제문("…한정한다.")은 마커 없는 조각으로 앞에 남는다.
+        assert markers == [None, "가.", "나.", "다.", "라.", "마.", "바."]
+        assert "정보자원" in frags[0].text
+        assert frags[1].text == "행정정보"
+
+    def test_single_stray_marker_not_treated_as_list(self):
+        """목 마커처럼 보이는 글자가 문장 안에 달랑 하나뿐이면 목록으로
+        보지 않는다 — 최소 2개 이상 증가하는 나열이어야 인정."""
+        text = "이 조에서 같다) 이러한 절차를 거쳐야 한다."
+        assert split_by_subitem(text) == []
 
 
 class TestSplitAll:
@@ -93,6 +170,21 @@ class TestSplitAll:
     def test_empty(self):
         assert split_all("") == []
         assert split_all("   ") == []
+
+    def test_single_item_still_splits_subitems(self):
+        """실측(전자정부법 제2조제11호): 블록 안에 호가 정확히 1개뿐이어도
+        그 호에 딸린 목 분해가 건너뛰어지면 안 된다. 예전엔 items 개수가
+        1개면 '분해 불필요'로 보고 통째로 되돌려, 목 분해가 통째로
+        생략되는 버그가 있었다."""
+        text = (
+            "11. 정보자원이란 다음 각 목의 자원을 말한다.가. 행정정보나. "
+            "정보시스템다. 정보기술라. 건축물마. 예산바. 인력"
+        )
+        frags = split_all(text)
+        markers = [f.marker for f in frags]
+        assert markers == [None, "가.", "나.", "다.", "라.", "마.", "바."]
+        # 전제문("11. 정보자원이란…")도 별도 조각으로 살아있어야 검색 가능
+        assert any(f.marker is None and "정보자원" in f.text for f in frags)
 
 
 class TestArticleNo:

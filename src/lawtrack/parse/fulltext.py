@@ -15,9 +15,9 @@
         → ✅ 실측 확인된 필드명 (국민기초생활보장법 시행규칙,
            아동복지법 응답에서 직접 확인)
 
-    목(目) 레벨 필드명(목번호/목내용 등)
-        → ❓ 미확인. 호와 동일한 패턴으로 추정해 구현했으나,
-           실제 응답 확인 후 조정 필요.
+    목(目) 레벨 필드명(목번호/목내용)
+        → ✅ 실측 확인됨 (2026-07-16, 전자정부법 MST=268103 제2조제3호·
+           제9호). 호와 동일 패턴("목번호"/"목내용")이 맞았다.
 
     상위 경로("조문" 밑에 바로 항목 리스트가 오는지, "조문단위"라는
     한 겹이 더 있는지)
@@ -30,7 +30,17 @@ import logging
 from dataclasses import dataclass, field
 
 from lawtrack.parse.jsonutil import as_list, dig, find_key, text_of
-from lawtrack.text.split import ArticleNo, article_title, strip_article_head
+from lawtrack.text.split import (
+    ArticleNo,
+    Fragment,
+    Level,
+    article_title,
+    split_by_clause,
+    split_by_item,
+    split_by_subitem,
+    strip_annotations,
+    strip_article_head,
+)
 
 log = logging.getLogger(__name__)
 
@@ -41,7 +51,7 @@ _ARTICLE_LIST_PATHS: tuple[tuple[str, ...], ...] = (
 
 
 @dataclass(frozen=True)
-class SubItemNode:  # 목 — ❓ 필드명 미확인, 호와 동일 패턴으로 추정
+class SubItemNode:  # 목 — 필드명(목번호/목내용) 실측 확인됨
     label: str
     text: str
 
@@ -215,7 +225,7 @@ def _parse_clause(raw_clause: dict) -> ClauseNode:
 def _parse_item(raw_item: dict) -> ItemNode:
     if not isinstance(raw_item, dict):
         raw_item = {}
-    # 목(目) 필드명 미확인 — "목" 키 자체의 존재 여부부터 방어적으로 확인.
+    # 목(目) 필드명(목번호/목내용) 실측 확인됨 — "목" 키 존재 여부는 방어적으로 확인.
     subitems = tuple(_parse_subitem(s) for s in as_list(raw_item.get("목")))
     return ItemNode(
         no=text_of(raw_item.get("호번호")),
@@ -225,7 +235,7 @@ def _parse_item(raw_item: dict) -> ItemNode:
     )
 
 
-def _parse_subitem(raw_sub) -> SubItemNode:  # ❓ 필드명 미확인, 호 패턴 추정
+def _parse_subitem(raw_sub) -> SubItemNode:  # 필드명(목번호/목내용) 실측 확인됨
     if not isinstance(raw_sub, dict):
         return SubItemNode(label="", text=text_of(raw_sub))
     label = text_of(raw_sub.get("목번호") or raw_sub.get("목가지번호"))
@@ -244,6 +254,24 @@ def _find_root(raw: dict) -> dict:
 # 검색 트리 평탄화
 # ---------------------------------------------------------------------------
 
+def _unit_article_code(art: ArticleUnit) -> str:
+    """SearchUnit.article_code 생성 — 조문가지번호까지 포함해 article당 고유해야 함.
+
+    ★★ 실측 발견(2026-07-16, contract/export.py 실데이터 검증): art.code는
+    "조문번호"(순수 조번호, 예: "56")뿐이라 제56조/제56조의2/…/제56조의6이
+    전부 같은 article_code="56"을 공유했다. article_diff의 UNIQUE KEY가
+    (law_id, law_serial_no, article_code, clause_no, item_label,
+    subitem_label)이고 article_label은 ON DUPLICATE KEY UPDATE 대상이
+    아니어서, 여러 조문의 같은 항번호(예: 둘 다 "①")가 전부 같은 키로
+    충돌 — 먼저 들어간 행의 article_label은 그대로 남은 채 change_type/
+    old_text/new_text/match_status만 나중 값으로 덮어써지는 심각한 버그가
+    있었다(실측: 제56조의5① 의 내용이 "제56조의2①"라는 라벨을 달고
+    저장됨). art.label("제56조의2" 등)은 이미 조번호+가지번호 조합이라
+    article당 고유하므로 그대로 code로 재사용한다.
+    """
+    return art.label
+
+
 def flatten_searchable(articles: list[ArticleUnit]) -> list[SearchUnit]:
     """locate 단계가 순회할 최소 검색 단위 리스트.
 
@@ -254,51 +282,181 @@ def flatten_searchable(articles: list[ArticleUnit]) -> list[SearchUnit]:
     """
     units: list[SearchUnit] = []
     for art in articles:
+        code = _unit_article_code(art)
+        # ★★ 실측 발견(2026-07-16, 공공기관의 정보공개에 관한 법률 제22조):
+        # 항 없이 호가 조문에 바로 붙는 구조("항" JSON 키가 실제 항번호/
+        # 항내용 없이 "호" 배열만 담은 빈 컨테이너)가 있다. 이 경우
+        # art.clauses 는 비어있지 않으므로(빈 ClauseNode 하나) 아래
+        # "항이 없는 조문" 분기를 안 타는데, 정작 조문 자신의 도입부 문장
+        # ("다음 각 호의 사항을 심의ㆍ조정하기 위하여…")은 그 어떤 항/호
+        # 필드에도 없고 오직 art.content 에만 있다 — 항/호 레벨에서 이미
+        # 두 번 겪은 "자식이 있으면 부모 텍스트가 통째로 사라지는" 문제의
+        # 세 번째 사례(조문→항 레벨)다. 항 유무와 무관하게 조문 자체도
+        # 항상 검색 유닛으로 추가한다(정상적인 다항 조문에서는 content가
+        # 헤더뿐이라 strip 후 빈 문자열이 되어 무해하다).
+        head_body = strip_article_head(art.content) if art.content else ""
+        if head_body:
+            units.append(
+                SearchUnit(
+                    article_code=code, article_label=art.label,
+                    clause_no="", item_label="", subitem_label="",
+                    text=head_body, changed=art.changed,
+                    enforce_date=art.enforce_date,
+                )
+            )
         if not art.clauses:
             # ★ 수정: 항이 없는 단일 문단형 조문은 title(짧은 괄호 제목)이
             # 아니라 content(조문내용 전체)에서 헤더만 뗀 본문을 써야 한다.
             # 실측: 제56조의6(항 없음)에서 title만 쓰면 본문이 통째로
-            # 유실되어 검색이 항상 0건실패로 죽는 버그가 있었다.
-            body = strip_article_head(art.content) if art.content else (art.title or "")
-            units.append(
-                SearchUnit(
-                    article_code=art.code, article_label=art.label,
-                    clause_no="", item_label="", subitem_label="",
-                    text=body, changed=art.changed,
-                    enforce_date=art.enforce_date,
-                )
-            )
-            continue
-        for clause in art.clauses:
-            if not clause.items:
+            # 유실되어 검색이 항상 0건실패로 죽는 버그가 있었다. 위에서
+            # 이미 head_body 로 처리했으므로, content 가 비어 title만
+            # 있는 경우에만 보강한다.
+            if not head_body and art.title:
                 units.append(
                     SearchUnit(
-                        article_code=art.code, article_label=art.label,
-                        clause_no=clause.no, item_label="", subitem_label="",
-                        text=clause.text, changed=art.changed,
+                        article_code=code, article_label=art.label,
+                        clause_no="", item_label="", subitem_label="",
+                        text=art.title, changed=art.changed,
                         enforce_date=art.enforce_date,
                     )
                 )
+            continue
+        for clause in art.clauses:
+            # ★ 실측(전자정부법 제56조의2 항①): 호가 있는 항이라도 항내용
+            # 필드 자체에 호 목록 전에 나오는 전제문(예: "…통보하여야 한다.")이
+            # 실질적인 내용을 담고 있을 수 있다. 호가 있다고 이 텍스트를
+            # 건너뛰면, 전제문 안에서 바뀐 부분은 영원히 위치확정에 실패한다.
+            # 그래서 호 유무와 무관하게 항 자체도 항상 검색 유닛으로 추가한다.
+            units.append(
+                SearchUnit(
+                    article_code=code, article_label=art.label,
+                    clause_no=clause.no, item_label="", subitem_label="",
+                    text=clause.text, changed=art.changed,
+                    enforce_date=art.enforce_date,
+                )
+            )
+            if not clause.items:
                 continue
             for item in clause.items:
-                if not item.subitems:
-                    units.append(
-                        SearchUnit(
-                            article_code=art.code, article_label=art.label,
-                            clause_no=clause.no, item_label=item.label, subitem_label="",
-                            text=item.text, changed=art.changed,
-                            enforce_date=art.enforce_date,
-                        )
+                # ★ 실측(전자정부법 제2조제11호): 목이 있는 호도 호내용 필드
+                # 자체에 목 목록 전의 전제문("…다음 각 목의 자원을 말한다.
+                # 다만…")이 실질 내용을 담고 있을 수 있다. 항 레벨과 동일한
+                # 이유로, 목 유무와 무관하게 호 자체도 항상 유닛으로 추가한다.
+                units.append(
+                    SearchUnit(
+                        article_code=code, article_label=art.label,
+                        clause_no=clause.no, item_label=item.label, subitem_label="",
+                        text=item.text, changed=art.changed,
+                        enforce_date=art.enforce_date,
                     )
+                )
+                if not item.subitems:
                     continue
                 for sub in item.subitems:
                     units.append(
                         SearchUnit(
-                            article_code=art.code, article_label=art.label,
+                            article_code=code, article_label=art.label,
                             clause_no=clause.no, item_label=item.label,
                             subitem_label=sub.label,
                             text=sub.text, changed=art.changed,
                             enforce_date=art.enforce_date,
+                        )
+                    )
+    return units
+
+
+def parse_admrul_units(raw: dict) -> list[SearchUnit]:
+    """행정규칙 본문(조문내용) → 검색 유닛 목록.
+
+    ★★ 실측 발견(2026-07-16, 15개 행정규칙 실제 개정 시뮬레이션 검증):
+    행정규칙 본문조회 응답은 법령과 구조가 완전히 다르다. 법령은
+    조문/항/호/목이 JSON 트리로 미리 쪼개져 있어 parse_articles가 그
+    구조를 그대로 읽으면 되지만, 행정규칙은 "AdmRulService.조문내용"
+    이라는 평문 문자열 배열 하나뿐이다. 조문 하나가 배열의 원소 하나이긴
+    하지만, 그 안의 항①②③/호1.2.3./목가.나.다.는 전혀 분리돼 있지 않고
+    (예: "제5조(사용언어) ① 계약을 이행함에 있어서는… ② 계약담당공무원은…")
+    한 줄에 통째로 이어붙어 있다. "제1장 총칙" 같은 장(章) 제목도 조문과
+    같은 배열에 섞여 있어 걸러내야 한다.
+
+    이 사실을 몰랐을 때는 parse_articles(법령 전용)를 행정규칙에도 그대로
+    썼는데, "조문"/"조문단위" 키가 없어 조문을 0건 찾고, 그 결과 검색
+    대상 유닛이 하나도 없어 모든 위치확정이 100% 실패했다(실측: 15개
+    행정규칙 시뮬레이션에서 5개 전부 succ=0).
+
+    해결: oldAndNew 조각을 자르는 데 이미 쓰던 text.split의 항/호/목
+    분해기(split_by_clause/item/subitem, 목 리스트 오탐 방지 로직 포함)를
+    본문 자체에도 그대로 적용해 SearchUnit을 직접 만든다. 법령 쪽과 달리
+    "항 자체 텍스트를 늘 별도 유닛으로 추가"하지 않는다 — 항 텍스트가
+    JSON 필드처럼 호 내용과 분리돼 있지 않고 통째로 한 덩어리이므로,
+    항 유닛과 호 유닛을 둘 다 만들면 호 내용을 포함한 중복(상위집합)
+    유닛이 생겨 불필요한 중복매칭을 유발한다. split_by_item이 반환하는
+    "호 기호 이전 전제문" 조각(Level.NONE)이 이미 그 역할을 대신한다.
+
+    ★ 실측 추가 발견(보안업무규정 시행규칙, law_id=9008822): 같은 평문
+    배열이 루트 바로 아래("AdmRulService.조문내용")가 아니라 "조문" 한
+    겹 아래("AdmRulService.조문.조문내용")에 오는 경우도 있다(조문이
+    1건뿐일 때 dict로 오는 admrul 특유의 패턴과 유사). 두 경로를 다
+    시도한다.
+    """
+    root = raw.get("AdmRulService", raw)
+    lines = as_list(root.get("조문내용"))
+    if not lines:
+        nested = root.get("조문")
+        if isinstance(nested, dict):
+            lines = as_list(nested.get("조문내용"))
+
+    units: list[SearchUnit] = []
+    for raw_line in lines:
+        text = text_of(raw_line)
+        if not text:
+            continue
+        no = ArticleNo.from_text(text)
+        if no is None:
+            continue  # "제1장 총칙" 같은 장 제목 — 조문이 아니므로 건너뜀
+        article_label = no.label
+        # ★★ 실측 발견(2026-07-16, (계약예규) 정부 입찰ㆍ계약 집행기준
+        # 제34조④): 행정규칙 평문 본문에는 "<개정 2008.12.29.>" 같은
+        # 개정이력 각주가 항/호/목 사이사이에 그대로 섞여 있다. 이걸 안
+        # 지우고 split_by_item/split_by_subitem 에 넘기면 각주 속 날짜
+        # 조각("2008." 등)이 진짜 호 번호로 오인되고, 그 여파로 목 분해
+        # 시작 위치까지 틀어진다. locator.py 는 이미 검색 직전에
+        # strip_annotations 를 적용하지만, 여기서 만드는 SearchUnit 자체가
+        # 오염된 조각으로 쪼개지면 그 시점에 손쓸 수 없으므로 분해 전에
+        # 미리 제거한다.
+        body = strip_annotations(strip_article_head(text))
+
+        clauses = split_by_clause(body) or [Fragment(Level.NONE, None, body, body)]
+        for clause in clauses:
+            clause_no = clause.marker or ""
+            items = split_by_item(clause.text)
+            if not items:
+                units.append(
+                    SearchUnit(
+                        article_code=article_label, article_label=article_label,
+                        clause_no=clause_no, item_label="", subitem_label="",
+                        text=clause.text, changed=True,
+                    )
+                )
+                continue
+            for item in items:
+                item_label = item.marker or ""
+                subs = split_by_subitem(item.text)
+                if not subs:
+                    units.append(
+                        SearchUnit(
+                            article_code=article_label, article_label=article_label,
+                            clause_no=clause_no, item_label=item_label, subitem_label="",
+                            text=item.text, changed=True,
+                        )
+                    )
+                    continue
+                for sub in subs:
+                    units.append(
+                        SearchUnit(
+                            article_code=article_label, article_label=article_label,
+                            clause_no=clause_no, item_label=item_label,
+                            subitem_label=sub.marker or "",
+                            text=sub.text, changed=True,
                         )
                     )
     return units

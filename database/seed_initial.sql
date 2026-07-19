@@ -1,4 +1,18 @@
--- 법령·행정규칙 초기 적재 SQL
+-- ⚠️ 실행하지 마시오 (2026-07-19) ⚠️
+--
+-- 이 파일은 laws/administrative_rules 에 law_full_text=JSON_OBJECT()(빈 값)로
+-- 행을 미리 채워 넣는데, 이 프로젝트의 개정감지는 정확히 "(law_id, 현재
+-- 일련번호) 조합이 laws/administrative_rules 에 이미 존재하는가"로 판단한다
+-- (VersionRepo.law_exists/admrul_exists). 이 파일을 실행하면 실제 전문 없이
+-- "이미 처리 완료"로 표시된 가짜 행이 생겨, 해당 항목들이 영원히 "변경없음"
+-- 으로만 보고되고 전문/diff가 절대 채워지지 않는다. 이걸 보완하려던
+-- scripts/load_full_text.py 도 끝내 구현되지 않고 0바이트로 남아있다.
+--
+-- 최초 DB 구축은 README.md 의 순서(schema.sql → seed_watchlist.sql →
+-- scripts/run_weekly.py)를 따른다 — laws/administrative_rules 는 비워둔
+-- 채로 시작해야 run_weekly.py 의 첫 실행이 전체를 정상적으로 백필한다.
+--
+-- 법령·행정규칙 초기 적재 SQL (사용 안 함 — 위 경고 참고)
 -- 전문 JSON은 우선 빈 JSON 객체로 저장하고, 별도 Python 스크립트로 API 전문을 업데이트합니다.
 USE law_tracking_db;
 

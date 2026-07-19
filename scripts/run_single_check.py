@@ -26,7 +26,7 @@ from lawtrack.db.repo import (
     VersionRepo,
     WatchlistRepo,
 )
-from lawtrack.detect import DetectStatus, process_law_entry
+from lawtrack.detect import DetectStatus, process_entry
 
 log = logging.getLogger("run_single_check")
 
@@ -98,7 +98,7 @@ def main() -> int:
 
     print("\n--- API 호출 시작 (실제 국가법령정보 서버) ---")
     try:
-        outcome = process_law_entry(
+        outcome = process_entry(
             client, version_repo, watchlist_repo, change_log_repo, article_diff_repo, entry,
         )
     except LawApiError as exc:

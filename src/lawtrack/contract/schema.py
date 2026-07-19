@@ -39,7 +39,16 @@ class ArticleDiffItem(BaseModel):
     change_type: str = Field(..., description="개정 | 신설 | 삭제 | 미상")
     old_text: str = ""
     new_text: str = ""
-    match_status: str = Field(..., description="성공 | 삭제(위치탐색제외)")
+    match_status: str = Field(
+        ...,
+        description=(
+            "성공 | 삭제(위치탐색제외) | 위치재배치의심(항 신설로 조번호가 밀려 "
+            "old_text/new_text가 서로 다른 조항의 내용일 수 있음 — 법제처 "
+            "원본 신구조문대비표가 조번호 재배치를 위치 기준으로만 대응시켜 "
+            "제공하기 때문. 이 값이면 old_text를 '개정 전 같은 조항'으로 "
+            "신뢰하지 말 것)"
+        ),
+    )
 
     @property
     def location_label(self) -> str:
@@ -64,6 +73,18 @@ class LawChange(BaseModel):
     )
     source_url: str = ""
     articles: list[ArticleDiffItem] = Field(default_factory=list)
+    unchanged_clauses: dict[str, list[str]] = Field(
+        default_factory=dict,
+        description=(
+            "개정된 조문 중 이번에 안 바뀐 항/호(현행) 라벨. 예: "
+            '{"제34조": ["①","②","③"]}. 법령은 법제처 항제개정유형 공식 '
+            "필드 기준(항 라벨만), 행정규칙은 신구법 비교의 "
+            "\"(생략)/(현행과 같음)\" 스킵 표시 기준(항 또는 호 라벨) — "
+            "두 경우 모두 법제처 원본이 준 사실이며 추론이 아니다. 스킵 "
+            "표시가 없거나 해당 조문이 이번에 CHANGED로 감지되지 않았으면 "
+            "비어 있다."
+        ),
+    )
 
     @field_validator("new_serial_no")
     @classmethod

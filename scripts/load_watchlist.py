@@ -41,6 +41,15 @@ RENAME = {
     '사회보장급여법': '사회보장급여의 이용ㆍ제공 및 수급권자 발굴에 관한 법률',
     '사회서비스원법': '사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률',
     '위기아동청년법': '가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률',
+    # ★ 2026-07-16 실측 추가분: 가운뎃점(ㆍ) 누락 오타 (제명변경 아님, 처음부터 오타)
+    '초중등교육법': '초ㆍ중등교육법',
+    '저출산고령사회기본법': '저출산ㆍ고령사회기본법',
+    # ★ 2026-07-16 실측 추가분 (행정규칙 2건):
+    #   접두어 '(행정안전부)'는 API 정식명칭에 없음 — 그대로 두면 검색 0건으로 계속 실패.
+    '(행정안전부) 정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시':
+        '정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시',
+    #   제명변경: "...지침" → "...등에 관한 고시"
+    '정보보호시스템 평가·인증 지침': '정보보호시스템 평가·인증 등에 관한 고시',
 }
 
 LAWS = [
@@ -86,6 +95,7 @@ LAWS = [
     ('의료·요양 등 지역 돌봄의 통합지원에 관한 법', '014633', '265469'),
     ('의료급여법', '001780', '252715'),
     ('장애인·노인·임산부 등의 편의증진 보장에 관한 법', '000186', '267429'),
+    ('장애인연금법', '011181', '276683'),
     ('장애인활동 지원에 관한 법', '011330', '267431'),
     ('재난적의료비 지원에 관한 법률', '013070', '249317'),
     ('저출산고령사회기본법', '009933', '259255'),
@@ -117,7 +127,8 @@ ADMRULES = [
     ('장애인·고령자 등의 정보 접근 및 이용 편의 증진을 위한 고시', '2036973', '2100000266100'),
     ('전자정부사업관리 위탁에 관한 규정', '42496', '2100000243326'),
     ('전자정부사업관리 위탁용역계약 특수조건', '43010', '2100000243334'),
-    ('전자정부서비스 호환성 준수지침', '42433', '2100000260906'),
+    ('행정업무용 표준 관리규정', '42430', '2100000254490'),
+    ('전자정부서비스 호환성 준수지침', '42433', '2100000260906'),  # ★교정됨: 제명변경 (RENAME 참고)
     ('정보보호시스템 평가·인증 지침', '33891', '2100000215508'),
     ('정보시스템 감리기준', '33483', '2100000243290'),
     ('조달청 내자구매업무 처리규정', '36967', '2100000280340'),
@@ -128,6 +139,15 @@ ADMRULES = [
     ('하도급거래공정화 지침', '35080', '2100000251404'),
     ('행정기관 및 공공기관 정보시스템 구축·운영 지침', '33489', '2100000252582'),
 ]
+
+# ★ 2026-07-16 실측 추가: dept_codes(행정규칙은 부처명) — 동명이인 행정규칙
+#   오염 방지용(detect.py의 detect_admrul 이 이 값을 dept_name 완전일치
+#   조건으로 씀). rule_id 기준.
+ADMRUL_DEPT = {
+    '27944': '재정경제부', '27945': '재정경제부', '27946': '재정경제부',
+    '27947': '재정경제부', '27949': '재정경제부', '34470': '재정경제부',
+    '42433': '행정안전부', '42430': '행정안전부',
+}
 
 
 def law_type_of(name: str) -> str:
@@ -154,18 +174,20 @@ def main() -> int:
         INSERT INTO watchlist (
             law_id, law_type, official_name, internal_name,
             dept_codes, status, last_serial_no, last_checked_at
-        ) VALUES (%s, %s, %s, %s, NULL, '현행', %s, NOW())
+        ) VALUES (%s, %s, %s, %s, %s, '현행', %s, NOW())
         ON DUPLICATE KEY UPDATE
             official_name = VALUES(official_name),
-            internal_name = VALUES(internal_name)
+            internal_name = VALUES(internal_name),
+            dept_codes = VALUES(dept_codes)
     """
 
     rows = []
     for name, law_id, serial in LAWS:
         official = RENAME.get(name, name)
-        rows.append((law_id, law_type_of(official), official, name, serial))
+        rows.append((law_id, law_type_of(official), official, name, None, serial))
     for name, rule_id, serial in ADMRULES:
-        rows.append((rule_id, '행정규칙', name, name, serial))
+        official = RENAME.get(name, name)
+        rows.append((rule_id, '행정규칙', official, name, ADMRUL_DEPT.get(rule_id), serial))
 
     print(f"{len(rows)}건 적재 중...")
     cur.executemany(sql, rows)

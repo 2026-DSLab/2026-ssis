@@ -1,0 +1,49 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-19",
+  "period": {
+    "from_date": "2016-07-21",
+    "to_date": "2036-07-16"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "single-43010-2100000243334",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "43010"
+      ],
+      "laws": [
+        {
+          "law_id": "43010",
+          "law_type": "행정규칙",
+          "law_name": "전자정부사업관리 위탁용역계약 특수조건",
+          "internal_name": "전자정부사업관리 위탁용역계약 특수조건",
+          "dept_codes": [],
+          "old_serial_no": "2100000243334",
+          "new_serial_no": "2100000243334",
+          "enforce_date": "2024-06-27",
+          "revision_type": "일부개정",
+          "revision_reason": "◇ 제ㆍ개정 이유 - 재검토 기한 만료에 따른 기한 재설정 ◇ 주요내용 가. 재검토 기한 설정에 관한 사항 - 기존에 설정된 기한 만료에 따른 기한 재설정(안 제18조)",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000243334&type=HTML",
+          "articles": [
+            {
+              "article_label": "제18조",
+              "clause_no": "",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "행정안전부장관은「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 이 예규에 대하여 2021년 7월 1일 기준으로 매3년이 되는 시점(매 3년째의 6월 30일까지를 말한다)마다 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+              "new_text": "행정안전부장관은「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 이 예규에 대하여 2024년 7월 1일 기준으로 매 3년이 되는 시점(매 3년째의 6월 30일까지를 말한다)마다 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+              "match_status": "성공"
+            }
+          ],
+          "unchanged_clauses": {}
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

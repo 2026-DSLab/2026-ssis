@@ -58,7 +58,10 @@ def fetch_admrul_fulltext(client: LawApiClient, rule_serial_no: str) -> FullText
 # ---------------------------------------------------------------------------
 # 내부 파싱
 # ---------------------------------------------------------------------------
-# 루트 키 이름은 실측(JSON) 미확정 상태이므로 후보 경로를 시도한다.
+# ✅ 루트 키 실측 확인됨(2026-07-16, 법령 5건·행정규칙 3건 교차검증):
+#   법령 본문조회(target=law)     → "법령" (매번 일관됨)
+#   행정규칙 본문조회(target=admrul) → "AdmRulService" (매번 일관됨)
+# 후보 리스트는 만약을 대비해 유지하되, 확인된 키를 맨 앞에 둔다.
 
 def _find_root(data: dict, candidates: tuple[str, ...]) -> dict:
     for key in candidates:
@@ -74,8 +77,8 @@ def _build_law_result(data: dict, mst: str) -> FullTextResult:
     law_id = text_of(basic.get("법령ID") or root.get("법령ID"))
     name = text_of(basic.get("법령명_한글") or basic.get("법령명한글") or root.get("법령명한글"))
 
-    reason = text_of(_dig_any(root, ("제개정이유", "제개정이유내용")))
-    revision_text = text_of(_dig_any(root, ("개정문", "개정문내용")))
+    reason = _extract_nested_text(root, "제개정이유", "제개정이유내용")
+    revision_text = _extract_nested_text(root, "개정문", "개정문내용")
 
     return FullTextResult(
         raw=data,
@@ -88,7 +91,11 @@ def _build_law_result(data: dict, mst: str) -> FullTextResult:
 
 
 def _build_admrul_result(data: dict, serial_no: str) -> FullTextResult:
-    root = _find_root(data, ("행정규칙", "AdmRul", "AdmRulService"))
+    # ✅ 실측 확인(2026-07-16, 여러 ID 교차검증): 실제 루트 키는 "AdmRulService"
+    # 뿐이다. "행정규칙"/"AdmRul"은 확인된 적 없는 추측 후보였고, 매번 이
+    # 뒤의 세 번째 후보(AdmRulService)로만 성공해왔다. 실측 키를 앞에 두어
+    # 불필요한 순회를 없앤다.
+    root = _find_root(data, ("AdmRulService", "행정규칙", "AdmRul"))
 
     basic = root.get("기본정보", root)
     rule_id = text_of(basic.get("행정규칙ID") or root.get("행정규칙ID"))
@@ -96,8 +103,8 @@ def _build_admrul_result(data: dict, serial_no: str) -> FullTextResult:
 
     # 행정규칙은 개정문/제개정이유 필드 존재 여부가 법령과 다를 수 있어
     # 있으면 채우고 없으면 빈 문자열로 둔다 (assert 하지 않음).
-    reason = text_of(_dig_any(root, ("제개정이유", "제개정이유내용")))
-    revision_text = text_of(_dig_any(root, ("개정문", "개정문내용")))
+    reason = _extract_nested_text(root, "제개정이유", "제개정이유내용")
+    revision_text = _extract_nested_text(root, "개정문", "개정문내용")
 
     return FullTextResult(
         raw=data,
@@ -109,8 +116,34 @@ def _build_admrul_result(data: dict, serial_no: str) -> FullTextResult:
     )
 
 
-def _dig_any(node: dict, keys: tuple[str, ...]):
-    for k in keys:
-        if k in node:
-            return node[k]
-    return None
+def _flatten_lines(node) -> list[str]:
+    lines: list[str] = []
+    if isinstance(node, str):
+        stripped = node.strip()
+        if stripped:
+            lines.append(stripped)
+    elif isinstance(node, list):
+        for item in node:
+            lines.extend(_flatten_lines(item))
+    return lines
+
+
+def _extract_nested_text(root: dict, outer_key: str, inner_key: str) -> str:
+    """"제개정이유"/"개정문" 처럼 한 겹 더 안에 실제 내용이 있는 필드를 읽는다.
+
+    ★★ 실측 발견(2026-07-16, 공공기관의 정보공개에 관한 법률 등): root의
+    "제개정이유"/"개정문" 키는 그 자체가 문자열이 아니라
+    {"제개정이유내용": [[...줄들...]]} / {"개정문내용": [[...줄들...]]}
+    형태로 한 겹 더 감싸여 있다. 예전엔 _dig_any(root, ("제개정이유",
+    "제개정이유내용"))가 이 둘을 "같은 레벨의 후보"로 취급해, 실제로는
+    항상 "제개정이유"(딕셔너리)가 먼저 걸려 그 딕셔너리 자체를
+    text_of()에 넘겼는데, text_of()는 dict에서 "#text"/"content"/
+    "value"/"_" 키만 볼 뿐이라 늘 빈 문자열로 떨어졌다 — schema.py 가
+    강조하는 revision_reason 필드가 이 때문에 한 번도 채워진 적이 없었다.
+    내용 자체는 별표내용과 같은 "줄 단위 문자열 배열" 형식이라 평탄화해
+    공백으로 이어붙인다.
+    """
+    outer = root.get(outer_key)
+    if not isinstance(outer, dict):
+        return text_of(outer)  # 혹시 예전 가정대로 평문으로 오는 경우 대비
+    return " ".join(_flatten_lines(outer.get(inner_key)))

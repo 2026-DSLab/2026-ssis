@@ -72,7 +72,7 @@ def build_contract(
         key = (row["law_id"], row["law_serial_no"])
         by_law_serial.setdefault(key, []).append(row)
 
-    change_rows = _change_rows_in_period(by_law_serial)
+    change_rows = _change_rows_in_period(by_law_serial, change_log_repo)
 
     promulgation_nos = [r["promulgation_no"] for r in change_rows if r.get("promulgation_no")]
     linked = group_many(change_log_repo, promulgation_nos)
@@ -119,6 +119,32 @@ def build_contract(
                 )
             )
 
+    # ★★ 실측 발견(2026-07-18): 위 amendment_groups 조립 경로는 article_diff에서
+    # 시작해 (law_id, serial_no) 집합을 얻는데, 신구법 대비가 아예 불가능한
+    # 건(제정/폐지제정 등)은 정의상 article_diff 행이 0개라 그 집합에 원천적으로
+    # 들어갈 수 없었다 — 즉 _build_laws의 no_comparison 처리 코드가 도달
+    # 불가능한 죽은 코드였고, NoComparisonItem은 스키마만 있고 실제로 채워진
+    # 적이 한 번도 없었다(제정된 법이 매번 산출물에서 통째로 사라짐). article_diff
+    # 를 거치지 않고 change_log를 직접 조회해 채운다.
+    seen = {(r["law_id"], r["new_serial_no"]) for r in change_rows}
+    for pair in change_log_repo.fetch_no_comparison_in_period(from_date, to_date):
+        law_id, serial_no = pair["law_id"], pair["new_serial_no"]
+        if (law_id, serial_no) in seen:
+            continue
+        seen.add((law_id, serial_no))
+        cl = change_log_repo.fetch_latest_for_serial(law_id, serial_no)
+        entry = watchlist_repo.get(law_id)
+        law_name = entry.official_name if entry else law_id
+        law_type = entry.law_type if entry else ""
+        url = _sanitize_url(_source_url(law_type, serial_no))
+        no_comparison.append(
+            NoComparisonItem(
+                law_id=law_id, law_name=law_name, new_serial_no=serial_no,
+                reason=(cl.get("revision_type") if cl else "") or "신구법 대비 불가",
+                source_url=url,
+            )
+        )
+
     contract = WeeklyContract(
         batch_date=batch_date.isoformat(),
         period=Period(from_date=from_date.isoformat(), to_date=to_date.isoformat()),
@@ -130,23 +156,32 @@ def build_contract(
     return contract
 
 
-def _change_rows_in_period(by_law_serial: dict[tuple[str, str], list[dict]]) -> list[dict]:
+def _change_rows_in_period(
+    by_law_serial: dict[tuple[str, str], list[dict]], change_log_repo: ChangeLogRepo,
+) -> list[dict]:
     """article_diff 에서 확보한 (law_id, serial_no) 조합별 메타 정보 집계.
 
-    ❓ 현재는 promulgation_no 를 article_diff 행에서 직접 끌어오지 않는다
-    (article_diff 스키마에 그 컬럼이 없음 — change_log 에만 있음).
-    운영 단계에서는 ChangeLogRepo 에 기간 조회 메서드(fetch_period)를
-    추가해 change_log 를 조인하는 편이 더 정확하다. 지금은 article_diff
-    가 이미 갖고 있는 (law_id, serial_no) 쌍을 뼈대로 최소 구현했다.
+    ✅ 실측 발견·수정(2026-07-16): promulgation_no 는 article_diff 스키마에
+    아예 없는 컬럼이라(law_id, law_serial_no, article_code, … 뿐), 예전엔
+    diffs[0].get("promulgation_no", "") 가 항상 기본값 ""로 떨어졌다.
+    그 결과 연쇄개정 그룹핑(link.py group_many)의 입력이 늘 빈 문자열이라
+    같은 공포번호로 동시개정된 법들도 전부 별도 그룹으로 쪼개져 나오는
+    버그가 있었다(실측: 사회보장기본법/국민기초생활보장법이 같은
+    공포번호 21065인데 그룹 3개로 쪼개짐). change_log(진짜 출처)에서
+    (law_id, new_serial_no) 별 최신 1건을 조회해 채운다.
     """
     rows = []
-    for (law_id, serial_no), diffs in by_law_serial.items():
+    for law_id, serial_no in by_law_serial:
+        cl = change_log_repo.fetch_latest_for_serial(law_id, serial_no)
         rows.append({
             "law_id": law_id,
             "new_serial_no": serial_no,
-            "promulgation_no": diffs[0].get("promulgation_no", "") if diffs else "",
+            "promulgation_no": (cl.get("promulgation_no") or "") if cl else "",
             "promulgation_date": "",
-            "revision_type": "",
+            "revision_type": (cl.get("revision_type") or "") if cl else "",
+            "old_serial_no": (cl.get("old_serial_no") or "") if cl else "",
+            "revision_reason": (cl.get("revision_reason") or "") if cl else "",
+            "unchanged_clauses": (cl.get("unchanged_clauses") or {}) if cl else {},
         })
     return rows
 
@@ -212,10 +247,20 @@ def _build_laws(
             LawChange(
                 law_id=law_id, law_type=law_type, law_name=law_name,
                 internal_name=internal_name, dept_codes=dept_codes,
+                old_serial_no=row.get("old_serial_no", "") or "",
                 new_serial_no=serial_no,
                 enforce_date=str(diffs[0].get("enforce_date") or ""),
+                revision_type=row.get("revision_type", "") or "",
+                # ✅ 실측 발견·수정(2026-07-16): api/fulltext.py 가 "제개정이유"를
+                # 이미 API 응답에서 뽑아오면서도(FullTextResult.revision_reason)
+                # 그 값을 change_log 에 저장하지도, contract 에 담지도 않아
+                # 항상 빈 문자열로 나갔다 — schema.py 의 설계 의도("LLM이
+                # 추론할 필요 없게 함")를 무력화하고 있었다. change_log에
+                # revision_reason 컬럼을 추가해 저장하고 여기서 채운다.
+                revision_reason=row.get("revision_reason", "") or "",
                 source_url=url,
                 articles=articles,
+                unchanged_clauses=row.get("unchanged_clauses") or {},
             )
         )
 
