@@ -168,3 +168,108 @@ class TestNoComparisonReporting:
         law = contract.amendment_groups[0].laws[0]
         assert law.revision_reason == ""
         assert law.old_serial_no == ""
+
+
+class TestStructuralExpansionGrouping:
+    """★ 설계(2026-07-19, LLM팀 산출물 리뷰): match_status="구조확장(구법미분리)"
+    행들(구법엔 없던 호/목 구조가 신법에서 새로 생겨 old_text가 여러 행에
+    복제되는 케이스)은 articles[]가 아니라 structural_expansions[]로 완전히
+    분리되어야 한다 — articles[]는 항상 1:1만 담는다는 전제를 지키기 위함."""
+
+    def _diff_repo_with_expansion(self):
+        repo = MagicMock()
+        repo.fetch_period.return_value = [
+            {
+                "law_id": "009199", "law_serial_no": "268103",
+                "article_code": "2", "article_label": "제2조",
+                "clause_no": "", "item_label": "11.", "subitem_label": "",
+                "change_type": "개정", "old_text": "11. 정보자원이란...",
+                "new_text": "정보자원이란 다음 각 목과 같다.",
+                "match_status": "구조확장(구법미분리)", "enforce_date": date(2023, 11, 17),
+            },
+            {
+                "law_id": "009199", "law_serial_no": "268103",
+                "article_code": "2", "article_label": "제2조",
+                "clause_no": "", "item_label": "11.", "subitem_label": "가.",
+                "change_type": "개정", "old_text": "11. 정보자원이란...",
+                "new_text": "가. 행정정보",
+                "match_status": "구조확장(구법미분리)", "enforce_date": date(2023, 11, 17),
+            },
+            {
+                "law_id": "009199", "law_serial_no": "268103",
+                "article_code": "2", "article_label": "제2조",
+                "clause_no": "", "item_label": "11.", "subitem_label": "나.",
+                "change_type": "개정", "old_text": "11. 정보자원이란...",
+                "new_text": "나. 정보시스템",
+                "match_status": "구조확장(구법미분리)", "enforce_date": date(2023, 11, 17),
+            },
+            # 진짜 1:1 케이스도 하나 섞어서 articles[]엔 이것만 남는지 확인
+            {
+                "law_id": "009199", "law_serial_no": "268103",
+                "article_code": "3", "article_label": "제3조",
+                "clause_no": "①", "item_label": "", "subitem_label": "",
+                "change_type": "개정", "old_text": "구", "new_text": "신",
+                "match_status": "성공", "enforce_date": date(2023, 11, 17),
+            },
+        ]
+        return repo
+
+    def _watchlist_repo_009199(self):
+        repo = MagicMock()
+        repo.get.return_value = WatchlistEntry(
+            law_id="009199", law_type="법률", official_name="전자정부법",
+            internal_name="전자정부법", dept_codes=(),
+        )
+        return repo
+
+    def test_expansion_rows_excluded_from_articles(self):
+        contract = build_contract(
+            self._watchlist_repo_009199(), self._diff_repo_with_expansion(), _change_log_repo(),
+            from_date=date(2020, 1, 1), to_date=date(2100, 1, 1),
+        )
+        law = contract.amendment_groups[0].laws[0]
+        assert len(law.articles) == 1
+        assert law.articles[0].article_label == "제3조"
+
+    def test_expansion_rows_grouped_into_one_entry_with_shared_old_text(self):
+        contract = build_contract(
+            self._watchlist_repo_009199(), self._diff_repo_with_expansion(), _change_log_repo(),
+            from_date=date(2020, 1, 1), to_date=date(2100, 1, 1),
+        )
+        law = contract.amendment_groups[0].laws[0]
+        assert len(law.structural_expansions) == 1
+        exp = law.structural_expansions[0]
+        assert exp.article_label == "제2조"
+        assert exp.old_text == "11. 정보자원이란..."
+        assert len(exp.new_items) == 3
+        assert [it.subitem_label for it in exp.new_items] == ["", "가.", "나."]
+        assert exp.new_items[1].text == "가. 행정정보"
+
+    def test_expansion_across_different_clauses_grouped_together(self):
+        """★★ 실측(2026-07-19, 전자정부법 제56조의3①~④): 항 구분조차 없던
+        조문 하나가 통째로 새 항(①②③④) 여러 개로 재작성되면, old_text는
+        4행 전부 동일한데 clause_no는 행마다 다르다(①,②,③,④). 그룹 키에
+        clause_no가 섞여 있으면 이 4행이 서로 다른 "1개짜리 그룹" 4개로
+        쪼개진다 — 정의상 구조확장은 1:N이어야 하므로 이건 모순이다."""
+        repo = MagicMock()
+        repo.fetch_period.return_value = [
+            {
+                "law_id": "009199", "law_serial_no": "268103",
+                "article_code": "56003", "article_label": "제56조의3",
+                "clause_no": clause, "item_label": "", "subitem_label": "",
+                "change_type": "개정", "old_text": "행정안전부장관은 국가비상사태...",
+                "new_text": f"{clause} 새 항 내용 {clause}",
+                "match_status": "구조확장(구법미분리)", "enforce_date": date(2023, 11, 17),
+            }
+            for clause in ("①", "②", "③", "④")
+        ]
+        contract = build_contract(
+            self._watchlist_repo_009199(), repo, _change_log_repo(),
+            from_date=date(2020, 1, 1), to_date=date(2100, 1, 1),
+        )
+        law = contract.amendment_groups[0].laws[0]
+        assert law.articles == []
+        assert len(law.structural_expansions) == 1  # 4개가 아니라 1개 그룹
+        exp = law.structural_expansions[0]
+        assert len(exp.new_items) == 4
+        assert [it.clause_no for it in exp.new_items] == ["①", "②", "③", "④"]

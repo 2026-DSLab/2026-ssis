@@ -42,11 +42,15 @@ class ArticleDiffItem(BaseModel):
     match_status: str = Field(
         ...,
         description=(
-            "성공 | 삭제(위치탐색제외) | 위치재배치의심(항 신설로 조번호가 밀려 "
-            "old_text/new_text가 서로 다른 조항의 내용일 수 있음 — 법제처 "
-            "원본 신구조문대비표가 조번호 재배치를 위치 기준으로만 대응시켜 "
-            "제공하기 때문. 이 값이면 old_text를 '개정 전 같은 조항'으로 "
-            "신뢰하지 말 것)"
+            "성공 | 삭제(위치탐색제외) | "
+            "구조확장(구법미분리)(이 항/호/목은 개정으로 새로 생긴 구조라 "
+            "구법엔 대응하는 조각이 없음 — old_text는 그 항/조 전체의 "
+            "개정 전 문장(참고 맥락)일 뿐, 이 특정 항목의 개정 전 내용이 "
+            "아니므로 신뢰하지 말 것) | "
+            "위치재배치의심(같은 조문 안에서 항이 신설되며 뒤 항 번호가 "
+            "밀려, 법제처 원본 신구조문대비표가 신/구를 순서 기준으로만 "
+            "잘못 대응시켰을 수 있음 — old_text가 실제로는 다른 항의 "
+            "내용일 수 있으니 '개정 전 같은 조항'으로 신뢰하지 말 것)"
         ),
     )
 
@@ -54,6 +58,45 @@ class ArticleDiffItem(BaseModel):
     def location_label(self) -> str:
         parts = [self.article_label, self.clause_no, self.item_label, self.subitem_label]
         return "".join(p for p in parts if p)
+
+
+class ExpandedItem(BaseModel):
+    """구조확장(StructuralExpansion)으로 새로 생긴 위치 하나.
+
+    ★ 실측(2026-07-19, 전자정부법 제56조의3①~④): 구조확장은 "한 항 안에
+    호/목이 새로 생기는" 경우만이 아니라 "조문 하나(항 구분조차 없던
+    통짜 조문)가 통째로 여러 개의 새 항(①②③④)으로 재작성"되는 경우도
+    있다 — 이때는 새로 생긴 위치들의 clause_no 자체가 서로 다르므로,
+    clause_no를 그룹(StructuralExpansion) 레벨이 아니라 이 항목 레벨에
+    둬야 각 위치를 정확히 표시할 수 있다."""
+
+    clause_no: str = ""
+    item_label: str = ""
+    subitem_label: str = ""
+    text: str = Field(..., description="이 위치의 개정 후(new) 문장 — 정확함")
+
+
+class StructuralExpansion(BaseModel):
+    """★ 설계(2026-07-19, LLM팀 산출물 리뷰): 구법엔 없던 항/호/목 구조가
+    개정으로 새로 생긴 경우(예: 구법 "① 통짜 문장"이 신법에서 "① + 1.~5.
+    호 목록"으로 재작성됨, 또는 항 구분조차 없던 조문 하나가 새 항 여러
+    개로 재작성됨), old_text 1개에 new 위치가 여러 개 딸린다. 처음엔 이
+    경우도 articles[] 안에 old_text를 복제해 넣고
+    match_status="구조확장(구법미분리)"로만 표시했는데, "행 하나 = 위치
+    하나의 1:1 대응"이라는 articles[]의 기본 전제가 이 케이스에서만
+    깨지다 보니 라벨을 아무리 명확히 붙여도 헷갈린다는 지적을 받았다.
+    그래서 이 케이스는 articles[]에서 완전히 빼내 별도 배열로 분리한다
+    — articles[]는 항상 깨끗한 1:1만 담고, "이건 그룹이다"가 배열
+    자체로 드러나게 하는 것이 목적. old_text는 참고 맥락 그 자체이므로
+    (구법에 이 세부 위치가 없었으니 특정 new_item 하나에 대응하는
+    개정 전 문장은 존재하지 않음) 안내문 접두어가 필요 없다 — 배열
+    이름과 구조가 이미 그 의미를 담고 있다."""
+
+    article_label: str
+    old_text: str = Field(
+        ..., description="구법의 통짜 원문(참고 맥락) — new_items 각각에 정밀 대응하지 않음"
+    )
+    new_items: list[ExpandedItem] = Field(default_factory=list)
 
 
 class LawChange(BaseModel):
@@ -73,6 +116,15 @@ class LawChange(BaseModel):
     )
     source_url: str = ""
     articles: list[ArticleDiffItem] = Field(default_factory=list)
+    structural_expansions: list[StructuralExpansion] = Field(
+        default_factory=list,
+        description=(
+            "구법엔 없던 항/호/목 구조가 개정으로 새로 생긴 그룹 — 여기 담긴 "
+            "old_text는 그룹 전체의 참고 맥락이지 new_items 각각의 정밀한 "
+            "개정 전 문장이 아니다. articles[]에는 이런 1:N 케이스가 절대 "
+            "섞이지 않는다(항상 1:1만 담김)."
+        ),
+    )
     unchanged_clauses: dict[str, list[str]] = Field(
         default_factory=dict,
         description=(
@@ -150,9 +202,16 @@ class WeeklyContract(BaseModel):
     def total_article_count(self) -> int:
         return sum(len(law.articles) for g in self.amendment_groups for law in g.laws)
 
+    @property
+    def total_structural_expansion_count(self) -> int:
+        return sum(
+            len(law.structural_expansions) for g in self.amendment_groups for law in g.laws
+        )
+
     def summary(self) -> str:
         return (
             f"{self.batch_date} 배치: 그룹 {len(self.amendment_groups)}개, "
             f"법 {self.total_law_count}건, 조문변경 {self.total_article_count}건, "
+            f"구조확장그룹 {self.total_structural_expansion_count}건, "
             f"미확정 {len(self.unresolved)}건, 비교불가 {len(self.no_comparison)}건"
         )

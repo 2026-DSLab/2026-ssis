@@ -22,9 +22,11 @@ from pathlib import Path
 from lawtrack.contract.schema import (
     AmendmentGroup,
     ArticleDiffItem,
+    ExpandedItem,
     LawChange,
     NoComparisonItem,
     Period,
+    StructuralExpansion,
     UnresolvedItem,
     WeeklyContract,
 )
@@ -219,6 +221,21 @@ def _build_laws(
             continue
 
         articles: list[ArticleDiffItem] = []
+        # ★ 설계(2026-07-19): match_status="구조확장(구법미분리)" 행은
+        # articles[]에 안 넣고 이 딕셔너리에 모아 StructuralExpansion으로
+        # 재조립한다 — articles[]는 항상 "행 하나 = 위치 하나의 1:1 대응"만
+        # 담는다는 전제를 지키기 위함(schema.py 참고).
+        #
+        # ★★ 실측 발견(2026-07-19, 전자정부법 제56조의3①~④): 처음엔
+        # (article_label, clause_no, old_text)로 묶었는데, "조문 하나가
+        # 통째로 새 항(①②③④) 여러 개로 재작성"되는 경우 old_text는
+        # 4행 전부 동일한데 clause_no가 행마다 다르다(①,②,③,④) — 그룹
+        # 키에 clause_no가 들어있으면 이 4행이 서로 다른 그룹으로
+        # 쪼개져 1개짜리 "그룹" 4개가 나온다(모순: 구조확장은 정의상
+        # 1:N인데 그룹 크기가 1). 그룹 키에서 clause_no를 빼고
+        # (article_label, old_text)만 쓴다 — clause_no는 대신
+        # ExpandedItem 쪽에 항목별로 둔다.
+        expansions_by_key: dict[tuple[str, str], StructuralExpansion] = {}
         for d in diffs:
             if d["match_status"] in ("0건실패", "중복실패"):
                 detail = json.loads(d.get("match_detail") or "[]")
@@ -227,6 +244,24 @@ def _build_laws(
                         law_id=law_id, law_name=law_name, new_serial_no=serial_no,
                         reason=d["match_status"], detail="; ".join(detail),
                         source_url=url, guards_tried=detail,
+                    )
+                )
+                continue
+            if d["match_status"] == "구조확장(구법미분리)":
+                key = (
+                    d.get("article_label") or d.get("article_code") or "",
+                    d.get("old_text") or "",
+                )
+                expansion = expansions_by_key.get(key)
+                if expansion is None:
+                    expansion = StructuralExpansion(article_label=key[0], old_text=key[1])
+                    expansions_by_key[key] = expansion
+                expansion.new_items.append(
+                    ExpandedItem(
+                        clause_no=d.get("clause_no") or "",
+                        item_label=d.get("item_label") or "",
+                        subitem_label=d.get("subitem_label") or "",
+                        text=d.get("new_text") or "",
                     )
                 )
                 continue
@@ -260,6 +295,7 @@ def _build_laws(
                 revision_reason=row.get("revision_reason", "") or "",
                 source_url=url,
                 articles=articles,
+                structural_expansions=list(expansions_by_key.values()),
                 unchanged_clauses=row.get("unchanged_clauses") or {},
             )
         )

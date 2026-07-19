@@ -215,6 +215,24 @@ class TestReshuffledArticleFlagging:
         )
         assert row[11] == "위치재배치의심"  # match_status
 
+    def test_flagged_old_text_carries_inline_warning_prefix(self):
+        """★ 실측(2026-07-19, LLM팀 산출물 리뷰): match_status 필드를 따로
+        안 보고 old_text만 훑어도 "이거 못 믿는다"가 바로 보이게, old_text
+        앞에 "[※...]" 안내문을 붙인다 — 법령 원문과 섞이지 않는 형식."""
+        amended = self._amended_change(0)
+        created = self._newly_created_change(1)
+        results = [
+            (amended, [LocateResult(LocateStatus.SUCCESS, self._unit("제34조", "③"), None, 1, ())]),
+            (created, [LocateResult(LocateStatus.SUCCESS, self._unit("제34조", "⑬"), None, 1, ())]),
+        ]
+        reshuffled = ArticleDiffRepo._reshuffled_articles(results)
+        row = ArticleDiffRepo._to_row(
+            "34470", "1", amended, results[0][1][0], date(2025, 1, 1), 0, reshuffled,
+        )
+        old_text = row[9]
+        assert old_text.startswith("[※")
+        assert "구" in old_text  # 원래 old_text("구")가 뒤에 그대로 남아있어야 함
+
     def test_amended_row_not_flagged_without_sibling_newly_created(self):
         amended = self._amended_change(0)
         results = [
@@ -241,3 +259,89 @@ class TestReshuffledArticleFlagging:
             "X", "1", amended, results[0][1][0], date(2025, 1, 1), 0, reshuffled,
         )
         assert row[11] == "성공"
+
+
+class TestOldTextSharedFlagging:
+    """★★ 실측(2026-07-19, 전자정부법 제2조11호 가~바): 신설이 전혀 없는
+    순수 '개정'인데도, 구법엔 목(가~바) 구조 자체가 없던 통짜 문단이
+    신법에서 목 6개로 쪼개지면 old_text가 6개 행 전부에 똑같이 재사용된다.
+    _reshuffled_articles()는 "같은 조문에 신설이 섞였는가"만 보므로 이
+    케이스를 놓쳐 match_status=성공으로 잘못 확정된다. "같은 change가
+    2곳 이상으로 성공 위치확정됐는가"를 직접 보는 old_text_shared가
+    이 틈을 메운다.
+
+    ★ 실측(2026-07-19, LLM팀 산출물 리뷰): 처음엔 이것도 "위치재배치의심"
+    으로 표시했는데, 원인이 전혀 다른 reshuffled_articles 케이스(항 신설로
+    순서가 밀려 신/구가 잘못 짝지어짐)와 같은 이름을 쓰니 "재배치"라는
+    말이 이 케이스엔 안 맞아 헷갈린다는 지적을 받았다 — 여긴 재배치가
+    아니라 애초에 구법에 대응하는 조각이 없는 것(구조확장)이다. 값
+    이름을 "구조확장(구법미분리)"로 분리했다."""
+
+    def _amended_change(self, index: int) -> ArticleChange:
+        return ArticleChange(
+            index=index, change_type=ChangeType.AMENDED,
+            old_raw="<P>구</P>", new_raw="<P>신</P>", old_clean="구", new_clean="신",
+        )
+
+    def _unit(self, article_label: str, item_label: str, subitem_label: str = "") -> SearchUnit:
+        return SearchUnit(
+            article_code=article_label, article_label=article_label, clause_no="",
+            item_label=item_label, subitem_label=subitem_label, text="x", changed=True,
+        )
+
+    def test_single_change_split_into_multiple_locations_flagged(self):
+        change = self._amended_change(0)
+        row = ArticleDiffRepo._to_row(
+            "X", "1", change,
+            LocateResult(LocateStatus.SUCCESS, self._unit("제2조", "11.", "가."), None, 1, ()),
+            date(2025, 1, 1), 0, frozenset(), old_text_shared=True,
+        )
+        assert row[11] == "구조확장(구법미분리)"
+        # ★ 설계(2026-07-19): "구조확장" 케이스는 DB 단계에서 old_text에
+        # 안내문을 붙이지 않는다 — contract/export.py가 이 상태를 보고
+        # articles[]가 아닌 별도 StructuralExpansion 배열로 빼내므로,
+        # 배열 구조 자체가 의미를 전달한다(schema.py 참고). DB의 old_text는
+        # 항상 순수 원문 그대로여야 한다.
+        assert row[9] == "구"
+
+    def test_single_location_not_flagged(self):
+        """change 하나가 정확히 한 곳에만 위치확정되면(1:1), old_text가
+        재사용될 여지가 없으니 플래그하면 안 된다(과다플래그 방지)."""
+        change = self._amended_change(0)
+        row = ArticleDiffRepo._to_row(
+            "X", "1", change,
+            LocateResult(LocateStatus.SUCCESS, self._unit("제2조", ""), None, 1, ()),
+            date(2025, 1, 1), 0, frozenset(), old_text_shared=False,
+        )
+        assert row[11] == "성공"
+
+    def test_newly_created_not_flagged_by_shared_flag(self):
+        """신설 행은 old_text가 항상 빈 문자열이라 '재사용' 개념 자체가
+        의미 없다 — old_text_shared가 True로 넘어와도 신설 타입이면
+        무시해야 한다(insert_results가 애초에 AMENDED만 True로 넘기지만,
+        _to_row 자체도 change_type으로 한 번 더 방어한다)."""
+        change = ArticleChange(
+            index=0, change_type=ChangeType.NEWLY_CREATED,
+            old_raw="<P><신  설></P>", new_raw="<P>새 항 내용</P>",
+            old_clean="<신  설>", new_clean="새 항 내용",
+        )
+        row = ArticleDiffRepo._to_row(
+            "X", "1", change,
+            LocateResult(LocateStatus.SUCCESS, self._unit("제2조", "가."), None, 1, ()),
+            date(2025, 1, 1), 0, frozenset(), old_text_shared=True,
+        )
+        assert row[11] == "성공"
+
+    def test_old_text_shared_takes_precedence_over_reshuffled_label(self):
+        """두 원인이 같은 조문에서 동시에 발생할 수 있다(호/목 구조확장이
+        일어난 조문에 다른 항의 신설도 섞인 경우) — 이때는 더 구체적인
+        원인(구조확장)을 우선 표시한다. "위치재배치의심"이라고 하면 마치
+        순서가 밀린 것처럼 오해하지만, 실제 원인은 구법에 대응 조각
+        자체가 없는 것이기 때문이다."""
+        change = self._amended_change(0)
+        row = ArticleDiffRepo._to_row(
+            "X", "1", change,
+            LocateResult(LocateStatus.SUCCESS, self._unit("제2조", "11.", "가."), None, 1, ()),
+            date(2025, 1, 1), 0, reshuffled_articles={"제2조"}, old_text_shared=True,
+        )
+        assert row[11] == "구조확장(구법미분리)"

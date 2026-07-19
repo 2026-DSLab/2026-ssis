@@ -361,6 +361,23 @@ class ChangeLogRepo:
 # 조문 단위 diff (6가드 출력)
 # ---------------------------------------------------------------------------
 
+#: match_status="위치재배치의심"일 때 old_text 앞에 붙일 안내문. match_status
+#: 필드를 따로 안 보고 old_text만 눈으로 훑어도 신뢰하면 안 된다는 게
+#: 바로 보이도록, 실제 법령 원문과 섞이지 않는 "[※...]" 형식을 쓴다.
+#:
+#: ★ 설계(2026-07-19): "구조확장(구법미분리)"는 여기 없다 — 그 케이스는
+#: contract/export.py가 articles[]에서 아예 빼내 별도 StructuralExpansion
+#: 그룹으로 분리하므로(schema.py 참고), old_text에 안내문을 덧붙이는 대신
+#: 배열 구조 자체로 "이건 1:1이 아니다"를 표현한다. 여기서 이 접두어를
+#: 붙이면 export 단계에서 다시 벗겨내야 하는 이중 작업이 되므로, 애초에
+#: 안 붙인다 — DB에 저장되는 old_text는 항상 순수 원문이어야 한다.
+_OLD_TEXT_NOTES: dict[str, str] = {
+    "위치재배치의심": "[※ 같은 조문 내 항 신설로 순번이 밀려 원본 대비표가 "
+                     "잘못 짝지었을 수 있음 — 아래가 실제로는 다른 항의 "
+                     "개정 전 내용일 수 있음] ",
+}
+
+
 class ArticleDiffRepo:
     def __init__(self, db: Database):
         self._db = db
@@ -381,11 +398,22 @@ class ArticleDiffRepo:
         reshuffled = self._reshuffled_articles(results)
         rows = []
         for change, locate_results in results:
+            # ★★ 실측 발견(2026-07-19, 전자정부법 제2조11호 가~바):
+            # _reshuffled_articles()는 "같은 조문에 신설(NEWLY_CREATED)이
+            # 섞였는가"만 보는데, 이 케이스는 신설이 전혀 없는 순수
+            # '개정'인데도 old_text가 여러 새 위치(가.나.다.라.마.바.)에
+            # 동일하게 재사용된다(구법엔 목 구조 자체가 없던 통짜 문단이
+            # 신법에서 목 6개로 쪼개짐). 그래서 조문 단위 신설 여부와
+            # 무관하게, "이 change 하나가 성공적으로 위치확정된 결과가
+            # 2개 이상"이면 그 자체로 old_text가 각 행에 정밀 대응하지
+            # 않는다는 직접적인 신호다 — 위 휴리스틱보다 더 좁고 정확하다.
+            success_count = sum(1 for lr in locate_results if lr.status.value == "성공")
+            old_text_shared = change.change_type is ChangeType.AMENDED and success_count > 1
             for frag_idx, lr in enumerate(locate_results):
                 rows.append(
                     self._to_row(
                         law_id, law_serial_no, change, lr, default_enforce_date, frag_idx,
-                        reshuffled,
+                        reshuffled, old_text_shared,
                     )
                 )
 
@@ -480,6 +508,7 @@ class ArticleDiffRepo:
         law_id: str, law_serial_no: str, change: ArticleChange,
         lr: LocateResult, default_enforce_date: date, frag_idx: int,
         reshuffled_articles: set[str] = frozenset(),
+        old_text_shared: bool = False,
     ) -> tuple:
         unit = lr.unit
         # ✅ 실측 확인된 "조문시행일자"(unit.enforce_date)를 우선 사용.
@@ -538,12 +567,27 @@ class ArticleDiffRepo:
         old_text = strip_annotations(strip_article_head(change.old_clean)).strip()
 
         match_status = lr.status.value
-        if (
-            match_status == "성공"
-            and change.change_type is ChangeType.AMENDED
-            and article_label in reshuffled_articles
-        ):
-            match_status = "위치재배치의심"
+        if match_status == "성공" and change.change_type is ChangeType.AMENDED:
+            # ★ 실측(2026-07-19, LLM팀 산출물 리뷰): "위치재배치의심" 하나로
+            # 두 가지 서로 다른 원인을 뭉뚱그려 표시하면 헷갈린다는 지적.
+            #   1) old_text_shared: 구법엔 없던 호/목 구조가 신법에서 새로
+            #      생겨(구조확장) old_text가 여러 행에 같은 통짜 문장으로
+            #      복제됨 — "재배치"가 아니라 "대응 자체가 없음"이 정확한
+            #      원인이라 값 이름을 분리한다.
+            #   2) reshuffled_articles: 같은 조문에 항이 신설되며 뒤 항
+            #      번호가 밀려, 원본 대비표가 순서만으로 신/구를 잘못
+            #      짝지음 — 이건 진짜 "재배치 의심"이 맞는 표현.
+            if old_text_shared:
+                match_status = "구조확장(구법미분리)"
+            elif article_label in reshuffled_articles:
+                match_status = "위치재배치의심"
+
+        # ★ 실측(2026-07-19, LLM팀 산출물 리뷰): match_status만 보고 old_text의
+        # 신뢰도를 판단하게 하면, old_text 자체만 눈으로 훑는 사람/LLM은 그
+        # 경고를 놓칠 수 있다 — 문제되는 문장 옆에 바로 괄호로 이유를 적어
+        # old_text 자체만 봐도 "이건 곧이곧대로 믿으면 안 된다"가 보이게 한다.
+        # 실제 법령 원문과 섞이지 않도록 "[※...]" 형식으로 명확히 구분한다.
+        old_text = _OLD_TEXT_NOTES.get(match_status, "") + old_text
 
         return (
             law_id,

@@ -259,10 +259,31 @@ def split_all(text: str) -> list[Fragment]:
         # 이러면 그 하나뿐인 호에 딸린 목 분해(아래 for문)가 통째로
         # 건너뛰어진다. 호 마커가 실제로 발견됐다면(items 가 비어있지
         # 않다면) 개수가 1개여도 목 분해를 계속 시도해야 한다.
-        if not items:
+        #
+        # ★★ 실측 발견(2026-07-19, 환경개선비용 부담법 제20조① 등): 호
+        # 마커가 전혀 없는 조각이라도 split_by_item()의 내부 _split()은
+        # "매칭 안 된 나머지"를 marker=None 인 Fragment 하나로 감싸
+        # 돌려주므로 items가 절대 빈 리스트가 되지 않는다 — 위 "if not
+        # items" 는 사실상 죽은 코드였다. 그 결과 호가 없는 모든 항이
+        # clause(마커 포함 raw)가 아니라 marker=None 인 item(마커가 이미
+        # 빠진 clause.text 기반)으로 대체되어, 위치확정된 new_text에서
+        # 항 기호(①②③…)가 조용히 사라졌다(old_text는 이 경로를 타지
+        # 않아 멀쩡했으므로 old/new 비대칭으로 드러남). "items에 실제
+        # 마커가 하나라도 있는가"로 진짜 분해 여부를 판정해야 한다.
+        if not items or not any(it.marker for it in items):
             result.append(clause)
             continue
-        for item in items:
+        for idx, item in enumerate(items):
+            if idx == 0 and item.marker is None and clause.marker:
+                # ★★ 실측 발견(2026-07-19, 전자정부법 제56조의2① 등): 호
+                # 목록이 시작되기 전 전제문(preamble)도 marker=None 인
+                # 별도 Fragment로 분리되는데, 이 조각 역시 clause.text
+                # (마커 이미 제거됨) 기반이라 raw에 "①"이 없다 — 위
+                # "호 없는 항" 케이스와 같은 유실이 전제문에서도 재현된다.
+                # 전제문은 개념상 그 항(①)의 일부이므로 raw 표시에는 항
+                # 마커를 되살려 붙인다(검색용 text는 그대로 두어 매칭
+                # 로직에는 영향이 없게 한다).
+                item = Fragment(item.level, item.marker, item.text, f"{clause.marker} {item.raw}")
             subs = split_by_subitem(item.text)
             if not subs:
                 result.append(item)

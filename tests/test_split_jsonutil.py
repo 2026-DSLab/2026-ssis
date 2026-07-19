@@ -186,6 +186,37 @@ class TestSplitAll:
         # 전제문("11. 정보자원이란…")도 별도 조각으로 살아있어야 검색 가능
         assert any(f.marker is None and "정보자원" in f.text for f in frags)
 
+    def test_clause_without_items_keeps_marker_in_raw(self):
+        """실측(2026-07-19, 환경개선비용 부담법 제20조①): 항 안에 호(1. 2.)
+        구조가 전혀 없으면 split_by_item()의 내부 fallback이 "매칭 안 됨"을
+        marker=None Fragment 하나로 감싸 돌려준다 — items가 절대 빈
+        리스트가 되지 않아, "호가 없으면 clause를 그대로 쓴다"는 분기가
+        죽은 코드였다. 그 결과 항 기호(①)가 담긴 clause.raw 대신
+        marker=None 인 item(마커 이미 제거된 clause.text 기반)이 쓰여
+        위치확정된 fragment.raw에서 "①"이 조용히 사라졌었다."""
+        text = "① 기후에너지환경부장관은 개선부담금을 내야 할 자가 납부기한까지 그 부담금을 내지 아니하면 10일 이상의 기간을 정하여 독촉하여야 한다."
+        frags = split_all(text)
+        assert len(frags) == 1
+        assert frags[0].marker == "①"
+        assert frags[0].raw.startswith("① 기후에너지환경부장관은")
+
+    def test_clause_preamble_before_item_list_keeps_marker_in_raw(self):
+        """실측(2026-07-19, 전자정부법 제56조의2①/조달청 내자구매업무
+        처리규정 제92조③): 항 안에 호(1. 2. …) 목록이 있어도, 목록이
+        시작되기 전 전제문("① …다음 각 호의 어느 하나에 해당하면…")은
+        marker=None인 별도 Fragment로 분리된다. 이 전제문 Fragment도
+        clause.text(마커 이미 제거됨) 기반이라, 위와 같은 이유로 raw에
+        "①"이 없었다 — old_text(항 전체, 마커 포함)와 이 전제문에
+        대응하는 new_text가 비대칭이었다."""
+        text = "① 다음 각 호의 어느 하나에 해당하면 지정정보처리장치를 이용하지 아니할 수 있다. 1. 전문적인 학술용역의 경우 2. 기존 시설물을 유지ㆍ보수하는 경우"
+        frags = split_all(text)
+        markers = [f.marker for f in frags]
+        assert markers == [None, "1.", "2."]
+        preamble = frags[0]
+        assert preamble.raw.startswith("① 다음 각 호의")
+        # 검색용 text는 마커 없이 그대로 유지되어야 매칭이 안 깨진다.
+        assert not preamble.text.startswith("①")
+
 
 class TestArticleNo:
     """조문번호 6자리 인코딩 — 실측 확인된 규칙."""
