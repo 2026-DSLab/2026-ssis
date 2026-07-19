@@ -408,25 +408,151 @@ diff는 원천적으로 없으므로 `source_url`(원문 링크)만 제공한다
 
 ```
 src/lawtrack/
-  api/        HTTP 레이어 (client, search, fulltext, oldnew)
-  text/       순수 로직 (normalize, split)
-  parse/      API 응답 → 구조화 (jsonutil, oldnew, fulltext)
-  locate/     6가드 위치확정 파이프라인 (핵심 diff 로직)
-  db/         conn.py, repo.py (Watchlist/Version/ChangeLog/ArticleDiff Repo)
-  contract/   schema.py(Pydantic), export.py (DB → LLM팀용 JSON)
-  detect.py   워치리스트 1건 처리(감지→조회→분석→저장)
+  config.py           .env 로딩 → Settings(api, db) — 다른 모든 모듈이 여길 통해 설정을 받음
+
+  api/                국가법령정보 Open API HTTP 레이어 (요청/응답 파싱까지, 비즈니스 로직은 없음)
+    client.py           공통 HTTP 클라이언트 (LawApiClient) — 인증키(OC) 부착, 재시도, LawApiError
+    search.py           목록조회 API — 워치리스트 항목의 최신 일련번호·시행상태 확인
+    fulltext.py          법령/행정규칙 "본문조회" API 호출 (전문 JSON 원본을 그대로 반환)
+    oldnew.py            "신구법 비교" API 호출 (法제처가 만든 개정 전/후 대비 원본)
+
+  parse/              api/ 가 받아온 원본 JSON을 구조화된 파이썬 객체로 변환 (여기까지는 파싱만, 위치확정 없음)
+    fulltext.py          전문 JSON → 조/항/호/목 트리 (parse_articles: 법령 / parse_admrul_units: 행정규칙)
+    oldnew.py            신구법 비교 API 응답 → (article_label, change_type, old_text, new_text) 레코드 목록
+    jsonutil.py           위 둘이 공유하는 JSON 순회/정규화 유틸
+
+  text/               순수 텍스트 로직 (외부 의존성 없음, 입출력이 전부 str/객체)
+    normalize.py          공백·특수문자·순화표기 등 비교 전 정규화
+    split.py              조문 원문을 항/호/목 단위 Fragment로 분리 (마커 손실 버그 수정한 파일 — split_all/split_by_item)
+
+  locate/             6단계 가드 파이프라인 — old_text가 신법 본문 어디에 해당하는지 확정 (이 프로젝트의 핵심 로직)
+    locator.py            가드 1~6 순서대로 시도, 성공하면 위치 확정 / 전부 실패하면 unresolved로 보고
+
+  db/                 MySQL 접근 계층 — 테이블별 Repo 클래스로 분리 (아래 "테이블 구조" 절 참고)
+    conn.py               커넥션 풀 + Database.transaction() 컨텍스트매니저
+    repo.py               WatchlistRepo / VersionRepo / ChangeLogRepo / ArticleDiffRepo
+
+  link.py             연쇄개정 그룹핑 — 같은 공포번호로 같이 개정된 법들을 하나의 AmendmentGroup으로 묶음
+
+  detect.py           워치리스트 1건 처리 파이프라인의 지휘자
+                       (일련번호 변경 감지 → 본문/신구법 API 호출 → parse → locate → link → DB 저장)
+
+  contract/           DB → LLM팀에게 넘길 최종 JSON 산출 계층
+    schema.py             Pydantic 모델 전체 (WeeklyContract 이하 전 스키마, 위 "산출물 구조" 절이 이 파일을 설명함)
+    export.py             DB 테이블들을 읽어 위 Pydantic 모델로 조립 (build_contract) — structural_expansions 그룹핑도 여기
 
 scripts/
-  run_weekly.py       주간 배치 — 워치리스트 전체를 돌며 개정 감지·저장·JSON 산출
-  run_single_check.py 법령/행정규칙 1건 디버깅용 상세 실행
-  load_watchlist.py   워치리스트 초기 적재 (Windows 인코딩 우회)
+  run_weekly.py       주간 배치 진입점 — 워치리스트 전체를 detect.process_entry()로 돌리고 build_contract()로 JSON 산출
+  run_single_check.py 법령/행정규칙 1건만 디버깅용으로 상세 실행 (locate 가드별 로그까지 출력)
+  load_watchlist.py   워치리스트 초기 적재 스크립트 (Windows mysql CLI 한글 인코딩 문제 우회용, seed_watchlist.sql과 내용 동일)
+  inspect_article.py  조문번호 필드(가지번호 포함, 예: 제6조의2)의 API 원본 JSON 구조를 그대로 출력해 파서 로직과 맞는지 확인하는 진단 스크립트
+  test_live_comparison.py  실제 API를 호출해 locate 파이프라인을 눈으로 검증하는 수동 스크립트
 
 database/
-  schema.sql          테이블 정의
-  seed_watchlist.sql  워치리스트 초기 데이터 (load_watchlist.py와 내용 동일)
+  schema.sql          전체 테이블 정의 (DDL) — 아래 "테이블 구조" 절 참고
+  seed_watchlist.sql  워치리스트 초기 데이터 (법령 76건 + 행정규칙 26건, load_watchlist.py와 내용 동일한 데이터를 SQL로 표현)
 
-tests/        pytest, 실측 데이터 기반 회귀 테스트
+tests/        pytest, 실측 데이터(실제 API 응답을 고정시킨 fixture) 기반 회귀 테스트. 파일명이 대상 모듈과 1:1 대응
+              (예: test_split_jsonutil.py ↔ text/split.py + parse/jsonutil.py, test_export.py ↔ contract/export.py)
 ```
+
+## 테이블 구조
+
+MySQL 8.0, `database/schema.sql` 기준. 테이블 5개 — 이 프로젝트에서 "진실의
+원천"은 항상 `laws`/`administrative_rules`의 전문 JSON이고, 나머지 테이블은
+전부 거기서 파생되거나 그 처리 과정을 기록한 것이다.
+
+### `laws` — 법령 전문 아카이브
+
+| 컬럼 | 타입 | 의미 |
+|---|---|---|
+| `law_id` | VARCHAR(50) | 법령 ID(불변 식별자, PK 일부) |
+| `law_serial_no` | VARCHAR(50) | 법령 일련번호(개정마다 바뀜, PK 일부) |
+| `law_name` | VARCHAR(255) | 법령명 |
+| `law_full_text` | JSON | **법제처 API 원본 그대로** — 가공 없이 저장(진실의 원천, 재파싱 가능하도록 보존) |
+| `law_articles_parsed` | JSON | `law_full_text`를 `parse_articles()`로 조/항/호/목 트리로 파싱한 캐시(조회 편의용, 파생값) |
+| `db_timestamp` | TIMESTAMP | 삽입/수정 시각 |
+
+- **PK**: `(law_id, law_serial_no)` — 같은 법이라도 일련번호(버전)마다 별도 행.
+- 개정이 감지되면 새 일련번호로 새 행이 **추가**되며, 기존 행은 지우지
+  않는다 — 즉 매 버전이 그대로 쌓이는 이력 테이블이다.
+- **행 존재 여부 자체가 개정감지 신호다**: `VersionRepo.law_exists(law_id,
+  new_serial_no)`가 False면 "아직 안 본 버전"이라는 뜻이고, 이게 곧
+  "개정됨"으로 판정되는 기준이다. 그래서 최초 구축 시 이 테이블을 절대
+  미리 채우면 안 된다(위 "DB 최초 구축 순서" 절 참고).
+
+### `administrative_rules` — 행정규칙 전문 아카이브
+
+`laws`와 완전히 동일한 구조(컬럼명만 `administrative_rule_*` 접두어), 행정규칙
+전용. `administrative_rule_articles_parsed`만 파서가 다르다
+(`parse_admrul_units` — 행정규칙 원문은 법령과 달리 마크업이 없는 평문이라,
+조/항/호/목 트리가 아니라 "위치 라벨 + 텍스트"의 평평한 목록 형태로 파싱됨).
+
+- **PK**: `(administrative_rule_id, administrative_rule_serial_no)`.
+
+### `watchlist` — 감시 대상 목록 (법령 76건 + 행정규칙 26건)
+
+| 컬럼 | 타입 | 의미 |
+|---|---|---|
+| `law_id` | VARCHAR(50) | **PK.** 법령/행정규칙 ID |
+| `law_type` | VARCHAR(50) | 법률/시행령/시행규칙/행정규칙 |
+| `official_name` | VARCHAR(255) | 현재 정식 명칭 |
+| `internal_name` | VARCHAR(255) | 등록 당시 이름(제명변경 추적용, 산출물의 `internal_name`과 동일 개념) |
+| `previous_names` | JSON | 제명변경 이력 배열 |
+| `dept_codes` | VARCHAR(255) | 소관부처 코드(콤마 구분, 행정규칙 동명이인 구분용) |
+| `status` | VARCHAR(50) | 현행/시행전 등 |
+| `successor_law_id` | VARCHAR(50) | 폐지·통합된 경우 후속 법령 ID |
+| `scheduled_date` | DATE | 시행예정일(아직 시행 안 된 경우) |
+| `last_serial_no` | VARCHAR(50) | 마지막으로 확인한 일련번호 |
+| `last_checked_at` | DATETIME | 마지막 확인 일시 |
+
+한 번 등록되면 삭제되지 않는 **단순 목록 테이블**이다(버전 이력이 아니라
+"지금 감시 중인 항목이 무엇인가"만 담음). `run_weekly.py`가 매 배치마다
+이 테이블 전체를 순회하며 `detect.process_entry()`를 호출하는 시작점.
+
+### `change_log` — 개정 이벤트 로그
+
+| 컬럼 | 타입 | 의미 |
+|---|---|---|
+| `id` | INT AUTO_INCREMENT | PK |
+| `law_id` | VARCHAR(50) | 법령/행정규칙 ID |
+| `old_serial_no` / `new_serial_no` | VARCHAR(50) | 개정 전/후 일련번호 |
+| `promulgation_no` | VARCHAR(100) | 공포번호(`link.py`가 이 값으로 연쇄개정을 그룹핑) |
+| `revision_type` | VARCHAR(50) | 제개정구분(일부개정/전부개정/제정/폐지제정 등) |
+| `revision_reason` | TEXT | 법제처 공식 개정이유 원문 그대로(LLM팀이 추론할 필요 없게) |
+| `unchanged_clauses` | JSON | `{"제34조": ["①","②"]}` 형태 — 이번에 안 바뀐 항(법령만, 항제개정유형 필드 기준) |
+| `comparison_available` | BOOLEAN | 신구법 대비 가능 여부. FALSE면 `article_diff`에 이 버전의 행이 하나도 없다는 뜻이지만, 그 부재만으로는 "애초에 대비 불가"와 "대비했는데 0건 변경"을 구분할 수 없어 별도 컬럼으로 명시(`no_comparison` 산출의 근거) |
+| `enforce_date` | DATE | 시행일자 |
+| `detected_at` | DATETIME | 이 개정을 감지·기록한 시각 |
+
+한 개정 이벤트(일련번호 변경) = 한 행. `article_diff`의 각 행은 반드시
+`change_log`의 어떤 행(같은 `law_id`+`new_serial_no`)에 속한다 — 즉
+`change_log`가 "이 버전에 무슨 일이 있었는가"의 헤더이고, `article_diff`가
+그 개정의 조문별 세부 내역이다.
+
+### `article_diff` — 조문 단위 diff (파이프라인의 핵심 산출 테이블)
+
+| 컬럼 | 타입 | 의미 |
+|---|---|---|
+| `law_id`, `law_serial_no` | VARCHAR(50) | 어느 법의 어느 버전(개정 후)인지 |
+| `article_code` | VARCHAR(50) | 법제처 원본의 조문코드(내부 식별자) |
+| `article_label` | VARCHAR(100) | 사람이 읽는 조 라벨(`제26조의7` 등). 위치를 못 찾으면 `(위치미상#N-M)` |
+| `clause_no` / `item_label` / `subitem_label` | VARCHAR(50) | 항/호/목 라벨(없으면 빈 문자열 `''`, NULL 아님 — UNIQUE KEY에 NULL이 섞이면 중복판정이 깨지기 때문) |
+| `enforce_date` | DATE | 시행일자 |
+| `change_type` | VARCHAR(50) | 개정/신설/삭제/미상 |
+| `old_text` / `new_text` | TEXT | 개정 전/후 문장 (`위치재배치의심`이면 `old_text` 앞에 `[※...]` 안내문이 붙어 저장됨) |
+| `match_status` | VARCHAR(50) | 성공 / 삭제(위치탐색제외) / 구조확장(구법미분리) / 위치재배치의심 |
+| `match_detail` | JSON | locate 6가드 중 어느 가드로 확정됐는지, 시도 로그 등 디버깅용 |
+| `created_at` | DATETIME | 삽입 시각 |
+
+- **UNIQUE KEY** `(law_id, law_serial_no, article_code, clause_no, item_label,
+  subitem_label, enforce_date)` — 같은 버전의 같은 위치가 중복 삽입되는 것을
+  막는다(재처리를 여러 번 돌려도 같은 위치는 갱신되지 않고 최초 1행만 유지).
+- `contract/export.py`의 `build_contract()`가 이 테이블을 읽어
+  `match_status`에 따라 `articles[]`(1:1)와 `structural_expansions[]`(1:N,
+  `match_status="구조확장(구법미분리)"` 행들을 `(article_label, old_text)`
+  기준으로 그룹핑)로 갈라 담는다 — 자세한 그룹핑 규칙은 위 산출물 구조
+  절의 `structural_expansions[]` 설명 참고.
 
 ## 테스트
 
