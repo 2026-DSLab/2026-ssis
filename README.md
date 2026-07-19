@@ -37,10 +37,12 @@ LOG_LEVEL=INFO
 **아래 순서를 반드시 지킨다.** `database/schema.sql`이 DB/테이블을 만들고,
 `database/seed_watchlist.sql`이 감시 대상 워치리스트(현재 102건: 법령 76건 +
 행정규칙 26건)를 등록한다. `laws`/`administrative_rules`(법령/행정규칙 전문
-아카이브)와 `article_diff`(조문별 diff)는 **일부러 비워둔다** — 이 두 테이블에
-행이 있는지 없는지 자체가 "이 버전을 이미 처리했는가"를 판단하는 개정감지의
-핵심 신호이기 때문에, 미리 채워 넣으면 안 된다(아래 "왜 `seed_initial.sql`을
-쓰면 안 되는가" 참고).
+아카이브)와 `article_diff`(조문별 diff)는 **반드시 비워둔 채로 시작해야 한다**
+— 이 두 테이블에 행이 있는지 없는지 자체가 "이 버전을 이미 처리했는가"를
+판단하는 개정감지의 핵심 신호이기 때문이다(`VersionRepo.law_exists`/
+`admrul_exists`). 미리 채워 넣으면(빈 값이든 실제 값이든) 그 항목은 영원히
+"이미 처리됨"으로 오판되어 개정감지가 동작하지 않는다 — 최초 백필은 반드시
+아래 3번 단계(`scripts/run_weekly.py`)로 한다.
 
 1. **스키마 생성**
 
@@ -74,18 +76,6 @@ LOG_LEVEL=INFO
    1회) 실행하면 된다 — 실제 스케줄러(cron, Windows 작업 스케줄러 등)에
    등록하는 것은 이 프로젝트의 범위 밖이며, 인프라 담당이 별도로 구성해야
    한다. 산출물은 `out/weekly_contract_<날짜>.json`에 쌓인다.
-
-## ⚠️ `database/seed_initial.sql`은 쓰지 않는다
-
-이 파일은 `laws`/`administrative_rules`에 **내용이 빈 JSON**(`law_full_text =
-JSON_OBJECT()`)으로 미리 행을 채워 넣는 옛 설계의 흔적이다. 이 프로젝트의
-개정감지는 정확히 "`(law_id, 현재_일련번호)` 조합이 `laws`/`administrative_rules`에
-이미 존재하는가"로 판단하므로(`VersionRepo.law_exists`/`admrul_exists`), 이 파일을
-실행하면 실제 전문 데이터 없이 "이미 처리 완료"로 표시된 가짜 행이 생겨 —
-**해당 항목들이 영원히 "변경없음"으로만 보고되고, 실제 전문이나 diff는 절대
-채워지지 않는다.** 이걸 보완하려던 후속 스크립트 `scripts/load_full_text.py`도
-끝내 구현되지 않아 0바이트로 남아있다. 최초 백필은 위 3번 단계
-(`scripts/run_weekly.py`)로 한다 — 별도 전문 사전 적재가 필요 없다.
 
 ## 산출물(`out/*.json`) 구조
 
@@ -434,7 +424,6 @@ scripts/
 database/
   schema.sql          테이블 정의
   seed_watchlist.sql  워치리스트 초기 데이터 (load_watchlist.py와 내용 동일)
-  seed_initial.sql    ⚠️ 사용하지 않음 — 위 경고 참고
 
 tests/        pytest, 실측 데이터 기반 회귀 테스트
 ```
