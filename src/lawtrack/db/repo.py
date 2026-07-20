@@ -361,21 +361,11 @@ class ChangeLogRepo:
 # 조문 단위 diff (6가드 출력)
 # ---------------------------------------------------------------------------
 
-#: match_status="위치재배치의심"일 때 old_text 앞에 붙일 안내문. match_status
-#: 필드를 따로 안 보고 old_text만 눈으로 훑어도 신뢰하면 안 된다는 게
-#: 바로 보이도록, 실제 법령 원문과 섞이지 않는 "[※...]" 형식을 쓴다.
-#:
-#: ★ 설계(2026-07-19): "구조확장(구법미분리)"는 여기 없다 — 그 케이스는
-#: contract/export.py가 articles[]에서 아예 빼내 별도 StructuralExpansion
-#: 그룹으로 분리하므로(schema.py 참고), old_text에 안내문을 덧붙이는 대신
-#: 배열 구조 자체로 "이건 1:1이 아니다"를 표현한다. 여기서 이 접두어를
-#: 붙이면 export 단계에서 다시 벗겨내야 하는 이중 작업이 되므로, 애초에
-#: 안 붙인다 — DB에 저장되는 old_text는 항상 순수 원문이어야 한다.
-_OLD_TEXT_NOTES: dict[str, str] = {
-    "위치재배치의심": "[※ 같은 조문 내 항 신설로 순번이 밀려 원본 대비표가 "
-                     "잘못 짝지었을 수 있음 — 아래가 실제로는 다른 항의 "
-                     "개정 전 내용일 수 있음] ",
-}
+#: ★ 설계(2026-07-20): match_status="위치재배치의심"일 때 old_text 앞에
+#: "[※...]" 안내문을 붙이던 로직은 제거했다 — match_status 필드 자체가
+#: 이미 "위치재배치의심"이라는 값으로 신뢰도를 명시하므로, old_text에
+#: 텍스트를 덧붙이면 DB에 저장되는 old_text가 원문 그대로가 아니게 되는
+#: 부작용이 있었다. DB에 저장되는 old_text는 항상 순수 원문이어야 한다.
 
 
 class ArticleDiffRepo:
@@ -581,13 +571,6 @@ class ArticleDiffRepo:
                 match_status = "구조확장(구법미분리)"
             elif article_label in reshuffled_articles:
                 match_status = "위치재배치의심"
-
-        # ★ 실측(2026-07-19, LLM팀 산출물 리뷰): match_status만 보고 old_text의
-        # 신뢰도를 판단하게 하면, old_text 자체만 눈으로 훑는 사람/LLM은 그
-        # 경고를 놓칠 수 있다 — 문제되는 문장 옆에 바로 괄호로 이유를 적어
-        # old_text 자체만 봐도 "이건 곧이곧대로 믿으면 안 된다"가 보이게 한다.
-        # 실제 법령 원문과 섞이지 않도록 "[※...]" 형식으로 명확히 구분한다.
-        old_text = _OLD_TEXT_NOTES.get(match_status, "") + old_text
 
         return (
             law_id,

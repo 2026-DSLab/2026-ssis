@@ -1,9 +1,9 @@
 {
   "contract_version": "1.0",
-  "batch_date": "2026-07-19",
+  "batch_date": "2026-07-20",
   "period": {
-    "from_date": "2016-07-21",
-    "to_date": "2036-07-16"
+    "from_date": "2016-07-22",
+    "to_date": "2036-07-17"
   },
   "amendment_groups": [
     {

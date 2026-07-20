@@ -215,10 +215,10 @@ class TestReshuffledArticleFlagging:
         )
         assert row[11] == "위치재배치의심"  # match_status
 
-    def test_flagged_old_text_carries_inline_warning_prefix(self):
-        """★ 실측(2026-07-19, LLM팀 산출물 리뷰): match_status 필드를 따로
-        안 보고 old_text만 훑어도 "이거 못 믿는다"가 바로 보이게, old_text
-        앞에 "[※...]" 안내문을 붙인다 — 법령 원문과 섞이지 않는 형식."""
+    def test_flagged_old_text_stays_pure_original_text(self):
+        """★ 실측(2026-07-20): match_status="위치재배치의심"이어도 old_text
+        앞에 안내문을 덧붙이지 않는다 — DB/산출물의 old_text는 항상 순수
+        원문 그대로여야 하고, 신뢰도 표시는 match_status 필드만으로 한다."""
         amended = self._amended_change(0)
         created = self._newly_created_change(1)
         results = [
@@ -229,9 +229,7 @@ class TestReshuffledArticleFlagging:
         row = ArticleDiffRepo._to_row(
             "34470", "1", amended, results[0][1][0], date(2025, 1, 1), 0, reshuffled,
         )
-        old_text = row[9]
-        assert old_text.startswith("[※")
-        assert "구" in old_text  # 원래 old_text("구")가 뒤에 그대로 남아있어야 함
+        assert row[9] == "구"
 
     def test_amended_row_not_flagged_without_sibling_newly_created(self):
         amended = self._amended_change(0)
