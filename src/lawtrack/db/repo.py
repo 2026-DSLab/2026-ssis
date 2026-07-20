@@ -14,7 +14,7 @@ from datetime import date, datetime
 from lawtrack.db.conn import Database
 from lawtrack.locate.locator import LocateResult, LocateStatus
 from lawtrack.parse.oldnew import ArticleChange, ChangeType
-from lawtrack.text.split import strip_annotations, strip_article_head
+from lawtrack.text.split import split_to_item_level, strip_annotations, strip_article_head
 
 log = logging.getLogger(__name__)
 
@@ -397,13 +397,33 @@ class ArticleDiffRepo:
             # 무관하게, "이 change 하나가 성공적으로 위치확정된 결과가
             # 2개 이상"이면 그 자체로 old_text가 각 행에 정밀 대응하지
             # 않는다는 직접적인 신호다 — 위 휴리스틱보다 더 좁고 정확하다.
+            #
+            # ★★★ 설계(2026-07-20): 다만 "2개 이상"이 전부 old_text가
+            # 진짜로 대응 안 되는 건 아니다 — oldAndNew가 이미 호 단위로
+            # 나뉜 구법 문장을 어쩌다 한 change 블록에 같이 담았을 뿐,
+            # 구법에도 신법과 똑같은 호 마커가 있어 1:1로 정밀하게 짝지을
+            # 수 있는 경우도 있다. 그런 경우까지 뭉뚱그려 구조확장으로
+            # 보내면 과잉분류다. _fragment_old_text_by_item()이 "이 change의
+            # 성공 위치 전부가 old_clean을 호 단위로 쪼갠 결과와 애매함 없이
+            # 1:1로 맞아떨어지는가"를 확인해, 맞으면 위치별 정밀 old_text를
+            # 주고(old_text_shared=False, 정상 성공 처리), 하나라도 안 맞으면
+            # None을 돌려줘 기존 통짜 재사용 + 구조확장 판정으로 그대로
+            # 폴백한다(all-or-nothing — 일부만 정밀 매칭하는 애매한 상태는
+            # 만들지 않는다).
             success_count = sum(1 for lr in locate_results if lr.status.value == "성공")
-            old_text_shared = change.change_type is ChangeType.AMENDED and success_count > 1
+            fragment_old_lookup = None
+            if change.change_type is ChangeType.AMENDED and success_count > 1:
+                fragment_old_lookup = self._fragment_old_text_by_item(change, locate_results)
+            old_text_shared = (
+                change.change_type is ChangeType.AMENDED
+                and success_count > 1
+                and fragment_old_lookup is None
+            )
             for frag_idx, lr in enumerate(locate_results):
                 rows.append(
                     self._to_row(
                         law_id, law_serial_no, change, lr, default_enforce_date, frag_idx,
-                        reshuffled, old_text_shared,
+                        reshuffled, old_text_shared, fragment_old_lookup,
                     )
                 )
 
@@ -466,6 +486,52 @@ class ArticleDiffRepo:
             return cur.fetchall()
 
     @staticmethod
+    def _fragment_old_text_by_item(
+        change: ArticleChange, locate_results: list[LocateResult],
+    ) -> dict[tuple[str, str], str] | None:
+        """old_clean을 호 단위까지 분해해(text.split.split_to_item_level),
+        이 change의 성공 위치 전부를 (clause_no, item_label) 키로 애매함
+        없이 1:1 매칭할 수 있으면 그 매핑을 돌려준다 — 대응이 하나라도
+        안 되거나 old쪽에 같은 키가 중복되면(애매함) None을 돌려줘
+        호출부가 기존 통짜-재사용 동작으로 폴백하게 한다. all-or-nothing:
+        일부 위치만 정밀 매칭되는 상태는 만들지 않는다(그 change의 여러
+        위치가 서로 다른 신뢰도의 old_text를 갖게 되는 혼란을 피하기
+        위해서다).
+        """
+        succeeded = [
+            lr for lr in locate_results
+            if lr.status.value == "성공" and lr.unit is not None
+        ]
+        if len(succeeded) <= 1:
+            return None
+
+        # ★★ 실측 발견(2026-07-20, 전자정부법 제2조11호 가~바 재확인):
+        # 신법 쪽 여러 위치(목 가.나.다...)가 (항,호)까지만 놓고 보면 전부
+        # 같은 키로 겹칠 수 있다 — 이 경우 old_lookup에 그 키가 "존재"는
+        # 하므로(중복 없이 딱 1개) 아래 존재확인만으로는 통과해버려, 결국
+        # 목 6개 전부가 같은 old_text를 공유한 채 match_status=성공으로
+        # 새어나가는 회귀가 생겼다(구조확장으로 잡혔어야 할 케이스가 오히려
+        # 안내 없이 더 조용히 틀리게 됨). 신법 쪽 키들이 서로 겹치지 않고
+        # 전부 달라야만("호 단위로 구분 가능") 정밀 매칭을 시도한다.
+        new_keys = [(lr.unit.clause_no or "", lr.unit.item_label or "") for lr in succeeded]
+        if len(set(new_keys)) != len(new_keys):
+            return None
+
+        old_search_text = strip_annotations(strip_article_head(change.old_clean))
+        old_lookup: dict[tuple[str, str], str] = {}
+        for clause_marker, item_marker, frag in split_to_item_level(old_search_text):
+            key = (clause_marker, item_marker)
+            if key in old_lookup:
+                return None  # old쪽에 같은 (항,호) 키가 중복 — 애매하니 폴백
+            old_lookup[key] = strip_annotations(frag.raw).strip()
+
+        for lr in succeeded:
+            key = (lr.unit.clause_no or "", lr.unit.item_label or "")
+            if key not in old_lookup:
+                return None  # 이 위치에 대응하는 old 조각이 없음 — 폴백
+        return old_lookup
+
+    @staticmethod
     def _reshuffled_articles(
         results: list[tuple[ArticleChange, list[LocateResult]]],
     ) -> set[str]:
@@ -499,6 +565,7 @@ class ArticleDiffRepo:
         lr: LocateResult, default_enforce_date: date, frag_idx: int,
         reshuffled_articles: set[str] = frozenset(),
         old_text_shared: bool = False,
+        fragment_old_lookup: dict[tuple[str, str], str] | None = None,
     ) -> tuple:
         unit = lr.unit
         # ✅ 실측 확인된 "조문시행일자"(unit.enforce_date)를 우선 사용.
@@ -536,11 +603,7 @@ class ArticleDiffRepo:
         # 똑같이 거대한 원문 덩어리를 new_text 로 갖게 되어, "이 위치에서
         # 정확히 무엇이 바뀌었는지"를 각 행만 보고는 알 수 없었다(LLM팀에게
         # "이미 확정된 사실만 준다"는 설계 원칙 위반). new_text 는 실제로
-        # 위치가 확정된 조각(lr.fragment)의 텍스트를 쓴다. old_text 는
-        # 구조상 조각 단위로 대응시킬 짝이 없어(oldAndNew 가 신 텍스트만
-        # 조각 분해 대상으로 삼음, locate/locator.py 참고) 여전히 change
-        # 전체를 쓰지만, 최소한 조문 헤더는 떼어내 new_text 와 형식을
-        # 맞춘다.
+        # 위치가 확정된 조각(lr.fragment)의 텍스트를 쓴다.
         #
         # ★★ 실측 발견(2026-07-16, (계약예규) 예정가격작성기준 제40조② 등):
         # new_text 쪽은 locate/locator.py 가 검색 직전에 이미
@@ -553,8 +616,24 @@ class ArticleDiffRepo:
         # "신설"을 명시하므로 정보 손실이 아니다(오히려 "old_text=<신설>"
         # 이라는 내부 마커 텍스트를 그대로 노출하는 것보다 빈 문자열이
         # "개정 전엔 없었다"는 뜻을 더 명확히 전달한다).
+        #
+        # ★★★ 설계(2026-07-20): old_text도 fragment_old_lookup이 있으면
+        # (호 단위까지 구/신이 정밀하게 1:1 대응된 경우) 통짜 change.old_clean
+        # 대신 이 위치에 해당하는 호 단위 조각만 쓴다 — insert_results()가
+        # 이 change의 모든 성공 위치를 old_clean 분해 결과와 매칭할 수
+        # 있을 때만 채워주므로(_fragment_old_text_by_item 참고), 대응이
+        # 애매하면 fragment_old_lookup 자체가 None이라 기존 통짜 재사용
+        # 동작으로 자동 폴백한다.
         new_text = lr.fragment.raw if lr.fragment else change.new_clean
-        old_text = strip_annotations(strip_article_head(change.old_clean)).strip()
+        fragment_old_text = (
+            fragment_old_lookup.get((clause_no, item_label))
+            if fragment_old_lookup is not None and unit is not None
+            else None
+        )
+        if fragment_old_text is not None:
+            old_text = fragment_old_text
+        else:
+            old_text = strip_annotations(strip_article_head(change.old_clean)).strip()
 
         match_status = lr.status.value
         if match_status == "성공" and change.change_type is ChangeType.AMENDED:

@@ -343,3 +343,93 @@ class TestOldTextSharedFlagging:
             date(2025, 1, 1), 0, reshuffled_articles={"제2조"}, old_text_shared=True,
         )
         assert row[11] == "구조확장(구법미분리)"
+
+
+class TestFragmentSpecificOldText:
+    """★ 설계(2026-07-20): "구조확장이 아닌데도 old_text가 통짜로 재사용되는"
+    사례를 줄이기 위해, old_clean도 호 단위까지 쪼개서 이 change의 성공
+    위치 전부와 애매함 없이 1:1로 맞출 수 있으면 위치별 정밀 old_text를
+    준다. 맞지 않으면(old에 호 구조가 없거나 일부만 맞으면) 기존 통짜
+    재사용 + 구조확장 판정으로 그대로 폴백한다(all-or-nothing)."""
+
+    def _amended_change(self, old_clean: str, new_clean: str = "신", index: int = 0) -> ArticleChange:
+        return ArticleChange(
+            index=index, change_type=ChangeType.AMENDED,
+            old_raw=f"<P>{old_clean}</P>", new_raw=f"<P>{new_clean}</P>",
+            old_clean=old_clean, new_clean=new_clean,
+        )
+
+    def _unit(self, item_label: str, clause_no: str = "") -> SearchUnit:
+        return SearchUnit(
+            article_code="제5조", article_label="제5조", clause_no=clause_no,
+            item_label=item_label, subitem_label="", text="x", changed=True,
+        )
+
+    def test_clean_item_split_gives_precise_old_text_not_shared(self):
+        """구법에도 호 마커가 있어 신법 위치와 1:1로 맞아떨어지면, old_text는
+        전체 블록이 아니라 그 호만 받고 match_status는 정상 성공이어야
+        한다(구조확장으로 과잉분류되면 안 됨)."""
+        change = self._amended_change("1. 가 2. 나")
+        locate_results = [
+            LocateResult(LocateStatus.SUCCESS, self._unit("1."), None, 1, ()),
+            LocateResult(LocateStatus.SUCCESS, self._unit("2."), None, 1, ()),
+        ]
+        lookup = ArticleDiffRepo._fragment_old_text_by_item(change, locate_results)
+        assert lookup == {("", "1."): "1. 가", ("", "2."): "2. 나"}
+
+        row0 = ArticleDiffRepo._to_row(
+            "X", "1", change, locate_results[0], date(2025, 1, 1), 0,
+            frozenset(), old_text_shared=False, fragment_old_lookup=lookup,
+        )
+        row1 = ArticleDiffRepo._to_row(
+            "X", "1", change, locate_results[1], date(2025, 1, 1), 1,
+            frozenset(), old_text_shared=False, fragment_old_lookup=lookup,
+        )
+        assert row0[9] == "1. 가"
+        assert row1[9] == "2. 나"
+        assert row0[11] == "성공"
+        assert row1[11] == "성공"
+
+    def test_old_without_item_markers_falls_back_to_none(self):
+        """구법이 호 구조 없이 통짜 문장이면(구조확장 케이스) 정밀 매칭이
+        원천적으로 불가능하니 None을 돌려줘 기존 동작으로 폴백해야 한다."""
+        change = self._amended_change("통짜 구법 문장")
+        locate_results = [
+            LocateResult(LocateStatus.SUCCESS, self._unit("1."), None, 1, ()),
+            LocateResult(LocateStatus.SUCCESS, self._unit("2."), None, 1, ()),
+        ]
+        assert ArticleDiffRepo._fragment_old_text_by_item(change, locate_results) is None
+
+    def test_partial_match_falls_back_to_none(self):
+        """신법 위치 중 하나라도 old쪽에 대응하는 호가 없으면(예: 신설로
+        번호가 하나 더 늘어난 경우) 전체를 폴백시킨다 — 일부만 정밀
+        매칭되는 애매한 상태는 만들지 않는다."""
+        change = self._amended_change("1. 가 2. 나")
+        locate_results = [
+            LocateResult(LocateStatus.SUCCESS, self._unit("1."), None, 1, ()),
+            LocateResult(LocateStatus.SUCCESS, self._unit("2."), None, 1, ()),
+            LocateResult(LocateStatus.SUCCESS, self._unit("3."), None, 1, ()),
+        ]
+        assert ArticleDiffRepo._fragment_old_text_by_item(change, locate_results) is None
+
+    def test_multiple_new_locations_sharing_same_item_key_falls_back_to_none(self):
+        """★★ 실측 회귀(2026-07-20, 전자정부법 제2조11호 가~바): 신법 쪽
+        여러 위치(목 가.나.다...)가 (항,호)까지만 보면 전부 같은 키로
+        겹칠 수 있다 — old_lookup엔 그 키가 존재는 하므로(중복 없이 1개)
+        존재확인만으로는 이걸 못 걸러내 목 6개가 전부 같은 old_text를
+        공유한 채 match_status=성공으로 새어나가는 회귀가 있었다. 신법
+        쪽 키가 서로 겹치면 반드시 폴백해야 한다."""
+        change = self._amended_change("11. 통짜 구법 문장")
+        locate_results = [
+            LocateResult(LocateStatus.SUCCESS, self._unit("11.", clause_no=""), None, 1, ()),
+            LocateResult(LocateStatus.SUCCESS, self._unit("11.", clause_no=""), None, 1, ()),
+        ]
+        assert ArticleDiffRepo._fragment_old_text_by_item(change, locate_results) is None
+
+    def test_single_success_returns_none(self):
+        """성공 위치가 1개뿐이면 애초에 old_text 재사용 문제 자체가 없으니
+        정밀 매칭을 시도할 필요가 없다(기존 통짜 동작 그대로가 이미
+        정확함)."""
+        change = self._amended_change("1. 가 2. 나")
+        locate_results = [LocateResult(LocateStatus.SUCCESS, self._unit("1."), None, 1, ())]
+        assert ArticleDiffRepo._fragment_old_text_by_item(change, locate_results) is None

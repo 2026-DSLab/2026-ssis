@@ -297,6 +297,38 @@ def searchable_fragments(text: str) -> list[Fragment]:
     return [f for f in split_all(text) if f.searchable]
 
 
+def split_to_item_level(text: str) -> list[tuple[str, str, Fragment]]:
+    """항 → 호 까지만 분해한다(목은 내려가지 않는다).
+
+    ★ 설계(2026-07-20, old_text 정밀화): db/repo.py가 old_text를 위치별로
+    정밀 매칭할 때 쓴다. 목(가나다) 단위까지 내려가면 괄호 안 숫자 참조,
+    한글 문장 종결어미 등 목 마커 오탐 위험이 이번 세션에서만 여러 번
+    발견됐던 만큼(split_by_subitem 주석 참고), 상대적으로 훨씬 안정적인
+    호 단위에서 멈춘다 — 목 단위 행은 자기가 속한 호 전체의 old_text를
+    보게 되지만, 이건 새로운 종류의 애매함이 아니라 structural_expansions
+    가 이미 쓰는 "그룹당 참고 old_text 1개" 규칙이 더 좁은 범위(조문
+    전체가 아니라 호 하나)에 적용되는 것뿐이다.
+
+    반환값: (항 마커 또는 "", 호 마커 또는 "", Fragment) 튜플 목록 —
+    항 하나에 호가 여러 개 딸려도 각 조각이 어느 항 소속인지 식별
+    가능해야 하므로 clause 마커를 함께 들고 다닌다.
+    """
+    if not text or not text.strip():
+        return []
+    out: list[tuple[str, str, Fragment]] = []
+    for clause in split_by_clause(text) or [Fragment(Level.NONE, None, text, text)]:
+        clause_marker = clause.marker or ""
+        items = split_by_item(clause.text)
+        if not items or not any(it.marker for it in items):
+            out.append((clause_marker, "", clause))
+            continue
+        for idx, item in enumerate(items):
+            if idx == 0 and item.marker is None and clause.marker:
+                item = Fragment(item.level, item.marker, item.text, f"{clause.marker} {item.raw}")
+            out.append((clause_marker, item.marker or "", item))
+    return out
+
+
 # ---------------------------------------------------------------------------
 # 조문 번호
 # ---------------------------------------------------------------------------
