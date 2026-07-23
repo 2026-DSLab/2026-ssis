@@ -5,7 +5,7 @@
 
 주의 — API 키 노출 방지:
     목록조회 응답의 '법령상세링크' 등에는 실제 호출에 쓰인 OC 인증키가
-    쿼리스트링에 그대로 박혀 있다(실측: '/DRF/lawService.do?OC=joonone
+    쿼리스트링에 그대로 박혀 있다(실측: '/DRF/lawService.do?OC=<redacted>
     &target=law&MST=...'). 이걸 그대로 산출물에 옮기면 인증키가
     LLM팀 산출물(파일)에 새어나간다. source_url 생성 시 반드시 OC 를
     제거하거나 안전한 값으로 치환한다.
@@ -65,16 +65,82 @@ def build_contract(
     to_date: date,
     batch_date: date | None = None,
 ) -> WeeklyContract:
-    """DB 에서 기간 내 변경분을 모아 WeeklyContract 를 조립한다."""
+    """DB에서 시행일이 기간 내인 변경분을 조립한다.
+
+    과거 자료 재조립·범위 조회용 API다. 실제 주간 배치는 실행 중 새로 감지한
+    버전만 담기 위해 :func:`build_contract_for_versions`를 사용한다.
+    """
     batch_date = batch_date or date.today()
 
     diff_rows = article_diff_repo.fetch_period(from_date, to_date)
+    no_comparison_versions = {
+        (row["law_id"], row["new_serial_no"])
+        for row in change_log_repo.fetch_no_comparison_in_period(from_date, to_date)
+    }
+    return _build_contract_from_rows(
+        watchlist_repo,
+        change_log_repo,
+        diff_rows=diff_rows,
+        candidate_versions=no_comparison_versions,
+        no_comparison_versions=no_comparison_versions,
+        from_date=from_date,
+        to_date=to_date,
+        batch_date=batch_date,
+    )
+
+
+def build_contract_for_versions(
+    watchlist_repo: WatchlistRepo,
+    article_diff_repo: ArticleDiffRepo,
+    change_log_repo: ChangeLogRepo,
+    *,
+    versions: set[tuple[str, str]],
+    no_comparison_versions: set[tuple[str, str]] | None = None,
+    from_date: date,
+    to_date: date,
+    batch_date: date | None = None,
+) -> WeeklyContract:
+    """이번 배치 실행에서 새로 감지한 법령·버전만 계약으로 조립한다.
+
+    ``from_date``와 ``to_date``는 보고 주기를 문서에 표시하기 위한 메타데이터일
+    뿐이며, 시행일 필터로 사용하지 않는다.
+    """
+    batch_date = batch_date or date.today()
+    normalized_versions = set(versions)
+    explicit_no_comparison = set(no_comparison_versions or ())
+    if not explicit_no_comparison.issubset(normalized_versions):
+        raise ValueError("no_comparison_versions는 versions에 포함되어야 합니다.")
+    diff_rows = article_diff_repo.fetch_versions(normalized_versions)
+    return _build_contract_from_rows(
+        watchlist_repo,
+        change_log_repo,
+        diff_rows=diff_rows,
+        candidate_versions=normalized_versions,
+        no_comparison_versions=explicit_no_comparison,
+        from_date=from_date,
+        to_date=to_date,
+        batch_date=batch_date,
+    )
+
+
+def _build_contract_from_rows(
+    watchlist_repo: WatchlistRepo,
+    change_log_repo: ChangeLogRepo,
+    *,
+    diff_rows: list[dict],
+    candidate_versions: set[tuple[str, str]],
+    no_comparison_versions: set[tuple[str, str]],
+    from_date: date,
+    to_date: date,
+    batch_date: date,
+) -> WeeklyContract:
+    """이미 선택된 diff와 버전 목록을 WeeklyContract로 조립한다."""
     by_law_serial: dict[tuple[str, str], list[dict]] = {}
     for row in diff_rows:
         key = (row["law_id"], row["law_serial_no"])
         by_law_serial.setdefault(key, []).append(row)
 
-    change_rows = _change_rows_in_period(by_law_serial, change_log_repo)
+    change_rows = _change_rows(by_law_serial, change_log_repo)
 
     promulgation_nos = [r["promulgation_no"] for r in change_rows if r.get("promulgation_no")]
     linked = group_many(change_log_repo, promulgation_nos)
@@ -111,11 +177,17 @@ def build_contract(
         laws, u, nc = _build_laws(standalone, watchlist_repo, by_law_serial)
         unresolved.extend(u)
         no_comparison.extend(nc)
+        standalone_by_version = {
+            (row["law_id"], row["new_serial_no"]): row for row in standalone
+        }
         for law in laws:
+            row = standalone_by_version[(law.law_id, law.new_serial_no)]
             amendment_groups.append(
                 AmendmentGroup(
                     group_id=f"single-{law.law_id}-{law.new_serial_no}",
-                    promulgation_no="",
+                    promulgation_no=row.get("promulgation_no", "") or "",
+                    promulgation_date=row.get("promulgation_date", "") or "",
+                    revision_type=row.get("revision_type", "") or "",
                     affected_law_ids=[law.law_id],
                     laws=[law],
                 )
@@ -129,8 +201,7 @@ def build_contract(
     # 적이 한 번도 없었다(제정된 법이 매번 산출물에서 통째로 사라짐). article_diff
     # 를 거치지 않고 change_log를 직접 조회해 채운다.
     seen = {(r["law_id"], r["new_serial_no"]) for r in change_rows}
-    for pair in change_log_repo.fetch_no_comparison_in_period(from_date, to_date):
-        law_id, serial_no = pair["law_id"], pair["new_serial_no"]
+    for law_id, serial_no in sorted(candidate_versions):
         if (law_id, serial_no) in seen:
             continue
         seen.add((law_id, serial_no))
@@ -142,7 +213,11 @@ def build_contract(
         no_comparison.append(
             NoComparisonItem(
                 law_id=law_id, law_name=law_name, new_serial_no=serial_no,
-                reason=(cl.get("revision_type") if cl else "") or "신구법 대비 불가",
+                reason=(
+                    ((cl.get("revision_type") if cl else "") or "신구법 대비 불가")
+                    if (law_id, serial_no) in no_comparison_versions
+                    else "변경 세부내역 없음"
+                ),
                 source_url=url,
             )
         )
@@ -158,7 +233,7 @@ def build_contract(
     return contract
 
 
-def _change_rows_in_period(
+def _change_rows(
     by_law_serial: dict[tuple[str, str], list[dict]], change_log_repo: ChangeLogRepo,
 ) -> list[dict]:
     """article_diff 에서 확보한 (law_id, serial_no) 조합별 메타 정보 집계.
@@ -179,7 +254,7 @@ def _change_rows_in_period(
             "law_id": law_id,
             "new_serial_no": serial_no,
             "promulgation_no": (cl.get("promulgation_no") or "") if cl else "",
-            "promulgation_date": "",
+            "promulgation_date": str(cl.get("promulgation_date") or "") if cl else "",
             "revision_type": (cl.get("revision_type") or "") if cl else "",
             "old_serial_no": (cl.get("old_serial_no") or "") if cl else "",
             "revision_reason": (cl.get("revision_reason") or "") if cl else "",

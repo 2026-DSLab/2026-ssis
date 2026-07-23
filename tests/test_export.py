@@ -3,7 +3,7 @@
 from datetime import date
 from unittest.mock import MagicMock
 
-from lawtrack.contract.export import build_contract
+from lawtrack.contract.export import build_contract, build_contract_for_versions
 from lawtrack.db.repo import WatchlistEntry
 
 
@@ -33,13 +33,79 @@ def _article_diff_repo():
 def _change_log_repo():
     repo = MagicMock()
     repo.fetch_latest_for_serial.return_value = {
-        "promulgation_no": "", "revision_type": "일부개정",
+        "promulgation_no": "20476", "promulgation_date": date(2024, 10, 22),
+        "revision_type": "일부개정",
         "revision_reason": "국무총리 소속에서 행정안전부장관 소속으로 이관하기 위함",
         "old_serial_no": "200001",
         "unchanged_clauses": {"제22조": ["①", "②"]},
     }
     repo.find_by_promulgation.return_value = []
     return repo
+
+
+class TestDetectedVersionReporting:
+    """주간 배치는 시행일이 아니라 이번 실행에서 감지한 버전을 보고한다."""
+
+    def test_detected_version_is_included_even_when_enforce_date_is_old(self):
+        article_repo = MagicMock()
+        old_diff = _article_diff_repo().fetch_period.return_value[0]
+        article_repo.fetch_versions.return_value = [old_diff]
+
+        contract = build_contract_for_versions(
+            _watchlist_repo(), article_repo, _change_log_repo(),
+            versions={("001357", "251019")},
+            from_date=date(2026, 7, 15),
+            to_date=date(2026, 7, 22),
+            batch_date=date(2026, 7, 22),
+        )
+
+        assert contract.total_law_count == 1
+        law = contract.amendment_groups[0].laws[0]
+        assert law.new_serial_no == "251019"
+        assert law.enforce_date == "2023-11-17"
+        assert contract.period.from_date == "2026-07-15"
+        assert contract.period.to_date == "2026-07-22"
+        group = contract.amendment_groups[0]
+        assert group.promulgation_no == "20476"
+        assert group.promulgation_date == "2024-10-22"
+        assert group.revision_type == "일부개정"
+        article_repo.fetch_versions.assert_called_once_with({("001357", "251019")})
+        article_repo.fetch_period.assert_not_called()
+
+    def test_only_versions_detected_in_current_run_are_requested(self):
+        article_repo = MagicMock()
+        article_repo.fetch_versions.return_value = []
+
+        contract = build_contract_for_versions(
+            _watchlist_repo(), article_repo, _change_log_repo(),
+            versions=set(),
+            from_date=date(2026, 7, 15),
+            to_date=date(2026, 7, 22),
+        )
+
+        assert contract.total_law_count == 0
+        assert contract.no_comparison == []
+        article_repo.fetch_versions.assert_called_once_with(set())
+
+    def test_detected_no_comparison_version_is_reported(self):
+        article_repo = MagicMock()
+        article_repo.fetch_versions.return_value = []
+        cl_repo = _change_log_repo()
+        cl_repo.fetch_latest_for_serial.return_value = {
+            "revision_type": "폐지제정",
+            "promulgation_no": "",
+        }
+
+        contract = build_contract_for_versions(
+            _watchlist_repo(), article_repo, cl_repo,
+            versions={("001357", "251019")},
+            no_comparison_versions={("001357", "251019")},
+            from_date=date(2026, 7, 15),
+            to_date=date(2026, 7, 22),
+        )
+
+        assert len(contract.no_comparison) == 1
+        assert contract.no_comparison[0].reason == "폐지제정"
 
 
 class TestRevisionReasonWiredThrough:

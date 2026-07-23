@@ -9,6 +9,7 @@
 - Python 3.11+ (conda 환경 권장)
 - MySQL 8.0+
 - 국가법령정보 Open API 인증키(OC) — <https://open.law.go.kr>에서 발급
+- OpenRouter 또는 OpenAI API 키 — AI 요약을 사용할 때만 필요
 
 ```bash
 pip install -r requirements.txt
@@ -30,7 +31,33 @@ MYSQL_PORT=3306
 MYSQL_USER=root
 MYSQL_DATABASE=law_tracking_db
 LOG_LEVEL=INFO
+
+# OpenRouter 요약(선택): 키를 넣으면 run_weekly.py에서 자동 활성화
+OPENAI_API_KEY=발급받은_OpenRouter_API_키
+OPENAI_BASE_URL=https://openrouter.ai/api/v1
+OPENAI_MODEL=openai/gpt-4o-mini
+OPENAI_SUMMARY_REQUIRED=false
+
+# 독립 요약 검증 에이전트
+OPENAI_VERIFY_ENABLED=true
+OPENAI_VERIFY_REQUIRED=true
+OPENAI_VERIFY_FAIL_CLOSED=true
+# 비우면 OPENAI_MODEL을 사용
+OPENAI_VERIFY_MODEL=
 ```
+
+OpenRouter에서는 `OPENAI_MODEL`을 `공급자/모델` 형식의 모델 ID로 적는다.
+예를 들어 GPT-4o mini는 `openai/gpt-4o-mini`이다. OpenAI API를 직접 쓸 때는
+`OPENAI_BASE_URL`을 비우거나 삭제하고 `OPENAI_MODEL=gpt-4o-mini`처럼 적으면 된다.
+`OPENAI_API_KEY`가 비어 있으면 API를 호출하지 않고 공식 개정이유와 조문 차이를
+규칙 기반으로 정리한다. 요약 실패도 배치를 계속 진행하는 것이 기본이며,
+요약 실패 시 전체 배치를 실패 처리하려면 `OPENAI_SUMMARY_REQUIRED=true`로 둔다.
+요약이 생성되면 독립 검증 에이전트가 법령별 원문 사실과 요약을 별도 호출로
+대조한다. `OPENAI_VERIFY_FAIL_CLOSED=true`이면 검증이 실패한 AI 요약은
+JSON/HWPX에서 제외되어 규칙 기반 보고서로 전환된다.
+`OPENAI_VERIFY_REQUIRED=true`이면 이 경우 배치 종료 코드도 1이 된다.
+전체 예시는 `.env.example`을 참고한다. API 키 값은 로그와 HWPX/JSON에 기록하지
+않는다.
 
 ## DB 최초 구축 순서
 
@@ -75,7 +102,45 @@ LOG_LEVEL=INFO
 4. 이후로는 `python scripts/run_weekly.py`를 주기적으로(원래 설계는 주간
    1회) 실행하면 된다 — 실제 스케줄러(cron, Windows 작업 스케줄러 등)에
    등록하는 것은 이 프로젝트의 범위 밖이며, 인프라 담당이 별도로 구성해야
-   한다. 산출물은 `out/weekly_contract_<날짜>.json`에 쌓인다.
+   한다. 산출물은 `out/weekly_contract_<날짜>.json`과
+   `out/weekly_law_report_<날짜>.hwpx`에 쌓인다.
+
+## 기존 DB 스키마 갱신
+
+이미 운영 중인 DB에는 `schema.sql`을 다시 실행해도 새 컬럼이 추가되지 않는다
+(`CREATE TABLE IF NOT EXISTS`는 기존 테이블을 변경하지 않음). 코드를 갱신한
+뒤 주간 배치를 실행하기 전에 아래 명령을 한 번 실행한다. 누락된 컬럼과 확정된
+워치리스트 교정값만 반영하며, 이미 적용된 DB에서 다시 실행해도 안전하다.
+
+```bash
+python scripts/migrate_db.py
+```
+
+## 주간 HWPX 보고서 생성
+
+`run_weekly.py` 한 번으로 `법령 조사 → DB 반영 → JSON 조립 → 원본 무결성
+검사 → LLM 요약(키가 있을 때) → 독립 요약 검증 → HWPX 생성`을 순서대로
+수행한다. 즉 HWPX만 따로 만드는
+배치가 아니라, 그 주에 실제 조사한 최종 JSON을 보고서의 입력으로 사용한다.
+기존 JSON만 다시 문서로 만들 때는 다음 명령을 쓴다.
+
+```bash
+python scripts/build_weekly_hwpx.py out/weekly_contract_2026-07-19_d.json
+```
+
+출력 기본 경로는 `out/weekly_law_report_<batch_date>.hwpx`이다. 앞부분은
+핵심 요약·현황·법령 목록만 간결하게 두고, 법령별 상세는 별도 페이지에서
+AI 업무 요약과 개정 전·후 문장을 세로형 전폭 표로 표시한다. 긴 원문을
+여러 열에 압축하지 않아 한글 문장이 지나치게 좁아지는 문제를 피했다.
+구조확장·위치 미확정·신구법 비교불가 항목과 생성 모델도 문서에 표시한다.
+JSON에 없는 개정일이나 법적 의미는 임의로 추론하지 않고 `-` 또는 원문 검토
+필요로 표시한다.
+작성자·부서·검토자는 필요할 때 옵션으로 지정할 수 있다.
+
+```bash
+python scripts/build_weekly_hwpx.py input.json \
+  --author "김용현" --department "법인사이트팀" --manager "검토자"
+```
 
 ## 산출물(`out/*.json`) 구조
 
@@ -85,14 +150,29 @@ LOG_LEVEL=INFO
 여기 문서는 그 필드를 실제 값 예시와 함께 설명한다(예시는 전부
 `build_contract()`가 실제로 만들어낸 값을 그대로 옮긴 것).
 
+LLM 요약이 활성화된 실행에서는 같은 JSON 최상위에 `llm_summary`가 추가된다.
+여기에는 사용 모델, 생성 시각, 주간 종합 요약, 법령별 제목·요약·핵심 변경·
+업무 영향·검토 포인트가 들어가며 HWPX가 이 값을 그대로 사용한다. 요약을
+사용하지 않은 실행에서는 `llm_summary`가 `null`이고 HWPX는 규칙 기반 문구로
+대체한다.
+
+모든 실행은 최상위 `verification`에 검증 상태를 기록하고,
+`out/verification_report_<batch_date>.json`도 별도로 저장한다.
+`source_integrity`는 감지기가 확정한 `(law_id, 일련번호)` 집합과 계약 JSON,
+조문 구조, 법제처 원문 URL 및 인증정보 노출 여부를 Python 코드로 검사한
+결과다. `summary_grounding`은 작성 호출과 분리된 LLM 검증 에이전트가
+법령명·날짜·조문·변경 유형·업무 영향의 원문 근거를 대조한 결과다.
+상태는 `PASS`, `WARN`, `FAIL`, 실행하지 않은 경우 `NOT_RUN`을 사용한다.
+
 > 지금 `out/`에 있는 파일들은 실제 `run_weekly.py`를 그대로 돌린 결과가
 > 아니라, LLM팀에게 스키마를 예시로 보여주기 위해 워치리스트 중 일부만
 > **실제로 라이브 API를 다시 호출해**(기존 `laws`/`administrative_rules`
 > 행을 지우고 `process_entry()`를 실제 실행 — 즉 국가법령정보 API를 그때마다
 > 진짜로 호출했다) 재처리한 뒤, 그 대상만 남긴 축소판 `WeeklyContract`들이다.
 > 필드 구성은 실제 배치 파일과 100% 동일(전부 Pydantic 재검증 통과)하고,
-> 실제 `run_weekly.py`를 그대로 실행하면 이런 축소 없이 그 주에 감지된
-> 전체 개정분이 `period`(최근 7일 기준)에 맞춰 하나의 파일로 나온다.
+> 실제 `run_weekly.py`를 그대로 실행하면 이런 축소 없이 **그 실행에서 새
+> 버전으로 감지된 전체 개정분**이 하나의 파일로 나온다. `period`는 주간
+> 보고 주기를 표시하는 메타데이터이고, 법령 시행일을 거르는 조건이 아니다.
 >
 > | 파일 | 구성 | 비고 |
 > |---|---|---|
@@ -170,7 +250,7 @@ WeeklyContract (최상위)
 |---|---|
 | `contract_version` | 스키마 버전(현재 고정값 "1.0") — LLM팀이 파싱 전 호환성 확인용 |
 | `batch_date` | 이 배치가 실행된 날짜(오늘) |
-| `period` | 이번에 조회한 시행일(`enforce_date`) 구간. `run_weekly.py`는 기본 최근 7일 |
+| `period` | 주간 보고 주기 표시. 감지된 법령의 `enforce_date` 필터로 사용하지 않음 |
 | `amendment_groups` | **실제로 위치까지 확정된 개정 내용.** 아래 참고 |
 | `unresolved` | 개정은 감지됐지만 본문에서 정확한 위치를 못 찾은 조각들. 절대 빠지지 않음 |
 | `no_comparison` | 개정은 감지됐지만 신구법 대비 자체가 불가능한 건(제정/폐지제정 등) |
@@ -406,8 +486,8 @@ diff는 원천적으로 없으므로 `source_url`(원문 링크)만 제공한다
 전체 워치리스트(102건) 기준 실측(2026-07-20, old_text 호 단위 정밀매칭
 반영 후 재검증): 74개 그룹, 법 93건, 조문변경(articles) 887건, 구조확장그룹
 22건(추가로 97건이 여기 담김), 미확정 18건, 비교불가 9건 → 약 940KB.
-`run_weekly.py`의 실제 운영 모드는
-최근 7일치만 조회하므로 평소엔 이보다 훨씬 작다(개정이 없는 주는
+`run_weekly.py`의 실제 운영 모드는 이번 실행에서 새 버전으로 감지된 법령만
+담으므로 평소엔 이보다 훨씬 작다(신규 감지가 없는 주는
 `amendment_groups: []`로 사실상 빈 파일). 지금 `out/`에 있는 축소판들은
 `weekly_contract_*`(법령 2+행정규칙 1, 3건)가 각 20~56KB, `single_*`
 (법령 또는 행정규칙 1건, 조문변경 5건 이하)가 각 2~3KB 수준이다.
@@ -449,8 +529,20 @@ src/lawtrack/
     schema.py             Pydantic 모델 전체 (WeeklyContract 이하 전 스키마, 위 "산출물 구조" 절이 이 파일을 설명함)
     export.py             DB 테이블들을 읽어 위 Pydantic 모델로 조립 (build_contract) — structural_expansions 그룹핑도 여기
 
+  llm/
+    openai_summary.py     OpenAI 호환 Responses API 구조화 출력 → JSON의 llm_summary 보강
+    verifier.py           작성 호출과 분리된 LLM 검증 에이전트 → 원문 근거·누락·과장 판정
+
+  verify/
+    source.py             감지 버전↔계약, 조문 구조, 원문 URL·비밀값을 코드로 강제 검증
+
+  report/
+    hwpx.py               최종 JSON → 세로형 개정 전·후 비교 HWPX 주간보고서
+
 scripts/
   run_weekly.py       주간 배치 진입점 — 워치리스트 전체를 detect.process_entry()로 돌리고 build_contract()로 JSON 산출
+  build_weekly_hwpx.py WeeklyContract JSON을 주간 법령개정 HWPX 보고서로 변환
+  migrate_db.py       기존 DB에 누락된 컬럼·확정된 워치리스트 교정값을 조건부 반영(재실행 가능)
   run_single_check.py 법령/행정규칙 1건만 디버깅용으로 상세 실행 (locate 가드별 로그까지 출력)
   load_watchlist.py   워치리스트 초기 적재 스크립트 (Windows mysql CLI 한글 인코딩 문제 우회용, seed_watchlist.sql과 내용 동일)
   inspect_article.py  조문번호 필드(가지번호 포함, 예: 제6조의2)의 API 원본 JSON 구조를 그대로 출력해 파서 로직과 맞는지 확인하는 진단 스크립트

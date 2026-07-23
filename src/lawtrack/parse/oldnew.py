@@ -167,6 +167,13 @@ def classify(old_text: str, new_text: str) -> ChangeType:
     old_text = old_text or ""
     new_text = new_text or ""
 
+    # 실측(국민체육진흥법 MST 286627): 신구조문 대비표가 이미 삭제되어 있던
+    # 호를 구법 쪽의 "9. 삭  제"로만 남기고 신법 쪽은 빈 문자열로 주는
+    # 경우가 있다. 이것은 이번 개정에서 삭제된 조문이 아니라 과거 삭제
+    # 자리표시가 신법 표에서 생략된 것이므로 변경·미확정으로 보고하면 안 된다.
+    if not strip_p_tags(new_text).strip() and _is_whole_block_deleted(strip_p_tags(old_text)):
+        return ChangeType.UNCHANGED
+
     old_skip = is_skippable(old_text)
     new_skip = is_skippable(new_text)
     if old_skip and new_skip:

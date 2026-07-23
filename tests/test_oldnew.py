@@ -53,6 +53,12 @@ class TestDeletedWholeBlockMarker:
         new = "<P>자료를 삭제하는 절차를 마련한다</P>"  # 10자 초과, 실제 개정 내용
         assert classify(old, new) is not ChangeType.DELETED
 
+    def test_stale_deleted_item_with_empty_new_side_is_unchanged(self):
+        """실측(국민체육진흥법 MST 286627): 과거에 이미 삭제된 9호의
+        자리표시가 구법 쪽에만 남은 행은 이번 개정사항이 아니다."""
+        assert classify("9. 삭  제", "") is ChangeType.UNCHANGED
+        assert classify("<P>9. 삭제</P>", "") is ChangeType.UNCHANGED
+
 
 class TestPartialMarkerNotWholeBlock:
     """★★ 실측(2026-07-16, 산업재해보상보험법 제116조②): "<후단 신설>"

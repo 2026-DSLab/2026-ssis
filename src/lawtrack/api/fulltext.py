@@ -97,7 +97,7 @@ def _build_admrul_result(data: dict, serial_no: str) -> FullTextResult:
     # 불필요한 순회를 없앤다.
     root = _find_root(data, ("AdmRulService", "행정규칙", "AdmRul"))
 
-    basic = root.get("기본정보", root)
+    basic = root.get("행정규칙기본정보") or root.get("기본정보", root)
     rule_id = text_of(basic.get("행정규칙ID") or root.get("행정규칙ID"))
     name = text_of(basic.get("행정규칙명") or root.get("행정규칙명"))
 

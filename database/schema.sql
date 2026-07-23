@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS change_log (
     old_serial_no VARCHAR(50),
     new_serial_no VARCHAR(50) NOT NULL,
     promulgation_no VARCHAR(100),
+    promulgation_date DATE COMMENT '법령 공포일 또는 행정규칙 발령일',
     revision_type VARCHAR(50),
     revision_reason TEXT COMMENT '법제처 공식 개정이유(제개정이유) — LLM팀이 추론할 필요 없게 원문 그대로 보관',
     unchanged_clauses JSON COMMENT '{"제34조": ["①","②","③"]} 형태 — 이번 개정에서 안 바뀐 항(항제개정유형 필드 기준, 법령만). LLM팀이 "이 조문의 나머지 항은 현행 유지"임을 추론하지 않아도 되게 함',
@@ -69,4 +70,4 @@ CREATE TABLE IF NOT EXISTS article_diff (
     match_detail JSON,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_article_diff (law_id, law_serial_no, article_code, clause_no, item_label, subitem_label, enforce_date)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;

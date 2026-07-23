@@ -13,15 +13,17 @@ from __future__ import annotations
 
 import json
 import sys
+from pathlib import Path
 
-sys.path.insert(0, "src")
-from lawtrack.config import load_settings  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+from lawtrack.config import configure_utf8_console, load_settings  # noqa: E402
 from lawtrack.api.client import LawApiClient  # noqa: E402
 from lawtrack.api.fulltext import fetch_law_fulltext  # noqa: E402
 from lawtrack.parse.jsonutil import as_list, dig, find_key  # noqa: E402
 
 
 def main() -> int:
+    configure_utf8_console()
     settings = load_settings()
     mst = sys.argv[2] if len(sys.argv) > 2 else "276653"
 

@@ -1,0 +1,128 @@
+{
+  "status": "WARN",
+  "source_integrity": "PASS",
+  "summary_grounding": "WARN",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "verified_at": "2026-07-23T15:58:17",
+  "source_sha256": "0127d725a1dc960273a0a50a27de783492275a06b0ec7caf48756b6c9df81f8c",
+  "summary_sha256": "99a337a0adcc866f51df6b5ad7256d5a33d862ea87c0b98f3d25998343d25525",
+  "expected_version_count": 2,
+  "contract_version_count": 2,
+  "checked_law_count": 2,
+  "issues": [
+    {
+      "severity": "WARNING",
+      "category": "SUMMARY",
+      "code": "SUMMARY_OMISSION",
+      "law_id": "000171",
+      "new_serial_no": "276819",
+      "location": "key_changes",
+      "field": "key_changes",
+      "claim": "법령 전반의 일부 조문이 수정되었으며, 주된 변화는 환경부장관의 명칭이 기후에너지환경부장관으로 변경된 점이다.",
+      "evidence": "주된 변화는 환경부장관의 명칭이 기후에너지환경부장관으로 변경된 점이다.",
+      "reason": "핵심 변경 위치가 빠졌음."
+    },
+    {
+      "severity": "WARNING",
+      "category": "SUMMARY",
+      "code": "SUMMARY_OMISSION",
+      "law_id": "000171",
+      "new_serial_no": "276819",
+      "location": "summary",
+      "field": "summary",
+      "claim": "법령 전반의 일부 조문이 수정되었으며, 주된 변화는 환경부장관의 명칭이 기후에너지환경부장관으로 변경된 점이다.",
+      "evidence": "법령 전반의 일부 조문이 수정되었으며, 주된 변화는 환경부장관의 명칭이 기후에너지환경부장관으로 변경된 점이다.",
+      "reason": "핵심 변경 위치가 빠졌음."
+    },
+    {
+      "severity": "WARNING",
+      "category": "SYSTEM",
+      "code": "VERIFIER_INVALID_WARNING_EVIDENCE",
+      "law_id": "000171",
+      "new_serial_no": "276819",
+      "location": "",
+      "field": "",
+      "claim": "주된 변화는 환경부장관의 명칭이 기후에너지환경부장관으로 변경된 점이다.",
+      "evidence": "",
+      "reason": "검증 에이전트의 경고 근거가 원문에 정확히 존재하지 않습니다."
+    },
+    {
+      "severity": "WARNING",
+      "category": "SYSTEM",
+      "code": "VERIFIER_INVALID_WARNING_EVIDENCE",
+      "law_id": "000171",
+      "new_serial_no": "276819",
+      "location": "",
+      "field": "",
+      "claim": "법령 전반의 일부 조문이 수정되었으며, 주된 변화는 환경부장관의 명칭이 기후에너지환경부장관으로 변경된 점이다.",
+      "evidence": "",
+      "reason": "검증 에이전트의 경고 근거가 원문에 정확히 존재하지 않습니다."
+    },
+    {
+      "severity": "WARNING",
+      "category": "SUMMARY",
+      "code": "SUMMARY_OMISSION",
+      "law_id": "001605",
+      "new_serial_no": "286627",
+      "location": "key_changes",
+      "field": "key_changes",
+      "claim": "‘제22조①10.’ 조문에서 한국대학스포츠협의회가 추가됨에 대한 언급이 없습니다.",
+      "evidence": "10. 대한체육회, 지방체육회, 대한장애인체육회, 지방장애인체육회, 한국도핑방지위원회, 생활체육 관련 체육단체와 체육 과학 연구기관, 스포츠윤리센터, 한국대학스포츠협의회 및 체육인재육성 관련 단체의 운영ㆍ지원",
+      "reason": "핵심 변경 위치가 누락되었습니다."
+    },
+    {
+      "severity": "WARNING",
+      "category": "SUMMARY",
+      "code": "SUMMARY_OMISSION",
+      "law_id": "",
+      "new_serial_no": "",
+      "location": "generated_executive_summary",
+      "field": "generated_executive_summary",
+      "claim": "국민체육진흥법은 장애인올림픽대회의 명칭 변경 및 관련 사업 범위 확대 등의 개정이 이루어졌다.",
+      "evidence": "주요 개정 내용은 장애인올림픽대회의 명칭을 '패럴림픽대회'로 변경하고, 서울올림픽기념국민체육진흥공단의 사업 범위에 ‘제8회 서울패럴림픽대회’를 포함하며, 대학스포츠 진흥을 위한 한국대학스포츠협의회를 설립하는 것입니다.",
+      "reason": "가장 큰 개정 사항인 한국대학스포츠협의회 설립 언급이 빠진 채로 요약되었다."
+    },
+    {
+      "severity": "WARNING",
+      "category": "SUMMARY",
+      "code": "SUMMARY_OMISSION",
+      "law_id": "",
+      "new_serial_no": "",
+      "location": "batch_facts",
+      "field": "batch_facts",
+      "claim": "변경 전 법령명이 '국민체육진흥법'으로 표시된 부분이 포함되어 있는데, 실제로 개정된 법률명은 '국민체육진흥법 일부개정법률'이다.",
+      "evidence": "2026년 6월 2일 공포된 국민체육진흥법의 일부 개정된 버전입니다.",
+      "reason": "변경 전 법령명이라기 보다 '일부개정법률'로 명시해야 하기 때문에, 그것의 누락은 반드시 경계해야 한다."
+    },
+    {
+      "severity": "WARNING",
+      "category": "SYSTEM",
+      "code": "VERIFIER_INVALID_WARNING_EVIDENCE",
+      "law_id": "",
+      "new_serial_no": "",
+      "location": "",
+      "field": "",
+      "claim": "주요 개정 내용은 장애인올림픽대회의 명칭을 '패럴림픽대회'로 변경하고, 서울올림픽기념국민체육진흥공단의 사업 범위에 ‘제8회 서울패럴림픽대회’를 포함하며, 대학스포츠 진흥을 위한 한국대학스포츠협의회를 설립하는 것입니다.",
+      "evidence": "",
+      "reason": "검증 에이전트의 경고 근거가 원문에 정확히 존재하지 않습니다."
+    },
+    {
+      "severity": "WARNING",
+      "category": "SYSTEM",
+      "code": "VERIFIER_INVALID_WARNING_EVIDENCE",
+      "law_id": "",
+      "new_serial_no": "",
+      "location": "",
+      "field": "",
+      "claim": "2026년 6월 2일 공포된 국민체육진흥법의 일부 개정된 버전입니다.",
+      "evidence": "",
+      "reason": "검증 에이전트의 경고 근거가 원문에 정확히 존재하지 않습니다."
+    }
+  ],
+  "missing_locations": [
+    "001605:286627:제22조①10."
+  ],
+  "input_tokens": 10580,
+  "output_tokens": 731
+}

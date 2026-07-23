@@ -38,6 +38,8 @@ class TestNestedRevisionReasonExtraction:
             }
         }
         result = _build_admrul_result(data, "2100000272436")
+        assert result.source_id == "27946"
+        assert result.name == "협상에 의한 계약체결기준"
         assert "예정가격 산정기준을 명확히 하기 위함." in result.revision_reason
 
     def test_missing_revision_reason_falls_back_to_empty(self):

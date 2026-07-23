@@ -8,8 +8,10 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from dataclasses import asdict, dataclass
 from datetime import date, datetime
+from difflib import SequenceMatcher
 
 from lawtrack.db.conn import Database
 from lawtrack.locate.locator import LocateResult, LocateStatus
@@ -17,6 +19,11 @@ from lawtrack.parse.oldnew import ArticleChange, ChangeType
 from lawtrack.text.split import split_to_item_level, strip_annotations, strip_article_head
 
 log = logging.getLogger(__name__)
+
+_LocationKey = tuple[str, str, str, str]
+_RELOCATION_MIN_SIMILARITY = 0.60
+_RELOCATION_MIN_ADVANTAGE = 0.20
+
 
 def _parse_yyyymmdd(s: str) -> date | None:
     """'20251001' 형태의 조문시행일자를 date로. 형식이 아니면 None."""
@@ -274,18 +281,19 @@ class ChangeLogRepo:
 
     def insert(
         self, *, law_id: str, new_serial_no: str, old_serial_no: str | None = None,
-        promulgation_no: str = "", revision_type: str = "", revision_reason: str = "",
+        promulgation_no: str = "", promulgation_date: date | None = None,
+        revision_type: str = "", revision_reason: str = "",
         enforce_date: date | None = None, unchanged_clauses: dict[str, list[str]] | None = None,
         comparison_available: bool = True,
     ) -> int:
         with self._db.transaction() as (_, cur):
             cur.execute(
                 "INSERT INTO change_log "
-                "(law_id, old_serial_no, new_serial_no, promulgation_no, revision_type, "
+                "(law_id, old_serial_no, new_serial_no, promulgation_no, promulgation_date, revision_type, "
                 " revision_reason, enforce_date, unchanged_clauses, comparison_available) "
-                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                 (law_id, old_serial_no, new_serial_no, promulgation_no or None,
-                 revision_type or None, revision_reason or None, enforce_date,
+                 promulgation_date, revision_type or None, revision_reason or None, enforce_date,
                  json.dumps(unchanged_clauses, ensure_ascii=False) if unchanged_clauses else None,
                  comparison_available),
             )
@@ -306,10 +314,10 @@ class ChangeLogRepo:
         """
         with self._db.cursor() as (_, cur):
             cur.execute(
-                "SELECT law_id, old_serial_no, new_serial_no, promulgation_no, "
+                "SELECT law_id, old_serial_no, new_serial_no, promulgation_no, promulgation_date, "
                 "revision_type, revision_reason, enforce_date, unchanged_clauses "
                 "FROM change_log WHERE law_id=%s AND new_serial_no=%s "
-                "ORDER BY detected_at DESC LIMIT 1",
+                "ORDER BY detected_at DESC, id DESC LIMIT 1",
                 (law_id, new_serial_no),
             )
             row = cur.fetchone()
@@ -385,12 +393,12 @@ class ArticleDiffRepo:
         상위 파이프라인이 lsJoHstInf 등으로 보강해 change 객체에
         채워 넣는 것을 전제로 한 확장 지점이다.
         """
-        reshuffled = self._reshuffled_articles(results)
+        reshuffled = self._reshuffled_locations(results)
         rows = []
         for change, locate_results in results:
             # ★★ 실측 발견(2026-07-19, 전자정부법 제2조11호 가~바):
-            # _reshuffled_articles()는 "같은 조문에 신설(NEWLY_CREATED)이
-            # 섞였는가"만 보는데, 이 케이스는 신설이 전혀 없는 순수
+            # 재배치 판정은 신설 문장과의 1:1 이동 후보를 찾지만, 이 케이스는
+            # 신설이 전혀 없는 순수
             # '개정'인데도 old_text가 여러 새 위치(가.나.다.라.마.바.)에
             # 동일하게 재사용된다(구법엔 목 구조 자체가 없던 통짜 문단이
             # 신법에서 목 6개로 쪼개짐). 그래서 조문 단위 신설 여부와
@@ -475,6 +483,27 @@ class ArticleDiffRepo:
             )
             return cur.fetchall()
 
+    def fetch_versions(self, versions: set[tuple[str, str]]) -> list[dict]:
+        """지정한 법령·버전의 diff만 조회한다.
+
+        주간 배치는 시행일 범위가 아니라 이번 실행에서 새로 감지한 버전을
+        보고해야 하므로 ``fetch_period``와 별도 경로를 둔다.
+        """
+        pairs = sorted(set(versions))
+        if not pairs:
+            return []
+        conditions = " OR ".join(
+            "(law_id=%s AND law_serial_no=%s)" for _ in pairs
+        )
+        params = tuple(value for pair in pairs for value in pair)
+        with self._db.cursor() as (_, cur):
+            cur.execute(
+                f"SELECT * FROM article_diff WHERE {conditions} "
+                "ORDER BY law_id, article_code",
+                params,
+            )
+            return cur.fetchall()
+
     def fetch_failures(self, *, limit: int = 200) -> list[dict]:
         """0건실패/중복실패만 — 운영 모니터링·가드 튜닝용."""
         with self._db.cursor() as (_, cur):
@@ -532,38 +561,96 @@ class ArticleDiffRepo:
         return old_lookup
 
     @staticmethod
-    def _reshuffled_articles(
+    def _reshuffled_locations(
         results: list[tuple[ArticleChange, list[LocateResult]]],
-    ) -> set[str]:
-        """★★ 실측 발견(2026-07-16, (계약예규) 정부 입찰ㆍ계약 집행기준
-        제34조): 항이 여러 개 신설(NEWLY_CREATED)되어 뒤의 항 번호가
-        밀리면, 법제처 신구조문대비표 원본 자체가 "구법 N번째 항"과
-        "신법 N번째 항"을 내용이 아니라 순서(위치)로만 짝지어 제공한다
-        (구③="기존 지급기한 규정" vs 신③="완전히 새로운 규정" — 같은
-        조항이 개정된 게 아니라 그 자리의 내용이 통째로 교체된 것). 실측
-        확인: old② "하수급인 선금지급계획 제출"은 의미상 new③에 대응하고
-        old⑤는 new⑧에 대응하는 등 밀리는 폭도 조각마다 달라(+1, +2, +3
-        등) 일반 규칙으로 재정렬할 수 없다. 그렇다고 "성공"으로 조용히
-        내보내면 서로 무관한 구/신 문장을 마치 같은 조항의 전후인 것처럼
-        LLM팀에게 확정 사실로 전달하게 된다. 내용 기반 재정렬은 시도하지
-        않고(오탐 위험이 더 크다는 사용자 판단), 대신 순수 신설이 섞인
-        조문 안의 '개정' 항목은 전부 의심 대상으로 표시만 한다(over-flag
-        가 false-confirm 보다 안전하다는 원칙).
+    ) -> set[_LocationKey]:
+        """신설 항 때문에 실제로 잘못 짝지어진 개정 위치만 찾는다.
+
+        법제처 신구조문대비표는 조문 중간에 항이 삽입되면 구법의 기존 항을
+        신법의 같은 순번 항과 기계적으로 짝지을 수 있다. 예를 들어 구②의
+        내용이 신⑤로 이동했는데 구②↔신②가 한 쌍으로 전달되는 경우다.
+
+        예전에는 같은 조문에 신설 항이 하나라도 있으면 모든 개정 항을
+        ``위치재배치의심``으로 표시했다. 그 결과 국민체육진흥법 제21조처럼
+        ①·②는 같은 위치에서 기관명만 바뀌고 ④가 맨 뒤에 추가된 정상
+        개정까지 과잉 분류됐다.
+
+        이제 각 개정 행의 구문을 (a) 현재 짝인 신문장과 (b) 같은 조문의
+        신설 문장들과 비교한다. 신설 문장 중 하나가 현재 짝보다 충분히
+        높은 유사도를 보일 때만 그 개정 위치를 의심으로 표시한다. 따라서
+        단순 후단 신설은 통과하고, 실제 이동 후보가 있는 행만 남는다.
         """
-        reshuffled: set[str] = set()
+        created_by_article: dict[str, list[str]] = {}
         for change, locate_results in results:
             if change.change_type is not ChangeType.NEWLY_CREATED:
                 continue
             for lr in locate_results:
                 if lr.status.value == "성공" and lr.unit is not None:
-                    reshuffled.add(lr.unit.article_label)
+                    created_by_article.setdefault(lr.unit.article_label, []).append(
+                        lr.fragment.raw if lr.fragment else change.new_clean
+                    )
+
+        reshuffled: set[_LocationKey] = set()
+        for change, locate_results in results:
+            if change.change_type is not ChangeType.AMENDED:
+                continue
+            old_text = ArticleDiffRepo._comparison_text(change.old_clean)
+            if len(old_text) < 20:
+                continue
+            for lr in locate_results:
+                if lr.status.value != "성공" or lr.unit is None:
+                    continue
+                alternatives = created_by_article.get(lr.unit.article_label, [])
+                if not alternatives:
+                    continue
+                current_text = ArticleDiffRepo._comparison_text(
+                    lr.fragment.raw if lr.fragment else change.new_clean
+                )
+                current_score = ArticleDiffRepo._text_similarity(old_text, current_text)
+                alternative_score = max(
+                    (
+                        ArticleDiffRepo._text_similarity(
+                            old_text,
+                            ArticleDiffRepo._comparison_text(candidate),
+                        )
+                        for candidate in alternatives
+                    ),
+                    default=0.0,
+                )
+                if (
+                    alternative_score >= _RELOCATION_MIN_SIMILARITY
+                    and alternative_score - current_score >= _RELOCATION_MIN_ADVANTAGE
+                ):
+                    reshuffled.add(ArticleDiffRepo._location_key(lr.unit))
         return reshuffled
+
+    @staticmethod
+    def _comparison_text(value: str) -> str:
+        """항 번호·공백·문장부호를 제외한 재배치 비교용 문자열."""
+        text = strip_annotations(strip_article_head(value or "")).strip()
+        text = re.sub(r"^[①-⑳]\s*", "", text)
+        return re.sub(r"[^0-9A-Za-z가-힣]", "", text)
+
+    @staticmethod
+    def _text_similarity(left: str, right: str) -> float:
+        if not left or not right:
+            return 0.0
+        return SequenceMatcher(None, left, right, autojunk=False).ratio()
+
+    @staticmethod
+    def _location_key(unit: object) -> _LocationKey:
+        return (
+            str(getattr(unit, "article_label", "") or ""),
+            str(getattr(unit, "clause_no", "") or ""),
+            str(getattr(unit, "item_label", "") or ""),
+            str(getattr(unit, "subitem_label", "") or ""),
+        )
 
     @staticmethod
     def _to_row(
         law_id: str, law_serial_no: str, change: ArticleChange,
         lr: LocateResult, default_enforce_date: date, frag_idx: int,
-        reshuffled_articles: set[str] = frozenset(),
+        reshuffled_locations: set[_LocationKey] = frozenset(),
         old_text_shared: bool = False,
         fragment_old_lookup: dict[tuple[str, str], str] | None = None,
     ) -> tuple:
@@ -643,12 +730,15 @@ class ArticleDiffRepo:
             #      생겨(구조확장) old_text가 여러 행에 같은 통짜 문장으로
             #      복제됨 — "재배치"가 아니라 "대응 자체가 없음"이 정확한
             #      원인이라 값 이름을 분리한다.
-            #   2) reshuffled_articles: 같은 조문에 항이 신설되며 뒤 항
-            #      번호가 밀려, 원본 대비표가 순서만으로 신/구를 잘못
-            #      짝지음 — 이건 진짜 "재배치 의심"이 맞는 표현.
+            #   2) reshuffled_locations: 같은 조문의 신설 문장 중 현재
+            #      짝보다 구문과 훨씬 가까운 문장이 있어, 원본 대비표가
+            #      신/구를 순서 기준으로 잘못 짝지었을 가능성이 높은 위치.
             if old_text_shared:
                 match_status = "구조확장(구법미분리)"
-            elif article_label in reshuffled_articles:
+            elif (
+                unit is not None
+                and ArticleDiffRepo._location_key(unit) in reshuffled_locations
+            ):
                 match_status = "위치재배치의심"
 
         return (

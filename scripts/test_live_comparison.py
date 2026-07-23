@@ -5,7 +5,7 @@ from pathlib import Path
 # src 폴더를 경로에 추가
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from lawtrack.config import load_settings, setup_logging
+from lawtrack.config import configure_utf8_console, load_settings, setup_logging
 from lawtrack.db.conn import Database
 from lawtrack.api.client import LawApiClient
 from lawtrack.api.search import resolve_law
@@ -17,6 +17,7 @@ from lawtrack.locate.locator import locate_all
 
 def main():
     # 로그 설정
+    configure_utf8_console()
     settings = load_settings()
     setup_logging("WARNING")
     client = LawApiClient(settings.api)

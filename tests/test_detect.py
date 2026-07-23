@@ -4,10 +4,14 @@ from unittest.mock import MagicMock, patch
 
 import json
 
+from lawtrack.api.fulltext import FullTextResult
+from lawtrack.api.oldnew import OldNewResult, VersionInfo
 from lawtrack.api.search import ResolveOutcome
 from lawtrack.db.repo import WatchlistEntry
 from lawtrack.detect import (
     DetectStatus,
+    _fulltext_identity_error,
+    _search_identity_error,
     _serialize_articles,
     _serialize_units,
     _unchanged_clauses,
@@ -64,6 +68,62 @@ class TestDetectAdmrulDeptName:
             result = detect_admrul(MagicMock(), version_repo, entry)
 
         assert result.status is DetectStatus.AMBIGUOUS
+
+
+class TestFetchedLawIdentity:
+    """이름 검색 뒤 다른 ID/본문이 섞여도 DB 저장 전에 차단한다."""
+
+    def test_leading_zero_law_ids_are_the_same_identity(self):
+        entry = _entry(
+            law_id="001357",
+            law_type="법률",
+            official_name="공공기관의 정보공개에 관한 법률",
+        )
+        assert _search_identity_error(
+            entry,
+            source_id="1357",
+            source_name="공공기관의 정보공개에 관한 법률",
+        ) == ""
+
+    def test_different_source_id_is_rejected(self):
+        entry = _entry()
+        error = _search_identity_error(
+            entry,
+            source_id="99999",
+            source_name=entry.official_name,
+        )
+        assert "API 응답 ID 99999" in error
+
+    def test_oldnew_serial_must_match_fulltext_serial(self):
+        entry = _entry()
+        fulltext = FullTextResult(
+            raw={},
+            serial_no="200",
+            source_id="27946",
+            name=entry.official_name,
+            revision_reason="",
+            revision_text="",
+        )
+        current = VersionInfo(
+            serial_no="201",
+            source_id="27946",
+            name=entry.official_name,
+            enforce_date="",
+            promulgation_date="",
+            promulgation_no="",
+            revision_type="",
+            is_current=True,
+        )
+        oldnew = OldNewResult(
+            available=True,
+            reason="",
+            old_version=VersionInfo("", "", "", "", "", "", "", False),
+            new_version=current,
+        )
+
+        error = _fulltext_identity_error(entry, fulltext, oldnew=oldnew)
+
+        assert "신법 일련번호 201" in error
 
 
 def _unit(article_label, clause_no):

@@ -21,7 +21,9 @@ unresolved 를 절대 비우지 않는 이유:
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field, field_validator
+from typing import Literal
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class Period(BaseModel):
@@ -47,10 +49,10 @@ class ArticleDiffItem(BaseModel):
             "구법엔 대응하는 조각이 없음 — old_text는 그 항/조 전체의 "
             "개정 전 문장(참고 맥락)일 뿐, 이 특정 항목의 개정 전 내용이 "
             "아니므로 신뢰하지 말 것) | "
-            "위치재배치의심(같은 조문 안에서 항이 신설되며 뒤 항 번호가 "
-            "밀려, 법제처 원본 신구조문대비표가 신/구를 순서 기준으로만 "
-            "잘못 대응시켰을 수 있음 — old_text가 실제로는 다른 항의 "
-            "내용일 수 있으니 '개정 전 같은 조항'으로 신뢰하지 말 것)"
+            "위치재배치의심(같은 조문 안의 신설 문장 중 old_text와 현재 "
+            "new_text보다 구문상 훨씬 가까운 문장이 확인되어, 법제처 원본 "
+            "신구조문대비표가 신/구를 순서 기준으로 잘못 대응시켰을 가능성이 "
+            "높음 — old_text를 '개정 전 같은 조항'으로 신뢰하지 말 것)"
         ),
     )
 
@@ -184,6 +186,71 @@ class NoComparisonItem(BaseModel):
     source_url: str = ""
 
 
+class LawLLMSummary(BaseModel):
+    """LLM이 확정된 변경 사실만 바탕으로 작성한 법령별 업무용 요약."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    law_id: str
+    new_serial_no: str
+    headline: str
+    summary: str
+    key_changes: list[str] = Field(default_factory=list)
+    operational_impact: str = ""
+    review_points: list[str] = Field(default_factory=list)
+
+
+class LLMSummary(BaseModel):
+    """주간 계약에 함께 보존되는 LLM 요약과 생성 메타데이터."""
+
+    provider: str = "openai"
+    model: str
+    generated_at: str
+    executive_summary: str
+    law_summaries: list[LawLLMSummary] = Field(default_factory=list)
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+
+
+class VerificationIssue(BaseModel):
+    """원본 또는 LLM 요약 검증에서 발견된 단일 문제."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    severity: Literal["WARNING", "ERROR"]
+    category: Literal["SOURCE", "SUMMARY", "SYSTEM"]
+    code: str
+    law_id: str = ""
+    new_serial_no: str = ""
+    location: str = ""
+    field: str = ""
+    claim: str = ""
+    evidence: str = ""
+    reason: str
+
+
+class VerificationReport(BaseModel):
+    """코드 기반 원본 검사와 독립 LLM 검증 에이전트의 통합 결과."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    status: Literal["PASS", "WARN", "FAIL"]
+    source_integrity: Literal["PASS", "WARN", "FAIL"]
+    summary_grounding: Literal["PASS", "WARN", "FAIL", "NOT_RUN"] = "NOT_RUN"
+    provider: str = ""
+    model: str = ""
+    verified_at: str
+    source_sha256: str
+    summary_sha256: str = ""
+    expected_version_count: int = 0
+    contract_version_count: int = 0
+    checked_law_count: int = 0
+    issues: list[VerificationIssue] = Field(default_factory=list)
+    missing_locations: list[str] = Field(default_factory=list)
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+
+
 class WeeklyContract(BaseModel):
     """주간 산출물 최상위 스키마. LLM팀이 받는 실제 구조."""
 
@@ -193,6 +260,8 @@ class WeeklyContract(BaseModel):
     amendment_groups: list[AmendmentGroup] = Field(default_factory=list)
     unresolved: list[UnresolvedItem] = Field(default_factory=list)
     no_comparison: list[NoComparisonItem] = Field(default_factory=list)
+    llm_summary: LLMSummary | None = None
+    verification: VerificationReport | None = None
 
     @property
     def total_law_count(self) -> int:

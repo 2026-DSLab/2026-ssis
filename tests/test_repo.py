@@ -1,12 +1,35 @@
 """ArticleDiffRepo._to_row 테스트. DB 연결 없이 순수 로직만 검증."""
 
 from datetime import date
+from unittest.mock import MagicMock
 
 from lawtrack.db.repo import ArticleDiffRepo
 from lawtrack.locate.locator import LocateResult, LocateStatus
 from lawtrack.parse.fulltext import SearchUnit
 from lawtrack.parse.oldnew import ArticleChange, ChangeType
 from lawtrack.text.split import Fragment, Level
+
+
+class TestFetchDetectedVersions:
+    def test_queries_only_requested_law_and_serial_pairs(self):
+        db = MagicMock()
+        cursor = MagicMock()
+        db.cursor.return_value.__enter__.return_value = (None, cursor)
+        cursor.fetchall.return_value = [{"law_id": "A"}, {"law_id": "B"}]
+
+        rows = ArticleDiffRepo(db).fetch_versions({("B", "2"), ("A", "1")})
+
+        sql, params = cursor.execute.call_args.args
+        assert "enforce_date BETWEEN" not in sql
+        assert sql.count("law_id=%s AND law_serial_no=%s") == 2
+        assert params == ("A", "1", "B", "2")
+        assert rows == [{"law_id": "A"}, {"law_id": "B"}]
+
+    def test_empty_version_set_does_not_query_database(self):
+        db = MagicMock()
+
+        assert ArticleDiffRepo(db).fetch_versions(set()) == []
+        db.cursor.assert_not_called()
 
 
 def _change(index: int) -> ArticleChange:
@@ -172,26 +195,25 @@ class TestOldTextAnnotationStripping:
 
 
 class TestReshuffledArticleFlagging:
-    """★★ 실측(2026-07-16, (계약예규) 정부 입찰ㆍ계약 집행기준 제34조): 항이
-    여러 개 신설되어 뒤의 항 번호가 밀리면, 법제처 신구조문대비표 원본이
-    "구법 N번째 항"과 "신법 N번째 항"을 내용이 아니라 순서로만 짝지어
-    제공한다 — 구③(기존 지급기한 규정)과 신③(완전히 새로운 규정)이 마치
-    같은 조항의 개정 전/후인 것처럼 match_status=성공으로 나갔었다. 같은
-    조문 안에 순수 신설(NEWLY_CREATED) 항목이 있으면 그 조문의 '개정' 행은
-    '위치재배치의심'으로 표시해 LLM팀이 old_text를 그대로 신뢰하지 않게
-    한다."""
+    """같은 조문의 신설 문장에 실제 구문 이동 후보가 있을 때만 의심 처리."""
 
-    def _amended_change(self, index: int) -> ArticleChange:
+    def _amended_change(
+        self, index: int, *, old: str = "기존 항의 충분히 긴 원문 내용입니다.",
+        new: str = "개정된 항의 충분히 긴 원문 내용입니다.",
+    ) -> ArticleChange:
         return ArticleChange(
             index=index, change_type=ChangeType.AMENDED,
-            old_raw="<P>구</P>", new_raw="<P>신</P>", old_clean="구", new_clean="신",
+            old_raw=f"<P>{old}</P>", new_raw=f"<P>{new}</P>",
+            old_clean=old, new_clean=new,
         )
 
-    def _newly_created_change(self, index: int) -> ArticleChange:
+    def _newly_created_change(
+        self, index: int, *, new: str = "새로 만들어진 충분히 긴 항의 내용입니다.",
+    ) -> ArticleChange:
         return ArticleChange(
             index=index, change_type=ChangeType.NEWLY_CREATED,
-            old_raw="<P><신  설></P>", new_raw="<P>새 항 내용</P>",
-            old_clean="<신  설>", new_clean="새 항 내용",
+            old_raw="<P><신  설></P>", new_raw=f"<P>{new}</P>",
+            old_clean="<신  설>", new_clean=new,
         )
 
     def _unit(self, article_label: str, clause_no: str) -> SearchUnit:
@@ -200,18 +222,35 @@ class TestReshuffledArticleFlagging:
             item_label="", subitem_label="", text="x", changed=True,
         )
 
-    def test_amended_row_flagged_when_sibling_clause_newly_created(self):
-        amended = self._amended_change(0)
-        created = self._newly_created_change(1)
+    def test_amended_row_flagged_when_old_text_matches_created_sibling(self):
+        old = (
+            "② 제1항에 따른 정보시스템의 장애 예방 및 대응에 필요한 사항은 "
+            "국회규칙 및 대통령령으로 정한다."
+        )
+        amended = self._amended_change(
+            0,
+            old=old,
+            new=(
+                "② 행정기관의 장은 소관 정보시스템의 장애를 예방하고 장애 발생 시 "
+                "신속하게 대응하기 위한 관리계획을 수립하여야 한다."
+            ),
+        )
+        created = self._newly_created_change(
+            1,
+            new=(
+                "⑤ 제1항부터 제4항까지에 따른 정보시스템의 장애 예방 및 대응에 "
+                "필요한 사항은 국회규칙 및 대통령령으로 정한다."
+            ),
+        )
         results = [
-            (amended, [LocateResult(LocateStatus.SUCCESS, self._unit("제34조", "③"), None, 1, ())]),
-            (created, [LocateResult(LocateStatus.SUCCESS, self._unit("제34조", "⑬"), None, 1, ())]),
+            (amended, [LocateResult(LocateStatus.SUCCESS, self._unit("제56조의2", "②"), None, 1, ())]),
+            (created, [LocateResult(LocateStatus.SUCCESS, self._unit("제56조의2", "⑤"), None, 1, ())]),
         ]
-        reshuffled = ArticleDiffRepo._reshuffled_articles(results)
-        assert reshuffled == {"제34조"}
+        reshuffled = ArticleDiffRepo._reshuffled_locations(results)
+        assert reshuffled == {("제56조의2", "②", "", "")}
 
         row = ArticleDiffRepo._to_row(
-            "34470", "1", amended, results[0][1][0], date(2025, 1, 1), 0, reshuffled,
+            "009199", "1", amended, results[0][1][0], date(2025, 1, 1), 0, reshuffled,
         )
         assert row[11] == "위치재배치의심"  # match_status
 
@@ -219,24 +258,76 @@ class TestReshuffledArticleFlagging:
         """★ 실측(2026-07-20): match_status="위치재배치의심"이어도 old_text
         앞에 안내문을 덧붙이지 않는다 — DB/산출물의 old_text는 항상 순수
         원문 그대로여야 하고, 신뢰도 표시는 match_status 필드만으로 한다."""
-        amended = self._amended_change(0)
-        created = self._newly_created_change(1)
+        old = "② 기존 지급 기준과 신청 절차에 필요한 사항은 대통령령으로 정한다."
+        amended = self._amended_change(
+            0,
+            old=old,
+            new="② 계약담당자는 새로운 검토계획을 수립하여 기관장에게 제출하여야 한다.",
+        )
+        created = self._newly_created_change(
+            1,
+            new="③ 기존 지급 기준과 신청 절차에 필요한 세부 사항은 대통령령으로 정한다.",
+        )
         results = [
-            (amended, [LocateResult(LocateStatus.SUCCESS, self._unit("제34조", "③"), None, 1, ())]),
-            (created, [LocateResult(LocateStatus.SUCCESS, self._unit("제34조", "⑬"), None, 1, ())]),
+            (amended, [LocateResult(LocateStatus.SUCCESS, self._unit("제34조", "②"), None, 1, ())]),
+            (created, [LocateResult(LocateStatus.SUCCESS, self._unit("제34조", "③"), None, 1, ())]),
         ]
-        reshuffled = ArticleDiffRepo._reshuffled_articles(results)
+        reshuffled = ArticleDiffRepo._reshuffled_locations(results)
         row = ArticleDiffRepo._to_row(
             "34470", "1", amended, results[0][1][0], date(2025, 1, 1), 0, reshuffled,
         )
-        assert row[9] == "구"
+        assert row[9] == old
+
+    def test_appended_clause_does_not_flag_earlier_matching_clauses(self):
+        """국민체육진흥법 제21조: ①·②는 제자리 개정이고 ④만 후단 신설."""
+        amended_1 = self._amended_change(
+            0,
+            old=(
+                "① 올림픽 표지를 영리 목적으로 사용하려는 자는 "
+                "대한올림픽위원회의 승인을 받아야 한다."
+            ),
+            new=(
+                "① 올림픽 표지를 영리 목적으로 사용하려는 자는 "
+                "대한체육회의 승인을 받아야 한다."
+            ),
+        )
+        amended_2 = self._amended_change(
+            1,
+            old=(
+                "② 대한올림픽위원회는 승인 권한을 국민체육진흥공단으로 "
+                "하여금 대행하게 할 수 있다."
+            ),
+            new=(
+                "② 대한체육회는 승인 권한을 국민체육진흥공단으로 "
+                "하여금 대행하게 할 수 있다."
+            ),
+        )
+        created_4 = self._newly_created_change(
+            2,
+            new="④ 대한체육회는 필요한 물품과 용역을 수의계약으로 구매할 수 있다.",
+        )
+        results = [
+            (amended_1, [LocateResult(LocateStatus.SUCCESS, self._unit("제21조", "①"), None, 1, ())]),
+            (amended_2, [LocateResult(LocateStatus.SUCCESS, self._unit("제21조", "②"), None, 1, ())]),
+            (created_4, [LocateResult(LocateStatus.SUCCESS, self._unit("제21조", "④"), None, 1, ())]),
+        ]
+
+        reshuffled = ArticleDiffRepo._reshuffled_locations(results)
+
+        assert reshuffled == set()
+        for change, locate_results in results[:2]:
+            row = ArticleDiffRepo._to_row(
+                "001605", "286627", change, locate_results[0],
+                date(2026, 6, 2), 0, reshuffled,
+            )
+            assert row[11] == "성공"
 
     def test_amended_row_not_flagged_without_sibling_newly_created(self):
         amended = self._amended_change(0)
         results = [
             (amended, [LocateResult(LocateStatus.SUCCESS, self._unit("제1조", ""), None, 1, ())]),
         ]
-        reshuffled = ArticleDiffRepo._reshuffled_articles(results)
+        reshuffled = ArticleDiffRepo._reshuffled_locations(results)
         assert reshuffled == set()
 
         row = ArticleDiffRepo._to_row(
@@ -252,7 +343,7 @@ class TestReshuffledArticleFlagging:
             (amended, [LocateResult(LocateStatus.SUCCESS, self._unit("제5조", "①"), None, 1, ())]),
             (created, [LocateResult(LocateStatus.SUCCESS, self._unit("제34조", "⑬"), None, 1, ())]),
         ]
-        reshuffled = ArticleDiffRepo._reshuffled_articles(results)
+        reshuffled = ArticleDiffRepo._reshuffled_locations(results)
         row = ArticleDiffRepo._to_row(
             "X", "1", amended, results[0][1][0], date(2025, 1, 1), 0, reshuffled,
         )
@@ -263,13 +354,13 @@ class TestOldTextSharedFlagging:
     """★★ 실측(2026-07-19, 전자정부법 제2조11호 가~바): 신설이 전혀 없는
     순수 '개정'인데도, 구법엔 목(가~바) 구조 자체가 없던 통짜 문단이
     신법에서 목 6개로 쪼개지면 old_text가 6개 행 전부에 똑같이 재사용된다.
-    _reshuffled_articles()는 "같은 조문에 신설이 섞였는가"만 보므로 이
+    재배치 판정과 무관하게 이
     케이스를 놓쳐 match_status=성공으로 잘못 확정된다. "같은 change가
     2곳 이상으로 성공 위치확정됐는가"를 직접 보는 old_text_shared가
     이 틈을 메운다.
 
     ★ 실측(2026-07-19, LLM팀 산출물 리뷰): 처음엔 이것도 "위치재배치의심"
-    으로 표시했는데, 원인이 전혀 다른 reshuffled_articles 케이스(항 신설로
+    으로 표시했는데, 원인이 전혀 다른 reshuffled_locations 케이스(항 신설로
     순서가 밀려 신/구가 잘못 짝지어짐)와 같은 이름을 쓰니 "재배치"라는
     말이 이 케이스엔 안 맞아 헷갈린다는 지적을 받았다 — 여긴 재배치가
     아니라 애초에 구법에 대응하는 조각이 없는 것(구조확장)이다. 값
@@ -340,7 +431,9 @@ class TestOldTextSharedFlagging:
         row = ArticleDiffRepo._to_row(
             "X", "1", change,
             LocateResult(LocateStatus.SUCCESS, self._unit("제2조", "11.", "가."), None, 1, ()),
-            date(2025, 1, 1), 0, reshuffled_articles={"제2조"}, old_text_shared=True,
+            date(2025, 1, 1), 0,
+            reshuffled_locations={("제2조", "", "11.", "가.")},
+            old_text_shared=True,
         )
         assert row[11] == "구조확장(구법미분리)"
 
