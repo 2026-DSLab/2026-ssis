@@ -29,7 +29,9 @@ SYSTEM_PROMPT = """당신은 대한민국 법령 개정 주간보고서의 편�
 '발의', '입법예고'처럼 공포 전 단계로 표현하지 마세요.
 batch_date와 enforce_date를 비교하여 이미 지난 시행일을 '시행 예정'이라고
 쓰지 마세요. 날짜는 입력에 있는 연도와 날짜만 사용하세요.
-key_changes의 각 문장은 반드시 입력에 실제로 존재하는 조문 번호로 시작하세요.
+key_changes는 1~8개로 작성하고, 각 문장은 반드시 입력에 실제로 존재하는 조문 번호로 시작하세요.
+source_facts.required_summary_locations의 조문은 핵심 변경 목록에서 하나도 빠뜨리지 마세요.
+서로 밀접한 두 조문은 한 문장에 함께 적어도 되지만 두 조문 번호를 모두 명시하세요.
 행위 주체와 위반행위를 정확히 구분하세요. 예를 들어 '인증을 받지 않고 표시함'을 '표시하지 않음'으로 바꾸면 안 됩니다.
 revision_type이 '타법개정'이면 official_revision_reason은 다른 법률의 제정ㆍ개정 이유일 수 있습니다.
 이 경우 현재 법령의 articles에 나타난 인용 법률ㆍ조문 정비만 설명하고, 다른 법률의 제도 신설을 현재 법령의 효과로 쓰지 마세요.
@@ -49,7 +51,7 @@ class _LawSummaryContent(BaseModel):
 
     headline: str = Field(description="한 줄 핵심 제목")
     summary: str = Field(description="2~4문장의 개정 요약")
-    key_changes: list[str] = Field(min_length=1, max_length=5, description="핵심 변경사항 1~5개")
+    key_changes: list[str] = Field(min_length=1, max_length=8, description="핵심 변경사항 1~8개")
     operational_impact: str = Field(description="확정 가능한 업무 영향 또는 검토 필요 문구")
     review_points: list[str] = Field(max_length=5, description="담당자가 확인할 사항 0~5개")
 
@@ -141,7 +143,8 @@ def summarize_contract(
                             "role": "user",
                             "content": (
                                 "다음 source_facts의 법령 1건을 보고서용으로 요약하세요. "
-                                "모든 핵심 변경 위치를 빠뜨리지 말고 중복 표현은 줄이세요.\n"
+                                "required_summary_locations의 위치를 key_changes에 모두 "
+                                "포함하고 중복 표현은 줄이세요.\n"
                                 + (
                                     "correction_context가 있으면 이전 후보를 그대로 "
                                     "반복하지 말고, 원문으로 확인되는 검증 오류를 수정하세요.\n"
@@ -166,6 +169,11 @@ def summarize_contract(
                     validation_error = f"{law.law_name} 요약 결과가 비어 있습니다."
                     previous_candidate = None
                 else:
+                    parsed = _complete_required_summary_locations(
+                        law,
+                        parsed,
+                        facts,
+                    )
                     try:
                         _validate_law_summary(law, parsed, facts)
                         break
@@ -402,6 +410,7 @@ def _law_facts(
         "promulgated_version": True,
         "revision_type": law.revision_type,
         "official_revision_reason": law.revision_reason,
+        "required_summary_locations": _summary_priority_locations(law),
         "articles": [
             {
                 "location": article.location_label,
@@ -436,6 +445,80 @@ _WEEKLY_EVENT_RE = re.compile(r"(이번\s*주|금주|최근\s*(?:1|일)\s*주)")
 _FUTURE_ENFORCEMENT_RE = re.compile(r"시행(?:될)?\s*예정")
 
 
+def _summary_priority_locations(law: LawChange, *, limit: int = 8) -> list[str]:
+    """핵심 요약에서 반드시 다룰 조문을 코드로 선정한다.
+
+    변경 조문이 8개 이하면 모든 조문을 포함한다. 그보다 많으면 신설·구조
+    확장·위치 불확정과 변경 항목 수가 많은 조문을 우선한다. 항·호 단위
+    변경은 같은 조문 아래 묶어 요약할 수 있도록 조문 번호로 정규화한다.
+    """
+    grouped: dict[str, dict[str, int | bool]] = {}
+
+    def add(
+        label: str,
+        *,
+        is_new: bool = False,
+        is_uncertain: bool = False,
+        is_structural: bool = False,
+    ) -> None:
+        match = _ARTICLE_REF_RE.search(label or "")
+        if match is None:
+            return
+        location = match.group(0)
+        item = grouped.setdefault(location, {
+            "count": 0,
+            "is_new": False,
+            "is_uncertain": False,
+            "is_structural": False,
+        })
+        item["count"] = int(item["count"]) + 1
+        item["is_new"] = bool(item["is_new"]) or is_new
+        item["is_uncertain"] = bool(item["is_uncertain"]) or is_uncertain
+        item["is_structural"] = bool(item["is_structural"]) or is_structural
+
+    for article in law.articles:
+        add(
+            article.article_label,
+            is_new=article.change_type == "신설" or not article.old_text.strip(),
+            is_uncertain=article.match_status not in {
+                "성공",
+                "삭제(위치탐색제외)",
+            },
+        )
+    for expansion in law.structural_expansions:
+        add(
+            expansion.article_label,
+            is_new=True,
+            is_structural=True,
+        )
+
+    def article_order(location: str) -> tuple[int, int]:
+        match = re.fullmatch(r"제(\d+)조(?:의(\d+))?", location)
+        if match is None:
+            return (10**9, 10**9)
+        return (int(match.group(1)), int(match.group(2) or 0))
+
+    locations = list(grouped)
+    if len(locations) <= limit:
+        return sorted(locations, key=article_order)
+
+    def priority(location: str) -> tuple[int, int, int, int]:
+        item = grouped[location]
+        return (
+            int(bool(item["is_structural"])),
+            int(bool(item["is_uncertain"])),
+            int(bool(item["is_new"])),
+            int(item["count"]),
+        )
+
+    selected = sorted(
+        locations,
+        key=lambda location: (priority(location), tuple(-n for n in article_order(location))),
+        reverse=True,
+    )[:limit]
+    return sorted(selected, key=article_order)
+
+
 def _validate_summary_locations(law: LawChange, summary: _LawSummaryContent) -> None:
     """LLM이 입력에 없는 조문 번호를 핵심 변경 위치로 만들지 못하게 한다."""
     allowed = {
@@ -447,15 +530,17 @@ def _validate_summary_locations(law: LawChange, summary: _LawSummaryContent) -> 
         if (match := _ARTICLE_REF_RE.search(label or ""))
     }
     for item in summary.key_changes:
-        match = _ARTICLE_REF_RE.search(item)
-        if match is None:
+        matches = list(_ARTICLE_REF_RE.finditer(item))
+        if not matches:
             raise LLMSummaryError(
                 f"{law.law_name} 요약의 핵심 변경사항에 조문 위치가 없습니다: {item}"
             )
-        if match.group(0) not in allowed:
-            raise LLMSummaryError(
-                f"{law.law_name} 요약이 입력에 없는 조문을 사용했습니다: {match.group(0)}"
-            )
+        for match in matches:
+            if match.group(0) not in allowed:
+                raise LLMSummaryError(
+                    f"{law.law_name} 요약이 입력에 없는 조문을 사용했습니다: "
+                    f"{match.group(0)}"
+                )
 
 
 def _validate_law_summary(
@@ -465,6 +550,7 @@ def _validate_law_summary(
 ) -> None:
     """법령별 요약의 위치·공포 상태·연도·시행 시제를 입력 사실과 대조한다."""
     _validate_summary_locations(law, summary)
+    _validate_required_summary_locations(law, summary, facts)
     text = _law_summary_text(summary)
     if match := _PRE_PROMULGATION_RE.search(text):
         raise LLMSummaryError(
@@ -479,6 +565,103 @@ def _validate_law_summary(
         raise LLMSummaryError(
             f"{law.law_name} 요약이 이미 도래한 시행일을 미래 시제로 표현했습니다."
         )
+
+
+def _validate_required_summary_locations(
+    law: LawChange,
+    summary: _LawSummaryContent,
+    facts: dict[str, Any],
+) -> None:
+    required = set(facts.get("required_summary_locations") or ())
+    mentioned = {
+        match.group(0)
+        for item in summary.key_changes
+        for match in _ARTICLE_REF_RE.finditer(item)
+    }
+    missing = sorted(required - mentioned)
+    if missing:
+        raise LLMSummaryError(
+            f"{law.law_name} 요약의 핵심 변경사항에서 필수 조문이 빠졌습니다: "
+            f"{', '.join(missing)}"
+        )
+
+
+def _complete_required_summary_locations(
+    law: LawChange,
+    summary: _LawSummaryContent,
+    facts: dict[str, Any],
+) -> _LawSummaryContent:
+    """모델이 빠뜨린 필수 조문을 원문 문장으로 안전하게 보충한다.
+
+    생성 모델은 명시적인 재작성 요청에도 긴 신설 조문을 생략할 수 있다.
+    이 경우 새로운 설명을 만들지 않고 해당 조문의 실제 ``new_text``를
+    대표 문장으로 사용한다. 같은 조문이 중복 생성된 경우 첫 항목만 남겨
+    최대 8개 제한 안에서 필수 위치를 모두 보존한다.
+    """
+    required = list(facts.get("required_summary_locations") or ())
+    if not required:
+        return summary
+
+    required_set = set(required)
+    completed: list[str] = []
+    covered: set[str] = set()
+    for item in summary.key_changes:
+        refs = {
+            match.group(0)
+            for match in _ARTICLE_REF_RE.finditer(item)
+        }
+        required_refs = refs & required_set
+        if required_refs and required_refs <= covered:
+            continue
+        completed.append(item)
+        covered.update(required_refs)
+
+    for location in required:
+        if location in covered:
+            continue
+        candidates = [
+            article
+            for article in law.articles
+            if (
+                (match := _ARTICLE_REF_RE.search(article.article_label or ""))
+                and match.group(0) == location
+            )
+        ]
+        if candidates:
+            representative = min(
+                candidates,
+                key=lambda article: (
+                    article.change_type != "신설",
+                    bool(article.clause_no) and article.clause_no != "①",
+                    len(article.new_text or article.old_text),
+                ),
+            )
+            source_text = (
+                representative.new_text or representative.old_text
+            ).strip()
+        else:
+            expansion = next(
+                (
+                    item
+                    for item in law.structural_expansions
+                    if (
+                        (match := _ARTICLE_REF_RE.search(item.article_label or ""))
+                        and match.group(0) == location
+                    )
+                ),
+                None,
+            )
+            source_text = (
+                expansion.new_items[0].text.strip()
+                if expansion and expansion.new_items
+                else ""
+            )
+        if not source_text:
+            continue
+        completed.append(f"{location}: {source_text}")
+        covered.add(location)
+
+    return summary.model_copy(update={"key_changes": completed[:8]})
 
 
 def _validate_executive_summary(

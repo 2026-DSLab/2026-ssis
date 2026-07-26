@@ -18,9 +18,11 @@ from lawtrack.llm.openai_summary import (
     LLMSummaryError,
     _LawSummaryContent,
     _ExecutiveSummaryContent,
+    _complete_required_summary_locations,
     _exception_detail,
     _law_facts,
     _new_client,
+    _summary_priority_locations,
     _validate_executive_summary,
     _validate_law_summary,
     _validate_summary_locations,
@@ -343,6 +345,76 @@ def test_law_summary_allows_standard_enforcement_wording_for_past_date():
     )
 
     _validate_law_summary(law, summary, facts)
+
+
+def test_required_summary_locations_prevent_core_article_omission():
+    law = LawChange(
+        law_id="002",
+        law_type="법률",
+        law_name="핵심조문법",
+        new_serial_no="300",
+        articles=[
+            ArticleDiffItem(
+                article_label="제18조",
+                clause_no="②",
+                change_type="개정",
+                old_text="종전 지원 대상",
+                new_text="새 지원 대상",
+                match_status="성공",
+            ),
+            ArticleDiffItem(
+                article_label="제37조의2",
+                clause_no="①",
+                change_type="신설",
+                old_text="",
+                new_text="새 협의회를 설립한다.",
+                match_status="성공",
+            ),
+            ArticleDiffItem(
+                article_label="제37조의2",
+                clause_no="②",
+                change_type="신설",
+                old_text="",
+                new_text="협의회는 법인으로 한다.",
+                match_status="성공",
+            ),
+            ArticleDiffItem(
+                article_label="제42조",
+                change_type="개정",
+                old_text="종전 명칭 제한",
+                new_text="새 명칭 제한",
+                match_status="성공",
+            ),
+        ],
+    )
+    facts = _law_facts(law)
+
+    assert _summary_priority_locations(law) == ["제18조", "제37조의2", "제42조"]
+
+    summary = _LawSummaryContent(
+        headline="협의회 관련 조문 정비",
+        summary="협의회 설립과 관련 조문이 정비되었습니다.",
+        key_changes=["제37조의2 협의회 설립 근거 신설"],
+        operational_impact="담당 부서의 원문 검토 필요",
+        review_points=[],
+    )
+    try:
+        _validate_law_summary(law, summary, facts)
+    except LLMSummaryError as exc:
+        assert "필수 조문" in str(exc)
+        assert "제18조" in str(exc)
+        assert "제42조" in str(exc)
+    else:
+        raise AssertionError("핵심 변경 조문이 빠진 요약을 허용했습니다.")
+
+    completed = _complete_required_summary_locations(law, summary, facts)
+    completed_text = " ".join(completed.key_changes)
+    assert "제18조" in completed_text
+    assert "제37조의2" in completed_text
+    assert "제42조" in completed_text
+    assert "새 지원 대상" in completed_text
+    assert "새 명칭 제한" in completed_text
+    _validate_law_summary(law, completed, facts)
 
 
 def test_executive_summary_rejects_weekly_event_semantics():

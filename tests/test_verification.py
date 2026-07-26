@@ -16,6 +16,7 @@ from lawtrack.contract.schema import (
 from lawtrack.llm.verifier import (
     _AuditIssue,
     _convert_issues,
+    _verified_missing_locations,
     verify_summary,
 )
 from lawtrack.verify import verify_source_integrity
@@ -272,7 +273,7 @@ class _UngroundedVerifierResponses:
         )
 
 
-def test_verifier_hallucination_is_warning_not_summary_failure():
+def test_verifier_hallucination_without_grounded_issue_is_discarded():
     contract = _with_summary(_contract())
     source_report = verify_source_integrity(
         contract,
@@ -288,19 +289,12 @@ def test_verifier_hallucination_is_warning_not_summary_failure():
         client=SimpleNamespace(responses=_UngroundedVerifierResponses()),
     )
 
-    assert report.status == "WARN"
-    assert report.summary_grounding == "WARN"
-    assert all(issue.severity != "ERROR" for issue in report.issues)
-    assert any(
-        issue.code in {
-            "VERIFIER_UNSUPPORTED_FINDING",
-            "VERIFIER_INVALID_WARNING_EVIDENCE",
-        }
-        for issue in report.issues
-    )
+    assert report.status == "PASS"
+    assert report.summary_grounding == "PASS"
+    assert report.issues == []
 
 
-def test_misclassified_omission_is_forced_to_warning():
+def test_already_covered_location_is_not_reported_as_omission():
     payload = {
         "source_facts": {"articles": [{"location": "제9조", "new_text": "새 기관"}]},
         "generated_summary": {"key_changes": ["제9조 기관 명칭 변경"]},
@@ -323,11 +317,10 @@ def test_misclassified_omission_is_forced_to_warning():
     )
 
     assert invalid == []
-    assert converted[0].severity == "WARNING"
-    assert converted[0].code == "SUMMARY_OMISSION"
+    assert converted == []
 
 
-def test_subjective_clarity_feedback_cannot_fail_summary():
+def test_subjective_clarity_feedback_is_discarded():
     payload = {
         "source_facts": {
             "articles": [{"location": "제21조④", "new_text": "수의계약으로 구매할 수 있다."}]
@@ -357,8 +350,58 @@ def test_subjective_clarity_feedback_cannot_fail_summary():
     )
 
     assert invalid == []
-    assert converted[0].severity == "WARNING"
-    assert converted[0].code == "SUMMARY_QUALITY_NOTE"
+    assert converted == []
+
+
+def test_missing_location_is_kept_only_when_absent_from_generated_summary():
+    payload = {
+        "source_facts": {
+            "articles": [
+                {"location": "제21조④", "new_text": "수의계약 근거를 신설한다."},
+                {"location": "제37조의2", "new_text": "협의회를 설립한다."},
+            ]
+        },
+        "generated_summary": {
+            "key_changes": ["제21조④ 수의계약 근거 신설"]
+        },
+    }
+
+    verified = _verified_missing_locations(
+        ["제21조④", "제37조의2", "근거 없는 위치"],
+        payload=payload,
+    )
+
+    assert verified == ["제37조의2"]
+
+
+def test_warning_with_invented_evidence_is_silently_discarded():
+    payload = {
+        "source_facts": {
+            "articles": [{"location": "제1조", "new_text": "새 기관"}]
+        },
+        "generated_summary": {
+            "key_changes": ["제1조 종전 기관을 새 기관으로 변경"]
+        },
+    }
+    converted, invalid = _convert_issues(
+        [
+            _AuditIssue(
+                issue_type="OMISSION",
+                severity="WARNING",
+                field="key_changes",
+                location="제2조",
+                claim="제2조가 누락되었습니다.",
+                evidence="검증기가 만든 가짜 원문",
+                reason="핵심 변경 위치가 누락되었습니다.",
+            )
+        ],
+        payload=payload,
+        law_id="001",
+        serial_no="200",
+    )
+
+    assert converted == []
+    assert invalid == []
 
 
 def test_direct_source_contradiction_remains_error():

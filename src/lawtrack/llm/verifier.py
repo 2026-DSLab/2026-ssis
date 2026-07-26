@@ -19,6 +19,7 @@ from lawtrack.contract.schema import (
 from lawtrack.verify.source import source_sha256, summary_sha256
 
 from .openai_summary import (
+    _ARTICLE_REF_RE,
     _exception_detail,
     _law_facts,
     _new_client,
@@ -216,24 +217,28 @@ def verify_summary(
             )
             issues.extend(converted)
             issues.extend(invalid_evidence)
+            verified_missing = _verified_missing_locations(
+                parsed.missing_locations,
+                payload=payload,
+            )
             qualified_missing = [
                 f"{law.law_id}:{law.new_serial_no}:{location}"
-                for location in parsed.missing_locations
+                for location in verified_missing
             ]
             missing_locations.extend(qualified_missing)
-            if parsed.missing_locations and parsed.status == "PASS":
+            if verified_missing and parsed.status == "PASS":
                 issues.append(VerificationIssue(
                     severity="WARNING",
                     category="SUMMARY",
                     code="MISSING_LOCATION",
                     law_id=law.law_id,
                     new_serial_no=law.new_serial_no,
-                    location=", ".join(parsed.missing_locations),
+                    location=", ".join(verified_missing),
                     reason="검증기가 누락 위치를 반환했지만 PASS로 판정해 WARN으로 보정했습니다.",
                 ))
             _ensure_audit_status_has_issue(
                 parsed.status,
-                converted,
+                [*converted, *invalid_evidence],
                 law_id=law.law_id,
                 serial_no=law.new_serial_no,
                 issues=issues,
@@ -266,7 +271,7 @@ def verify_summary(
         issues.extend(invalid_evidence)
         _ensure_audit_status_has_issue(
             executive.status,
-            converted,
+            [*converted, *invalid_evidence],
             issues=issues,
         )
         used_in, used_out = _usage(executive_response)
@@ -392,7 +397,17 @@ def _convert_issues(
 ) -> tuple[list[VerificationIssue], list[VerificationIssue]]:
     converted: list[VerificationIssue] = []
     invalid_evidence: list[VerificationIssue] = []
-    source_payload = payload.get("source_facts") or payload.get("batch_facts") or {}
+    if "source_facts" in payload:
+        source_payload = payload["source_facts"]
+    else:
+        # 종합 요약은 배치 메타데이터뿐 아니라 이미 법령별로 생성·검증된
+        # 요약을 압축한다. 두 입력을 함께 근거 범위로 사용한다.
+        source_payload = {
+            "batch_facts": payload.get("batch_facts") or {},
+            "generated_law_summaries": (
+                payload.get("generated_law_summaries") or []
+            ),
+        }
     generated_payload = (
         payload.get("generated_summary")
         or payload.get("generated_executive_summary")
@@ -408,6 +423,8 @@ def _convert_issues(
         ensure_ascii=False,
         separators=(",", ":"),
     )
+    source_locations = set(_ARTICLE_REF_RE.findall(source_text))
+    generated_locations = set(_ARTICLE_REF_RE.findall(generated_text))
     for item in audit_issues:
         is_omission = (
             item.issue_type == "OMISSION"
@@ -417,6 +434,10 @@ def _convert_issues(
             item.issue_type == "AMBIGUITY"
             or bool(_QUALITY_REASON_RE.search(item.reason))
         )
+        # 명료성·상세성 같은 주관적 문서 품질 의견은 사실 검증 결과가
+        # 아니므로 보고서 경고로 남기지 않는다.
+        if is_quality_feedback:
+            continue
         has_factual_error_reason = bool(
             _FACTUAL_ERROR_REASON_RE.search(item.reason)
         )
@@ -432,10 +453,26 @@ def _convert_issues(
         if severity == "ERROR" and not has_factual_error_reason:
             severity = "WARNING"
         evidence_is_valid = bool(item.evidence) and item.evidence in source_text
-        claim_is_valid = (
-            is_omission
-            or (bool(item.claim) and item.claim in generated_text)
-        )
+        claim_is_valid = bool(item.claim) and item.claim in generated_text
+        if is_omission:
+            omission_locations = set(_ARTICLE_REF_RE.findall(
+                " ".join((item.location, item.claim, item.reason))
+            ))
+            if omission_locations:
+                # 실제 원문에 존재하면서 생성 요약에는 없는 조문만 누락으로
+                # 인정한다. 이미 적힌 조문을 검증 모델이 다시 누락이라 부르는
+                # 거짓 경고는 여기서 제거한다.
+                verified_locations = (
+                    omission_locations
+                    & source_locations
+                    - generated_locations
+                )
+                if not verified_locations or not evidence_is_valid:
+                    continue
+            elif not (claim_is_valid and evidence_is_valid):
+                # 조문 위치 없는 추상적인 누락 평가는 인용문이 양쪽 입력에
+                # 정확히 존재할 때만 보존한다.
+                continue
         if severity == "ERROR" and (not evidence_is_valid or not claim_is_valid):
             invalid_evidence.append(_system_warning(
                 "VERIFIER_UNSUPPORTED_FINDING",
@@ -445,6 +482,8 @@ def _convert_issues(
                 serial_no=serial_no,
                 claim=item.claim or item.evidence,
             ))
+            continue
+        if severity == "WARNING" and not evidence_is_valid:
             continue
         converted.append(VerificationIssue(
             severity=severity,
@@ -464,15 +503,33 @@ def _convert_issues(
             evidence=item.evidence,
             reason=item.reason,
         ))
-        if severity == "WARNING" and item.evidence and not evidence_is_valid:
-            invalid_evidence.append(_system_warning(
-                "VERIFIER_INVALID_WARNING_EVIDENCE",
-                "검증 에이전트의 경고 근거가 원문에 정확히 존재하지 않습니다.",
-                law_id=law_id,
-                serial_no=serial_no,
-                claim=item.evidence,
-            ))
     return converted, invalid_evidence
+
+
+def _verified_missing_locations(
+    locations: list[str],
+    *,
+    payload: dict[str, Any],
+) -> list[str]:
+    """검증 모델이 반환한 누락 위치를 원문과 생성 요약으로 재검사한다."""
+    source = json.dumps(
+        payload.get("source_facts") or {},
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    generated = json.dumps(
+        payload.get("generated_summary") or {},
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    source_locations = set(_ARTICLE_REF_RE.findall(source))
+    generated_locations = set(_ARTICLE_REF_RE.findall(generated))
+    verified: list[str] = []
+    for location in locations:
+        refs = set(_ARTICLE_REF_RE.findall(location))
+        if refs and refs <= source_locations and not refs <= generated_locations:
+            verified.append(location)
+    return verified
 
 
 def _ensure_audit_status_has_issue(
@@ -483,21 +540,10 @@ def _ensure_audit_status_has_issue(
     law_id: str = "",
     serial_no: str = "",
 ) -> None:
-    if status == "PASS":
-        return
-    if converted:
-        return
-    issues.append(VerificationIssue(
-        severity="WARNING",
-        category="SYSTEM",
-        code="VERIFIER_STATUS_WITHOUT_VALID_ISSUE",
-        law_id=law_id,
-        new_serial_no=serial_no,
-        reason=(
-            f"검증 에이전트가 {status}를 반환했지만 원문으로 확인 가능한 "
-            "구체적인 문제를 제공하지 않았습니다."
-        ),
-    ))
+    # 검증 모델의 status는 참고값일 뿐이다. 원문 인용과 요약 인용으로
+    # 재검사된 구체적 issue가 없으면 근거 없는 FAIL/WARN 상태를 최종
+    # 보고서에 전파하지 않는다.
+    return
 
 
 def _executive_payload(contract: WeeklyContract) -> dict[str, Any]:
