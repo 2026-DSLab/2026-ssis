@@ -1,8 +1,10 @@
-"""주간 배치: 워치리스트 전체를 돌며 개정 감지 → 저장 → 산출물(JSON) 생성.
+"""주간 배치: 개정 감지 → 조문 비교 → (선택) LLM 요약 → (선택) HWPX 보고서.
 
-사용법 (law-tracking-db 폴더 루트, 가상환경 활성화 상태에서):
+사용법 (프로젝트 루트, 가상환경 활성화 상태에서):
 
-    python scripts\\run_weekly.py
+    python scripts\\run_weekly.py              # 감지·비교만 (LLM 비용 없음)
+    python scripts\\run_weekly.py --summarize  # + LLM 요약 JSON
+    python scripts\\run_weekly.py --full       # + HWPX 보고서 + DB 적재
 
 이 스크립트가 하는 일 (순서대로):
     1. watchlist.due_for_activation() 으로 시행예정일이 도래한 항목을
@@ -12,22 +14,30 @@
        (감지 → 본문/신구법 조회 → 위치확정 6가드 → article_diff/change_log 저장)
     4. 결과를 상태별로 집계해 요약 출력
     5. 최근 7일 시행분으로 WeeklyContract 를 조립해 out/ 에 JSON 저장
+    6. (--summarize) 그 JSON 을 요약 파이프라인에 넘겨 요약 생성
+    7. (--hwpx / --summary-db) 보고서 생성 / law_summary 테이블 적재
+
+★ 왜 요약이 기본값이 아닌가:
+    1~5 단계는 공짜지만 6단계부터는 호출 건당 LLM 비용이 든다. 기본을
+    켜 두면 "감지 결과만 보려고" 돌린 실행에서도 조용히 과금된다.
+    자동 실행(작업 스케줄러)에는 --full 로 등록한다 — scripts/weekly.cmd
+    가 그렇게 되어 있다.
 
 이 스크립트가 하지 않는 것 (detect.py 상단 docstring과 동일한 경계):
-    병렬 처리, 재시도 정책, 실제 스케줄링(이 스크립트 자체를 매주
-    자동으로 실행되게 cron/작업 스케줄러에 등록하는 것은 별도 인프라
-    담당의 몫이다 — 여기서는 "한 번 실행하면 전체가 정확히 처리된다"는
-    것만 보장한다).
+    병렬 처리, 재시도 정책. 스케줄 등록 자체는 scripts/register_task.ps1
+    이 맡는다 — 여기서는 "한 번 실행하면 전체가 정확히 처리된다"는 것만
+    보장한다.
 
 한 항목에서 API 오류/예외가 나도 전체 배치를 중단하지 않고 나머지를
 계속 처리한다 — 워치리스트 100건 중 1건이 실패했다고 나머지 99건의
 개정 감지 기회를 날리면 안 되기 때문이다. 실패한 항목은 요약에 모아
 보고하고, 종료 코드로 오류 발생 여부를 알린다(오류 0건이면 0, 있으면 1
-— 향후 실제 스케줄러에 연결할 때 실패 알림 트리거로 쓸 수 있게).
+— 스케줄러의 실패 알림 트리거로 쓸 수 있게).
 """
 
 from __future__ import annotations
 
+import argparse
 import logging
 from collections import Counter
 from datetime import date, timedelta
@@ -48,7 +58,120 @@ from lawtrack.detect import DetectStatus, process_entry
 log = logging.getLogger("run_weekly")
 
 
-def main() -> int:
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="run_weekly",
+        description="법령/행정규칙 개정 주간 배치 (감지 → 비교 → 요약 → 보고서)",
+    )
+    parser.add_argument(
+        "--summarize", action="store_true",
+        help="감지 후 LLM 요약까지 실행 (호출 건당 API 비용 발생)",
+    )
+    parser.add_argument(
+        "--hwpx", action="store_true",
+        help="HWPX 보고서까지 생성 (--summarize 를 포함한다)",
+    )
+    parser.add_argument(
+        "--summary-db", action="store_true",
+        help="요약을 law_summary 테이블에 적재 (--summarize 를 포함한다)",
+    )
+    parser.add_argument(
+        "--full", action="store_true",
+        help="--summarize --hwpx --summary-db 를 모두 켠다. 자동 실행용.",
+    )
+    args = parser.parse_args(argv)
+
+    # --hwpx / --summary-db 는 요약 결과가 있어야 의미가 있다. 사용자가
+    # --summarize 를 빠뜨렸다고 "아무것도 안 나오는" 실행을 하게 두지 않는다.
+    if args.full:
+        args.summarize = args.hwpx = args.summary_db = True
+    if args.hwpx or args.summary_db:
+        args.summarize = True
+    return args
+
+
+def run_summary_stage(
+    contract_path: Path, db: Database, *, hwpx: bool, to_db: bool,
+) -> int:
+    """계약 JSON 하나를 요약 파이프라인에 넘긴다. 오류 건수를 돌려준다.
+
+    ★ import 를 함수 안에서 하는 이유: 요약 단계는 LLM SDK 와 hwpx 를
+      필요로 하는데, 감지만 쓰는 사람은 그것들을 깔지 않았을 수 있다.
+      모듈 최상단에서 import 하면 --summarize 를 안 쓴 실행도 함께
+      죽는다.
+
+    ★ 여기서 예외를 잡아 삼키지 않고 건수로 돌려주는 이유: 감지 결과는
+      이미 DB 에 커밋되어 안전하다. 요약이 실패했다고 그 사실을 되돌릴
+      수는 없으므로, 배치는 계속 진행하되 종료 코드로 알린다.
+    """
+    print("\n" + "=" * 70)
+    print("요약 단계 시작 (LLM)")
+    print("=" * 70)
+
+    try:
+        from summarizer.config import ConfigError as SummaryConfigError
+        from summarizer.config import load_settings as load_summary_settings
+        from summarizer.llm import build_client
+        from summarizer.pipeline import SummaryPipeline
+        from summarizer.sinks import DbSink, HwpxSink, JsonSink
+    except ImportError as exc:
+        print(f"\n❌ 요약 모듈을 불러올 수 없습니다: {exc}")
+        print("   pip install -e \".[openai]\" 로 의존성을 설치하세요.")
+        return 1
+
+    try:
+        summary_settings = load_summary_settings()
+    except SummaryConfigError as exc:
+        print(f"\n❌ 요약 설정 오류: {exc}")
+        return 1
+
+    try:
+        client = build_client(summary_settings.llm)
+        results = SummaryPipeline(client, summary_settings).run([contract_path])
+    except Exception as exc:  # noqa: BLE001 — 감지 결과를 지키기 위해 여기서 멈춘다
+        log.exception("요약 파이프라인 실패")
+        print(f"\n❌ 요약 실패: {exc!r}")
+        print("   감지·비교 결과는 이미 DB 와 out/ 에 저장되어 있습니다.")
+        return 1
+
+    JsonSink(summary_settings.pipeline.output_dir).write(results)
+    print(f"요약 저장됨: {summary_settings.pipeline.output_dir}")
+
+    errors = 0
+    for contract in results:
+        for law in contract.laws:
+            print(f"  ■ [{law.law_type}] {law.law_name}: {law.headline}")
+            for caveat in law.caveats:
+                print(f"    ※ {caveat}")
+
+    if hwpx:
+        try:
+            report_dir = summary_settings.pipeline.output_dir.parent / "reports"
+            HwpxSink(report_dir).write(results)
+            print(f"보고서 저장됨: {report_dir}")
+        except Exception as exc:  # noqa: BLE001
+            log.exception("HWPX 보고서 생성 실패")
+            print(f"\n⚠️ 보고서 생성 실패: {exc!r} (요약 JSON 은 저장됨)")
+            errors += 1
+
+    if to_db:
+        try:
+            saved = DbSink(
+                db,
+                llm_provider=summary_settings.llm.provider,
+                llm_model=summary_settings.llm.model,
+            ).write(results)
+            print(f"law_summary 적재: {saved}건")
+        except Exception as exc:  # noqa: BLE001
+            log.exception("요약 DB 적재 실패")
+            print(f"\n⚠️ 요약 DB 적재 실패: {exc!r} (요약 JSON 은 저장됨)")
+            errors += 1
+
+    return errors
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parse_args(argv)
     settings = load_settings()
     setup_logging(settings.log_level)
 
@@ -138,8 +261,15 @@ def main() -> int:
     output_path = write_contract(contract, Path("out"))
     print(f"산출물 저장됨: {output_path}")
 
+    # --- 요약 → 보고서 → DB 적재 ---
+    summary_errors = 0
+    if args.summarize:
+        summary_errors = run_summary_stage(
+            output_path, db, hwpx=args.hwpx, to_db=args.summary_db,
+        )
+
     print("\n" + "=" * 70)
-    return 1 if errors else 0
+    return 1 if (errors or summary_errors) else 0
 
 
 if __name__ == "__main__":

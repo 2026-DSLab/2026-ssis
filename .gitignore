@@ -27,3 +27,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# 배치 실행 산출물 (out/logs 는 *.log 규칙에 이미 걸리지만 디렉터리째 무시)
+out/logs/

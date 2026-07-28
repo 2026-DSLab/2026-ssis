@@ -29,6 +29,25 @@ def _parse_yyyymmdd(s: str) -> date | None:
         return None
 
 
+def _parse_iso_date(value: str | date | None) -> date | None:
+    """'2025-10-01' 형태를 date로. 형식이 아니면 None.
+
+    계약 JSON(contract/schema.py)은 날짜를 문자열로 실어 나른다 — LLM 팀에
+    넘기는 JSON 이라 타입이 아니라 표기가 계약이기 때문이다. 그 값이 DB로
+    돌아올 때(요약 적재) 여기서 다시 date 로 바꾼다. 빈 문자열도 정상
+    입력이다(시행일 미상) — 그때는 NULL 로 들어간다.
+    """
+    if isinstance(value, date):
+        return value
+    s = (value or "").strip()
+    if not s:
+        return None
+    try:
+        return date.fromisoformat(s)
+    except ValueError:
+        return None
+
+
 
 # ---------------------------------------------------------------------------
 # 워치리스트
@@ -666,3 +685,125 @@ class ArticleDiffRepo:
             match_status,
             json.dumps(list(lr.tried), ensure_ascii=False),
         )
+
+# ---------------------------------------------------------------------------
+# LLM 요약 (summarizer 산출물)
+# ---------------------------------------------------------------------------
+
+class LawSummaryRepo:
+    """LLM 요약 결과 적재.
+
+    ★ 왜 summarizer 의 자료구조(LawSummary)를 인자로 받지 않고 원시값만
+      받는가: 의존 방향을 지키기 위해서다. summarizer 는 lawtrack 을
+      import 하지만(계약 스키마를 읽어야 하므로) 그 반대는 아니다.
+      여기서 LawSummary 를 import 하면 순환이 생기고, 감지 파이프라인만
+      쓰려는 사람도 LLM 쪽 의존성을 깔아야 한다. 변환은 부르는 쪽
+      (summarizer/sinks.py 의 DbSink)이 한다.
+    """
+
+    def __init__(self, db: Database):
+        self._db = db
+
+    def upsert(
+        self, *, law_id: str, new_serial_no: str, law_name: str,
+        law_type: str = "", enforce_date: str | date | None = None,
+        revision_type: str = "", source_url: str = "",
+        headline: str = "", overview: str = "", body: str = "",
+        caveats: list | None = None, article_summaries: list | None = None,
+        mappings: list | None = None, verifier_issues: list | None = None,
+        llm_provider: str = "", llm_model: str = "",
+        batch_date: str | date | None = None, source_file: str = "",
+        error: str | None = None,
+    ) -> None:
+        """요약 1건 저장. 같은 (law_id, new_serial_no) 가 있으면 덮어쓴다.
+
+        덮어쓰는 이유는 law_summary 테이블 COMMENT 에 적어 두었다 — 요약은
+        계약 JSON 에서 언제든 다시 만들 수 있는 파생물이고, 실제로 참조되는
+        것은 항상 최신 1건이다.
+
+        ★ new_serial_no 가 비어 있으면 저장하지 않고 예외를 낸다. 빈 문자열로
+          넣으면 서로 다른 개정분의 요약이 같은 키('')로 몰려 마지막 것만
+          남는다 — 조용히 데이터가 사라지는 종류의 버그라 여기서 막는다.
+        """
+        if not law_id or not new_serial_no:
+            raise ValueError(
+                f"요약 저장에는 law_id 와 new_serial_no 가 모두 필요합니다: "
+                f"law_id={law_id!r}, new_serial_no={new_serial_no!r}"
+            )
+
+        def _json(value: list | None) -> str | None:
+            return json.dumps(value, ensure_ascii=False) if value else None
+
+        with self._db.transaction() as (_, cur):
+            cur.execute(
+                """
+                INSERT INTO law_summary (
+                    law_id, new_serial_no, law_name, law_type, enforce_date,
+                    revision_type, source_url, headline, overview, body,
+                    caveats, article_summaries, mappings, verifier_issues,
+                    llm_provider, llm_model, batch_date, source_file, error
+                ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                ON DUPLICATE KEY UPDATE
+                    law_name=VALUES(law_name),
+                    law_type=VALUES(law_type),
+                    enforce_date=VALUES(enforce_date),
+                    revision_type=VALUES(revision_type),
+                    source_url=VALUES(source_url),
+                    headline=VALUES(headline),
+                    overview=VALUES(overview),
+                    body=VALUES(body),
+                    caveats=VALUES(caveats),
+                    article_summaries=VALUES(article_summaries),
+                    mappings=VALUES(mappings),
+                    verifier_issues=VALUES(verifier_issues),
+                    llm_provider=VALUES(llm_provider),
+                    llm_model=VALUES(llm_model),
+                    batch_date=VALUES(batch_date),
+                    source_file=VALUES(source_file),
+                    error=VALUES(error)
+                """,
+                (
+                    law_id, new_serial_no, law_name, law_type or None,
+                    _parse_iso_date(enforce_date), revision_type or None,
+                    source_url or None, headline or None, overview or None,
+                    body or None, _json(caveats), _json(article_summaries),
+                    _json(mappings), _json(verifier_issues),
+                    llm_provider or None, llm_model or None,
+                    _parse_iso_date(batch_date), source_file or None, error,
+                ),
+            )
+
+    def fetch(self, law_id: str, new_serial_no: str) -> dict | None:
+        """요약 1건 조회. JSON 컬럼은 파이썬 객체로 풀어서 돌려준다."""
+        with self._db.cursor() as (_, cur):
+            cur.execute(
+                "SELECT * FROM law_summary WHERE law_id=%s AND new_serial_no=%s",
+                (law_id, new_serial_no),
+            )
+            return _decode_summary_row(cur.fetchone())
+
+    def fetch_by_batch(self, batch_date: str | date) -> list[dict]:
+        """한 배치가 만든 요약 전체. 주간 메일·대시보드가 쓸 조회."""
+        with self._db.cursor() as (_, cur):
+            cur.execute(
+                "SELECT * FROM law_summary WHERE batch_date=%s ORDER BY law_name",
+                (_parse_iso_date(batch_date),),
+            )
+            return [_decode_summary_row(row) for row in cur.fetchall()]
+
+
+#: law_summary 의 JSON 컬럼들. 드라이버 설정에 따라 str 로 오기도 하고 이미
+#: 파싱된 객체로 오기도 해서(mysql-connector 버전차), 양쪽 다 받는다.
+_SUMMARY_JSON_COLUMNS = ("caveats", "article_summaries", "mappings", "verifier_issues")
+
+
+def _decode_summary_row(row: dict | None) -> dict | None:
+    if not row:
+        return None
+    for col in _SUMMARY_JSON_COLUMNS:
+        value = row.get(col)
+        if isinstance(value, (str, bytes, bytearray)):
+            row[col] = json.loads(value)
+        elif value is None:
+            row[col] = []
+    return row

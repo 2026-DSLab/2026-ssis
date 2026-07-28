@@ -1,28 +1,78 @@
 # 법령/행정규칙 개정 자동감지 파이프라인
 
 국가법령정보 Open API를 이용해 워치리스트에 등록된 법령/행정규칙의 개정 여부를
-매주 감지하고, 조/항/호/목 단위로 구조화된 diff를 만들어 LLM팀에게 JSON으로
-넘겨준다.
+매주 감지하고, 조/항/호/목 단위로 구조화된 diff를 만든 뒤, LLM 멀티에이전트로
+요약·검증해 한글(HWPX) 보고서까지 생성한다.
+
+```
+ ① 감지        watchlist 102건의 일련번호를 API로 대조 → 바뀐 것만 추림
+ ② 조문 비교    신구법 대비 파싱 → 6가드로 위치 확정 → article_diff 저장
+ ③ 계약 JSON   out/weekly_contract_<날짜>.json  (여기까지가 src/lawtrack)
+ ─────────────────────────────────────────────────────────────────
+ ④ LLM 요약    매핑 → 조문별 요약(병렬) → 법령 종합    (summarizer/)
+ ⑤ 검증        요약을 원문과 코드로 대조 (LLM 판단 없음)
+ ⑥ 보고서      HWPX 생성 → 다시 열어 누락 대조
+ ⑦ DB 적재     law_summary 테이블에 upsert
+```
+
+전 단계를 한 번에 돌리려면:
+
+```bash
+python scripts/run_weekly.py --full
+```
+
+`--full` 없이 실행하면 ①~③(감지·비교)만 한다. ④부터는 호출 건당 LLM 비용이
+들기 때문에 기본값을 꺼 두었다 — 감지 결과만 확인하려고 돌린 실행에서
+조용히 과금되면 안 된다.
+
+| 플래그 | 하는 일 |
+|---|---|
+| (없음) | 감지 → 조문 비교 → 계약 JSON. 비용 없음 |
+| `--summarize` | + LLM 요약 JSON (`out/summaries/`) |
+| `--hwpx` | + HWPX 보고서 (`out/reports/`). `--summarize` 포함 |
+| `--summary-db` | + `law_summary` 테이블 적재. `--summarize` 포함 |
+| `--full` | 위 전부 |
+
+계약 JSON이 이미 있다면 요약 단계만 따로 돌릴 수도 있다:
+
+```bash
+python -m summarizer out/weekly_contract_2026-07-19.json --hwpx --db
+python -m summarizer out/weekly_contract_2026-07-19.json --dry-run --echo  # API 키 없이 프롬프트만 확인
+```
 
 ## 요구사항
 
 - Python 3.11+ (conda 환경 권장)
 - MySQL 8.0+
 - 국가법령정보 Open API 인증키(OC) — <https://open.law.go.kr>에서 발급
+- LLM API 키 (요약 단계를 쓸 경우)
 
 ```bash
-pip install -r requirements.txt
+pip install -e ".[openai]"        # 요약까지 (원내 QWEN 도 OpenAI 호환이면 이것)
+pip install -e ".[anthropic]"     # Anthropic 을 쓸 경우
+pip install -e ".[openai,dev]"    # + pytest
 ```
+
+**`pip install -r requirements.txt` 가 아니라 `pip install -e .` 를 쓴다.**
+이 프로젝트는 패키지가 두 곳에 나뉘어 있어(`src/lawtrack`, `summarizer`)
+설치하지 않으면 `import lawtrack` 이 되지 않는다. 특히 작업 스케줄러는
+대화형 셸의 `PYTHONPATH` 를 물려받지 않으므로, 설치해 두는 것이 자동
+실행의 전제다.
 
 ## 환경변수 (`.env`)
 
 프로젝트 루트에 `.env` 파일을 만든다(코드 저장소에 커밋하지 말 것 — 인증키/DB
-비밀번호가 들어간다).
+비밀번호가 들어간다). `.env.example` 을 복사해 채우면 된다.
 
 ```env
-# 필수
+# --- 1~2단계: 감지·비교 (src/lawtrack) ---
 LAW_API_OC=발급받은_OC_인증키
 MYSQL_PASSWORD=MySQL_비밀번호
+
+# --- 3단계: 요약 (summarizer) ---
+OPENAI_API_KEY=발급받은_API_키
+SUMMARY_PROVIDER=openai
+SUMMARY_MODEL=gpt-5.4-mini
 
 # 선택 (기본값 있음)
 MYSQL_HOST=127.0.0.1
@@ -31,6 +81,9 @@ MYSQL_USER=root
 MYSQL_DATABASE=law_tracking_db
 LOG_LEVEL=INFO
 ```
+
+감지만 쓸 것이면 `LAW_API_OC` + `MYSQL_PASSWORD` 만, 요약만 쓸 것이면
+API 키만 있어도 된다 — 쓰지 않는 단계의 설정은 요구하지 않는다.
 
 ## DB 최초 구축 순서
 
@@ -72,10 +125,48 @@ LOG_LEVEL=INFO
    python scripts/run_weekly.py
    ```
 
-4. 이후로는 `python scripts/run_weekly.py`를 주기적으로(원래 설계는 주간
-   1회) 실행하면 된다 — 실제 스케줄러(cron, Windows 작업 스케줄러 등)에
-   등록하는 것은 이 프로젝트의 범위 밖이며, 인프라 담당이 별도로 구성해야
-   한다. 산출물은 `out/weekly_contract_<날짜>.json`에 쌓인다.
+4. 이후로는 `python scripts/run_weekly.py --full`을 주 1회 실행하면 된다.
+   산출물은 `out/weekly_contract_<날짜>.json`에 쌓인다. 자동 실행 등록은
+   아래 "주간 자동 실행" 절 참고.
+
+   > 이미 운영 중인 DB에 요약 기능을 추가하는 경우: `schema.sql`은 전부
+   > `CREATE TABLE IF NOT EXISTS`라 그대로 다시 실행해도 기존 데이터는
+   > 건드리지 않는다. `law_summary` 테이블만 새로 생긴다.
+
+## 주간 자동 실행 (Windows 작업 스케줄러)
+
+```powershell
+# 1) 등록해도 돌아갈 환경인지 먼저 점검 (아무것도 바꾸지 않음)
+powershell -ExecutionPolicy Bypass -File scripts\register_task.ps1 -Verify
+
+# 2) 매주 월요일 06:00 등록
+powershell -ExecutionPolicy Bypass -File scripts\register_task.ps1
+
+# 요일·시각 지정
+powershell -ExecutionPolicy Bypass -File scripts\register_task.ps1 -DayOfWeek Friday -Time 18:30
+
+# 해제
+powershell -ExecutionPolicy Bypass -File scripts\register_task.ps1 -Remove
+```
+
+관리자 권한은 필요 없다. 등록되는 작업은 `scripts\weekly.cmd`를 실행하고,
+이 파일이 `run_weekly.py --full`을 돌린 뒤 결과를
+`out\logs\weekly_<yyyyMMdd>.log`에 남긴다. 배치가 실패하면 종료 코드가
+0이 아니게 되어 작업 스케줄러 기록에 실패로 뜬다.
+
+**등록 전에 `-Verify`를 먼저 돌릴 것.** 스케줄러 등록의 흔한 실패는 등록
+자체가 아니라 등록 후 첫 실행에서 나는데(python을 못 찾음, `.env` 없음,
+패키지 미설치), 그때는 아무도 보고 있지 않아 로그를 열기 전까지 모른다.
+`-Verify`는 그 조건들을 등록 전에 점검한다.
+
+주의할 점 두 가지:
+
+- **python 경로.** 작업 스케줄러는 대화형 셸의 PATH를 물려받지 않는다.
+  `conda activate`로만 python이 잡히는 환경이면 무인 실행에서 실패한다.
+  프로젝트 루트에 `.venv`를 만들어 두면 `weekly.cmd`가 그것을 우선 쓴다.
+- **로그인 상태.** 기본 등록은 "로그인한 사용자로 실행"이라 해당 계정이
+  로그오프면 작업이 미뤄진다. 서버 무인 운영은 `-RunWhetherLoggedOn`
+  (계정 비밀번호를 저장한다)이나 전용 서비스 계정을 쓴다.
 
 ## 산출물(`out/*.json`) 구조
 
@@ -438,7 +529,7 @@ src/lawtrack/
 
   db/                 MySQL 접근 계층 — 테이블별 Repo 클래스로 분리 (아래 "테이블 구조" 절 참고)
     conn.py               커넥션 풀 + Database.transaction() 컨텍스트매니저
-    repo.py               WatchlistRepo / VersionRepo / ChangeLogRepo / ArticleDiffRepo
+    repo.py               WatchlistRepo / VersionRepo / ChangeLogRepo / ArticleDiffRepo / LawSummaryRepo
 
   link.py             연쇄개정 그룹핑 — 같은 공포번호로 같이 개정된 법들을 하나의 AmendmentGroup으로 묶음
 
@@ -449,8 +540,28 @@ src/lawtrack/
     schema.py             Pydantic 모델 전체 (WeeklyContract 이하 전 스키마, 위 "산출물 구조" 절이 이 파일을 설명함)
     export.py             DB 테이블들을 읽어 위 Pydantic 모델로 조립 (build_contract) — structural_expansions 그룹핑도 여기
 
+summarizer/           계약 JSON → LLM 요약 → 검증 → HWPX 보고서 (3단계)
+  config.py             .env 로딩 → Settings(llm, pipeline). lawtrack/config.py 와 같은 방식
+  llm.py                LLMClient 프로토콜 + OpenAI/Anthropic 구현 + DryRunClient (프로바이더 교체 지점)
+  loader.py             계약 JSON 로드 → 조문 단위(ArticleUnit)로 정규화. 전부 결정론적, LLM 미개입
+  matching.py           구↔신 위치 대응의 계산 가능한 부분 (완전일치·밀림 가능성 판정)
+  agents.py             MappingAgent / ArticleAgent / LawAgent / VerifierAgent(현재 미사용)
+  prompts/              에이전트별 프롬프트 — 가장 자주 고치는 부분이라 로직과 분리
+  pipeline.py           오케스트레이션: 매핑 → 조문 팬아웃(병렬) → 법령 종합 → 검증
+  verifier.py           요약을 원문과 코드로 대조 (환각·방향오류만). LLM 을 판단자로 쓰지 않는 이유는 파일 상단 주석 참고
+  postprocess.py        LLM 출력 정리 (한자 오타 등)
+  render.py             조문별 변경 목록을 코드로 조립 — 구조 사실은 LLM 에 맡기지 않는다
+  report/               HWPX 보고서
+    builder.py            ContractSummary → HWPX (표지/개요/목록/조문별 변경표/미확정/비교불가)
+    layout.py             지면·표 배치 (폭, 열 너비, 칸 여백, 머리행)
+    verify.py             생성한 HWPX 를 다시 열어 요약이 온전히 들어갔는지 대조
+  sinks.py              저장처 — JsonSink / HwpxSink / DbSink (모두 같은 Sink 프로토콜)
+  __main__.py           `python -m summarizer` 진입점
+
 scripts/
-  run_weekly.py       주간 배치 진입점 — 워치리스트 전체를 detect.process_entry()로 돌리고 build_contract()로 JSON 산출
+  run_weekly.py       주간 배치 진입점 — 감지·비교(기본) + 요약·보고서·DB적재(--full)
+  weekly.cmd          작업 스케줄러가 실행하는 래퍼 (UTF-8 설정, 로그 적재, 종료코드 전달). ASCII 전용
+  register_task.ps1   작업 스케줄러 등록/해제 + 사전 환경 점검(-Verify)
   run_single_check.py 법령/행정규칙 1건만 디버깅용으로 상세 실행 (locate 가드별 로그까지 출력)
   load_watchlist.py   워치리스트 초기 적재 스크립트 (Windows mysql CLI 한글 인코딩 문제 우회용, seed_watchlist.sql과 내용 동일)
   inspect_article.py  조문번호 필드(가지번호 포함, 예: 제6조의2)의 API 원본 JSON 구조를 그대로 출력해 파서 로직과 맞는지 확인하는 진단 스크립트
@@ -466,7 +577,7 @@ tests/        pytest, 실측 데이터(실제 API 응답을 고정시킨 fixture
 
 ## 테이블 구조
 
-MySQL 8.0, `database/schema.sql` 기준. 테이블 5개 — 이 프로젝트에서 "진실의
+MySQL 8.0, `database/schema.sql` 기준. 테이블 6개 — 이 프로젝트에서 "진실의
 원천"은 항상 `laws`/`administrative_rules`의 전문 JSON이고, 나머지 테이블은
 전부 거기서 파생되거나 그 처리 과정을 기록한 것이다.
 
@@ -562,8 +673,51 @@ MySQL 8.0, `database/schema.sql` 기준. 테이블 5개 — 이 프로젝트에�
   기준으로 그룹핑)로 갈라 담는다 — 자세한 그룹핑 규칙은 위 산출물 구조
   절의 `structural_expansions[]` 설명 참고.
 
+### `law_summary` — LLM 요약 결과
+
+| 컬럼 | 타입 | 의미 |
+|---|---|---|
+| `law_id`, `new_serial_no` | VARCHAR(50) | 어느 법의 어느 개정분에 대한 요약인지 (**PK**) |
+| `law_name` / `law_type` / `enforce_date` / `revision_type` / `source_url` | | 요약 시점의 법령 정보 사본 |
+| `headline` | TEXT | LLM이 쓴 한 줄 요약(목록 화면용) |
+| `overview` | MEDIUMTEXT | LLM이 쓴 개정 취지 문단. **이 컬럼만이 순수 LLM 생성물**이며 사실 검증의 대상 |
+| `body` | MEDIUMTEXT | `overview` + 코드가 붙인 조문별 변경 목록. 보고서 본문과 같은 내용 |
+| `caveats` | JSON | 신뢰도 경고. 코드가 판정 상태에서 결정론적으로 만든 것 — LLM이 쓴 문장이 아니다 |
+| `article_summaries` | JSON | 조문별 요약 전체(원문 old/new 포함) |
+| `mappings` | JSON | 조문별 구↔신 위치 대응 판정 — "①이 ②로 이동"이라 쓴 근거 |
+| `verifier_issues` | JSON | 사실 대조 검증이 찾은 문제. `severity=high`는 요약이 원문과 다르다는 뜻 |
+| `llm_provider` / `llm_model` | VARCHAR | 어느 모델이 만든 요약인지 |
+| `batch_date` / `source_file` | | 어느 배치의 어느 계약 JSON에서 나왔는지 (재현·추적용) |
+| `error` | TEXT | LLM 호출 실패 사유. 실패한 요약도 행으로 남긴다 |
+
+- **PK가 `(law_id, new_serial_no)`인 이유**: 요약의 정체성은 "어느 법의 어느
+  개정분에 대한 요약인가"이지 "언제 만들었나"가 아니다. 같은 개정분을 다시
+  요약하면 덮어쓴다 — 요약은 계약 JSON에서 언제든 다시 만들 수 있는
+  파생물이라 판본을 쌓아두면 "어느 게 맞는 요약인가"를 매번 따져야 하고,
+  실제로 참조되는 것은 항상 최신 1건이기 때문이다. 언제/무엇으로 만들었는지는
+  `batch_date`/`llm_model`에 남는다. `article_diff`가 재계산 시 해당 범위를
+  지우고 다시 채우는 것과 같은 원칙이다.
+- `article_summaries`에 원문(old/new)까지 통째로 넣는 이유: 나중에 "이 요약이
+  왜 이렇게 나왔나"를 추적하려면 그때 본 입력이 남아 있어야 하는데, 원문은
+  API 재조회로 바뀔 수 있다.
+
 ## 테스트
 
 ```bash
-pytest -q
+pytest -q          # 190건
 ```
+
+`pyproject.toml`의 `[tool.pytest.ini_options]`가 `pythonpath`를 잡아 주므로
+설치 없이도 저장소에서 바로 돌아간다.
+
+테스트는 실제 API·DB·LLM을 부르지 않는다. 실측 데이터를 고정시킨 fixture와
+가짜 커넥션을 쓴다 — 테스트가 네트워크와 과금에 의존하면 아무도 돌리지 않게
+되기 때문이다. 파일명이 대상 모듈과 1:1 대응한다:
+
+| 파일 | 대상 |
+|---|---|
+| `test_split_jsonutil.py` | `text/split.py`, `parse/jsonutil.py` |
+| `test_locator.py` | `locate/locator.py` (6가드) |
+| `test_export.py` | `contract/export.py` |
+| `test_summary_db.py` | `db/repo.py`의 `LawSummaryRepo`, `summarizer/sinks.py`의 `DbSink` |
+| `test_summary_pipeline.py` | `summarizer/verifier.py`, `summarizer/report/`, `run_weekly.py` 배선 |

@@ -69,4 +69,31 @@ CREATE TABLE IF NOT EXISTS article_diff (
     match_detail JSON,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_article_diff (law_id, law_serial_no, article_code, clause_no, item_label, subitem_label, enforce_date)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS law_summary (
+    law_id VARCHAR(50) NOT NULL COMMENT '법령/행정규칙 ID',
+    new_serial_no VARCHAR(50) NOT NULL COMMENT '요약 대상 개정분의 일련번호 — change_log.new_serial_no 와 같은 값',
+    law_name VARCHAR(255) NOT NULL COMMENT '요약 시점의 법령명 — watchlist 가 나중에 제명 변경으로 갱신되어도 "이 요약이 무엇에 대한 것이었나"가 남게 사본으로 보관',
+    law_type VARCHAR(50) COMMENT '법률, 시행령, 행정규칙 등',
+    enforce_date DATE COMMENT '시행일',
+    revision_type VARCHAR(50) COMMENT '일부개정, 타법개정 등',
+    source_url TEXT COMMENT '법제처 원문 링크 — 담당자가 요약을 못 믿을 때 바로 원문으로 갈 수 있게',
+    headline TEXT COMMENT 'LLM 이 쓴 한 줄 요약(목록 화면용)',
+    overview MEDIUMTEXT COMMENT 'LLM 이 쓴 개정 취지 문단. 이 컬럼만이 순수 LLM 생성물이며, 사실 검증(summarizer/verifier.py)의 대상',
+    body MEDIUMTEXT COMMENT 'overview + 코드가 붙인 조문별 변경 목록. 보고서 본문과 같은 내용',
+    caveats JSON COMMENT '["조문 요약 실패: 제3조①", ...] — 이 요약을 읽는 사람이 알아야 할 신뢰도 경고. 코드가 판정 상태에서 결정론적으로 만든 것이며 LLM 이 쓴 문장이 아니다',
+    article_summaries JSON COMMENT '조문별 요약 전체(원문 old/new 포함). 보고서의 조문별 변경표가 이것으로 만들어진다',
+    mappings JSON COMMENT '조문별 구↔신 위치 대응 판정. "①이 ②로 이동"이라고 쓴 근거이자, 나중에 판정이 의심스러울 때 추적하는 기록',
+    verifier_issues JSON COMMENT '사실 대조 검증(코드)이 찾은 문제. severity=high 는 요약이 원문과 다르다는 뜻이라 담당자가 원문을 봐야 한다',
+    llm_provider VARCHAR(50) COMMENT '요약을 만든 프로바이더 (openai, anthropic 등)',
+    llm_model VARCHAR(100) COMMENT '요약을 만든 모델. 모델을 바꾼 뒤 품질이 달라졌을 때 어느 판본인지 구분하려면 반드시 필요하다',
+    batch_date DATE COMMENT '이 요약을 만든 배치의 기준일',
+    source_file VARCHAR(255) COMMENT '요약의 입력이 된 계약 JSON 파일명 — 재현·추적용',
+    error TEXT COMMENT 'LLM 호출 실패 사유. 실패를 조용히 빼지 않는다는 계약 원칙과 같다 — 실패한 요약도 행으로 남긴다',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (law_id, new_serial_no),
+    KEY idx_law_summary_batch (batch_date)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci
+COMMENT = 'LLM 요약 결과. 키가 (law_id, new_serial_no)인 이유: 요약의 정체성은 "어느 법의 어느 개정분에 대한 요약인가"이지 "언제 만들었나"가 아니다. 같은 개정분을 다시 요약하면 덮어쓴다 — 요약은 계약 JSON에서 언제든 다시 만들 수 있는 파생물이라 판본을 쌓아두면 "어느 게 맞는 요약인가"를 매번 따져야 하고, 실제로 참조되는 것은 항상 최신 1건이기 때문이다. 언제/무엇으로 만들었는지는 batch_date/llm_model 컬럼에 남는다. 이 설계는 article_diff(재계산 시 해당 범위를 지우고 다시 채움)와 같은 원칙이다.';

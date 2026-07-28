@@ -1,0 +1,1770 @@
+{
+  "source_file": "weekly_contract_2026-07-19_d.json",
+  "batch_date": "2026-07-20",
+  "laws": [
+    {
+      "law_id": "013719",
+      "law_name": "고독사 예방 및 관리에 관한 법",
+      "law_type": "법률",
+      "enforce_date": "2024-03-15",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=254853&type=HTML",
+      "headline": "고독사 위기대응시스템 구축 및 고독사 예방 협의회 신설",
+      "body": "이번 개정은 고독사 예방 및 관리를 위한 체계적인 시스템을 구축하기 위해 고독사 위기대응시스템의 운영을 법적으로 뒷받침하고, 고독사 예방 협의회의 구성 및 운영에 필요한 기준을 마련하는 데 중점을 두고 있습니다. 이를 통해 고독사 사안을 보다 효율적으로 대응하고 예방할 수 있는 기반을 마련하고자 합니다.\n\n○ 조문별 변경 내용\n- 제12조의2 (신설, 16개 항·호·목): 보건복지부장관은 고독사 예방 및 관리업무를 위해 사회보장정보시스템과 연계하여 고독사위기대응시스템을 구축하고 운영할 수 있습니다.\n- 제14조\n    · ② (신설): 고독사 예방 협의회가 신설되며, 위원장을 포함하여 20명 이내의 위원으로 구성됩니다.\n    · ③ (신설): 위원장은 보건복지부장관이 되며, 위원은 위원장이 임명하거나 위촉한 각종 인사로 구성되며, 이때 공무원이 아닌 위원의 수는 위원장을 포함하여 전체 위원 수의 2분의 1 이상이어야 합니다.\n    · ③1. (신설): 관계 중앙행정기관의 차관, 차장 또는 이에 상당하는 공무원이 새로 신설되었습니다.\n    · ③2. (신설): 부시장 또는 부지사에 대한 규정이 새로 신설되어, 특별시, 광역시, 특별자치시, 도, 특별자치도의 부시장 또는 부지사는 해당 시 또는 도에 부시장 또는 부지사가 2명 이상일 경우, 해당 시 또는 도지사가 지명하는 부시장 또는 부지사로 정해졌습니다.\n    · ③3. (신설): 고독사에 관한 학식과 경험이 풍부한 사람이 새로 추가되었습니다.\n    · ④ (이동): 내용 변경 없이 ②에서 제14조④(으)로 번호만 이동했습니다.\n    · ① (신설): 고독사 예방정책의 효율적인 수행을 위해 보건복지부에 고독사 예방 협의회가 신설된다.\n    · ①1. (신설): 고독사 예방 및 관리를 위한 기본계획 수립에 관한 사항이 새로 신설되었습니다.\n    · ①2. (신설): 추진실적의 평가에 관한 사항이 새로 추가되었습니다.\n    · ①3. (신설): 위원장이 고독사 예방정책에 대해 협의가 필요하다고 판단하는 사항이 새로 추가되었습니다.\n- 제9조 (개정): 관계 중앙행정기관의 장이라는 용어가 추가되었습니다.",
+      "overview": "이번 개정은 고독사 예방 및 관리를 위한 체계적인 시스템을 구축하기 위해 고독사 위기대응시스템의 운영을 법적으로 뒷받침하고, 고독사 예방 협의회의 구성 및 운영에 필요한 기준을 마련하는 데 중점을 두고 있습니다. 이를 통해 고독사 사안을 보다 효율적으로 대응하고 예방할 수 있는 기반을 마련하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2①",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "① 보건복지부장관은 고독사 예방 및 관리업무에 필요한 각종 정보의 효율적 처리, 기관 간 정보 공유를 위하여 「사회보장기본법」 제37조제2항에 따라 설치된 사회보장정보시스템과 연계하여 고독사위기대응시스템을 구축ㆍ운영할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보건복지부장관은 고독사 예방 및 관리업무를 위해 사회보장정보시스템과 연계하여 고독사위기대응시스템을 구축하고 운영할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2②",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "② 보건복지부장관은 고독사위기대응시스템을 구축ㆍ운영하기 위하여 다음 각 호의 정보를 처리할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보건복지부장관은 고독사위기대응시스템을 구축하고 운영하기 위해 특정 정보를 처리할 수 있는 권한을 새로 갖게 되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2②1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 「주민등록법」에 따른 주민등록 자료 또는 정보",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "주민등록법에 따른 주민등록 자료 또는 정보가 새롭게 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2②2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 「가족관계의 등록 등에 관한 법률」에 따른 가족관계 등록 자료 또는 정보",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "가족관계의 등록 등에 관한 법률에 따른 가족관계 등록 자료 또는 정보가 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2②3.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 「사회보장급여의 이용ㆍ제공 및 수급권자 발굴에 관한 법률」 제12조제1항 각 호의 정보",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "사회보장급여의 이용과 제공 및 수급권자 발굴에 관한 법률 제12조제1항 각 호의 정보가 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2②4.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "4. 「국민건강보험법」 제41조제1항 각 호에 따른 요양급여, 같은 법 제41조의4제1항에 따른 선별급여, 「의료급여법」 제7조제1항에 따른 질병에 대한 같은 항 각 호의 의료급여 실시 기록",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국민건강보험법 및 의료급여법에 따른 요양급여와 의료급여 실시 기록이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2②5.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "5. 「장사 등에 관한 법률」 제12조제3항에 따라 공고된 무연고 시신에 관한 정보",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "무연고 시신에 관한 정보가 장사 등에 관한 법률 제12조제3항에 따라 공고된 내용으로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2②6.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "6. 그 밖에 고독사 예방 및 관리업무에 필요한 정보로서 대통령령으로 정하는 정보",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "고독사 예방 및 관리에 필요한 정보를 대통령령으로 정할 수 있는 조항이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 보건복지부장관은 관계 중앙행정기관등의 장에게 고독사위기대응시스템의 구축ㆍ운영에 필요한 정보의 제공을 요청하고 제공받은 목적의 범위에서 이를 수집ㆍ보유ㆍ이용할 수 있다. 이 경우 정보의 제공을 요청받은 자는 정당한 사유가 없으면 이에 따라야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보건복지부장관은 고독사위기대응시스템의 구축 및 운영을 위해 관계 중앙행정기관의 장에게 필요한 정보를 요청할 수 있으며, 요청받은 자는 정당한 사유가 없으면 이를 제공해야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2④",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "④ 관계 중앙행정기관등의 장은 고독사위기대응시스템이 보유하는 정보의 활용이 필요한 경우 사전에 보건복지부장관과 협의하여야 한다. 이 경우 보건복지부장관은 관계 중앙행정기관등의 장에게 관련 업무에 필요한 범위에서 정보를 제공할 수 있고 정보를 제공받은 관계 중앙행정기관등의 장은 제공받은 목적의 범위에서만 이를 보유ㆍ이용할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "관계 중앙행정기관의 장은 고독사 위기 대응 시스템의 정보 활용이 필요할 경우 사전에 보건복지부장관과 협의해야 하며, 보건복지부장관은 관련 업무에 필요한 범위에서 정보를 제공할 수 있고, 정보를 제공받은 관계 중앙행정기관의 장은 제공받은 목적의 범위 내에서만 이를 보유 및 이용할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2⑤",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑤ 보건복지부장관은 고독사위기대응시스템의 구축ㆍ운영의 전 과정에서 개인정보 보호를 위하여 필요한 시책을 마련하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보건복지부장관은 고독사위기대응시스템의 구축 및 운영 과정에서 개인정보 보호를 위한 필요한 시책을 마련해야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2⑥",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑥ 보건복지부장관은 고독사위기대응시스템을 다음 각 호의 정보시스템과 전자적으로 연계하여 활용할 수 있다. 이 경우 연계를 통하여 수집할 수 있는 자료 또는 정보는 제1항에 따른 업무를 수행하기 위한 것으로 한정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "고독사 예방 및 관리에 관한 법에 따라 보건복지부장관은 고독사위기대응시스템을 특정 정보시스템과 전자적으로 연계하여 활용할 수 있으며, 이 연계를 통해 수집되는 자료나 정보는 관련 업무 수행에 한정됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2⑥1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 「지역보건법」 제5조제1항에 따른 지역보건의료정보시스템",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "지역보건법에 따른 지역보건의료정보시스템이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2⑥2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 그 밖에 대통령령으로 정하는 정보시스템",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대통령령으로 정하는 정보시스템이 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2⑦",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑦ 보건복지부장관은 제1항에 따른 고독사위기대응시스템의 구축ㆍ운영에 관한 업무를 대통령령으로 정하는 바에 따라 전문기관에 위탁할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보건복지부장관은 고독사위기대응시스템의 구축 및 운영 업무를 전문기관에 위탁할 수 있도록 규정하였습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제12조의2⑧",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑧ 그 밖에 고독사위기대응시스템의 구축ㆍ운영에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "고독사 위기 대응 시스템의 구축 및 운영에 필요한 사항이 대통령령으로 정해지도록 새로운 규정이 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제14조②",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "② 고독사 예방 협의회는 위원장을 포함한 20명 이내의 위원으로 구성한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "고독사 예방 협의회가 신설되며, 위원장을 포함하여 20명 이내의 위원으로 구성됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제14조③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 위원장은 보건복지부장관이 되고 위원은 다음 각 호의 사람 중에서 위원장이 임명하거나 위촉한다. 이 경우 공무원이 아닌 위원의 수는 위원장을 포함한 위원 수의 2분의 1 이상이어야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "위원장은 보건복지부장관이 되며, 위원은 위원장이 임명하거나 위촉한 각종 인사로 구성되며, 이때 공무원이 아닌 위원의 수는 위원장을 포함하여 전체 위원 수의 2분의 1 이상이어야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제14조③1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 관계 중앙행정기관의 차관ㆍ차장 또는 이에 상당하는 공무원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "관계 중앙행정기관의 차관, 차장 또는 이에 상당하는 공무원이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제14조③2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 특별시ㆍ광역시ㆍ특별자치시ㆍ도ㆍ특별자치도의 부시장 또는 부지사(해당 시ㆍ도에 부시장 또는 부지사가 2명 이상인 경우에는 해당 시ㆍ도지사가 지명하는 부시장 또는 부지사로 한다)",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "부시장 또는 부지사에 대한 규정이 새로 신설되어, 특별시, 광역시, 특별자치시, 도, 특별자치도의 부시장 또는 부지사는 해당 시 또는 도에 부시장 또는 부지사가 2명 이상일 경우, 해당 시 또는 도지사가 지명하는 부시장 또는 부지사로 정해졌습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제14조③3.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 고독사에 관한 학식과 경험이 풍부한 사람",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "고독사에 관한 학식과 경험이 풍부한 사람이 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제14조④",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "④ 그 밖에 고독사 예방 협의회의 구성ㆍ운영에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "②",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ②에서 제14조④(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제9조①",
+            "change_type": "개정",
+            "old_text": "① 보건복지부장관, 관계 중앙행정기관의 장 및 시ㆍ도지사는 기본계획 또는 시행계획의 수립ㆍ시행과 평가를 위하여 필요한 경우에는 관계 중앙행정기관, 지방자치단체, 관계 공공기관 및 그 밖에 고독사 예방활동 관련 단체의 장에게 관련 자료의 제출 등 필요한 협조를 요청할 수 있다.",
+            "new_text": "① 보건복지부장관, 관계 중앙행정기관의 장 및 시ㆍ도지사는 기본계획 또는 시행계획의 수립ㆍ시행과 평가를 위하여 필요한 경우에는 관계 중앙행정기관, 지방자치단체, 관계 공공기관 및 그 밖에 고독사 예방활동 관련 단체의 장(이하 “관계 중앙행정기관등의 장”이라 한다)에게 관련 자료의 제출 등 필요한 협조를 요청할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'(이하 “관계 중앙행정기관등의 장”이라 한다)' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "관계 중앙행정기관의 장이라는 용어가 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제14조①",
+            "change_type": "신설",
+            "old_text": "① 보건복지부장관은 고독사 예방정책의 효율적인 수행을 위하여 관계 중앙행정기관의 장 및 지방자치단체의 장으로 구성되는 고독사 예방 협의회를 둘 수 있다.",
+            "new_text": "① 고독사 예방정책의 효율적인 수행에 필요한 다음 각 호의 사항을 협의하기 위하여 보건복지부에 고독사 예방 협의회를 둔다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "고독사 예방정책의 효율적인 수행을 위해 보건복지부에 고독사 예방 협의회가 신설된다.",
+          "caveats": [
+            "[제14조①] 구조확장(구법미분리) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"
+          ],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제14조①1.",
+            "change_type": "신설",
+            "old_text": "① 보건복지부장관은 고독사 예방정책의 효율적인 수행을 위하여 관계 중앙행정기관의 장 및 지방자치단체의 장으로 구성되는 고독사 예방 협의회를 둘 수 있다.",
+            "new_text": "1. 기본계획의 수립에 관한 사항",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "고독사 예방 및 관리를 위한 기본계획 수립에 관한 사항이 새로 신설되었습니다.",
+          "caveats": [
+            "[제14조①1.] 구조확장(구법미분리) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"
+          ],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제14조①2.",
+            "change_type": "신설",
+            "old_text": "① 보건복지부장관은 고독사 예방정책의 효율적인 수행을 위하여 관계 중앙행정기관의 장 및 지방자치단체의 장으로 구성되는 고독사 예방 협의회를 둘 수 있다.",
+            "new_text": "2. 제7조제2항에 따른 추진실적의 평가에 관한 사항",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "추진실적의 평가에 관한 사항이 새로 추가되었습니다.",
+          "caveats": [
+            "[제14조①2.] 구조확장(구법미분리) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"
+          ],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "013719",
+            "law_name": "고독사 예방 및 관리에 관한 법",
+            "location_label": "제14조①3.",
+            "change_type": "신설",
+            "old_text": "① 보건복지부장관은 고독사 예방정책의 효율적인 수행을 위하여 관계 중앙행정기관의 장 및 지방자치단체의 장으로 구성되는 고독사 예방 협의회를 둘 수 있다.",
+            "new_text": "3. 그 밖에 위원장이 고독사 예방정책에 대하여 협의가 필요하다고 인정하는 사항",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "위원장이 고독사 예방정책에 대해 협의가 필요하다고 판단하는 사항이 새로 추가되었습니다.",
+          "caveats": [
+            "[제14조①3.] 구조확장(구법미분리) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"
+          ],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제12조의2",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "①",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②3.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②4.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②5.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②6.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑤",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑥",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑥1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑥2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑦",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑧",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제14조",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "④",
+              "relation": "이동",
+              "basis": "LLM판정",
+              "note": "고독사 예방 협의회의 구성ㆍ운영에 필요한 사항이 제14조의 ④로 이동."
+            },
+            {
+              "old_position": null,
+              "new_position": "②",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "고독사 예방 협의회 구성에 관한 내용이 새로 나타남."
+            },
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "위원장 및 위원의 임명에 관한 세부 내용이 새로 나타남."
+            },
+            {
+              "old_position": null,
+              "new_position": "③1.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "관계 중앙행정기관의 공무원에 관한 내용이 새로 나타남."
+            },
+            {
+              "old_position": null,
+              "new_position": "③2.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "특별시ㆍ광역시ㆍ특별자치시ㆍ도ㆍ특별자치도의 부시장 또는 부지사에 관한 내용이 새로 나타남."
+            },
+            {
+              "old_position": null,
+              "new_position": "③3.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "고독사에 관한 학식과 경험이 풍부한 사람에 관한 내용이 새로 나타남."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제9조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "014151",
+      "law_name": "사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률",
+      "law_type": "법률",
+      "enforce_date": "2025-10-02",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270407&type=HTML",
+      "headline": "사회서비스 공급 취약 지역에 대한 지원 방안 및 실태조사 의무화",
+      "body": "이번 개정은 사회서비스 공급이 취약한 지역을 대상으로 하는 지원 방안을 수립하고, 보건복지부가 지역별 및 생애주기별 사회서비스 현황을 정기적으로 조사하도록 의무화함으로써 지역 간 사회서비스 격차 해소를 목표로 합니다. 이를 통해 사회서비스의 개선 및 보완을 도모하고, 보다 공정한 사회서비스 제공 기반을 마련하고자 합니다.\n\n○ 조문별 변경 내용\n- 제5조\n    · ① (개정): '제5조의2에 따른' 내용이 추가되었습니다.\n    · ②2의2 (신설): 사회서비스 공급이 취약한 지역에 대한 사회서비스 제공 방안이 새로 신설되었습니다.\n    · ②9. (개정): '호', '제2호', '제2호의2' 및 '제3'이 추가되었습니다.\n- 제5조의2 (신설, 5개 항·호·목): 보건복지부장관은 사회서비스 관련 정책의 수립 및 시행을 위해 정기적으로 사회서비스 실태조사를 실시해야 합니다.",
+      "overview": "이번 개정은 사회서비스 공급이 취약한 지역을 대상으로 하는 지원 방안을 수립하고, 보건복지부가 지역별 및 생애주기별 사회서비스 현황을 정기적으로 조사하도록 의무화함으로써 지역 간 사회서비스 격차 해소를 목표로 합니다. 이를 통해 사회서비스의 개선 및 보완을 도모하고, 보다 공정한 사회서비스 제공 기반을 마련하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "014151",
+            "law_name": "사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률",
+            "location_label": "제5조①",
+            "change_type": "개정",
+            "old_text": "① 보건복지부장관은 사회서비스의 발전 및 지원을 위하여 사회서비스 실태조사 및 관계 중앙행정기관의 장과의 협의를 거쳐 사회서비스 기본계획(이하 “기본계획”이라 한다)을 5년마다 수립하여야 한다. 이 경우 기본계획은 「사회보장기본법」 제16조제1항에 따른 사회보장에 관한 기본계획과 연계되도록 하여야 한다.",
+            "new_text": "① 보건복지부장관은 사회서비스의 발전 및 지원을 위하여 제5조의2에 따른 사회서비스 실태조사 및 관계 중앙행정기관의 장과의 협의를 거쳐 사회서비스 기본계획(이하 “기본계획”이라 한다)을 5년마다 수립하여야 한다. 이 경우 기본계획은 「사회보장기본법」 제16조제1항에 따른 사회보장에 관한 기본계획과 연계되도록 하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 제5조의2에 따른' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'제5조의2에 따른' 내용이 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014151",
+            "law_name": "사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률",
+            "location_label": "제5조②2의2",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2의2. 사회서비스 공급이 취약한 지역에 대한 사회서비스 제공 방안",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "사회서비스 공급이 취약한 지역에 대한 사회서비스 제공 방안이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014151",
+            "law_name": "사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률",
+            "location_label": "제5조②9.",
+            "change_type": "개정",
+            "old_text": "9. 제1호부터 제8호까지의 사항과 관련한 통계 및 정보의 관리에 관한 사항",
+            "new_text": "9. 제1호, 제2호, 제2호의2 및 제3호부터 제8호까지의 사항과 관련한 통계 및 정보의 관리에 관한 사항",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'호, 제2호, 제2호의2 및 제3' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'호', '제2호', '제2호의2' 및 '제3'이 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014151",
+            "law_name": "사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률",
+            "location_label": "제5조의2①",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "① 보건복지부장관은 사회서비스 관련 정책의 수립ㆍ시행을 위하여 정기적으로 다음 각 호의 사항에 관한 사회서비스 실태조사를 실시하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보건복지부장관은 사회서비스 관련 정책의 수립 및 시행을 위해 정기적으로 사회서비스 실태조사를 실시해야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014151",
+            "law_name": "사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률",
+            "location_label": "제5조의2①1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 지역별ㆍ생애주기별ㆍ서비스영역별 사회서비스 공급 현황, 이용 현황 및 이용 만족도 등에 관한 사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "지역별, 생애 주기별, 서비스 영역별로 사회서비스 공급 현황, 이용 현황 및 이용 만족도 등에 관한 사항이 새롭게 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014151",
+            "law_name": "사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률",
+            "location_label": "제5조의2①2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 사회서비스 제공기관 운영 및 사회서비스 종사자의 고용 등에 관한 사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "사회서비스 제공기관 운영 및 사회서비스 종사자의 고용 등에 관한 사항이 새롭게 규정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014151",
+            "law_name": "사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률",
+            "location_label": "제5조의2①3.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 그 밖에 사회서비스 정책의 수립ㆍ시행을 위하여 보건복지부장관이 필요하다고 인정하는 사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "사회서비스 정책의 수립 및 시행을 위해 보건복지부장관이 필요하다고 인정하는 사항이 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014151",
+            "law_name": "사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률",
+            "location_label": "제5조의2②",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "② 제1항에 따른 사회서비스 실태조사의 방법 및 절차, 그 밖에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "사회서비스 실태조사의 방법 및 절차와 그 밖에 필요한 사항을 대통령령으로 정하도록 규정하는 내용이 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제5조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "②9.",
+              "new_position": "②9.",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②2의2",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목이 없으며, 새로 나타난 항목은 신설된 내용임."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제5조의2",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "①",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①3.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "36967",
+      "law_name": "조달청 내자구매업무 처리규정",
+      "law_type": "행정규칙",
+      "enforce_date": "2026-07-10",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000282194&type=HTML",
+      "headline": "입찰보증금 납부 대상 강화 및 무분별입찰 방지 규정 신설",
+      "body": "이번 개정은 입찰 과정에서의 무분별한 참여를 방지하고, 조달청장이 필요로 하는 경우 입찰 보증금을 납부하도록 하는 규정을 신설하였습니다. 이를 통해 조달 거래의 신뢰성과 투명성을 높이고, 보다 합리적인 입찰 환경을 조성하고자 합니다.\n\n○ 조문별 변경 내용\n- (위치미상#0-0) (삭제): 제조자의 공급확약 또는 사후서비스 보증을 요구할 수 있다는 내용이 삭제되었습니다.\n- (위치미상#12-0) (삭제): 협상계약의 입찰공고 시 제안요청서 첨부 의무와 관련된 내용이 삭제되었습니다.\n- (위치미상#13-0) (삭제): 제안요청서를 교부한 자에 한하여 입찰에 참가하도록 하는 경우에 대한 규정이 삭제되었습니다.\n- (위치미상#19-0) (삭제): 나라장터를 통한 안내공고 및 견적서 제출의 예외에 관한 내용이 삭제되었습니다.\n- (위치미상#20-0) (삭제): 재안내 공고를 해야 하는 경우와 관련된 내용을 삭제하였습니다.\n- 제173조 (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n- 제26조 (신설): 무분별한 입찰 방지를 위해 조달청장이 필요하다고 인정한 입찰에 참여한 자에 대한 규정이 새로 신설되었습니다.\n- 제30조\n    · ① (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ①2. (개정): 예정가격을 작성하지 않아도 되는 경우에 대한 규정이 삭제되었습니다.\n    · ② (신설): 예정가격을 작성하지 않아도 되는 경우로, 특정 수의계약, 협상계약, 경쟁적 대화에 의한 계약 및 개산계약을 체결할 때의 내용을 추가로 규정하였습니다.\n- 제36조 (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n- 제47조의2 (개정): '지방계약법 시행령' 제43조에 따른 협상계약이 추가되었습니다.\n- 제92조\n    · ③ (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ③1. (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ③2. (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ③3. (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ③4. (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ③5. (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ④ (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ④1. (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ④2. (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ④3. (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+      "overview": "이번 개정은 입찰 과정에서의 무분별한 참여를 방지하고, 조달청장이 필요로 하는 경우 입찰 보증금을 납부하도록 하는 규정을 신설하였습니다. 이를 통해 조달 거래의 신뢰성과 투명성을 높이고, 보다 합리적인 입찰 환경을 조성하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "(위치미상#0-0)",
+            "change_type": "삭제",
+            "old_text": "계약담당과장은 제조자의 공급확약 또는 사후서비스 보증이 필요하다고 판단하는 경우 공급자로 등록한 입찰자, 낙찰자 또는 계약상대자에게 제조자의 확약서 또는 보증서를 제출하도록 요구할 수 있다.",
+            "new_text": "제23조의2(공급확약서의 제출) 계약담당과장은 제조자의 공급확약 또는 사후서비스 보증이 필요하다고 판단하는 경우 공급자로 등록한 <삭제> 낙찰자 또는 계약상대자에게 제조자의 확약서 또는 보증서를 제출하도록 요구할 수 있다.",
+            "match_status": "삭제(위치탐색제외)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제조자의 공급확약 또는 사후서비스 보증을 요구할 수 있다는 내용이 삭제되었습니다.",
+          "caveats": [
+            "[(위치미상#0-0)] 삭제(위치탐색제외) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"
+          ],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "(위치미상#12-0)",
+            "change_type": "삭제",
+            "old_text": "① 협상계약의 입찰공고를 하는 때에는 제안요청서를 첨부하여 입찰공고를 하여야 한다. 다만 수요기관이 제안요청서를 교부한 자에 한하여 입찰참가를 제한할 것을 요청하여 계약담당공무원이 필요하다고 인정하는 경우에는 제안요청서를 교부한 자에 한하여 입찰에 참가하도록 할 수 있다.",
+            "new_text": "제47조의2(협상계약) ① 협상계약의 입찰공고를 하는 때에는 제안요청서를 첨부하여 입찰공고를 하여야 한다. <삭제>",
+            "match_status": "삭제(위치탐색제외)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "협상계약의 입찰공고 시 제안요청서 첨부 의무와 관련된 내용이 삭제되었습니다.",
+          "caveats": [
+            "[(위치미상#12-0)] 삭제(위치탐색제외) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"
+          ],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "(위치미상#13-0)",
+            "change_type": "삭제",
+            "old_text": "② 제1항에 따라 제안요청서를 교부한 자에 한하여 입찰에 참가하도록 하는 경우에는 입찰공고에 제안요청서를 교부한 자에 한하여 입찰에 참가할 수 있다는 뜻과 제안요청서의 요청기한 및 요청에 필요한 서류 기타 필요한 사항을 명시하여야 한다.",
+            "new_text": "② <삭제>",
+            "match_status": "삭제(위치탐색제외)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제안요청서를 교부한 자에 한하여 입찰에 참가하도록 하는 경우에 대한 규정이 삭제되었습니다.",
+          "caveats": [
+            "[(위치미상#13-0)] 삭제(위치탐색제외) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"
+          ],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "(위치미상#19-0)",
+            "change_type": "삭제",
+            "old_text": "③ 제1항 및 제2항에도 불구하고 다음 각 호의 어느 하나에 해당하는 경우에는 나라장터를 통한 안내공고 및 견적서제출의 예외로 한다.",
+            "new_text": "③ <삭제> (2004.11.12.)",
+            "match_status": "삭제(위치탐색제외)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "나라장터를 통한 안내공고 및 견적서 제출의 예외에 관한 내용이 삭제되었습니다.",
+          "caveats": [
+            "[(위치미상#19-0)] 삭제(위치탐색제외) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"
+          ],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "(위치미상#20-0)",
+            "change_type": "삭제",
+            "old_text": "④ 제1항에 따른 안내공고에 불구하고 다음 각 호의 어느 하나에 해당하는 때에는 재안내 공고를 하여야 한다. 다만, 개찰당일에 한하여 회수에 제한 없이 다시 견적서를 제출하게 할 수 있다.",
+            "new_text": "④ <삭제>",
+            "match_status": "삭제(위치탐색제외)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "재안내 공고를 해야 하는 경우와 관련된 내용을 삭제하였습니다.",
+          "caveats": [
+            "[(위치미상#20-0)] 삭제(위치탐색제외) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"
+          ],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제173조1.",
+            "change_type": "개정",
+            "old_text": "1. 금융위원회에 시설대여업을 등록한 리스회사",
+            "new_text": "1.금융위원회에시설대여업을등록한 리스회사",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제26조②7.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "7. 무분별한 입찰방지를 위하여 조달청장이 필요하다고 인정한 입찰에 참여한 자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "무분별한 입찰 방지를 위해 조달청장이 필요하다고 인정한 입찰에 참여한 자에 대한 규정이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제30조①",
+            "change_type": "개정",
+            "old_text": "계약담당공무원은 「국가계약법 시행령」 제42조제1항 또는 「지방계약법 시행령」 제42조제1항에 따라 물품, 일반용역 및 임대차입찰을 위해 다음 각 호에 따라 기초금액과 복수예비가격을 작성하여야 한다. 다만, 복수예비가격의 작성은 모든 내자구매(협정물자 포함)의 경쟁입찰(「국가계약법 시행령」 제30조제2항 또는 「지방계약법시행령」 제30조제2항에 따른 수의계약 포함)에 적용한다.",
+            "new_text": "① 계약담당공무원은 「국가계약법 시행령」 제42조제1항 또는 「지방계약법 시행령」 제42조제1항에 따라 물품, 일반용역 및 임대차입찰을 위해 다음 각 호에 따라 기초금액과 복수예비가격을 작성하여야 한다. 다만, 복수예비가격의 작성은 모든 내자구매(협정물자 포함)의 경쟁입찰(「국가계약법 시행령」 제30조제2항 또는 「지방계약법시행령」 제30조제2항에 따른 수의계약 포함)에 적용한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제30조①2.",
+            "change_type": "개정",
+            "old_text": "2. 복수예비가격은 전자입찰마감 후에 나라장터에서 자동생성하여 저장되며, 공개하지 않는다. 다만, 수기 작성이 필요한 경우에는 계약담당공무원이 제1항에 따라 작성된 기초금액의 ±2%상당금액(「지방계약법」을 적용할 경우에는 ±3%)범위 내에서 서로 다른 15개의 예비가격을 작성하여 별지 제33호 서식에 따라 순서에 관계없이 임의로 1번에서 15번까지를 명기한 후 복수예비가격조서 봉투에 넣고 봉함하여 보관한다. 이때 복수예비가격간의 폭은 가능한 확대하여야 한다.   제1항에도 불구하고 「국가계약법 시행령」제26조제1항제5호가목 및 바목, 「지방계약법시행령」제25조제1항제3호 및 제5호에 따른 수의계약(제30조제2항 본문에 따라 견적서를 제출하게 하는 경우는 제외한다), 「국가계약법시행령」제43조, 「지방계약법시행령」제43조 및 제44조에 따른 협상계약, 「국가계약법시행령」제43조의3, 「지방계약법시행령」제44조의2에 따른 경쟁적 대화에 의한 계약 및 「국가계약법시행령」제70조, 「지방계약법시행령」제81조 및 제82조에 따른 개산계약을 체결하려 할 때에는 예정가격을 작성하지 아니할 수 있다.",
+            "new_text": "2. 복수예비가격은 전자입찰마감 후에 나라장터에서 자동생성하여 저장되며, 공개하지 않는다. 다만, 수기 작성이 필요한 경우에는 계약담당공무원이 제1항에 따라 작성된 기초금액의 ±2%상당금액(「지방계약법」을 적용할 경우에는 ±3%)범위 내에서 서로 다른 15개의 예비가격을 작성하여 별지 제33호 서식에 따라 순서에 관계없이 임의로 1번에서 15번까지를 명기한 후 복수예비가격조서 봉투에 넣고 봉함하여 보관한다. 이때 복수예비가격간의 폭은 가능한 확대하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'   제1항에도 불구하고 「국가계약법 시행령」제26조제1항제5호가목 및 바목, 「지방계약법시행령」제25조제1항제3호 및 제5호에 따른 수의계약(제30조제2항 본문에 따라 견적서를 제출하게 하는 경우는 제외한다), 「국가계약법시행령」제43조, 「지방계약법시행령」제43조 및 제44조에 따른 협상계약, 「국가계약법시행령」제43조의3, 「지방계약법시행령」제44조의2에 따른 경쟁적 대화에 의한 계약 및 「국가계약법시행령」제70조, 「지방계약법시행령」제81조 및 제82조에 따른 개산계약을 체결하려 할 때에는 예정가격을 작성하지 아니할 수 있다.' 삭제"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "예정가격을 작성하지 않아도 되는 경우에 대한 규정이 삭제되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제30조②",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "② 제1항에도 불구하고 「국가계약법 시행령」제26조제1항제5호가목 및 바목, 「지방계약법시행령」제25조제1항제3호 및 제5호에 따른 수의계약(제30조제2항 본문에 따라 견적서를 제출하게 하는 경우는 제외한다), 「국가계약법시행령」제43조, 「지방계약법시행령」제43조 및 제44조에 따른 협상계약, 「국가계약법시행령」제43조의3, 「지방계약법시행령」제44조의2에 따른 경쟁적 대화에 의한 계약 및 「국가계약법시행령」제70조, 「지방계약법시행령」제81조 및 제82조에 따른 개산계약을 체결하려 할 때에는 예정가격을 작성하지 아니할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "예정가격을 작성하지 않아도 되는 경우로, 특정 수의계약, 협상계약, 경쟁적 대화에 의한 계약 및 개산계약을 체결할 때의 내용을 추가로 규정하였습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제36조①",
+            "change_type": "개정",
+            "old_text": "① 입찰집행관은 투찰이 끝나면 개찰을 선언하고 입찰서를 개봉하여 입찰서마다 날인한 후 개찰조서(수의계약:별지 제12호 서식, 경쟁계약 별지 제34호 서식)에 기재하고 개찰결과 예정가격 범위 내에 투찰자가 있을 경우에는 유효입찰 여부를 검토하여 최저입찰자를 발표하며, 전자입찰의 경우에는 「국가종합전자조달시스템 전자입찰특별유의서」제11조에 따른다.",
+            "new_text": "① 입찰집행관은 투찰이 끝나면 개찰을 선언하고 입찰서를 개봉하여 입찰서마다 날인한 후 개찰조서(수의계약 : 별지 제12호 서식, 경쟁계약 별지 제34호 서식)에 기재하고 개찰결과 예정가격 범위 내에 투찰자가 있을 경우에는 유효입찰 여부를 검토하여 최저입찰자를 발표하며, 전자입찰의 경우에는 「국가종합전자조달시스템 전자입찰특별유의서」제11조에 따른다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제47조의2③",
+            "change_type": "개정",
+            "old_text": "③ 사업내용이 복잡하거나 제안자가 다수이어서 입찰절차가 지연될 우려가 있어 제안요청서 교부대상자를 제한할 필요가 있다고 판단되는 경우에는 기본제안서와 세부제안서를 구분하여 기본제안서를 평가한 결과 선정된 자로 제안요청서의 교부대상자를 제한할 수 있다. 다만, 제안요청서의 교부를 제한하는 경우에는 입찰공고에 제안요청서 교부대상자를 제한하는 근거와 제안요청서를 교부하는 절차를 명시하여야 한다.",
+            "new_text": "③ 「지방계약법 시행령」 제43조에 따른 협상계약으로 사업내용이 복잡하거나 제안자가 다수이어서 입찰절차가 지연될 우려가 있어 제안요청서 교부대상자를 제한할 필요가 있다고 판단되는 경우에는 기본제안서와 세부제안서를 구분하여 기본제안서를 평가한 결과 선정된 자로 제안요청서의 교부대상자를 제한할 수 있다. 다만, 제안요청서의 교부를 제한하는 경우에는 입찰공고에 제안요청서 교부대상자를 제한하는 근거와 제안요청서를 교부하는 절차를 명시하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 「지방계약법 시행령」 제43조에 따른 협상계약으로' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'지방계약법 시행령' 제43조에 따른 협상계약이 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제92조③",
+            "change_type": "개정",
+            "old_text": "③ 제1항 및 제2항에도 불구하고 다음 각 호의 어느 하나에 해당하는 경우에는 나라장터를 통한 안내공고 및 견적서제출의 예외로 한다.",
+            "new_text": "③ 제1항 및 제2항에도 불구하고 다음 각 호의 어느 하나에 해당하는 경우에는 나라장터를 통한 안내공고 및 견적서제출의 예외로 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제92조③1.",
+            "change_type": "개정",
+            "old_text": "1. 전문적인 학술용역의 경우",
+            "new_text": "1. 전문적인 학술용역의 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제92조③2.",
+            "change_type": "개정",
+            "old_text": "2. 농ㆍ수산물 및 음식물(그 재료를 포함한다)의 구입 등 신선도와 품질을 우선적으로 고려하여야 하는 경우",
+            "new_text": "2. 농ㆍ수산물 및 음식물(그 재료를 포함한다)의 구입 등 신선도와 품질을 우선적으로 고려하여야 하는 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제92조③3.",
+            "change_type": "개정",
+            "old_text": "3. 기존 시설물을 계속적으로 유지ㆍ보수하는 경우로서 지정정보처리장치를 이용하여 견적서를 제출받는 경우 호환이 되지 않는 등 사실상 유지ㆍ보수가 곤란하거나 예산낭비가 우려되는 경우",
+            "new_text": "3. 기존 시설물을 계속적으로 유지ㆍ보수하는 경우로서 지정정보처리장치를 이용하여 견적서를 제출받는 경우 호환이 되지 않는 등 사실상 유지ㆍ보수가 곤란하거나 예산낭비가 우려되는 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제92조③4.",
+            "change_type": "개정",
+            "old_text": "4. 제4항에 따른 재안내 공고를 실시한 결과 2인 이상으로부터 견적서를   받지 못한 경우",
+            "new_text": "4. 제4항에 따른 재안내 공고를 실시한 결과 2인 이상으로부터 견적서를   받지 못한 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제92조③5.",
+            "change_type": "개정",
+            "old_text": "5. 그 밖에 계약의 목적이나 특성상 지정정보처리장치에 따른 견적서를 제출받아 수의계약을 체결하는 경우 사실상 계약목적 달성이 어려운 경우",
+            "new_text": "5. 그 밖에 계약의 목적이나 특성상 지정정보처리장치에 따른 견적서를 제출받아 수의계약을 체결하는 경우 사실상 계약목적 달성이 어려운 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제92조④",
+            "change_type": "개정",
+            "old_text": "④ 제1항에 따른 안내공고에 불구하고 다음 각 호의 어느 하나에 해당하는 때에는 재안내 공고를 하여야 한다. 다만, 개찰당일에 한하여 회수에 제한 없이 다시 견적서를 제출하게 할 수 있다.",
+            "new_text": "④ 제1항에 따른 안내공고에 불구하고 다음 각 호의 어느 하나에 해당하는 때에는 재안내 공고를 하여야 한다. 다만, 개찰당일에 한하여 회수에 제한 없이 다시 견적서를 제출하게 할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제92조④1.",
+            "change_type": "개정",
+            "old_text": "1. 「국가계약법 시행령」 제12조제1항의 요건을 갖춘 견적서 제출자가 2인 미만인 경우",
+            "new_text": "1. 「국가계약법 시행령」 제12조제1항의 요건을 갖춘 견적서 제출자가 2인 미만인 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제92조④2.",
+            "change_type": "개정",
+            "old_text": "2. 예정가격 이하로서 제93조 제1항 각호의 기준을 충족하는 견적서가 없는 경우",
+            "new_text": "2. 예정가격 이하로서 제93조 제1항 각호의 기준을 충족하는 견적서가 없는 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "36967",
+            "law_name": "조달청 내자구매업무 처리규정",
+            "location_label": "제92조④3.",
+            "change_type": "개정",
+            "old_text": "3. 견적서를 제출한 자가 1인이하인 경우 등 계약상대자를 결정할 수 없는 경우. 다만, 추정가격이 2천만원 미만의 견적제출인 경우에는 재견적제출 결과 1인(동일인만 재차 참가하였을 경우 포함)이 참가한 경우에도 재견적 결과에 따라 계약상대자 및 계약금액을 확정할 수 있다.",
+            "new_text": "3. 견적서를 제출한 자가 1인이하인 경우 등 계약상대자를 결정할 수 없는 경우. 다만, 추정가격이 2천만원 미만의 견적제출인 경우에는 재견적제출 결과 1인(동일인만 재차 참가하였을 경우 포함)이 참가한 경우에도 재견적 결과에 따라 계약상대자 및 계약금액을 확정할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "(위치미상#0-0)",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "(위치미상#12-0)",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "(위치미상#13-0)",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "(위치미상#19-0)",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "(위치미상#20-0)",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제173조",
+          "mappings": [
+            {
+              "old_position": "1.",
+              "new_position": "1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제26조",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "②7.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제30조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "①2.",
+              "new_position": "①2.",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목이 없으므로 이 항목은 신설로 판단됨."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제36조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제47조의2",
+          "mappings": [
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제92조",
+          "mappings": [
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③1.",
+              "new_position": "③1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③2.",
+              "new_position": "③2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③3.",
+              "new_position": "③3.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③4.",
+              "new_position": "③4.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③5.",
+              "new_position": "③5.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "④",
+              "new_position": "④",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "④1.",
+              "new_position": "④1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "④2.",
+              "new_position": "④2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "④3.",
+              "new_position": "④3.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

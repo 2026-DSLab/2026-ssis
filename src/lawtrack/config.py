@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import logging
 import os
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -133,6 +134,27 @@ class Settings:
     log_level: str = "INFO"
 
 
+def load_db_settings(env_file: str | Path | None = None) -> DbSettings:
+    """DB 설정만 읽는다.
+
+    load_settings() 와 따로 두는 이유: 요약 파이프라인(summarizer)은 DB 에
+    요약을 적재하지만 국가법령정보 API 는 부르지 않는다. load_settings() 를
+    쓰면 쓰지도 않는 LAW_API_OC 가 없다는 이유로 실패한다.
+    """
+    path = Path(env_file) if env_file else PROJECT_ROOT / ".env"
+    if path.exists():
+        load_dotenv(path, override=False)
+        log.debug(".env 로드: %s", path)
+
+    return DbSettings(
+        host=os.environ.get("MYSQL_HOST", "127.0.0.1").strip(),
+        port=_int("MYSQL_PORT", 3306),
+        user=os.environ.get("MYSQL_USER", "root").strip(),
+        password=_require("MYSQL_PASSWORD"),
+        database=os.environ.get("MYSQL_DATABASE", "law_tracking_db").strip(),
+    )
+
+
 def load_settings(env_file: str | Path | None = None) -> Settings:
     """환경변수에서 설정을 읽는다.
 
@@ -153,13 +175,7 @@ def load_settings(env_file: str | Path | None = None) -> Settings:
         rate_limit_sleep=_float("LAW_API_RATE_LIMIT_SLEEP", 0.2),
     )
 
-    db = DbSettings(
-        host=os.environ.get("MYSQL_HOST", "127.0.0.1").strip(),
-        port=_int("MYSQL_PORT", 3306),
-        user=os.environ.get("MYSQL_USER", "root").strip(),
-        password=_require("MYSQL_PASSWORD"),
-        database=os.environ.get("MYSQL_DATABASE", "law_tracking_db").strip(),
-    )
+    db = load_db_settings(path)
 
     export = ExportSettings(
         output_dir=Path(os.environ.get("EXPORT_DIR", str(PROJECT_ROOT / "out"))),
@@ -175,8 +191,31 @@ def load_settings(env_file: str | Path | None = None) -> Settings:
 
 
 def setup_logging(level: str = "INFO") -> None:
+    setup_console()
     logging.basicConfig(
         level=getattr(logging, level, logging.INFO),
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
+
+
+def setup_console() -> None:
+    """콘솔에 못 쓰는 글자가 나와도 배치가 죽지 않게 한다.
+
+    ★ 실측(2026-07-28): 한국어 Windows 콘솔의 기본 코드페이지는 cp949 인데,
+      요약의 caveat 문장에는 em dash(—)가 들어간다. cp949 에 그 글자가
+      없어서 print 하는 순간 UnicodeEncodeError 로 프로세스가 죽었다 —
+      요약을 다 만들어 놓고 화면에 뿌리다가 죽는 것이라, 그때까지의
+      LLM 호출 비용을 그대로 날린다.
+
+      encoding 을 바꾸지 않고 errors 만 바꾸는 이유: utf-8 로 강제하면
+      cp949 콘솔에서는 전부 깨져 보인다. 못 쓰는 글자 하나를 '?'로
+      바꾸는 편이 낫다. 스케줄 실행(weekly.cmd)은 PYTHONUTF8=1 로
+      아예 UTF-8 모드라 이 대체 자체가 일어나지 않는다.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError):
+            # 파이프·리다이렉트로 교체된 스트림은 reconfigure 가 없을 수 있다.
+            pass

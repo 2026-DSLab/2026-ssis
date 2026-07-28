@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lawtrack"
+version = "1.0.0"
+description = "법령/행정규칙 개정 자동감지 → 조문 비교 → LLM 요약 → HWPX 보고서 파이프라인"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31",
+    "python-dotenv>=1.0",
+    "mysql-connector-python>=8.3",
+    "pydantic>=2.6",
+    "python-hwpx>=4.2",
+]
+
+[project.optional-dependencies]
+# LLM 프로바이더는 쓰는 것만 깐다. 원내 QWEN 이 OpenAI 호환 엔드포인트를
+# 제공하면 openai 쪽만 있으면 된다(SUMMARY_BASE_URL 로 주소만 바꿈).
+openai = ["openai>=1.40"]
+anthropic = ["anthropic>=0.40"]
+dev = ["pytest>=8.0"]
+
+# ---------------------------------------------------------------------------
+# 패키지 위치
+#
+# ★ 이 프로젝트는 두 패키지가 서로 다른 곳에 있다:
+#       src/lawtrack   — 감지·비교 (src 레이아웃)
+#       summarizer     — 요약·보고서 (루트 레이아웃)
+#
+#   이 파일이 비어 있던 동안에는 `pip install -e .` 가 불가능했고,
+#   그래서 `import lawtrack` 은 PYTHONPATH 를 손으로 맞춘 환경에서만
+#   됐다. 작업 스케줄러는 그 환경을 물려받지 않으므로, 설치 가능하게
+#   만들어 두는 것이 자동 실행의 전제다.
+# ---------------------------------------------------------------------------
+[tool.setuptools.packages.find]
+where = ["src", "."]
+include = ["lawtrack*", "summarizer*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# 설치 없이 저장소에서 바로 테스트를 돌릴 수 있게 한다.
+pythonpath = ["src", "."]
