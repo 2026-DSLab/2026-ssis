@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>법인사이트 — 법령·행정규칙 개정 대시보드</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">법</span>
+        <span class="brand-text">법인사이트</span>
+      </div>
+      {% if batch_date %}
+        <div class="topbar-right">
+          <span class="batch-pill">{{ batch_date }} 기준</span>
+          <a class="download-btn" href="{{ url_for('download') }}">
+            <span>HWPX 다운로드</span>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main>
+  {% if not laws %}
+    <div class="empty-state">
+      <p class="empty-icon">📭</p>
+      <p>아직 생성된 배치가 없습니다.</p>
+      <code>python scripts/run_weekly.py --full</code>
+    </div>
+  {% else %}
+    <section class="hero">
+      <h1>이번 배치 개정 요약</h1>
+      <p class="hero-sub">{{ batch_date }} 기준으로 감지된 법령·행정규칙 개정 내역입니다.</p>
+
+      <div class="stat-hero">
+        <div class="stat-hero-card">
+          <div class="stat-hero-num">{{ stats.total_laws }}</div>
+          <div class="stat-hero-label">개정 법령</div>
+        </div>
+        <div class="stat-hero-card">
+          <div class="stat-hero-num">{{ stats.total_articles }}</div>
+          <div class="stat-hero-label">변경 조문</div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        {% for kind, count in stats.breakdown %}
+        <div class="stat-card">
+          <div class="stat-num stat-num--{{ kind_css_for_label(kind) }}">{{ count }}</div>
+          <div class="stat-label">{{ kind }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <input type="search" id="law-search" placeholder="법령명으로 검색..." autocomplete="off">
+      <div class="chip-row" id="kind-chips">
+        <button class="chip chip--active" data-kind="all">전체</button>
+        {% for kind, count in stats.breakdown %}
+        <button class="chip" data-kind="{{ kind }}">{{ kind }} ({{ count }})</button>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% if flagged %}
+      <section class="highlight-box">
+        <h2>⚠ 확인이 필요한 항목 ({{ flagged|length }}건)</h2>
+        <ul>
+          {% for item in flagged %}
+            <li>
+              <a href="#{{ item.anchor }}" class="highlight-link" data-anchor="{{ item.anchor }}">
+                <span class="highlight-where"><strong>{{ item.law_name }}</strong>{% if item.loc %} · {{ format_location(item.loc) }}{% endif %}</span>
+                <span class="highlight-reason">{{ item.reason }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+
+    <section class="laws" id="law-list">
+      {% for law in laws %}
+        {% set law_idx = loop.index0 %}
+        <details class="law-card" id="law-{{ law_idx }}" data-law-name="{{ law.law_name|lower }}" {% if loop.first %}open{% endif %}>
+          <summary class="law-card-head">
+            <div class="law-card-title">
+              <span class="type-tag">{{ law.law_type or "-" }}</span>
+              <span class="law-name">{{ law.law_name }}</span>
+            </div>
+            <div class="law-card-meta">
+              <span>시행 {{ law.enforce_date or "-" }}</span>
+              <span class="dot">·</span>
+              <span>{{ law.revision_type or "-" }}</span>
+              <span class="dot">·</span>
+              <span>{{ law.article_summaries|length }}건 변경</span>
+              <span class="chevron">▾</span>
+            </div>
+          </summary>
+
+          <div class="law-card-body">
+            {% if law.headline %}<p class="headline">{{ law.headline }}</p>{% endif %}
+            {% if law.overview %}<p class="overview">{{ law.overview }}</p>{% endif %}
+
+            {% if law.caveats %}
+              <ul class="law-caveats">
+                {% for c in law.caveats %}<li>{{ c }}</li>{% endfor %}
+              </ul>
+            {% endif %}
+
+            {% if law.article_summaries %}
+              <div class="article-list">
+              {% for a in law.article_summaries %}
+                <div class="article-row" id="art-{{ law_idx }}-{{ loop.index0 }}" data-kind="{{ kind_of(a) }}">
+                  <div class="article-row-head">
+                    <span class="loc">{{ format_location(a.unit.location_label) }}</span>
+                    <span class="badge badge--{{ kind_css(a) }}">{{ kind_of(a) }}</span>
+                  </div>
+                  <div class="article-row-body">
+                    {% if a.error %}
+                      <span class="error">요약 생성 실패 — 원문 확인 필요 ({{ a.error }})</span>
+                    {% else %}
+                      <p>{{ a.summary or "[내용 없음]" }}</p>
+                    {% endif %}
+                    {% if a.unit.moved_from %}
+                      <p class="note">※ 이동 전 위치: {{ a.unit.moved_from }}</p>
+                    {% endif %}
+                    {% for c in a.caveats %}
+                      <p class="note">※ {{ humanize_caveat(c) }}</p>
+                    {% endfor %}
+
+                    {% if a.unit.old_text or a.unit.new_text %}
+                      {% set can_diff = not a.unit.old_text_is_context and a.unit.old_text and a.unit.new_text %}
+                      <details class="fulltext">
+                        <summary>원문 보기</summary>
+                        <div class="fulltext-body">
+                          {% if not a.unit.old_text_is_context %}
+                            <div class="fulltext-col fulltext-col--old">
+                              <div class="fulltext-label">개정 전</div>
+                              <div class="fulltext-text">{% if a.unit.old_text %}{% if can_diff %}{{ diff_old_html(a.unit.old_text, a.unit.new_text) }}{% else %}{{ a.unit.old_text }}{% endif %}{% else %}<span class="fulltext-empty">신설되어 개정 전 내용 없음</span>{% endif %}</div>
+                            </div>
+                          {% endif %}
+                          {% if a.unit.new_text %}
+                            <div class="fulltext-col fulltext-col--new">
+                              <div class="fulltext-label">개정 후</div>
+                              <div class="fulltext-text">{% if can_diff %}{{ diff_new_html(a.unit.old_text, a.unit.new_text) }}{% else %}{{ a.unit.new_text }}{% endif %}</div>
+                            </div>
+                          {% endif %}
+                        </div>
+                      </details>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+              </div>
+            {% endif %}
+
+            <p class="source">
+              <a href="{{ public_law_url(law.law_type, law.law_name) }}" target="_blank" rel="noopener">법제처 원문 보기 ↗</a>
+            </p>
+          </div>
+        </details>
+      {% endfor %}
+    </section>
+  {% endif %}
+  </main>
+
+  <script>
+    const search = document.getElementById("law-search");
+    const cards = document.querySelectorAll(".law-card");
+    const chips = document.querySelectorAll("#kind-chips .chip");
+    let activeKind = "all";
+
+    function applyFilters() {
+      const q = (search?.value || "").trim().toLowerCase();
+      cards.forEach((card) => {
+        const nameMatch = !q || card.dataset.lawName.includes(q);
+        const rows = card.querySelectorAll(".article-row");
+        let visibleRows = 0;
+        rows.forEach((row) => {
+          const kindMatch = activeKind === "all" || row.dataset.kind === activeKind;
+          row.style.display = kindMatch ? "" : "none";
+          if (kindMatch) visibleRows += 1;
+        });
+        card.style.display = nameMatch && (activeKind === "all" || visibleRows > 0) ? "" : "none";
+      });
+    }
+
+    search?.addEventListener("input", applyFilters);
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        chips.forEach((c) => c.classList.remove("chip--active"));
+        chip.classList.add("chip--active");
+        activeKind = chip.dataset.kind;
+        applyFilters();
+      });
+    });
+
+    // "확인이 필요한 항목" 링크 — 대상이 접혀있는 law-card 안에 있을 수
+    // 있으니 조상 <details>를 강제로 펼치고 스크롤 + 잠깐 강조한다.
+    function revealAnchor(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      let node = el;
+      while (node) {
+        if (node.tagName === "DETAILS") node.open = true;
+        node = node.parentElement;
+      }
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.classList.add("flash");
+      setTimeout(() => el.classList.remove("flash"), 1600);
+    }
+
+    document.querySelectorAll(".highlight-link").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        history.pushState(null, "", "#" + a.dataset.anchor);
+        revealAnchor(a.dataset.anchor);
+      });
+    });
+  </script>
+</body>
+</html>

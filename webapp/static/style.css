@@ -1,0 +1,490 @@
+:root {
+  --bg: #fff;
+  --surface: #f7f8fa;
+  --card-bg: #fff;
+  --border: #e7e9ee;
+  --text: #16181d;
+  --muted: #767c88;
+  --ink-soft: #40454f;
+  --primary: #3b5bfd;
+  --primary-dark: #2941c9;
+  --primary-soft: #eef1ff;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Pretendard", "Malgun Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+/* ---------- topbar ---------- */
+
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand { display: flex; align-items: center; gap: 8px; }
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.brand-text { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+
+.batch-pill {
+  font-size: 0.82rem;
+  color: var(--muted);
+  background: var(--surface);
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary);
+  color: #fff;
+  padding: 9px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: background 0.15s ease;
+}
+
+.download-btn:hover { background: var(--primary-dark); }
+
+/* ---------- empty state ---------- */
+
+.empty-state {
+  text-align: center;
+  color: var(--muted);
+  padding: 100px 20px;
+}
+
+.empty-icon { font-size: 2.4rem; margin: 0; }
+
+.empty-state code {
+  display: inline-block;
+  margin-top: 10px;
+  background: #eee;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+/* ---------- hero + stats ---------- */
+
+.hero { padding: 40px 0 8px; }
+
+.hero h1 { font-size: 1.7rem; margin: 0 0 4px; letter-spacing: -0.02em; }
+
+.hero-sub { color: var(--muted); margin: 0 0 24px; }
+
+/* 법령 수·조문 수 — 색으로 튀게 하는 대신, 살짝 띄운(elevated) 카드로
+   위쪽에 따로 둬서 "이게 이번 배치의 핵심 두 숫자"라는 걸 위치와
+   크기만으로 강조한다. 아래 세부 내역(신설/개정/...)과 같은 흰 배경을
+   써서 톤은 그대로 통일된다. */
+.stat-hero {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.stat-hero-card {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(20, 30, 60, 0.08);
+}
+
+.stat-hero-num {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.stat-hero-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 14px;
+  text-align: center;
+}
+
+.stat-num { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+
+.stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+/* 아래 stat-num--* 는 article-row의 .badge--* (배경 있는 알약 배지)와
+   일부러 다른 이름을 쓴다 — 예전엔 같은 클래스명(badge--new 등)을
+   재사용했는데, .badge--new 셀렉터 자체가 배경색까지 정의하고 있어서
+   글자만 색칠하려던 통계 숫자에도 그 배경이 그대로 새어 들어가
+   어색한 색 박스가 생겼다(실측 2026-07-31). */
+.stat-num--new { color: #15803d; }
+.stat-num--amend { color: #1d4ed8; }
+.stat-num--delete { color: #b91c1c; }
+.stat-num--move { color: #b45309; }
+.stat-num--nochange { color: #6b7280; }
+.stat-num--other { color: #4b5563; }
+
+/* ---------- toolbar ---------- */
+
+.toolbar {
+  position: sticky;
+  top: 63px;
+  background: var(--bg);
+  padding: 16px 0;
+  z-index: 9;
+}
+
+#law-search {
+  width: 100%;
+  padding: 11px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.92rem;
+  background: #fff;
+  margin-bottom: 10px;
+  font-family: inherit;
+}
+
+#law-search:focus { outline: 2px solid var(--primary-soft); border-color: var(--primary); }
+
+.chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.chip {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--ink-soft);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.chip:hover { border-color: var(--primary); color: var(--primary); }
+
+.chip--active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* ---------- highlight box ("확인이 필요한 항목") ---------- */
+
+.highlight-box {
+  background: #fffaeb;
+  border: 1px solid #fde8b8;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.highlight-box h2 {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  color: #92400e;
+}
+
+.highlight-box ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+
+.highlight-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #fde8b8;
+  flex-wrap: wrap;
+}
+
+.highlight-link:hover { border-color: #f0ad4e; }
+
+.highlight-where { font-size: 0.88rem; color: var(--text); white-space: nowrap; }
+
+.highlight-reason { font-size: 0.83rem; color: #92400e; }
+
+/* ---------- law cards (accordion) ---------- */
+
+.laws { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+
+.law-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.law-card[open] { box-shadow: 0 4px 18px rgba(20, 20, 30, 0.06); }
+
+.law-card-head {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.law-card-head::-webkit-details-marker { display: none; }
+
+.law-card-title { display: flex; align-items: center; gap: 10px; }
+
+.type-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-soft);
+  padding: 3px 9px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.law-name { font-weight: 700; font-size: 1.05rem; }
+
+.law-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.83rem;
+}
+
+.law-card-meta .dot { opacity: 0.5; }
+
+.chevron { margin-left: auto; transition: transform 0.15s ease; color: var(--muted); }
+
+.law-card[open] .chevron { transform: rotate(180deg); }
+
+.law-card-body {
+  padding: 0 20px 22px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.headline { font-weight: 700; font-size: 1rem; margin: 0 0 6px; }
+
+.overview { color: var(--ink-soft); margin: 0 0 14px; }
+
+.law-caveats {
+  background: #fffaeb;
+  border: 1px solid #fde8b8;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 0 0 16px;
+  list-style: none;
+  font-size: 0.87rem;
+  color: #92400e;
+}
+
+.law-caveats li { margin: 2px 0; }
+.law-caveats li::before { content: "⚠ "; }
+
+/* ---------- article rows ---------- */
+
+.article-list { display: flex; flex-direction: column; gap: 10px; }
+
+.article-row {
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.article-row.flash, .law-card.flash {
+  animation: flash-highlight 1.6s ease;
+}
+
+@keyframes flash-highlight {
+  0% { background: #fde8b8; }
+  100% { background: var(--surface); }
+}
+
+.article-row-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.loc {
+  font-weight: 700;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.loc-article { color: var(--text); }
+
+/* 칩(배경 박스) 대신 가운뎃점(·)으로만 구획을 나눈다 — 배경색 없이도
+   조/항/호/목 경계가 눈에 들어오도록 색과 굵기만 다르게 준다. */
+.loc > span:not(:first-child)::before {
+  content: "·";
+  display: inline-block;
+  color: var(--muted);
+  font-weight: 400;
+  margin: 0 3px;
+}
+
+.loc-clause {
+  color: var(--primary-dark);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
+
+.loc-item {
+  color: #92400e;
+  font-weight: 700;
+}
+
+.loc-subitem {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badge--new { background: #e6f6ea; color: #15803d; }
+.badge--amend { background: #e8edff; color: #1d4ed8; }
+.badge--delete { background: #fde8e8; color: #b91c1c; }
+.badge--move { background: #fef3e0; color: #b45309; }
+.badge--nochange { background: #eef0f2; color: #6b7280; }
+.badge--other { background: #eef0f2; color: #4b5563; }
+
+.article-row-body p { margin: 0 0 4px; font-size: 0.92rem; }
+
+.note {
+  color: #92580a;
+  font-size: 0.82rem !important;
+}
+
+.error { color: #b91c1c; font-weight: 600; }
+
+.fulltext { margin-top: 8px; }
+
+.fulltext summary {
+  cursor: pointer;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  user-select: none;
+  list-style: none;
+}
+
+.fulltext summary::-webkit-details-marker { display: none; }
+.fulltext summary::before { content: "▸ "; }
+.fulltext[open] summary::before { content: "▾ "; }
+
+.fulltext summary:hover { color: var(--primary-dark); }
+
+.fulltext-body {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.fulltext-col {
+  flex: 1 1 240px;
+  border-radius: 8px;
+  padding: 10px 13px;
+  border: 1px solid var(--border);
+}
+
+.fulltext-col--old { background: #fdf2f2; border-color: #fadcdc; }
+.fulltext-col--new { background: #f0f6ff; border-color: #cfe0fb; }
+
+.fulltext-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.fulltext-text { white-space: pre-wrap; font-size: 0.87rem; color: #333; }
+
+.fulltext-empty { color: var(--muted); font-style: italic; }
+
+mark.diff-changed {
+  font-weight: 700;
+  padding: 0 2px;
+  border-radius: 3px;
+  background: transparent;
+}
+
+.fulltext-col--old mark.diff-changed { background: #fbd0d0; color: #b91c1c; }
+.fulltext-col--new mark.diff-changed { background: #cfe0fb; color: #1d4ed8; }
+
+/* ---------- source ---------- */
+
+.source { font-size: 0.85em; margin: 14px 0 0; }
+.source a { color: var(--primary); text-decoration: none; }
+.source a:hover { text-decoration: underline; }
