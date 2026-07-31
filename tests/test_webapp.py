@@ -159,71 +159,29 @@ def test_index_shows_no_change_kind_even_though_change_type_is_amend():
     assert "변경없음" in html
 
 
-def test_index_renders_caveat_for_structural_expansion():
-    """caveats_for()가 붙이는 원문 match_status("구조확장(구법미분리)")는
-    담당자용 내부 용어라, 웹페이지에는 humanize_caveat()로 풀어 쓴 문장이
-    나가야 한다 — 신뢰도를 깎는 내부 용어 노출을 막기 위함."""
-    laws = [_law_row(article_summaries=[
-        {
-            "unit": {"location_label": "제56조의3①", "change_type": "신설", "no_change": False, "moved_from": None},
-            "summary": "정보시스템 등급산정 기준을 마련한다.",
-            "caveats": ["[제56조의3①] 구조확장(구법미분리) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"],
-            "error": None,
-        }
-    ])]
+def test_index_never_renders_highlight_box():
+    """★★★ 설계(2026-07-31, 사용자 결정): "확인이 필요한 항목" 박스를
+    완전히 없앴다. caveats/verifier_issues가 있어도 화면에 별도 경고
+    박스로 노출되면 안 된다 — 데이터 자체(DB)는 남아있어도 웹페이지엔
+    안 보여준다."""
+    laws = [_law_row(
+        article_summaries=[
+            {
+                "unit": {"location_label": "제56조의3①", "change_type": "신설", "no_change": False, "moved_from": None},
+                "summary": "정보시스템 등급산정 기준을 마련한다.",
+                "caveats": ["[제56조의3①] 구조확장(구법미분리) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"],
+                "error": None,
+            }
+        ],
+        verifier_issues=[
+            {"severity": "high", "where": "제5조", "problem": "이동/신설 판정이 원문과 다름"},
+        ],
+    )]
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
     html = app.test_client().get("/").get_data(as_text=True)
 
-    assert "구조확장(구법미분리)" not in html
-    assert "정확히 어느 문장이 바뀐 것인지 자동으로 특정하지 못했습니다" in html
-
-
-def test_index_shows_highlight_box_for_flagged_article():
-    """caveats가 있는 조문은 "확인이 필요한 항목" 하이라이트 박스에도
-    나와야 한다 — anchor(art-0-0)가 실제 article-row의 id와 일치해야
-    링크가 그 요소를 정확히 가리킨다."""
-    laws = [_law_row(article_summaries=[
-        {
-            "unit": {"location_label": "제56조의3①", "change_type": "신설", "no_change": False, "moved_from": None},
-            "summary": "정보시스템 등급산정 기준을 마련한다.",
-            "caveats": ["[제56조의3①] 구조확장(구법미분리) — 개정 전 문장이 이 위치에 정확히 대응하지 않음"],
-            "error": None,
-        }
-    ])]
-    app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
-
-    assert "확인이 필요한 항목 (1건)" in html
-    assert 'href="#art-0-0"' in html
-    assert 'id="art-0-0"' in html
-
-
-def test_index_shows_highlight_box_for_verifier_issue():
-    laws = [_law_row(verifier_issues=[
-        {"severity": "high", "where": "제5조", "problem": "이동/신설 판정이 원문과 다름"},
-    ])]
-    app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
-
-    assert "확인이 필요한 항목 (1건)" in html
-    assert 'href="#law-0"' in html
-    assert "이동/신설 판정이 원문과 다름" in html
-
-
-def test_index_no_highlight_box_when_nothing_flagged():
-    laws = [_law_row(article_summaries=[
-        {
-            "unit": {"location_label": "제92조③", "change_type": "개정", "no_change": False, "moved_from": None},
-            "summary": "정상적으로 처리된 조문입니다.",
-            "caveats": [], "error": None,
-        }
-    ])]
-    app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
-
-    # JS 주석에 같은 문구가 있어 텍스트로만 확인하면 오탐이 난다 —
-    # 실제로 렌더링되는 하이라이트 박스 요소 자체가 없는지 확인한다.
     assert 'class="highlight-box"' not in html
+    assert "확인이 필요한 항목" not in html
 
 
 def test_download_serves_hwpx_file(tmp_path, monkeypatch):

@@ -12,7 +12,7 @@
   <nav class="topbar">
     <div class="topbar-inner">
       <div class="brand">
-        <span class="brand-mark">법</span>
+        <img class="brand-mark" src="{{ url_for('static', filename='img/logo.png') }}" alt="법인사이트 로고">
         <span class="brand-text">법인사이트</span>
       </div>
       {% if batch_date %}
@@ -69,22 +69,6 @@
       </div>
     </section>
 
-    {% if flagged %}
-      <section class="highlight-box">
-        <h2>⚠ 확인이 필요한 항목 ({{ flagged|length }}건)</h2>
-        <ul>
-          {% for item in flagged %}
-            <li>
-              <a href="#{{ item.anchor }}" class="highlight-link" data-anchor="{{ item.anchor }}">
-                <span class="highlight-where"><strong>{{ item.law_name }}</strong>{% if item.loc %} · {{ format_location(item.loc) }}{% endif %}</span>
-                <span class="highlight-reason">{{ item.reason }}</span>
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      </section>
-    {% endif %}
-
     <section class="laws" id="law-list">
       {% for law in laws %}
         {% set law_idx = loop.index0 %}
@@ -131,9 +115,6 @@
                     {% if a.unit.moved_from %}
                       <p class="note">※ 이동 전 위치: {{ a.unit.moved_from }}</p>
                     {% endif %}
-                    {% for c in a.caveats %}
-                      <p class="note">※ {{ humanize_caveat(c) }}</p>
-                    {% endfor %}
 
                     {% if a.unit.old_text or a.unit.new_text %}
                       {% set can_diff = not a.unit.old_text_is_context and a.unit.old_text and a.unit.new_text %}
@@ -199,29 +180,6 @@
         chip.classList.add("chip--active");
         activeKind = chip.dataset.kind;
         applyFilters();
-      });
-    });
-
-    // "확인이 필요한 항목" 링크 — 대상이 접혀있는 law-card 안에 있을 수
-    // 있으니 조상 <details>를 강제로 펼치고 스크롤 + 잠깐 강조한다.
-    function revealAnchor(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      let node = el;
-      while (node) {
-        if (node.tagName === "DETAILS") node.open = true;
-        node = node.parentElement;
-      }
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-      el.classList.add("flash");
-      setTimeout(() => el.classList.remove("flash"), 1600);
-    }
-
-    document.querySelectorAll(".highlight-link").forEach((a) => {
-      a.addEventListener("click", (e) => {
-        e.preventDefault();
-        history.pushState(null, "", "#" + a.dataset.anchor);
-        revealAnchor(a.dataset.anchor);
       });
     });
   </script>

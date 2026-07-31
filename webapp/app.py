@@ -149,22 +149,6 @@ def _kind_css_for_label(kind_label: str) -> str:
     return _KIND_CSS.get(kind_label, "other")
 
 
-#: summarizer/loader.py의 caveats_for()가 붙이는 조문별 경고는
-#: "[제17조①] 구조확장(구법미분리) — 개정 전 문장이 이 위치에 정확히
-#: 대응하지 않음" 형태다. match_status 원문 그대로라 담당자용 HWPX
-#: 보고서엔 맞지만, 일반 웹페이지에 그대로 노출하면 내부 용어가 오히려
-#: 신뢰를 깎아먹는다. caveats_for()/DB는 그대로 두고(HWPX·회귀 테스트가
-#: 이 문구에 의존한다), 웹 표시용으로만 여기서 풀어 쓴다.
-_CAVEAT_RE = re.compile(r"^\[(?P<loc>.+?)\]\s*(?P<status>.+?)\s*—\s*.+$")
-
-_CAVEAT_PLAIN = {
-    "구조확장(구법미분리)": "개정 전 조문에서는 이 부분이 별도 항목으로 나뉘어 있지 않아, "
-    "정확히 어느 문장이 바뀐 것인지 자동으로 특정하지 못했습니다.",
-    "위치재배치의심": "같은 조문 안에서 새 항이 추가되며 번호가 밀려, "
-    "원본 자료의 개정 전/후 대응이 실제와 다를 수 있습니다.",
-}
-
-
 #: law.source_url(DB) 은 src/lawtrack/contract/export.py의 _source_url() 이
 #: 만든 DRF(Data Reference API) 링크(?target=law&MST=...)다 — OC 인증키를
 #: 일부러 뺐으므로(export.py 주석 참고, 키 유출 방지) 그 자체로는 열리지
@@ -174,16 +158,6 @@ _CAVEAT_PLAIN = {
 def _public_law_url(law_type: str, law_name: str) -> str:
     prefix = "행정규칙" if law_type == "행정규칙" else "법령"
     return f"https://www.law.go.kr/{prefix}/{quote(law_name)}"
-
-
-def _humanize_caveat(text: str) -> str:
-    m = _CAVEAT_RE.match(text or "")
-    if not m:
-        return text
-    plain = _CAVEAT_PLAIN.get(m.group("status"))
-    if not plain:
-        return text
-    return f"[{m.group('loc')}] {plain}"
 
 
 def _summary_stats(laws: list[dict]) -> dict:
@@ -204,39 +178,6 @@ def _summary_stats(laws: list[dict]) -> dict:
     return {"total_laws": len(laws), "total_articles": total, "breakdown": breakdown}
 
 
-def _flagged_items(laws: list[dict]) -> list[dict]:
-    """"확인이 필요한 항목" 하이라이트 박스용 — 18개 법령을 다 펼쳐보지
-    않아도 caveats/verifier_issues가 있는 곳만 모아 위에서 바로 보여준다.
-
-    ★ anchor는 report.html이 law-card/article-row에 매기는 id와 반드시
-      같은 규칙(law-{law_idx} / art-{law_idx}-{article_idx})을 써야
-      링크가 실제로 그 요소를 가리킨다 — 템플릿과 이 함수가 같은 순서로
-      laws/article_summaries를 순회하므로 인덱스가 어긋나지 않는다.
-    """
-    items: list[dict] = []
-    for li, law in enumerate(laws):
-        for ai, a in enumerate(law.get("article_summaries", [])):
-            reasons = []
-            if a.get("error"):
-                reasons.append(f"요약 생성 실패 — 원문 확인 필요 ({a['error']})")
-            reasons.extend(_humanize_caveat(c) for c in a.get("caveats", []))
-            if reasons:
-                items.append({
-                    "anchor": f"art-{li}-{ai}",
-                    "law_name": law.get("law_name", ""),
-                    "loc": a.get("unit", {}).get("location_label", ""),
-                    "reason": reasons[0],
-                })
-        for issue in law.get("verifier_issues", []):
-            items.append({
-                "anchor": f"law-{li}",
-                "law_name": law.get("law_name", ""),
-                "loc": None,
-                "reason": f"감수: {issue.get('where', '')} — {issue.get('problem', '')}",
-            })
-    return items
-
-
 def create_app(repo: LawSummaryRepo | None = None) -> Flask:
     """앱 팩토리. repo를 주입할 수 있어 테스트에서 진짜 DB 없이 확인 가능하다."""
     app = Flask(__name__)
@@ -244,7 +185,6 @@ def create_app(repo: LawSummaryRepo | None = None) -> Flask:
     app.jinja_env.globals["kind_css"] = _kind_css
     app.jinja_env.globals["kind_css_for_label"] = _kind_css_for_label
     app.jinja_env.globals["format_location"] = _format_location
-    app.jinja_env.globals["humanize_caveat"] = _humanize_caveat
     app.jinja_env.globals["public_law_url"] = _public_law_url
     app.jinja_env.globals["diff_old_html"] = _diff_old_html
     app.jinja_env.globals["diff_new_html"] = _diff_new_html
@@ -254,13 +194,10 @@ def create_app(repo: LawSummaryRepo | None = None) -> Flask:
     def index() -> str:
         batch_date = _repo.latest_batch_date()
         if batch_date is None:
-            return render_template("report.html", batch_date=None, laws=[], stats=None, flagged=[])
+            return render_template("report.html", batch_date=None, laws=[], stats=None)
         laws = _repo.fetch_by_batch(batch_date)
         stats = _summary_stats(laws)
-        flagged = _flagged_items(laws)
-        return render_template(
-            "report.html", batch_date=batch_date, laws=laws, stats=stats, flagged=flagged,
-        )
+        return render_template("report.html", batch_date=batch_date, laws=laws, stats=stats)
 
     @app.get("/download")
     def download() -> Response:
