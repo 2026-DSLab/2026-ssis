@@ -138,7 +138,7 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stat-tile, .item-row { animation: none !important; }
+  .item-row { animation: none !important; }
 }
 
 /* ---------- hero + stats ---------- */
@@ -177,69 +177,59 @@ main {
 
 .hero-sub { color: var(--muted); margin: 0 0 26px; }
 
-/* "벤토 그리드" — 개정 법령/변경 조문 두 큰 타일과 구분별 작은 타일을
-   하나의 그리드 안에 크기 대비로 배치한다. 큰 숫자 둘은 위치·크기로,
-   나머지는 옅은 팔레트 색으로 구분되어 한눈에 위계가 읽힌다. */
-.stat-bento {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
+/* 박스 없이 숫자 자체를 크게 — 개정 법령/변경 조문 두 핵심 수치를
+   세로 구분선 하나로만 나눈 "리드 문단"처럼 배치한다(신문 표지의
+   헤드라인 숫자를 참고). 카드형 통계 타일에서 완전히 벗어나는 지점. */
+.stat-lede {
+  display: flex;
+  align-items: baseline;
+  gap: 28px;
+  margin: 4px 0 18px;
+}
+
+.stat-lede-block { display: flex; align-items: baseline; gap: 10px; }
+
+.stat-lede-num {
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-lede-label { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+
+.stat-lede-divider { width: 1px; align-self: stretch; background: var(--border); }
+
+/* 구분별 세부 수치는 위쪽 얇은 선 하나로만 본문과 나뉘는 한 줄 목록 —
+   점(dot) 색으로만 구분을 표시하고 배경 박스는 쓰지 않는다. */
+.stat-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
   margin-bottom: 4px;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
 }
 
-.stat-tile {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 14px;
-  text-align: center;
-  grid-column: span 2;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  animation: fade-in-up 0.5s ease both;
-  animation-delay: calc(0.12s + min(var(--i, 0), 8) * 0.05s);
-}
+.stat-breakdown-item { display: inline-flex; align-items: center; gap: 6px; }
 
-.stat-tile:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px -8px rgba(20, 30, 60, 0.18);
-  border-color: var(--primary-soft);
-}
+.stat-breakdown-item strong { font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
 
-.stat-tile-num { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); }
+.stat-breakdown-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-.stat-tile-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
-
-.stat-tile--hero {
-  grid-column: span 3;
-  padding: 24px 16px;
-  box-shadow: 0 4px 14px rgba(20, 30, 60, 0.08);
-  animation-delay: 0s;
-}
-
-.stat-tile--hero:nth-of-type(2) { animation-delay: 0.06s; }
-
-.stat-tile--hero:hover { box-shadow: var(--shadow-tint); }
-
-.stat-tile--hero .stat-tile-num { font-size: 2.1rem; }
-
-/* 구분별 타일은 옅은 팔레트 배경으로 위계를 낮추면서도(핵심 두 숫자가
-   여전히 시선을 먼저 받는다) 구분마다 색이 달라 빠르게 훑어 읽힌다. */
-.stat-tile--new { background: var(--k-new-soft); border-color: transparent; }
-.stat-tile--new .stat-tile-num { color: var(--k-new); }
-.stat-tile--amend { background: var(--k-amend-soft); border-color: transparent; }
-.stat-tile--amend .stat-tile-num { color: var(--k-amend); }
-.stat-tile--delete { background: var(--k-delete-soft); border-color: transparent; }
-.stat-tile--delete .stat-tile-num { color: var(--k-delete); }
-.stat-tile--move { background: var(--k-move-soft); border-color: transparent; }
-.stat-tile--move .stat-tile-num { color: var(--k-move); }
-.stat-tile--nochange { background: var(--k-nochange-soft); border-color: transparent; }
-.stat-tile--nochange .stat-tile-num { color: var(--k-nochange); }
-.stat-tile--other { background: var(--k-other-soft); border-color: transparent; }
-.stat-tile--other .stat-tile-num { color: var(--k-other); }
+.stat-breakdown-item--new .stat-breakdown-dot { background: var(--k-new); }
+.stat-breakdown-item--amend .stat-breakdown-dot { background: var(--k-amend); }
+.stat-breakdown-item--delete .stat-breakdown-dot { background: var(--k-delete); }
+.stat-breakdown-item--move .stat-breakdown-dot { background: var(--k-move); }
+.stat-breakdown-item--nochange .stat-breakdown-dot { background: var(--k-nochange); }
+.stat-breakdown-item--other .stat-breakdown-dot { background: var(--k-other); }
 
 @media (max-width: 560px) {
-  .stat-bento { grid-template-columns: repeat(2, 1fr); }
-  .stat-tile, .stat-tile--hero { grid-column: span 1; }
+  .stat-lede { gap: 18px; }
+  .stat-lede-num { font-size: 2rem; }
 }
 
 /* ---------- toolbar ---------- */
@@ -282,51 +272,39 @@ main {
   box-shadow: 0 0 0 4px var(--primary-soft);
 }
 
-.chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+/* 필터가 아니라 "그 구분 섹션으로 이동"하는 내비게이션이므로 버튼처럼
+   보이지 않게 — 배경/테두리 없는 텍스트 링크 목록. 점(dot) 색만으로
+   구분을 표시한다. */
+.kind-nav { display: flex; gap: 6px 20px; flex-wrap: wrap; }
 
-.chip {
+.kind-nav-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid var(--border);
-  background: #fff;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 4px 0;
   color: var(--ink-soft);
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: all 0.12s ease, transform 0.12s ease;
+  transition: color 0.12s ease, border-color 0.12s ease;
 }
 
-.chip:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+.kind-nav-link:hover { color: var(--primary); border-color: var(--primary-soft); }
 
-.chip:active { transform: translateY(0) scale(0.96); }
+.kind-nav-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-.chip--active {
-  background: var(--primary-soft);
-  border-color: var(--primary-soft);
-  color: var(--primary-dark);
-  box-shadow: 0 4px 12px -4px rgba(59, 91, 253, 0.35);
-}
+.kind-nav-count { color: var(--muted); font-weight: 500; }
 
-.chip-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.55;
-  flex-shrink: 0;
-}
-
-/* 칩 자체는 항상 무채색이다가, 그 칩이 선택되면 그 구분의 고유 색으로
-   물든다 — "전체"만 파랑을 쓰고, 나머지는 자기 색을 갖는다. */
-.chip--new.chip--active { background: var(--k-new-soft); border-color: var(--k-new-soft); color: var(--k-new); box-shadow: 0 4px 12px -4px rgba(21, 128, 61, 0.35); }
-.chip--amend.chip--active { background: var(--k-amend-soft); border-color: var(--k-amend-soft); color: var(--k-amend); box-shadow: 0 4px 12px -4px rgba(29, 78, 216, 0.35); }
-.chip--delete.chip--active { background: var(--k-delete-soft); border-color: var(--k-delete-soft); color: var(--k-delete); box-shadow: 0 4px 12px -4px rgba(185, 28, 28, 0.35); }
-.chip--move.chip--active { background: var(--k-move-soft); border-color: var(--k-move-soft); color: var(--k-move); box-shadow: 0 4px 12px -4px rgba(180, 83, 9, 0.35); }
-.chip--nochange.chip--active { background: var(--k-nochange-soft); border-color: var(--k-nochange-soft); color: var(--k-nochange); }
-.chip--other.chip--active { background: var(--k-other-soft); border-color: var(--k-other-soft); color: var(--k-other); }
+.kind-nav-link--new .kind-nav-dot { background: var(--k-new); }
+.kind-nav-link--amend .kind-nav-dot { background: var(--k-amend); }
+.kind-nav-link--delete .kind-nav-dot { background: var(--k-delete); }
+.kind-nav-link--move .kind-nav-dot { background: var(--k-move); }
+.kind-nav-link--nochange .kind-nav-dot { background: var(--k-nochange); }
+.kind-nav-link--other .kind-nav-dot { background: var(--k-other); }
 
 /* ---------- 법령별 개요 ---------- */
 
@@ -339,12 +317,12 @@ main {
   margin: 0 0 10px;
 }
 
+/* 박스로 감싸지 않는다 — 위쪽 구분선 하나로 본문과 나뉘고, 행끼리는
+   얇은 밑줄로만 나뉘는 순수 목록. */
 .overview-list {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 18px;
-  margin-bottom: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  margin-bottom: 36px;
 }
 
 .overview-row {
@@ -352,7 +330,7 @@ main {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 4px 10px;
-  padding: 8px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -374,12 +352,11 @@ main {
 .overview-dot--other { background: var(--k-other); }
 
 .overview-type {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: var(--primary);
-  background: var(--primary-soft);
-  padding: 2px 8px;
-  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   flex-shrink: 0;
 }
 
@@ -433,18 +410,21 @@ main {
 .kind-section-title--other { color: var(--k-other); border-bottom-color: var(--k-other-soft); }
 .kind-section-title--other .kind-dot { background: var(--k-other); }
 
-.item-list { display: flex; flex-direction: column; gap: 8px; }
+.item-list { display: flex; flex-direction: column; }
 
+/* 배경 박스 없이 밑줄 하나로만 항목을 구분한다 — 목록 전체가 하나의
+   흐르는 문서처럼 읽히도록. */
 .item-row {
-  background: var(--surface);
-  border-radius: 10px;
-  padding: 12px 16px;
-  transition: background 0.15s ease;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.15s ease;
   animation: fade-in-up 0.4s ease both;
   animation-delay: calc(min(var(--i, 0), 10) * 0.03s);
 }
 
-.item-row:hover { background: #eef0f4; }
+.item-list .item-row:last-child { border-bottom: none; }
+
+.item-row:hover { border-color: var(--primary-soft); }
 
 .item-row-head {
   display: flex;

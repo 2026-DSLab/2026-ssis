@@ -39,20 +39,23 @@
       <h1>이번 배치 <span class="hero-accent">개정 요약</span></h1>
       <p class="hero-sub">{{ batch_date }} 기준으로 감지된 법령·행정규칙 개정 내역입니다.</p>
 
-      <div class="stat-bento">
-        <div class="stat-tile stat-tile--hero">
-          <div class="stat-tile-num" data-count="{{ stats.total_laws }}">0</div>
-          <div class="stat-tile-label">개정 법령</div>
+      <div class="stat-lede">
+        <div class="stat-lede-block">
+          <span class="stat-lede-num" data-count="{{ stats.total_laws }}">0</span>
+          <span class="stat-lede-label">개정 법령</span>
         </div>
-        <div class="stat-tile stat-tile--hero">
-          <div class="stat-tile-num" data-count="{{ stats.total_articles }}">0</div>
-          <div class="stat-tile-label">변경 조문</div>
+        <div class="stat-lede-divider" aria-hidden="true"></div>
+        <div class="stat-lede-block">
+          <span class="stat-lede-num" data-count="{{ stats.total_articles }}">0</span>
+          <span class="stat-lede-label">변경 조문</span>
         </div>
+      </div>
+
+      <div class="stat-breakdown">
         {% for kind, count in stats.breakdown %}
-        <div class="stat-tile stat-tile--{{ kind_css_for_label(kind) }}" style="--i: {{ loop.index0 }}">
-          <div class="stat-tile-num" data-count="{{ count }}">0</div>
-          <div class="stat-tile-label">{{ kind }}</div>
-        </div>
+        <span class="stat-breakdown-item stat-breakdown-item--{{ kind_css_for_label(kind) }}">
+          <span class="stat-breakdown-dot" aria-hidden="true"></span>{{ kind }} <strong data-count="{{ count }}">0</strong>
+        </span>
         {% endfor %}
       </div>
     </section>
@@ -65,11 +68,11 @@
         </svg>
         <input type="search" id="law-search" placeholder="법령명으로 검색..." autocomplete="off">
       </div>
-      <div class="chip-row" id="kind-chips">
+      <nav class="kind-nav" id="kind-chips">
         {% for section in sections %}
-        <button class="chip chip--{{ section.css }}" data-target="kind-{{ loop.index0 }}"><span class="chip-dot"></span>{{ section.kind }} ({{ section.entries|length }})</button>
+        <button class="kind-nav-link kind-nav-link--{{ section.css }}" data-target="kind-{{ loop.index0 }}"><span class="kind-nav-dot" aria-hidden="true"></span>{{ section.kind }} <span class="kind-nav-count">{{ section.entries|length }}</span></button>
         {% endfor %}
-      </div>
+      </nav>
     </section>
 
     <!-- 법령별 개요 — 구분(신설/개정/...) 대신 법령 단위로 "무슨 법이
@@ -179,7 +182,7 @@
     // 필터 칩 — 이제 걸러내지 않고, 해당 구분 섹션으로 부드럽게
     // 스크롤만 이동한다(본문이 이미 구분별로 나뉘어 있어 "숨기기"가
     // 필요 없다 — 대신 "바로 그 자리로 가기"가 더 유용하다).
-    document.querySelectorAll("#kind-chips .chip").forEach((chip) => {
+    document.querySelectorAll("#kind-chips .kind-nav-link").forEach((chip) => {
       chip.addEventListener("click", () => {
         document.getElementById(chip.dataset.target)?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
