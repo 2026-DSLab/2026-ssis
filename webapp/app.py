@@ -127,8 +127,8 @@ def _kind_of(article_summary: dict) -> str:
     return _TAG.get(change_type, change_type)
 
 
-#: kind_of()가 돌려주는 한글 라벨 → 배지 색 클래스. 템플릿에서 badge--{{ }}
-#: 형태로만 쓰이므로 여기 없는 라벨은 자동으로 무채색 배지가 된다.
+#: kind_of()가 돌려주는 한글 라벨 → 색 클래스. 통계 타일·법령 개요 점·
+#: 구분 섹션 제목·필터 칩이 전부 이 매핑 하나를 공유한다.
 _KIND_CSS = {
     "신설": "new",
     "개정": "amend",
@@ -140,13 +140,25 @@ _KIND_CSS = {
 }
 
 
-def _kind_css(article_summary: dict) -> str:
-    return _KIND_CSS.get(_kind_of(article_summary), "other")
-
-
 def _kind_css_for_label(kind_label: str) -> str:
     """통계 배지처럼 article_summary dict 없이 라벨(예: '신설')만 있을 때."""
     return _KIND_CSS.get(kind_label, "other")
+
+
+#: 법령 카드 왼쪽 강조선 색을 고를 때, 여러 구분이 섞여 있으면 어느 걸
+#: 대표색으로 쓸지 우선순위. "신설"이 담당자에게 가장 중요한 신호라
+#: 맨 앞에 둔다 — 예를 들어 조문 10개 중 1개만 신설이어도 그 법령 카드는
+#: 신설색으로 강조되어야 눈에 띈다(다수결로 고르면 묻힌다).
+_KIND_PRIORITY = ["신설", "삭제", "이동", "이동개정", "개정", "변경", "변경없음"]
+
+
+def _law_dominant_kind(law: dict) -> str:
+    """법령 카드 왼쪽 강조선에 쓸 대표 구분 하나를 고른다."""
+    kinds = {_kind_of(a) for a in law.get("article_summaries", [])}
+    for k in _KIND_PRIORITY:
+        if k in kinds:
+            return k
+    return "변경"
 
 
 #: law.source_url(DB) 은 src/lawtrack/contract/export.py의 _source_url() 이
@@ -158,6 +170,43 @@ def _kind_css_for_label(kind_label: str) -> str:
 def _public_law_url(law_type: str, law_name: str) -> str:
     prefix = "행정규칙" if law_type == "행정규칙" else "법령"
     return f"https://www.law.go.kr/{prefix}/{quote(law_name)}"
+
+
+#: _group_by_kind()가 만드는 섹션 순서 — _summary_stats()의 order와
+#: 반드시 같아야 통계 타일 순서와 본문 섹션 순서가 어긋나지 않는다.
+_KIND_ORDER = ["신설", "개정", "삭제", "이동", "이동개정", "변경없음", "변경"]
+
+
+def _group_by_kind(laws: list[dict]) -> list[dict]:
+    """조문 요약을 "구분"(신설/개정/삭제/...) 별로 묶은 평평한 목록으로
+    바꾼다.
+
+    ★★★ 설계(2026-07-31, 사용자 결정): 예전엔 법령 카드 하나 안에 그
+    법령의 조문들이 다 들어있는 구조였는데("법령 → 조문"), 그러다 보니
+    카드 하나에 구분이 여러 개 섞여(신설 1건 + 개정 9건 등) 카드 자체를
+    무슨 색으로 칠해야 할지 계속 애매했다(왼쪽 띠 → 컬러 섀도 다 시도해도
+    "티가 안 난다"는 피드백). 근본 원인은 색이 조문 하나하나의 속성인데
+    법령 단위 컨테이너에 억지로 대표색을 씌우려 한 것 — 그래서 아예
+    "구분 → 법령+조문" 으로 순회 축을 뒤집는다. 색은 이제 섹션 제목
+    하나에만 있으면 되고, 그 밑의 개별 항목은 "이 섹션 안에 있다"는
+    사실 자체로 이미 구분이 확정되므로 항목마다 색을 또 표시할 필요가
+    없어진다.
+    """
+    buckets: dict[str, list[dict]] = {}
+    for law in laws:
+        for a in law.get("article_summaries", []):
+            kind = _kind_of(a)
+            buckets.setdefault(kind, []).append({
+                "law_name": law.get("law_name", ""),
+                "law_type": law.get("law_type", ""),
+                "article": a,
+            })
+    ordered_kinds = [k for k in _KIND_ORDER if k in buckets]
+    ordered_kinds += [k for k in buckets if k not in _KIND_ORDER]
+    return [
+        {"kind": kind, "css": _kind_css_for_label(kind), "entries": buckets[kind]}
+        for kind in ordered_kinds
+    ]
 
 
 def _summary_stats(laws: list[dict]) -> dict:
@@ -172,18 +221,16 @@ def _summary_stats(laws: list[dict]) -> dict:
             kind = _kind_of(a)
             counts[kind] = counts.get(kind, 0) + 1
             total += 1
-    order = ["신설", "개정", "삭제", "이동", "이동개정", "변경없음", "변경"]
-    breakdown = [(k, counts[k]) for k in order if k in counts]
-    breakdown += [(k, v) for k, v in counts.items() if k not in order]
+    breakdown = [(k, counts[k]) for k in _KIND_ORDER if k in counts]
+    breakdown += [(k, v) for k, v in counts.items() if k not in _KIND_ORDER]
     return {"total_laws": len(laws), "total_articles": total, "breakdown": breakdown}
 
 
 def create_app(repo: LawSummaryRepo | None = None) -> Flask:
     """앱 팩토리. repo를 주입할 수 있어 테스트에서 진짜 DB 없이 확인 가능하다."""
     app = Flask(__name__)
-    app.jinja_env.globals["kind_of"] = _kind_of
-    app.jinja_env.globals["kind_css"] = _kind_css
     app.jinja_env.globals["kind_css_for_label"] = _kind_css_for_label
+    app.jinja_env.globals["law_dominant_kind"] = _law_dominant_kind
     app.jinja_env.globals["format_location"] = _format_location
     app.jinja_env.globals["public_law_url"] = _public_law_url
     app.jinja_env.globals["diff_old_html"] = _diff_old_html
@@ -194,10 +241,13 @@ def create_app(repo: LawSummaryRepo | None = None) -> Flask:
     def index() -> str:
         batch_date = _repo.latest_batch_date()
         if batch_date is None:
-            return render_template("report.html", batch_date=None, laws=[], stats=None)
+            return render_template("report.html", batch_date=None, laws=[], stats=None, sections=[])
         laws = _repo.fetch_by_batch(batch_date)
         stats = _summary_stats(laws)
-        return render_template("report.html", batch_date=batch_date, laws=laws, stats=stats)
+        sections = _group_by_kind(laws)
+        return render_template(
+            "report.html", batch_date=batch_date, laws=laws, stats=stats, sections=sections,
+        )
 
     @app.get("/download")
     def download() -> Response:

@@ -1,5 +1,5 @@
 :root {
-  --bg: #fff;
+  --bg: #fcfcfe;
   --surface: #f7f8fa;
   --card-bg: #fff;
   --border: #e7e9ee;
@@ -13,6 +13,16 @@
   /* 채도 있는(primary 색이 옅게 섞인) 그림자 — 회색 그림자보다 화면이
      붕 떠 보이는 느낌을 준다. 카드 호버/승격에 공통으로 쓴다. */
   --shadow-tint: 0 10px 26px -8px rgba(59, 91, 253, 0.28), 0 2px 6px rgba(20, 30, 60, 0.06);
+
+  /* 구분(신설/개정/삭제/이동/변경없음/기타)별 색 — 배지·통계 타일·카드
+     강조선·필터 칩이 전부 이 팔레트 하나를 공유한다. 요소마다 색이
+     따로 놀지 않고 "이 색 = 이 구분"이라는 하나의 언어로 통일된다. */
+  --k-new: #15803d; --k-new-soft: #e6f6ea;
+  --k-amend: #1d4ed8; --k-amend-soft: #e8edff;
+  --k-delete: #b91c1c; --k-delete-soft: #fde8e8;
+  --k-move: #b45309; --k-move-soft: #fef3e0;
+  --k-nochange: #6b7280; --k-nochange-soft: #eef0f2;
+  --k-other: #4b5563; --k-other-soft: #eef0f2;
 }
 
 * { box-sizing: border-box; }
@@ -128,97 +138,109 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stat-hero-card, .stat-card, .law-card { animation: none !important; }
+  .stat-tile, .item-row { animation: none !important; }
 }
 
 /* ---------- hero + stats ---------- */
 
-.hero { padding: 40px 0 8px; }
+.hero { position: relative; padding: 44px 0 8px; }
 
-.hero h1 { font-size: 1.7rem; margin: 0 0 4px; letter-spacing: -0.02em; }
-
-.hero-sub { color: var(--muted); margin: 0 0 24px; }
-
-/* 법령 수·조문 수 — 색으로 튀게 하는 대신, 살짝 띄운(elevated) 카드로
-   위쪽에 따로 둬서 "이게 이번 배치의 핵심 두 숫자"라는 걸 위치와
-   크기만으로 강조한다. 아래 세부 내역(신설/개정/...)과 같은 흰 배경을
-   써서 톤은 그대로 통일된다. */
-.stat-hero {
-  display: flex;
-  gap: 14px;
-  margin-bottom: 14px;
+/* 히어로 뒤편의 은은한 그라디언트 블롭 — 화면이 평평하지 않고 살짝
+   떠 있는 느낌을 준다. 아이콘/이모지 없이 색과 블러만으로 "요즘
+   스타일" 깊이감을 낸다(과한 장식은 예전에 "AI스러운" 인상을 줘서
+   피한다). */
+.hero-glow {
+  position: absolute;
+  top: -60px;
+  right: -80px;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(59, 91, 253, 0.16), rgba(59, 91, 253, 0) 70%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: -1;
 }
 
-.stat-hero-card {
-  flex: 1;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px 16px;
-  text-align: center;
-  box-shadow: 0 4px 14px rgba(20, 30, 60, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  animation: fade-in-up 0.5s ease both;
-}
-
-.stat-hero-card:nth-child(2) { animation-delay: 0.06s; }
-
-.stat-hero-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-tint);
-}
-
-.stat-hero-num {
-  font-size: 2.1rem;
+.hero h1 {
+  font-size: 2rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--text);
+  margin: 0 0 6px;
+  letter-spacing: -0.03em;
 }
 
-.stat-hero-label {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin-top: 2px;
+.hero-accent {
+  background: linear-gradient(100deg, var(--primary) 10%, #7c5cff 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.stat-grid {
+.hero-sub { color: var(--muted); margin: 0 0 26px; }
+
+/* "벤토 그리드" — 개정 법령/변경 조문 두 큰 타일과 구분별 작은 타일을
+   하나의 그리드 안에 크기 대비로 배치한다. 큰 숫자 둘은 위치·크기로,
+   나머지는 옅은 팔레트 색으로 구분되어 한눈에 위계가 읽힌다. */
+.stat-bento {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 10px;
+  margin-bottom: 4px;
 }
 
-.stat-card {
+.stat-tile {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px 14px;
   text-align: center;
+  grid-column: span 2;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   animation: fade-in-up 0.5s ease both;
   animation-delay: calc(0.12s + min(var(--i, 0), 8) * 0.05s);
 }
 
-.stat-card:hover {
+.stat-tile:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px -8px rgba(20, 30, 60, 0.18);
   border-color: var(--primary-soft);
 }
 
-.stat-num { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+.stat-tile-num { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); }
 
-.stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+.stat-tile-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
 
-/* 아래 stat-num--* 는 article-row의 .badge--* (배경 있는 알약 배지)와
-   일부러 다른 이름을 쓴다 — 예전엔 같은 클래스명(badge--new 등)을
-   재사용했는데, .badge--new 셀렉터 자체가 배경색까지 정의하고 있어서
-   글자만 색칠하려던 통계 숫자에도 그 배경이 그대로 새어 들어가
-   어색한 색 박스가 생겼다(실측 2026-07-31). */
-.stat-num--new { color: #15803d; }
-.stat-num--amend { color: #1d4ed8; }
-.stat-num--delete { color: #b91c1c; }
-.stat-num--move { color: #b45309; }
-.stat-num--nochange { color: #6b7280; }
-.stat-num--other { color: #4b5563; }
+.stat-tile--hero {
+  grid-column: span 3;
+  padding: 24px 16px;
+  box-shadow: 0 4px 14px rgba(20, 30, 60, 0.08);
+  animation-delay: 0s;
+}
+
+.stat-tile--hero:nth-of-type(2) { animation-delay: 0.06s; }
+
+.stat-tile--hero:hover { box-shadow: var(--shadow-tint); }
+
+.stat-tile--hero .stat-tile-num { font-size: 2.1rem; }
+
+/* 구분별 타일은 옅은 팔레트 배경으로 위계를 낮추면서도(핵심 두 숫자가
+   여전히 시선을 먼저 받는다) 구분마다 색이 달라 빠르게 훑어 읽힌다. */
+.stat-tile--new { background: var(--k-new-soft); border-color: transparent; }
+.stat-tile--new .stat-tile-num { color: var(--k-new); }
+.stat-tile--amend { background: var(--k-amend-soft); border-color: transparent; }
+.stat-tile--amend .stat-tile-num { color: var(--k-amend); }
+.stat-tile--delete { background: var(--k-delete-soft); border-color: transparent; }
+.stat-tile--delete .stat-tile-num { color: var(--k-delete); }
+.stat-tile--move { background: var(--k-move-soft); border-color: transparent; }
+.stat-tile--move .stat-tile-num { color: var(--k-move); }
+.stat-tile--nochange { background: var(--k-nochange-soft); border-color: transparent; }
+.stat-tile--nochange .stat-tile-num { color: var(--k-nochange); }
+.stat-tile--other { background: var(--k-other-soft); border-color: transparent; }
+.stat-tile--other .stat-tile-num { color: var(--k-other); }
+
+@media (max-width: 560px) {
+  .stat-bento { grid-template-columns: repeat(2, 1fr); }
+  .stat-tile, .stat-tile--hero { grid-column: span 1; }
+}
 
 /* ---------- toolbar ---------- */
 
@@ -232,14 +254,24 @@ main {
   z-index: 9;
 }
 
+.search-wrap { position: relative; margin-bottom: 10px; }
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
 #law-search {
   width: 100%;
-  padding: 11px 16px;
+  padding: 11px 16px 11px 38px;
   border: 1px solid var(--border);
   border-radius: 10px;
   font-size: 0.92rem;
   background: #fff;
-  margin-bottom: 10px;
   font-family: inherit;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -253,6 +285,9 @@ main {
 .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: 1px solid var(--border);
   background: #fff;
   color: var(--ink-soft);
@@ -275,125 +310,166 @@ main {
   box-shadow: 0 4px 12px -4px rgba(59, 91, 253, 0.35);
 }
 
-/* ---------- law cards (accordion) ---------- */
+.chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.55;
+  flex-shrink: 0;
+}
 
-.laws { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+/* 칩 자체는 항상 무채색이다가, 그 칩이 선택되면 그 구분의 고유 색으로
+   물든다 — "전체"만 파랑을 쓰고, 나머지는 자기 색을 갖는다. */
+.chip--new.chip--active { background: var(--k-new-soft); border-color: var(--k-new-soft); color: var(--k-new); box-shadow: 0 4px 12px -4px rgba(21, 128, 61, 0.35); }
+.chip--amend.chip--active { background: var(--k-amend-soft); border-color: var(--k-amend-soft); color: var(--k-amend); box-shadow: 0 4px 12px -4px rgba(29, 78, 216, 0.35); }
+.chip--delete.chip--active { background: var(--k-delete-soft); border-color: var(--k-delete-soft); color: var(--k-delete); box-shadow: 0 4px 12px -4px rgba(185, 28, 28, 0.35); }
+.chip--move.chip--active { background: var(--k-move-soft); border-color: var(--k-move-soft); color: var(--k-move); box-shadow: 0 4px 12px -4px rgba(180, 83, 9, 0.35); }
+.chip--nochange.chip--active { background: var(--k-nochange-soft); border-color: var(--k-nochange-soft); color: var(--k-nochange); }
+.chip--other.chip--active { background: var(--k-other-soft); border-color: var(--k-other-soft); color: var(--k-other); }
 
-.law-card {
+/* ---------- 법령별 개요 ---------- */
+
+.section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 10px;
+}
+
+.overview-list {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  overflow: hidden;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-  animation: fade-in-up 0.45s ease both;
-  animation-delay: calc(min(var(--i, 0), 10) * 0.05s);
+  padding: 16px 18px;
+  margin-bottom: 22px;
 }
 
-.law-card[open] { box-shadow: 0 4px 18px rgba(20, 20, 30, 0.06); }
-
-.law-card:not([open]):hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-tint);
-  border-color: var(--primary-soft);
-}
-
-.law-card-head {
-  list-style: none;
-  cursor: pointer;
-  padding: 18px 20px;
+.overview-row {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
 }
 
-.law-card-head::-webkit-details-marker { display: none; }
+.overview-row:last-child { border-bottom: none; }
 
-.law-card-title { display: flex; align-items: center; gap: 10px; }
+.overview-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  align-self: center;
+  flex-shrink: 0;
+}
 
-.type-tag {
-  font-size: 0.72rem;
+.overview-dot--new { background: var(--k-new); }
+.overview-dot--amend { background: var(--k-amend); }
+.overview-dot--delete { background: var(--k-delete); }
+.overview-dot--move { background: var(--k-move); }
+.overview-dot--nochange { background: var(--k-nochange); }
+.overview-dot--other { background: var(--k-other); }
+
+.overview-type {
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--primary);
   background: var(--primary-soft);
-  padding: 3px 9px;
+  padding: 2px 8px;
   border-radius: 6px;
   flex-shrink: 0;
 }
 
-.law-name { font-weight: 700; font-size: 1.05rem; }
+.overview-name { font-weight: 700; font-size: 0.92rem; flex-shrink: 0; }
 
-.law-card-meta {
+.overview-headline { color: var(--ink-soft); font-size: 0.88rem; }
+
+.overview-caveat {
+  flex-basis: 100%;
+  color: #92400e;
+  font-size: 0.8rem;
+}
+
+/* ---------- 구분별 섹션 ---------- */
+
+.kind-sections { display: flex; flex-direction: column; gap: 32px; }
+
+.kind-section { scroll-margin-top: 130px; }
+
+.kind-section-title {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+.kind-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+.kind-count {
+  margin-left: 2px;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--muted);
-  font-size: 0.83rem;
 }
 
-.law-card-meta .dot { opacity: 0.5; }
+.kind-section-title--new { color: var(--k-new); border-bottom-color: var(--k-new-soft); }
+.kind-section-title--new .kind-dot { background: var(--k-new); }
+.kind-section-title--amend { color: var(--k-amend); border-bottom-color: var(--k-amend-soft); }
+.kind-section-title--amend .kind-dot { background: var(--k-amend); }
+.kind-section-title--delete { color: var(--k-delete); border-bottom-color: var(--k-delete-soft); }
+.kind-section-title--delete .kind-dot { background: var(--k-delete); }
+.kind-section-title--move { color: var(--k-move); border-bottom-color: var(--k-move-soft); }
+.kind-section-title--move .kind-dot { background: var(--k-move); }
+.kind-section-title--nochange { color: var(--k-nochange); border-bottom-color: var(--k-nochange-soft); }
+.kind-section-title--nochange .kind-dot { background: var(--k-nochange); }
+.kind-section-title--other { color: var(--k-other); border-bottom-color: var(--k-other-soft); }
+.kind-section-title--other .kind-dot { background: var(--k-other); }
 
-.chevron { margin-left: auto; transition: transform 0.15s ease; color: var(--muted); }
+.item-list { display: flex; flex-direction: column; gap: 8px; }
 
-.law-card[open] .chevron { transform: rotate(180deg); }
-
-.law-card-body {
-  padding: 0 20px 22px;
-  border-top: 1px solid var(--border);
-  padding-top: 16px;
-  animation: fade-in-up 0.25s ease both;
-}
-
-.headline { font-weight: 700; font-size: 1rem; margin: 0 0 6px; }
-
-.overview { color: var(--ink-soft); margin: 0 0 14px; }
-
-.law-caveats {
-  background: #fffaeb;
-  border: 1px solid #fde8b8;
-  border-radius: 10px;
-  padding: 12px 16px;
-  margin: 0 0 16px;
-  list-style: none;
-  font-size: 0.87rem;
-  color: #92400e;
-}
-
-.law-caveats li { margin: 2px 0; }
-.law-caveats li::before { content: "⚠ "; }
-
-/* ---------- article rows ---------- */
-
-.article-list { display: flex; flex-direction: column; gap: 10px; }
-
-.article-row {
+.item-row {
   background: var(--surface);
   border-radius: 10px;
   padding: 12px 16px;
   transition: background 0.15s ease;
+  animation: fade-in-up 0.4s ease both;
+  animation-delay: calc(min(var(--i, 0), 10) * 0.03s);
 }
 
-.article-row:hover { background: #eef0f4; }
+.item-row:hover { background: #eef0f4; }
 
-.article-row-head {
+.item-row-head {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
   margin-bottom: 6px;
 }
 
-.loc {
-  font-weight: 700;
-  font-size: 0.92rem;
+.item-law { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+
+.item-loc {
+  font-weight: 600;
+  font-size: 0.82rem;
   white-space: nowrap;
   display: inline-flex;
   align-items: baseline;
+  color: var(--muted);
 }
 
-.loc-article { color: var(--text); }
+.item-loc .loc-article { color: var(--ink-soft); }
 
 /* 칩(배경 박스) 대신 가운뎃점(·)으로만 구획을 나눈다 — 배경색 없이도
    조/항/호/목 경계가 눈에 들어오도록 색과 굵기만 다르게 준다. */
-.loc > span:not(:first-child)::before {
+.item-loc > span:not(:first-child)::before {
   content: "·";
   display: inline-block;
   color: var(--muted);
@@ -419,22 +495,7 @@ main {
   font-size: 0.85rem;
 }
 
-.badge {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.badge--new { background: #e6f6ea; color: #15803d; }
-.badge--amend { background: #e8edff; color: #1d4ed8; }
-.badge--delete { background: #fde8e8; color: #b91c1c; }
-.badge--move { background: #fef3e0; color: #b45309; }
-.badge--nochange { background: #eef0f2; color: #6b7280; }
-.badge--other { background: #eef0f2; color: #4b5563; }
-
-.article-row-body p { margin: 0 0 4px; font-size: 0.92rem; }
+.item-row-body p { margin: 0 0 4px; font-size: 0.92rem; }
 
 .note {
   color: #92580a;
@@ -502,6 +563,6 @@ mark.diff-changed {
 
 /* ---------- source ---------- */
 
-.source { font-size: 0.85em; margin: 14px 0 0; }
-.source a { color: var(--primary); text-decoration: none; }
-.source a:hover { text-decoration: underline; }
+.source, .item-source { font-size: 0.85em; margin: 10px 0 0; }
+.source a, .item-source a { color: var(--primary); text-decoration: none; }
+.source a:hover, .item-source a:hover { text-decoration: underline; }
