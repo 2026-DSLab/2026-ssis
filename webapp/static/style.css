@@ -10,9 +10,16 @@
   --primary-dark: #2941c9;
   --primary-soft: #eef1ff;
   --radius: 14px;
+  /* 채도 있는(primary 색이 옅게 섞인) 그림자 — 회색 그림자보다 화면이
+     붕 떠 보이는 느낌을 준다. 카드 호버/승격에 공통으로 쓴다. */
+  --shadow-tint: 0 10px 26px -8px rgba(59, 91, 253, 0.28), 0 2px 6px rgba(20, 30, 60, 0.06);
 }
 
 * { box-sizing: border-box; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
 
 body {
   font-family: "Pretendard", "Malgun Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -32,7 +39,9 @@ main {
 /* ---------- topbar ---------- */
 
 .topbar {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -83,10 +92,16 @@ main {
   text-decoration: none;
   font-weight: 600;
   font-size: 0.88rem;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.download-btn:hover { background: #dfe5ff; }
+.download-btn:hover {
+  background: #dfe5ff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px -4px rgba(59, 91, 253, 0.35);
+}
+
+.download-btn:active { transform: translateY(0); }
 
 /* ---------- empty state ---------- */
 
@@ -105,6 +120,15 @@ main {
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 0.85rem;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-hero-card, .stat-card, .law-card { animation: none !important; }
 }
 
 /* ---------- hero + stats ---------- */
@@ -133,6 +157,15 @@ main {
   padding: 20px 16px;
   text-align: center;
   box-shadow: 0 4px 14px rgba(20, 30, 60, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: fade-in-up 0.5s ease both;
+}
+
+.stat-hero-card:nth-child(2) { animation-delay: 0.06s; }
+
+.stat-hero-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-tint);
 }
 
 .stat-hero-num {
@@ -160,6 +193,15 @@ main {
   border-radius: var(--radius);
   padding: 16px 14px;
   text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  animation: fade-in-up 0.5s ease both;
+  animation-delay: calc(0.12s + min(var(--i, 0), 8) * 0.05s);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -8px rgba(20, 30, 60, 0.18);
+  border-color: var(--primary-soft);
 }
 
 .stat-num { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
@@ -183,7 +225,9 @@ main {
 .toolbar {
   position: sticky;
   top: 63px;
-  background: var(--bg);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   padding: 16px 0;
   z-index: 9;
 }
@@ -197,9 +241,14 @@ main {
   background: #fff;
   margin-bottom: 10px;
   font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-#law-search:focus { outline: 2px solid var(--primary-soft); border-color: var(--primary); }
+#law-search:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
 
 .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
@@ -212,12 +261,19 @@ main {
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: all 0.12s ease, transform 0.12s ease;
 }
 
-.chip:hover { border-color: var(--primary); color: var(--primary); }
+.chip:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
 
-.chip--active { background: var(--primary-soft); border-color: var(--primary-soft); color: var(--primary-dark); }
+.chip:active { transform: translateY(0) scale(0.96); }
+
+.chip--active {
+  background: var(--primary-soft);
+  border-color: var(--primary-soft);
+  color: var(--primary-dark);
+  box-shadow: 0 4px 12px -4px rgba(59, 91, 253, 0.35);
+}
 
 /* ---------- law cards (accordion) ---------- */
 
@@ -228,9 +284,18 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  animation: fade-in-up 0.45s ease both;
+  animation-delay: calc(min(var(--i, 0), 10) * 0.05s);
 }
 
 .law-card[open] { box-shadow: 0 4px 18px rgba(20, 20, 30, 0.06); }
+
+.law-card:not([open]):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-tint);
+  border-color: var(--primary-soft);
+}
 
 .law-card-head {
   list-style: none;
@@ -275,6 +340,7 @@ main {
   padding: 0 20px 22px;
   border-top: 1px solid var(--border);
   padding-top: 16px;
+  animation: fade-in-up 0.25s ease both;
 }
 
 .headline { font-weight: 700; font-size: 1rem; margin: 0 0 6px; }
@@ -303,7 +369,10 @@ main {
   background: var(--surface);
   border-radius: 10px;
   padding: 12px 16px;
+  transition: background 0.15s ease;
 }
+
+.article-row:hover { background: #eef0f4; }
 
 .article-row-head {
   display: flex;

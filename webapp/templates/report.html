@@ -40,19 +40,19 @@
 
       <div class="stat-hero">
         <div class="stat-hero-card">
-          <div class="stat-hero-num">{{ stats.total_laws }}</div>
+          <div class="stat-hero-num" data-count="{{ stats.total_laws }}">0</div>
           <div class="stat-hero-label">개정 법령</div>
         </div>
         <div class="stat-hero-card">
-          <div class="stat-hero-num">{{ stats.total_articles }}</div>
+          <div class="stat-hero-num" data-count="{{ stats.total_articles }}">0</div>
           <div class="stat-hero-label">변경 조문</div>
         </div>
       </div>
 
       <div class="stat-grid">
         {% for kind, count in stats.breakdown %}
-        <div class="stat-card">
-          <div class="stat-num stat-num--{{ kind_css_for_label(kind) }}">{{ count }}</div>
+        <div class="stat-card" style="--i: {{ loop.index0 }}">
+          <div class="stat-num stat-num--{{ kind_css_for_label(kind) }}" data-count="{{ count }}">0</div>
           <div class="stat-label">{{ kind }}</div>
         </div>
         {% endfor %}
@@ -72,7 +72,7 @@
     <section class="laws" id="law-list">
       {% for law in laws %}
         {% set law_idx = loop.index0 %}
-        <details class="law-card" id="law-{{ law_idx }}" data-law-name="{{ law.law_name|lower }}" {% if loop.first %}open{% endif %}>
+        <details class="law-card" id="law-{{ law_idx }}" data-law-name="{{ law.law_name|lower }}" style="--i: {{ law_idx }}" {% if loop.first %}open{% endif %}>
           <summary class="law-card-head">
             <div class="law-card-title">
               <span class="type-tag">{{ law.law_type or "-" }}</span>
@@ -181,6 +181,27 @@
         activeKind = chip.dataset.kind;
         applyFilters();
       });
+    });
+
+    // 헤더 숫자(개정 법령/변경 조문/구분별 통계)를 0에서 목표값까지
+    // 애니메이션으로 세어 올린다 — 정적인 숫자 나열 대신 페이지가
+    // 살아있다는 느낌을 준다. prefers-reduced-motion이면 바로 최종값.
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.querySelectorAll("[data-count]").forEach((el) => {
+      const target = parseInt(el.dataset.count, 10) || 0;
+      if (reduceMotion || target === 0) {
+        el.textContent = target;
+        return;
+      }
+      const duration = 700;
+      const start = performance.now();
+      function tick(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * target);
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
     });
   </script>
 </body>
