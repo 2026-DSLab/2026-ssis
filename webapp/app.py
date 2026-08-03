@@ -1,10 +1,19 @@
 """Flask 앱 — 최신 배치 요약 페이지 + HWPX 다운로드.
 
-라우트 2개뿐이다:
-    GET /          가장 최근 배치(law_summary.batch_date MAX)의 법령별
-                    요약을 렌더링한다. 아직 배치가 하나도 없으면 안내만
-                    보여준다.
-    GET /download  같은 배치가 만든 HWPX 보고서 파일을 내려준다.
+라우트:
+    GET /               가장 최근 배치(law_summary.batch_date MAX)의
+                         법령별 요약을 렌더링한다. period 쿼리파라미터가
+                         있으면 대신 기간 즉석 조회 결과를 보여준다.
+    GET /download       같은 배치(또는 period)가 만든 HWPX 보고서 파일을
+                         내려준다.
+    GET /period-check   기간 즉석 조회를 논블로킹으로 시작만 시킨다 —
+                         캐시가 신선하면 {"ready": true}, 아니면 백그라운드
+                         스윕을 시작하고 {"ready": false}. 로딩 화면이
+                         "이동해도 되는지" 확인할 때 부른다.
+    GET /period-status  지금 그 스윕이 어느 단계인지({"stage":...,
+                         "done":...}) — 로딩 화면이 1~2초 간격으로
+                         폴링해서 "국가법령정보 API 확인 중 42/102건" 같은
+                         실제 단계 문구를 보여주는 데 쓴다.
 
 ★ 왜 파일이 아니라 DB(law_summary)를 보는가: out/summaries/*.json은
 "최신이 뭔지"를 파일명·수정시각으로 추론해야 하는데(계약 파일 하나가
@@ -16,17 +25,24 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from typing import Callable
 from urllib.parse import quote
 
-from flask import Flask, Response, abort, render_template
+from flask import Flask, Response, abort, jsonify, render_template, request
 from markupsafe import Markup, escape
 
 from lawtrack.config import PROJECT_ROOT, load_settings
 from lawtrack.db.conn import Database
 from lawtrack.db.repo import LawSummaryRepo
+from lawtrack.text.split import leading_marker, split_all
 from summarizer.textdiff import diff_segments
+from webapp.live import PERIOD_WINDOWS, PeriodResult, ensure_sweep_started, get_period_result, get_progress
 
 REPORTS_DIR = PROJECT_ROOT / "out" / "reports"
+
+#: 기간 선택 버튼에 쓰는 사람이 읽는 라벨 — PERIOD_WINDOWS(webapp/live.py)의
+#: 일수 매핑과 키를 공유하되, 표시 문구는 웹 레이어 관심사라 여기 둔다.
+PERIOD_LABELS: dict[str, str] = {"5d": "최근 5일", "2w": "최근 2주", "1m": "최근 1개월"}
 
 #: location_label 은 "제56조의2⑤1.가." 처럼 조/항/호/목이 구분자 없이
 #: 붙어 나온다(계약 원본 형식 — src/lawtrack/locate/locator.py 참고).
@@ -52,8 +68,22 @@ def _format_location(label: str) -> Markup:
     ★ "제N조" 없이 "③1."처럼 항/호만 오는 값도 있다(이동 전 위치 —
       같은 조 안에서 옮겨진 경우 조 번호를 다시 안 적는다). 그런
       값도 같은 규칙으로 항/호/목만 포맷한다.
+
+    ★★ 실측 발견(2026-08-03, 삭제 항목 마커 표시 후속): 삭제(DELETED_SKIP)
+      라벨은 db/repo.py._to_row()가 이미 "(삭제됨 — 개정 전 ①항 참고)"처럼
+      사람이 읽는 문장으로 조립해 둔 값이라, 조/항/호 원본 표기(구두점
+      기반)가 아니다. 이런 문장을 그대로 토큰 스캔에 태우면 "①"이 다시
+      항/호/목 패턴으로 잡혀 "①항"의 "항"을 또 붙여 "①항항 참고"처럼
+      중복 표기가 생긴다(항 기호는 뒤에 구두점이 없어도 매칭되는 유일한
+      토큰이라 이 케이스만 겉으로 드러났다 — 호/목은 원래 표기에 마침표가
+      없어 우연히 안 걸렸을 뿐, 근본 원인은 같다). 실제 location_label
+      (SearchUnit에서 나온 원본 표기)은 "제"로 시작하거나 항/호/목 기호로
+      바로 시작해 괄호가 올 일이 없으므로, "("로 시작하면 이미 완성된
+      문장으로 보고 토큰 스캔 없이 그대로 이스케이프만 해서 돌려준다.
     """
     label = label or ""
+    if label.startswith("("):
+        return Markup(escape(label))
     m = _ARTICLE_RE.match(label)
     if m:
         article, rest = m.group(0), label[m.end():]
@@ -80,14 +110,74 @@ def _format_location(label: str) -> Markup:
         out.append(str(escape(rest[pos:])))
     return Markup("".join(out))
 
+
+def _readable_text(text: str) -> Markup:
+    """긴 old_text/new_text를 항/호/목 경계마다 줄바꿈해서 읽기 쉽게 만들고,
+    각 줄 맨 앞의 항/호/목 기호만 굵게 강조한다.
+
+    ★ 실측 발견(2026-08-03, 지능정보화 기본법 삭제 항목 사용자 리포트):
+    신구법 비교 API는 조문 전체(①~⑦, 그 안의 호까지)를 <P> 블록 하나에
+    통짜로 이어붙여 준다 — "원문 보기"에 그대로 뿌리면 줄바꿈 하나 없는
+    벽 같은 텍스트가 되어 어디부터 어디까지가 몇 항인지 구분이 안 된다.
+    새 정규식을 만드는 대신, 이미 검색에 쓰며(locate/locator.py) 소수점ㆍ
+    날짜ㆍ괄호 참조 등 숱한 실측 오탐을 걸러내도록 다듬어진
+    text.split.split_all()을 그대로 재사용해 조각 경계마다 줄바꿈만
+    넣는다.
+
+    ★★ 실측 후속(2026-08-03, "7. 영유아의 인권 보호에 관한 업무" 사용자
+    리포트): 줄바꿈만으론 부족하다 — 줄 맨 앞의 "7." 같은 기호 자체가
+    눈에 안 띄어 어디부터 새 항목인지 여전히 헷갈린다는 지적. 각 조각의
+    raw 텍스트에 leading_marker()(삭제 항목 라벨에 이미 쓰던 것과 같은
+    함수)를 다시 적용해 맨 앞 기호만 <strong>으로 감싼다 — split_all()이
+    준 Fragment.marker를 바로 못 쓰는 이유는, 호 목록 앞 전제문처럼 마커가
+    Fragment 객체가 아니라 raw 문자열에만 재구성돼 붙는 경우가 있어서다
+    (split_all()의 전제문 처리 참고) — raw에서 직접 다시 찾으면 그 경우도
+    함께 잡힌다.
+    """
+    text = text or ""
+    frags = split_all(text)
+    if not frags:
+        return Markup(escape(text))
+    lines = []
+    for f in frags:
+        hint = leading_marker(f.raw)
+        if hint is not None:
+            rest = f.raw[len(hint.marker):]
+            lines.append(f"<strong>{escape(hint.marker)}</strong>{escape(rest)}")
+        else:
+            lines.append(str(escape(f.raw)))
+    return Markup("\n".join(lines))
+
+
 #: "원문 보기"에서 개정 전/후 중 바뀐 어절만 굵게 강조하는 데 쓴다.
 #: summarizer.textdiff.diff_segments()는 이미 apply_mappings()의
 #: content_ratio 판정·triage 선별에 쓰이는 같은 어절 단위 diff라(2026-07-30
 #: 이식), 강조용으로 새 diff 로직을 또 만들지 않고 그대로 재사용한다.
 def _diff_html(old_text: str, new_text: str, *, side: str) -> Markup:
-    left, right = diff_segments(old_text or "", new_text or "")
+    """★ 실측 발견(2026-08-03, 사용자 리포트 — "5. 금고 이상의 실형을…"에
+    선행 기호 볼드가 안 먹음): 항/호/목 선행 기호를 굵게 하는 처리는
+    readable_text() 필터에만 있었고, 이 함수(성공적으로 매칭된 항목의
+    "개정 전/후" diff 강조 경로)는 완전히 별도 코드라 그 처리가 안 됐다.
+    old_text/new_text 양쪽의 선행 기호가 같으면(제자리 개정이면 보통
+    같다 — 항/호 번호 자체는 안 바뀌고 내용만 바뀜) 그 기호를 diff 대상
+    에서 떼어내 먼저 굵게 낸 뒤, 나머지만 어절 diff에 넘긴다. 기호가
+    없거나 양쪽이 다르면(번호 자체가 바뀐 드문 경우) 잘못 추측해서
+    엉뚱한 걸 굵게 하지 않도록 기존처럼 그대로 둔다.
+    """
+    old_text = old_text or ""
+    new_text = new_text or ""
+    old_hint = leading_marker(old_text)
+    new_hint = leading_marker(new_text)
+    prefix = ""
+    if old_hint is not None and new_hint is not None and old_hint.marker == new_hint.marker:
+        marker = old_hint.marker
+        prefix = f"<strong>{escape(marker)}</strong>"
+        old_text = old_text[len(marker):]
+        new_text = new_text[len(marker):]
+
+    left, right = diff_segments(old_text, new_text)
     changed_kind = "del" if side == "old" else "ins"
-    out = []
+    out = [prefix] if prefix else []
     for seg in (left if side == "old" else right):
         text = str(escape(seg.text))
         if seg.kind == changed_kind:
@@ -214,6 +304,7 @@ def _group_by_kind(laws: list[dict]) -> list[dict]:
             buckets.setdefault(kind, []).append({
                 "law_name": law.get("law_name", ""),
                 "law_type": law.get("law_type", ""),
+                "enforce_date": law.get("enforce_date"),
                 "article": a,
             })
     ordered_kinds = [k for k in _KIND_ORDER if k in buckets]
@@ -241,8 +332,39 @@ def _summary_stats(laws: list[dict]) -> dict:
     return {"total_laws": len(laws), "total_articles": total, "breakdown": breakdown}
 
 
-def create_app(repo: LawSummaryRepo | None = None) -> Flask:
-    """앱 팩토리. repo를 주입할 수 있어 테스트에서 진짜 DB 없이 확인 가능하다."""
+def _period_context(result: PeriodResult) -> dict:
+    laws = result.laws
+    return {
+        "batch_date": None,
+        "laws": laws,
+        "stats": _summary_stats(laws),
+        "sections": _group_by_kind(laws),
+        "period": result.window_key,
+        "period_label": PERIOD_LABELS.get(result.window_key, result.window_key),
+        "period_from": result.from_date,
+        "period_to": result.to_date,
+        "period_errors": result.errors,
+        "period_windows": PERIOD_LABELS,
+    }
+
+
+def create_app(
+    repo: LawSummaryRepo | None = None,
+    live_check: Callable[[str], PeriodResult] | None = None,
+    *,
+    enable_background_refresh: bool = False,
+    sweep_starter: Callable[[str], bool] | None = None,
+    progress_getter: Callable[[str], dict] | None = None,
+) -> Flask:
+    """앱 팩토리. repo/live_check/sweep_starter/progress_getter를 주입할
+    수 있어 테스트에서 진짜 DB나 실 API+LLM 없이 확인 가능하다.
+
+    ★ enable_background_refresh 기본값이 False인 이유: 켜면 실제로
+    국가법령정보 API를 도는 백그라운드 스레드가 시작된다(webapp/live.py의
+    start_background_refresh) — pytest 등 테스트에서 앱을 만들 때마다
+    이게 켜지면 안 되므로, 실 서버 진입점(맨 아래 __main__)에서만
+    명시적으로 켠다.
+    """
     app = Flask(__name__)
     app.jinja_env.globals["kind_css_for_label"] = _kind_css_for_label
     app.jinja_env.globals["law_dominant_kind"] = _law_dominant_kind
@@ -250,23 +372,79 @@ def create_app(repo: LawSummaryRepo | None = None) -> Flask:
     app.jinja_env.globals["public_law_url"] = _public_law_url
     app.jinja_env.globals["diff_old_html"] = _diff_old_html
     app.jinja_env.globals["diff_new_html"] = _diff_new_html
+    app.jinja_env.filters["readable_text"] = _readable_text
+    app.jinja_env.globals["period_windows"] = PERIOD_LABELS
     _repo = repo if repo is not None else _build_repo()
+    _live_check = live_check or (lambda window_key: get_period_result(load_settings(), window_key))
+    _sweep_starter = sweep_starter or (lambda window_key: ensure_sweep_started(load_settings(), window_key))
+    _progress_getter = progress_getter or get_progress
+
+    if enable_background_refresh:
+        from webapp.live import start_background_refresh
+
+        start_background_refresh(load_settings())
+
+    def _validate_period(period: str | None) -> None:
+        if period is not None and period not in PERIOD_WINDOWS:
+            abort(400, f"알 수 없는 기간입니다: {period!r} (허용: {list(PERIOD_WINDOWS)})")
+
+    @app.get("/period-check")
+    def period_check() -> Response:
+        period = request.args.get("period")
+        _validate_period(period)
+        if period is None:
+            abort(400, "period 파라미터가 필요합니다.")
+        needs_wait = _sweep_starter(period)
+        return jsonify({"ready": not needs_wait})
+
+    @app.get("/period-status")
+    def period_status() -> Response:
+        period = request.args.get("period")
+        _validate_period(period)
+        if period is None:
+            abort(400, "period 파라미터가 필요합니다.")
+        progress = _progress_getter(period)
+        done = progress.get("stage") == "완료"
+        return jsonify({
+            "stage": progress.get("stage", ""), "detail": progress.get("detail", ""), "done": done,
+        })
 
     @app.get("/")
     def index() -> str:
+        period = request.args.get("period")
+        if period:
+            _validate_period(period)
+            result = _live_check(period)
+            return render_template("report.html", **_period_context(result))
+
         batch_date = _repo.latest_batch_date()
         if batch_date is None:
-            return render_template("report.html", batch_date=None, laws=[], stats=None, sections=[])
+            return render_template(
+                "report.html", batch_date=None, laws=[], stats=None, sections=[],
+                period=None, period_windows=PERIOD_LABELS,
+            )
         laws = _repo.fetch_by_batch(batch_date)
         stats = _summary_stats(laws)
         sections = _group_by_kind(laws)
         return render_template(
             "report.html", batch_date=batch_date, laws=laws, stats=stats, sections=sections,
+            period=None, period_windows=PERIOD_LABELS,
         )
 
     @app.get("/download")
     def download() -> Response:
         from flask import send_file
+
+        period = request.args.get("period")
+        if period:
+            _validate_period(period)
+            result = _live_check(period)
+            if result.hwpx_path is None or not result.hwpx_path.exists():
+                abort(404, "이 기간에는 변경사항이 없어 다운로드할 보고서가 없습니다.")
+            return send_file(
+                result.hwpx_path, as_attachment=True, download_name=result.hwpx_path.name,
+                mimetype="application/octet-stream",
+            )
 
         batch_date = _repo.latest_batch_date()
         if batch_date is None:
@@ -287,4 +465,8 @@ def create_app(repo: LawSummaryRepo | None = None) -> Flask:
 
 
 if __name__ == "__main__":
-    create_app().run(debug=True)
+    # threaded=True: 기간 즉석 조회가 폴링(/period-check, /period-status)을
+    # 쓰므로, 페이지 이동 요청 하나가 서버를 붙들고 있는 동안에도 그
+    # 폴링 요청들이 동시에 처리돼야 한다 — 기본값(단일 스레드)이면 앞
+    # 요청이 끝나야 다음 요청을 받아서, 폴링이 실제로 막힐 수 있다.
+    create_app(enable_background_refresh=True).run(debug=True, threaded=True)

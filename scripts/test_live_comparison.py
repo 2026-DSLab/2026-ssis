@@ -26,8 +26,8 @@ def main():
     target_laws = sys.argv[1:]
     if not target_laws:
         with db.cursor() as (_, cur):
-            # laws 테이블에서 무작위 5개 추출
-            cur.execute("SELECT law_name FROM laws ORDER BY RAND() LIMIT 5")
+            # documents 테이블(kind='law')에서 무작위 5개 추출
+            cur.execute("SELECT doc_name AS law_name FROM documents WHERE kind='law' ORDER BY RANDOM() LIMIT 5")
             target_laws = [row["law_name"] for row in cur.fetchall()]
     
     for law_name in target_laws:

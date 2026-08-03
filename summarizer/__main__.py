@@ -37,7 +37,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--hwpx", action="store_true", help="HWPX 보고서도 생성 (out/reports/)")
     parser.add_argument(
         "--db", action="store_true",
-        help="요약을 law_summary 테이블에 적재 (.env 의 MYSQL_* 필요)",
+        help="요약을 law_summary 테이블에 적재 (.env 의 POSTGRES_* 필요)",
     )
     args = parser.parse_args(argv)
 
@@ -72,7 +72,7 @@ def main(argv: list[str] | None = None) -> int:
             HwpxSink(settings.pipeline.output_dir.parent / "reports").write(results)
         if args.db:
             # DB 관련 import 는 여기서만 — 파일 출력만 쓰는 사람이
-            # mysql-connector 를 깔지 않아도 되게 한다.
+            # psycopg2 를 깔지 않아도 되게 한다.
             from lawtrack.config import load_db_settings
             from lawtrack.db.conn import Database
 

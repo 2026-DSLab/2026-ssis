@@ -70,6 +70,98 @@ body {
 
 .detail-backdrop.is-open { opacity: 1; pointer-events: auto; }
 
+/* 기간 즉석 조회 로딩 화면 — 캐시가 식어있으면 실 API(+LLM) 스윕이
+   1~4분 걸릴 수 있어(webapp/live.py), 페이지 이동 중 화면이 멈춘
+   것처럼 보이지 않게 클릭 즉시 띄운다. */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 20, 35, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+/* ★★ 실측 발견(2026-08-03): .detail-empty에서 이미 한 번 겪은 것과
+   똑같은 버그 — author 규칙의 display:flex가 명시도가 같아 UA의
+   [hidden]{display:none}을 이겨서, hidden 속성을 줘도 오버레이가 항상
+   화면 전체를 덮고 있었다(그래서 기간 버튼 클릭이 전부 이 오버레이에
+   막혀 아무 반응이 없어 보였다 — 콘솔 에러도 안 남는 이유: 클릭 자체가
+   오버레이로 가로채져서 버튼까지 도달하지도 못했다). */
+.loading-overlay[hidden] { display: none; }
+
+.loading-box {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 40px 36px;
+  text-align: center;
+  width: min(400px, 88vw);
+  box-shadow: 0 24px 60px -14px rgba(15, 20, 35, 0.42), 0 4px 14px rgba(20, 30, 60, 0.08);
+  animation: loading-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes loading-pop {
+  from { opacity: 0; transform: scale(0.94) translateY(6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* 헤로 타이틀의 그라디언트(--primary → 보라)와 같은 톤 — 얇은 링이
+   빙글 도는 형태로, 원색 테두리 스피너보다 사이트 전반의 그라디언트
+   악센트와 더 잘 어울린다. */
+.loading-spinner {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, var(--primary) 55%, #7c5cff);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+  animation: loading-spin 0.85s linear infinite;
+}
+
+@keyframes loading-spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-title {
+  font-weight: 800;
+  font-size: 1.12rem;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  word-break: keep-all;
+}
+
+.loading-period-accent {
+  background: linear-gradient(100deg, var(--primary) 10%, #7c5cff 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.loading-stage {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  word-break: keep-all;
+  margin: 0 0 16px;
+  min-height: 1.3em; /* 단계 문구 길이가 바뀌어도 박스가 덜컹거리지 않게 */
+  transition: opacity 0.15s ease;
+}
+
+.loading-hint {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
 /* 기본값(법제처 원문 보기 = iframe): 화면 가운데에 큼직한 모달로 띄운다
    — 외부 웹페이지를 "새 창처럼" 보여주는 데는 이 편이 낫다.
    cubic-bezier에 살짝 오버슈트를 줘서 톡 튀어 오르듯 열리는 "동적인"
@@ -316,6 +408,32 @@ body {
 
 .brand-text { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
 
+.period-nav { display: flex; align-items: center; gap: 4px; }
+
+.period-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.period-link:hover { background: var(--surface); color: var(--ink-soft); }
+
+.period-link.is-active { background: var(--primary-soft); color: var(--primary-dark); }
+
+.period-error-note {
+  background: var(--k-move-soft);
+  color: var(--k-move);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
 .topbar-right { display: flex; align-items: center; gap: 12px; }
 
 .batch-pill {
@@ -350,10 +468,24 @@ body {
 
 /* ---------- empty state ---------- */
 
+/* .content-col은 "왼쪽으로 몰고" 정책상 화면 가운데로 정렬되지 않는다
+   (실제 콘텐츠가 있을 때는 그게 맞다 — 위 주석 참고). 하지만 빈 상태는
+   보여줄 콘텐츠 자체가 없으니 그 정책이 적용될 이유가 없다 — 뷰포트
+   전체 기준으로 화면 정중앙에 오도록 별도로 고정한다(상단바 높이만
+   빼고 나머지 공간의 중앙). */
 .empty-state {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   color: var(--muted);
-  padding: 100px 20px;
+  padding: 20px;
 }
 
 .empty-icon { font-size: 2.4rem; margin: 0; }
@@ -499,6 +631,21 @@ body {
 
 .kind-nav-link:hover { color: var(--primary); border-color: var(--primary-soft); }
 
+/* 스크롤 중 지금 보고 있는 구분(신설/삭제/이동/…)을 강조 — 사용자
+   요청(2026-08-03): "스크롤을 내리면 신설/삭제/이동 구간이 바뀌는데,
+   위 내비게이션에서 지금 어디를 보는지 강조되면 좋겠다". 이 nav는
+   원래 "버튼처럼 보이지 않게, 배경/테두리 없는 텍스트 링크"로 설계돼
+   있어(위 주석 참고) 칩(배경 pill)을 새로 만들지 않고, hover와 같은
+   방식(글자색 + 밑줄)을 kind 고유색으로 쓴다 — 그 kind임을 표시하는
+   점(dot) 색과도 자연히 맞아떨어진다. */
+.kind-nav-link.is-active { border-bottom-color: currentColor; }
+.kind-nav-link--new.is-active { color: var(--k-new); }
+.kind-nav-link--amend.is-active { color: var(--k-amend); }
+.kind-nav-link--delete.is-active { color: var(--k-delete); }
+.kind-nav-link--move.is-active { color: var(--k-move); }
+.kind-nav-link--nochange.is-active { color: var(--k-nochange); }
+.kind-nav-link--other.is-active { color: var(--k-other); }
+
 .kind-nav-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 
 .kind-nav-count { color: var(--muted); font-weight: 500; }
@@ -623,6 +770,16 @@ body {
 .item-list .item-row:last-child { border-bottom: none; }
 
 .item-row:hover { border-color: var(--primary-soft); }
+
+/* 조문 위치(item-loc)만 봐서는 실제 적용 시점을 알 수 없어서, 그
+   위에 작고 옅은 색으로만 살짝 덧붙인다 — 본문(법령명·조문 위치)보다
+   눈에 띄면 안 되므로 크기/색 둘 다 확 낮춘다. */
+.item-enforce-date {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
 
 .item-row-head {
   display: flex;

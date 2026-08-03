@@ -1,6 +1,6 @@
 """요약 DB 적재 — LawSummaryRepo 와 DbSink.
 
-실제 MySQL 없이 돌아간다. 커넥션 계층(Database)을 가짜로 바꿔 끼워
+실제 PostgreSQL 없이 돌아간다. 커넥션 계층(Database)을 가짜로 바꿔 끼워
 "어떤 SQL 에 어떤 파라미터가 실렸는가"만 본다.
 
 ★ 왜 실 DB 를 안 쓰는가: 이 계층에서 틀릴 수 있는 것은 SQL 문법이
@@ -156,7 +156,7 @@ def test_upsert_uses_law_id_and_serial_as_key():
 
     sql, params = db.cursor_obj.calls[0]
     assert "INSERT INTO law_summary" in sql
-    assert "ON DUPLICATE KEY UPDATE" in sql
+    assert "ON CONFLICT (law_id, new_serial_no) DO UPDATE SET" in sql
     assert params[0] == "012045"
     assert params[1] == "276657"
     assert db.committed == 1

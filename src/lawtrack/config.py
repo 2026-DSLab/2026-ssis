@@ -98,23 +98,22 @@ class ApiSettings:
 
 @dataclass(frozen=True)
 class DbSettings:
-    """MySQL 접속 설정."""
+    """PostgreSQL 접속 설정."""
 
     host: str
     port: int
     user: str
     password: str
     database: str
-    charset: str = "utf8mb4"
 
     def as_connect_kwargs(self) -> dict:
+        # psycopg2.connect() 는 database 가 아니라 dbname 을 받는다.
         return {
             "host": self.host,
             "port": self.port,
             "user": self.user,
             "password": self.password,
-            "database": self.database,
-            "charset": self.charset,
+            "dbname": self.database,
         }
 
 
@@ -147,11 +146,11 @@ def load_db_settings(env_file: str | Path | None = None) -> DbSettings:
         log.debug(".env 로드: %s", path)
 
     return DbSettings(
-        host=os.environ.get("MYSQL_HOST", "127.0.0.1").strip(),
-        port=_int("MYSQL_PORT", 3306),
-        user=os.environ.get("MYSQL_USER", "root").strip(),
-        password=_require("MYSQL_PASSWORD"),
-        database=os.environ.get("MYSQL_DATABASE", "law_tracking_db").strip(),
+        host=os.environ.get("POSTGRES_HOST", "127.0.0.1").strip(),
+        port=_int("POSTGRES_PORT", 5432),
+        user=os.environ.get("POSTGRES_USER", "postgres").strip(),
+        password=_require("POSTGRES_PASSWORD"),
+        database=os.environ.get("POSTGRES_DATABASE", "law_tracking_db").strip(),
     )
 
 

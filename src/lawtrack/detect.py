@@ -14,7 +14,7 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import date
 from enum import Enum
 
@@ -32,7 +32,6 @@ from lawtrack.db.repo import (
 from lawtrack.locate.locator import locate_all
 from lawtrack.parse.fulltext import flatten_searchable, parse_admrul_units, parse_articles
 from lawtrack.parse.oldnew import extract_admrul_unchanged, extract_changes
-from lawtrack.text.split import strip_annotations
 
 log = logging.getLogger(__name__)
 
@@ -181,10 +180,7 @@ def process_law_entry(
             entry.official_name, entry.law_id, oldnew.reason,
         )
         fulltext = fetch_law_fulltext(client, new_serial)
-        version_repo.insert_law(
-            entry.official_name, entry.law_id, new_serial, fulltext.raw,
-            parsed_articles=_serialize_articles(parse_articles(fulltext.raw)),
-        )
+        version_repo.insert_law(entry.official_name, entry.law_id, new_serial, fulltext.raw)
         # ★ 실측 발견(2026-07-18): enforce_date를 None으로 그냥 두면(sr이 없는
         # 경우) contract/export.py의 fetch_no_comparison_in_period가 이 행을
         # 기간(BETWEEN) 조회로 영원히 못 찾는다 — 다른 브랜치처럼 오늘 날짜로
@@ -203,10 +199,7 @@ def process_law_entry(
 
     fulltext = fetch_law_fulltext(client, new_serial)
     articles = parse_articles(fulltext.raw)
-    version_repo.insert_law(
-        entry.official_name, entry.law_id, new_serial, fulltext.raw,
-        parsed_articles=_serialize_articles(articles),
-    )
+    version_repo.insert_law(entry.official_name, entry.law_id, new_serial, fulltext.raw)
 
     units = flatten_searchable(articles)
 
@@ -284,10 +277,7 @@ def process_admrul_entry(
             entry.official_name, entry.law_id, oldnew.reason,
         )
         fulltext = fetch_admrul_fulltext(client, new_serial)
-        version_repo.insert_admrul(
-            entry.official_name, entry.law_id, new_serial, fulltext.raw,
-            parsed_units=_serialize_units(parse_admrul_units(fulltext.raw)),
-        )
+        version_repo.insert_admrul(entry.official_name, entry.law_id, new_serial, fulltext.raw)
         change_log_repo.insert(
             law_id=entry.law_id, new_serial_no=new_serial,
             old_serial_no=entry.last_serial_no,
@@ -306,10 +296,7 @@ def process_admrul_entry(
     # parse_articles+flatten_searchable(법령 전용)를 그대로 쓰면 조문을 0건
     # 찾아 모든 위치확정이 100% 실패한다. 전용 파서를 쓴다.
     units = parse_admrul_units(fulltext.raw)
-    version_repo.insert_admrul(
-        entry.official_name, entry.law_id, new_serial, fulltext.raw,
-        parsed_units=_serialize_units(units),
-    )
+    version_repo.insert_admrul(entry.official_name, entry.law_id, new_serial, fulltext.raw)
 
     changes = extract_changes(oldnew.old_texts, oldnew.new_texts)
     located = locate_all(changes, units)
@@ -360,53 +347,6 @@ def process_entry(
     """
     fn = process_admrul_entry if entry.law_type == ADMRUL_LAW_TYPE else process_law_entry
     return fn(client, version_repo, watchlist_repo, change_log_repo, article_diff_repo, entry)
-
-
-def _strip_text_fields(obj):
-    """★★ 실측 발견(2026-07-18, 전자정부법 제5조③): parse_articles()가
-    만드는 ClauseNode.text/ItemNode.text/SubItemNode.text/ArticleUnit.content
-    는 lawService 원문 그대로라 "<개정 2020.6.9>" 같은 각주가 그대로 섞여
-    있다. article_diff.old_text에서 이미 한 번 같은 문제를 고쳤는데
-    (strip_annotations 누락), 오늘 새로 추가한 law_articles_parsed/
-    administrative_rule_articles_parsed 캐시 컬럼에서 똑같은 문제가
-    재발했다 — 이번엔 다른 경로(parse_articles 자체 출력)라 그때 고친
-    코드가 적용되지 않는 지점이었다. "text"/"content" 키만 대상으로
-    재귀적으로 strip_annotations를 적용한다(라벨/마커/날짜 필드는 원래
-    각주가 낄 일이 없으므로 건드리지 않는다).
-    """
-    if isinstance(obj, dict):
-        out = {}
-        for k, v in obj.items():
-            if k in ("text", "content") and isinstance(v, str):
-                out[k] = strip_annotations(v).strip()
-            else:
-                out[k] = _strip_text_fields(v)
-        return out
-    if isinstance(obj, (list, tuple)):
-        # ★ 실측 발견(2026-07-18): dataclasses.asdict()는 tuple 필드를
-        # list가 아니라 tuple 그대로 남긴다(ClauseNode.items 등) —
-        # list만 검사하면 이 중첩 tuple 안의 text/content가 하나도 안
-        # 지워지는 채로 새어나간다. list/tuple 둘 다 처리한다.
-        return [_strip_text_fields(x) for x in obj]
-    return obj
-
-
-def _serialize_articles(articles: list) -> list[dict]:
-    """parse_articles() 결과(ArticleUnit 트리)를 DB 저장용 JSON-호환 dict로.
-
-    ★ 요구사항("파싱된 것도 DB에 담아달라")에 따라 law_full_text(원본)와
-    별도로 저장하는 캐시용. dataclasses.asdict()는 중첩된 ClauseNode/
-    ItemNode/SubItemNode까지 재귀적으로 dict로 풀어준다. locate/매칭에
-    쓰는 원본 ArticleUnit 객체는 건드리지 않고(주석 유지가 매칭 로직에
-    영향 없다는 게 이미 검증돼 있음), DB에 쓸 딕셔너리로 변환한 *이후*에만
-    각주를 제거한다.
-    """
-    return [_strip_text_fields(asdict(art)) for art in articles]
-
-
-def _serialize_units(units: list) -> list[dict]:
-    """parse_admrul_units() 결과(SearchUnit 평평한 목록)를 DB 저장용으로."""
-    return [_strip_text_fields(asdict(u)) for u in units]
 
 
 def _unchanged_clauses(

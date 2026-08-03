@@ -1,6 +1,6 @@
 """LawSummaryRepo.latest_batch_date() — 웹페이지가 "이번 배치"를 찾는 진입점.
 
-실제 MySQL 없이, cursor()가 돌려주는 값만으로 SQL이 기대한 대로 쓰이는지
+실제 PostgreSQL 없이, cursor()가 돌려주는 값만으로 SQL이 기대한 대로 쓰이는지
 확인한다(다른 law_summary 테스트와 같은 가짜 DB 패턴 — tests/test_summary_db.py 참고).
 """
 

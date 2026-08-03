@@ -288,6 +288,24 @@ def split_all(text: str) -> list[Fragment]:
             if not subs:
                 result.append(item)
             else:
+                # ★★★ 실측 발견(2026-08-03, 영유아보육법 제48조②2. 등):
+                # 바로 위 항→호 전제문 유실과 완전히 같은 문제가 한 층
+                # 아래(호→목)에서도 재현된다 — 호 하나가 "본문 + 가./나.
+                # 다." 구조면 split_by_subitem()이 본문(목 목록 앞
+                # 전제문)을 marker=None 인 별도 Fragment로 떼어내는데, 이
+                # 전제문도 개념상 그 호(item, 예: "2.")에 속한다. item.text
+                # 는 이미 item 마커가 빠진 상태라 전제문 raw에 "2."가 없이
+                # 그대로 위치확정돼, new_text에서 호 번호가 조용히
+                # 사라졌다(old_text는 통짜 change.old_clean을 그대로 쓰는
+                # 별도 경로라 이 유실을 안 겪어 old/new 비대칭으로 드러남
+                # — 실측: 신구법 API 원문은 양쪽 다 "2. "로 시작했는데
+                # DB에 저장된 new_text만 빠져 있었음). idx==0 케이스와
+                # 동일한 방식으로 item 마커를 전제문 raw에 되살려 붙인다.
+                if item.marker and subs[0].marker is None:
+                    subs = [
+                        Fragment(subs[0].level, subs[0].marker, subs[0].text, f"{item.marker} {subs[0].raw}"),
+                        *subs[1:],
+                    ]
                 result.extend(subs)
     return result
 
@@ -295,6 +313,31 @@ def split_all(text: str) -> list[Fragment]:
 def searchable_fragments(text: str) -> list[Fragment]:
     """검색에 쓸 조각만. (생 략) / (현행과 같음) 제외."""
     return [f for f in split_all(text) if f.searchable]
+
+
+def leading_marker(text: str) -> Fragment | None:
+    """텍스트 맨 앞에 있는 항/호/목 기호 하나만 가볍게 뽑는다(전체 분해 없이).
+
+    ★ 쓰임(2026-08-03, 삭제 항목 위치 표시): 삭제(DELETED)된 항목은 신법에
+    더 이상 존재하지 않아 locate 6가드가 위치 탐색을 아예 생략한다(조 번호를
+    알 방법이 없음 — locator.py 참고). 하지만 oldAndNew API가 준 old_text
+    조각 자체는 보통 "① 국가기관등은…"처럼 항/호/목 기호로 시작하므로,
+    "몇 조"인지는 몰라도 "몇 항/호/목이었는지"는 이 기호 하나만으로 바로
+    알 수 있다 — 재조회 없이 이미 가진 데이터에서 뽑아내는 것.
+    """
+    stripped = (text or "").strip()
+    if not stripped:
+        return None
+    for head_re, level in (
+        (_CLAUSE_HEAD_RE, Level.CLAUSE),
+        (_ITEM_HEAD_RE, Level.ITEM),
+        (_SUBITEM_HEAD_RE, Level.SUBITEM),
+    ):
+        m = head_re.match(stripped)
+        if m:
+            marker = m.group(1)
+            return Fragment(level, marker, stripped[m.end():].strip(), stripped)
+    return None
 
 
 def split_to_item_level(text: str) -> list[tuple[str, str, Fragment]]:

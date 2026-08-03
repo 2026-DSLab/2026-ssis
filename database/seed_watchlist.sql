@@ -1,4 +1,5 @@
-USE law_tracking_db;
+-- psql -U postgres -d law_tracking_db -f database/seed_watchlist.sql 로 실행
+-- (Postgres는 USE 없이 접속 시 -d로 대상 DB를 지정한다)
 START TRANSACTION;
 
 -- ============================================================
@@ -129,9 +130,9 @@ INSERT INTO watchlist (
     ('35080', '행정규칙', '하도급거래공정화 지침', '하도급거래공정화 지침', NULL, '현행', '2100000251404', NOW()),
     ('33489', '행정규칙', '행정기관 및 공공기관 정보시스템 구축·운영 지침', '행정기관 및 공공기관 정보시스템 구축·운영 지침', NULL, '현행', '2100000252582', NOW()),
     ('42430', '행정규칙', '행정업무용 표준 관리규정', '행정업무용 표준 관리규정', '행정안전부', '현행', '2100000254490', NOW()) -- ★추가됨(2026-07-19): (통합)법령정리.xlsx 대조 검증에서 발견된 누락
-ON DUPLICATE KEY UPDATE
-    official_name = VALUES(official_name),
-    internal_name = VALUES(internal_name);
+ON CONFLICT (law_id) DO UPDATE SET
+    official_name = EXCLUDED.official_name,
+    internal_name = EXCLUDED.internal_name;
 
 COMMIT;
 

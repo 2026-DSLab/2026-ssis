@@ -83,6 +83,24 @@ def test_substantive_change_still_calls_llm():
     assert result.summary == "LLM 응답"
 
 
+def test_move_identical_sentence_uses_readable_location_format():
+    """실측(2026-08-03, 사용자 리포트): move_is_identical 경로는 LLM을
+    부르지 않고 규칙 기반 문장을 직접 만드는데("내용 변경 없이 ~에서
+    ~로 번호만 이동했습니다"), moved_from/location_label 원본 표기를
+    그대로 박아 넣으면 "②5.에서 제8조②12.로"처럼 읽기 힘들다는 지적을
+    받았다. 웹페이지/HWPX가 이미 쓰는 항/호/목 표기(locfmt.format_location)
+    를 이 문장에도 적용해야 한다."""
+    client = _CountingClient()
+    unit = _unit(
+        location_label="제8조②12.", change_type="이동",
+        moved_from="②5.", move_is_identical=True,
+    )
+    result = _agent(client).run(unit)
+
+    assert client.calls == 0  # LLM을 부르면 안 됨(규칙 기반 문장)
+    assert result.summary == "내용 변경 없이 ②항·5호에서 제8조 ②항·12호(으)로 번호만 이동했습니다."
+
+
 def test_old_text_is_context_bypasses_triage_even_if_texts_look_formal():
     """old_text가 이 위치의 실제 개정 전 문장이 아니라 참고 맥락뿐인 경우
     (구조확장/위치재배치의심)는, 설사 두 문장이 기관명 정비처럼 보여도

@@ -72,7 +72,7 @@ def main() -> int:
         db = Database(settings.db)
     except ConnectionError as exc:
         print(f"\n❌ DB 연결 실패: {exc}")
-        print("   .env 의 MYSQL_* 값을 확인하세요.")
+        print("   .env 의 POSTGRES_* 값을 확인하세요.")
         return 1
 
     if not db.ping():

@@ -4,12 +4,12 @@
     law_summary 의 INSERT 는 컬럼 19개를 손으로 나열하고, 값 19개를
     위치로 맞춰 넣는다. 여기서 나는 실수(컬럼 하나 오타, 순서 뒤바뀜,
     자리표시자 개수 불일치)는 파이썬 문법으로는 멀쩡해서 단위 테스트를
-    다 통과하고, 실제 MySQL 에 연결되는 순간에야 터진다. 그게 주간 배치
-    한밤중이면 아무도 안 보고 있다.
+    다 통과하고, 실제 PostgreSQL 에 연결되는 순간에야 터진다. 그게 주간
+    배치 한밤중이면 아무도 안 보고 있다.
 
     실 DB 없이도 이건 확인할 수 있다 — DDL 과 SQL 문자열을 둘 다 텍스트로
-    읽어 대조하면 된다. 실제 MySQL 연결이 필요한 것은 이 테스트가 잡을
-    수 없는 것(권한, 문자셋, 인덱스 길이 한계)뿐이다.
+    읽어 대조하면 된다. 실제 PostgreSQL 연결이 필요한 것은 이 테스트가
+    잡을 수 없는 것(권한, 인코딩, 인덱스 길이 한계)뿐이다.
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ def ddl_columns() -> list[str]:
     """schema.sql 의 law_summary 정의에서 컬럼 이름을 순서대로 뽑는다."""
     sql = SCHEMA.read_text(encoding="utf-8")
     m = re.search(
-        r"CREATE TABLE IF NOT EXISTS law_summary\s*\((.*?)\n\)\s*ENGINE",
+        r"CREATE TABLE IF NOT EXISTS law_summary\s*\((.*?)\n\);",
         sql,
         re.DOTALL,
     )
@@ -45,7 +45,7 @@ def ddl_columns() -> list[str]:
         line = line.strip()
         # 컬럼 정의는 '이름 타입 ...' 형태. 제약조건 줄은 건너뛴다.
         if not line or line.upper().startswith(
-            ("PRIMARY KEY", "UNIQUE KEY", "KEY ", "INDEX ", "CONSTRAINT", "FOREIGN KEY")
+            ("PRIMARY KEY", "UNIQUE", "KEY ", "INDEX ", "CONSTRAINT", "FOREIGN KEY")
         ):
             continue
         name = line.split()[0]
@@ -74,10 +74,10 @@ def placeholder_count() -> int:
 
 
 def updated_columns() -> list[str]:
-    """ON DUPLICATE KEY UPDATE 절이 갱신하는 컬럼."""
-    m = re.search(r"ON DUPLICATE KEY UPDATE(.*)", insert_sql(), re.DOTALL)
-    assert m, "ON DUPLICATE KEY UPDATE 절을 찾지 못했습니다."
-    return re.findall(r"(\w+)\s*=\s*VALUES\(", m.group(1))
+    """ON CONFLICT ... DO UPDATE SET 절이 갱신하는 컬럼."""
+    m = re.search(r"DO UPDATE SET(.*)", insert_sql(), re.DOTALL)
+    assert m, "ON CONFLICT ... DO UPDATE SET 절을 찾지 못했습니다."
+    return re.findall(r"(\w+)\s*=\s*EXCLUDED\.", m.group(1))
 
 
 # ---------------------------------------------------------------------------
@@ -153,13 +153,13 @@ def test_primary_key_is_law_id_and_serial_no():
 
 @pytest.mark.parametrize("column", ["caveats", "article_summaries", "mappings", "verifier_issues"])
 def test_json_columns_declared_as_json(column):
-    """JSON 타입이어야 조회 시 드라이버가 풀어 준다. TEXT 면 문자열로만 온다."""
+    """JSONB 타입이어야 조회 시 드라이버가 풀어 준다. TEXT 면 문자열로만 온다."""
     sql = SCHEMA.read_text(encoding="utf-8")
     m = re.search(
-        r"CREATE TABLE IF NOT EXISTS law_summary\s*\((.*?)\n\)\s*ENGINE", sql, re.DOTALL
+        r"CREATE TABLE IF NOT EXISTS law_summary\s*\((.*?)\n\);", sql, re.DOTALL
     )
     body = m.group(1)
-    assert re.search(rf"^\s*{column}\s+JSON\b", body, re.MULTILINE | re.IGNORECASE)
+    assert re.search(rf"^\s*{column}\s+JSONB\b", body, re.MULTILINE | re.IGNORECASE)
 
 
 def test_decoder_covers_all_json_columns():
@@ -167,8 +167,8 @@ def test_decoder_covers_all_json_columns():
     돌아와 호출부에서 뒤늦게 터진다."""
     sql = SCHEMA.read_text(encoding="utf-8")
     m = re.search(
-        r"CREATE TABLE IF NOT EXISTS law_summary\s*\((.*?)\n\)\s*ENGINE", sql, re.DOTALL
+        r"CREATE TABLE IF NOT EXISTS law_summary\s*\((.*?)\n\);", sql, re.DOTALL
     )
-    declared = set(re.findall(r"^\s*(\w+)\s+JSON\b", m.group(1), re.MULTILINE | re.IGNORECASE))
+    declared = set(re.findall(r"^\s*(\w+)\s+JSONB\b", m.group(1), re.MULTILINE | re.IGNORECASE))
 
     assert declared == set(repo_module._SUMMARY_JSON_COLUMNS)

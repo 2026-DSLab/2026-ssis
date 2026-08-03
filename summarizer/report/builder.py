@@ -20,16 +20,16 @@
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 from typing import Iterable, Sequence
 
 from hwpx import HwpxDocument
 
+from summarizer.locfmt import article_of as _article_of
+from summarizer.locfmt import format_position as _format_position
+from summarizer.locfmt import position_of as _position_of
 from summarizer.models import ArticleSummary, ContractSummary, LawSummary
 from summarizer.report.layout import Col, Page, Styles, TableWriter
-
-_ARTICLE = re.compile(r"^제\d+조(?:의\d+)?")
 
 _TAG = {
     "신설": "신설",
@@ -40,16 +40,6 @@ _TAG = {
     "미상": "변경",
 }
 """표의 '구분' 칸에 쓸 짧은 이름. 칸 폭이 좁아 4자를 넘기지 않는다."""
-
-
-def _article_of(location_label: str) -> str:
-    m = _ARTICLE.match(location_label)
-    return m.group(0) if m else location_label
-
-
-def _position_of(location_label: str) -> str:
-    art = _article_of(location_label)
-    return location_label[len(art):] if location_label.startswith(art) else ""
 
 
 def _text(s: ArticleSummary) -> str:
@@ -72,7 +62,9 @@ def _content_of(s: ArticleSummary) -> str:
     """
     parts = [_text(s)]
     if s.unit.moved_from:
-        parts.append(f"※ 이동 전 위치: {_article_of(s.unit.location_label)}{s.unit.moved_from}")
+        parts.append(
+            f"※ 이동 전 위치: {_article_of(s.unit.location_label)}{_format_position(s.unit.moved_from)}"
+        )
     parts.extend(f"※ {c}" for c in s.caveats)
     return "\n".join(parts)
 
@@ -170,7 +162,7 @@ class _Report:
         rows = [
             [
                 _article_of(s.unit.location_label),
-                _position_of(s.unit.location_label),
+                _format_position(_position_of(s.unit.location_label)),
                 _kind_of(s),
                 _content_of(s),
             ]

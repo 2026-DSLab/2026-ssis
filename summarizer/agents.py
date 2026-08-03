@@ -28,6 +28,7 @@ from lawtrack.contract.schema import ArticleDiffItem, LawChange
 from summarizer.config import LLMSettings
 from summarizer.llm import LLMClient, LLMError
 from summarizer.loader import caveats_for
+from summarizer.locfmt import format_location
 from summarizer.matching import (
     canon_key,
     depth,
@@ -287,11 +288,15 @@ class ArticleAgent:
         # LLM 을 부르지 않는다 — 부를 이유가 없고, 부르면 없던 변경을
         # 지어낼 위험만 생긴다.
         if unit.move_is_identical and unit.moved_from:
+            # ★ 실측(2026-08-03, 사용자 리포트): "②5.에서 제8조②12.로"처럼
+            # 원본 표기 그대로 문장에 박아 넣으면 읽기 힘들다는 지적 —
+            # 웹페이지/HWPX 위치 칸에 이미 쓰는 항/호/목 표기 규칙(locfmt)을
+            # 이 규칙 기반 문장(LLM 호출 없음)에도 그대로 적용한다.
             return ArticleSummary(
                 unit=unit,
                 summary=(
-                    f"내용 변경 없이 {unit.moved_from}에서 "
-                    f"{unit.location_label}(으)로 번호만 이동했습니다."
+                    f"내용 변경 없이 {format_location(unit.moved_from)}에서 "
+                    f"{format_location(unit.location_label)}(으)로 번호만 이동했습니다."
                 ),
                 caveats=caveats,
             )

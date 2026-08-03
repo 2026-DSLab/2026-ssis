@@ -1,6 +1,7 @@
-"""ArticleDiffRepo._to_row 테스트. DB 연결 없이 순수 로직만 검증."""
+"""ArticleDiffRepo._to_row / insert_results 테스트. DB 연결 없이 순수 로직만 검증."""
 
 from datetime import date
+from unittest.mock import MagicMock, patch
 
 from lawtrack.db.repo import ArticleDiffRepo
 from lawtrack.locate.locator import LocateResult, LocateStatus
@@ -63,6 +64,110 @@ class TestToRowUnresolvedUniqueness:
         assert row[2] == "56"
         assert row[3] == "제56조의2"
         assert row[4] == "①"
+
+
+class TestToRowDeletionSkipLabel:
+    """★★★★★ 실측 발견(2026-08-03, 지능정보화 기본법 HWPX 사용자 리포트):
+    삭제(DELETED_SKIP)는 unit이 없는 게 "위치를 못 찾아서"가 아니라
+    "삭제된 내용은 현재 조문에 없으니 애초에 찾을 필요가 없어서"다 —
+    진짜 위치확정 실패(0건실패/중복실패)와 근본 원인이 다른데 같은
+    "(위치미상#N-M)" 라벨을 써서 보고서만 보면 정상 처리된 삭제 건이
+    실패한 것처럼 보였다."""
+
+    def _deleted_change(
+        self, index: int, old_clean: str = "구", article_context: str | None = None,
+    ) -> ArticleChange:
+        return ArticleChange(
+            index=index, change_type=ChangeType.DELETED,
+            old_raw="<P>구</P>", new_raw="<P><삭  제></P>",
+            old_clean=old_clean, new_clean="<삭  제>",
+            article_context=article_context,
+        )
+
+    def test_deleted_skip_gets_clear_label_not_위치미상(self):
+        row = ArticleDiffRepo._to_row(
+            "000028", "1", self._deleted_change(0), _unresolved_result(), date(2025, 1, 1), 0,
+        )
+        assert "위치미상" not in row[3]
+        assert row[3] == "(삭제됨 — 개정 전 조문 참고)"
+
+    def test_deleted_skip_shows_leading_clause_marker_when_present(self):
+        """실측(지능정보화 기본법 후속 질문, 2026-08-03): old_text가 "①
+        국가기관등은…"처럼 항 기호로 시작하면, 조 번호는 몰라도 몇 항이었는지는
+        재조회 없이 이미 가진 데이터에서 보여줄 수 있어야 한다."""
+        change = self._deleted_change(0, old_clean="①  국가기관등은 정보통신망을 통하여…")
+        row = ArticleDiffRepo._to_row(
+            "000028", "1", change, _unresolved_result(), date(2025, 1, 1), 0,
+        )
+        assert row[3] == "(삭제됨 — 개정 전 ①항 참고)"
+
+    def test_deleted_skip_shows_leading_item_marker_when_present(self):
+        change = self._deleted_change(0, old_clean="3. 정보격차의 실태 및 해소 현황")
+        row = ArticleDiffRepo._to_row(
+            "000028", "1", change, _unresolved_result(), date(2025, 1, 1), 0,
+        )
+        assert row[3] == "(삭제됨 — 개정 전 3호 참고)"
+
+    def test_deleted_skip_shows_leading_subitem_marker_when_present(self):
+        change = self._deleted_change(0, old_clean="가. 세부 기준")
+        row = ArticleDiffRepo._to_row(
+            "000028", "1", change, _unresolved_result(), date(2025, 1, 1), 0,
+        )
+        assert row[3] == "(삭제됨 — 개정 전 가목 참고)"
+
+    def test_deleted_skip_shows_article_context_with_marker(self):
+        """실측(2026-08-03, 지능정보화 기본법 후속 질문 — "몇 조였는지도
+        보여달라"): extract_changes()가 채운 article_context(조 번호)와
+        old_text 선행 기호(항/호/목)를 합쳐 "제46조①항"처럼 완전한 위치를
+        보여줘야 한다."""
+        change = self._deleted_change(
+            0, old_clean="①  국가기관등은 정보통신망을 통하여…", article_context="제46조",
+        )
+        row = ArticleDiffRepo._to_row(
+            "000028", "1", change, _unresolved_result(), date(2025, 1, 1), 0,
+        )
+        assert row[3] == "(삭제됨 — 개정 전 제46조①항 참고)"
+
+    def test_deleted_skip_shows_article_context_without_marker(self):
+        """old_text 자체엔 기호가 없어도(호/항 마커 없는 통짜 문장) 조
+        번호만이라도 알면 그것만 보여준다 — 부분 정보라도 정직하게."""
+        change = self._deleted_change(
+            0, old_clean="정보통신접근성 품질인증의 유효기간은 1년으로 한다.",
+            article_context="제48조",
+        )
+        row = ArticleDiffRepo._to_row(
+            "000028", "1", change, _unresolved_result(), date(2025, 1, 1), 0,
+        )
+        assert row[3] == "(삭제됨 — 개정 전 제48조 참고)"
+
+    def test_deleted_skip_falls_back_when_no_leading_marker(self):
+        """기호 없이 평문으로 시작하고 조 번호도 못 찾으면(예: 헤더 없는
+        통짜 조문) 기존처럼 조문 참고 안내만 남긴다 — 없는 정보를 지어내지
+        않는다."""
+        change = self._deleted_change(0, old_clean="과학기술정보통신부장관은 …에 관한 사항을 정한다.")
+        row = ArticleDiffRepo._to_row(
+            "000028", "1", change, _unresolved_result(), date(2025, 1, 1), 0,
+        )
+        assert row[3] == "(삭제됨 — 개정 전 조문 참고)"
+
+    def test_deleted_skip_article_code_still_unique(self):
+        """라벨(사람이 보는 값)만 바뀌었을 뿐, article_code(DB 유일성
+        목적)는 여전히 change.index/frag_idx로 고유해야 한다."""
+        row_a = ArticleDiffRepo._to_row(
+            "000028", "1", self._deleted_change(0), _unresolved_result(), date(2025, 1, 1), 0,
+        )
+        row_b = ArticleDiffRepo._to_row(
+            "000028", "1", self._deleted_change(1), _unresolved_result(), date(2025, 1, 1), 0,
+        )
+        assert row_a[2] != row_b[2]
+
+    def test_genuine_location_failure_still_gets_위치미상_label(self):
+        """진짜 위치확정 실패(AMENDED인데 unit 없음)는 여전히 "위치미상"
+        라벨을 써야 한다 — 삭제와 헷갈리면 안 되는 건 반대 방향도 마찬가지."""
+        row = ArticleDiffRepo._to_row(
+            "000028", "1", _change(0), _unresolved_result(), date(2025, 1, 1), 0,
+        )
+        assert "위치미상" in row[3]
 
 
 class TestToRowFragmentSpecificText:
@@ -433,3 +538,67 @@ class TestFragmentSpecificOldText:
         change = self._amended_change("1. 가 2. 나")
         locate_results = [LocateResult(LocateStatus.SUCCESS, self._unit("1."), None, 1, ())]
         assert ArticleDiffRepo._fragment_old_text_by_item(change, locate_results) is None
+
+
+class TestInsertResultsDedupBeforeExecuteValues:
+    """★★★★ 실측 발견(2026-08-03, MySQL→PostgreSQL 전환 검증 중, (계약예규)
+    정부 입찰ㆍ계약 집행기준 34470 실측): results에 change.index가 같은
+    ArticleChange가 두 번 섞여 들어오면(위치확정 실패 건의 합성키
+    __unresolved__{index}_{frag_idx}가 충돌), MySQL의 executemany는 그냥
+    마지막 값으로 조용히 덮어썼지만, Postgres의 execute_values(한 INSERT
+    문에 여러 행)는 "ON CONFLICT DO UPDATE command cannot affect row a
+    second time"로 배치 전체를 실패시킨다. insert_results()가 execute_values를
+    부르기 전에 UNIQUE KEY 기준으로 미리 걸러(마지막 값 유지) 이 충돌을
+    막는지 확인한다."""
+
+    def _change(self, index: int) -> ArticleChange:
+        return ArticleChange(
+            index=index, change_type=ChangeType.AMENDED,
+            old_raw="<P>구</P>", new_raw="<P>신</P>", old_clean="구", new_clean="신",
+        )
+
+    def _unresolved(self) -> LocateResult:
+        return LocateResult(LocateStatus.ZERO_MATCH, None, None, 0, ("0건 미발견",))
+
+    def test_duplicate_change_index_collapses_to_last_value(self):
+        """change.index가 같은(=합성 article_code가 같은) 실패 건 2개가
+        results에 섞여 들어와도, execute_values에는 마지막 값 1건만
+        전달되어야 한다."""
+        db = MagicMock()
+        cur = MagicMock()
+        db.transaction.return_value.__enter__.return_value = (None, cur)
+        repo = ArticleDiffRepo(db)
+
+        change_a = self._change(index=5)
+        change_b = self._change(index=5)  # 같은 index — 실제로 재현된 실측 케이스
+        results = [
+            (change_a, [self._unresolved()]),
+            (change_b, [self._unresolved()]),
+        ]
+
+        with patch("lawtrack.db.repo.execute_values") as mock_execute_values:
+            repo.insert_results("34470", "1", results, default_enforce_date=date(2025, 1, 1))
+
+        assert mock_execute_values.called
+        rows_passed = mock_execute_values.call_args[0][2]
+        assert len(rows_passed) == 1  # 2건 -> 충돌 제거 후 1건
+        assert rows_passed[0][2] == "__unresolved__5_0"  # 마지막(change_b) 값이 남음
+
+    def test_no_collision_keeps_all_distinct_rows(self):
+        """키가 서로 다르면(정상 케이스) 아무것도 걸러지지 않아야 한다."""
+        db = MagicMock()
+        cur = MagicMock()
+        db.transaction.return_value.__enter__.return_value = (None, cur)
+        repo = ArticleDiffRepo(db)
+
+        results = [
+            (self._change(index=1), [self._unresolved()]),
+            (self._change(index=2), [self._unresolved()]),
+            (self._change(index=3), [self._unresolved()]),
+        ]
+
+        with patch("lawtrack.db.repo.execute_values") as mock_execute_values:
+            repo.insert_results("34470", "1", results, default_enforce_date=date(2025, 1, 1))
+
+        rows_passed = mock_execute_values.call_args[0][2]
+        assert len(rows_passed) == 3

@@ -1,9 +1,9 @@
-"""watchlist 데이터를 mysql 클라이언트를 거치지 않고 Python으로 직접 적재.
+"""watchlist 데이터를 psql 클라이언트를 거치지 않고 Python으로 직접 적재.
 
-Windows 환경에서 `mysql ... < file.sql` 실행 시 콘솔/클라이언트 코드페이지가
+Windows 환경에서 `psql ... < file.sql` 실행 시 콘솔/클라이언트 코드페이지가
 파일 인코딩과 어긋나 한글이 깨지는 문제를 우회한다. 이 스크립트는:
     1) Python이 파일을 명시적으로 UTF-8로 읽는다.
-    2) mysql-connector-python 연결도 명시적으로 utf8mb4로 맺는다.
+    2) psycopg2 연결도 명시적으로 UTF-8로 맺는다.
     3) 파라미터 바인딩(%s)으로 값을 넘기므로, SQL 문자열 리터럴을
        텍스트로 조립하는 과정 자체가 없다 — 인코딩이 틀어질 지점이
        원천적으로 없어진다.
@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import sys
 
-import mysql.connector
+import psycopg2
 
 sys.path.insert(0, "src")
 from lawtrack.config import load_settings  # noqa: E402
@@ -161,12 +161,11 @@ def law_type_of(name: str) -> str:
 def main() -> int:
     settings = load_settings()
 
-    print("MySQL 연결 중 (utf8mb4 명시)...")
-    conn = mysql.connector.connect(
+    print("PostgreSQL 연결 중 (UTF-8 명시)...")
+    conn = psycopg2.connect(
         host=settings.db.host, port=settings.db.port,
         user=settings.db.user, password=settings.db.password,
-        database=settings.db.database, charset="utf8mb4",
-        use_unicode=True,
+        dbname=settings.db.database, client_encoding="UTF8",
     )
     cur = conn.cursor()
 
@@ -175,10 +174,10 @@ def main() -> int:
             law_id, law_type, official_name, internal_name,
             dept_codes, status, last_serial_no, last_checked_at
         ) VALUES (%s, %s, %s, %s, %s, '현행', %s, NOW())
-        ON DUPLICATE KEY UPDATE
-            official_name = VALUES(official_name),
-            internal_name = VALUES(internal_name),
-            dept_codes = VALUES(dept_codes)
+        ON CONFLICT (law_id) DO UPDATE SET
+            official_name = EXCLUDED.official_name,
+            internal_name = EXCLUDED.internal_name,
+            dept_codes = EXCLUDED.dept_codes
     """
 
     rows = []

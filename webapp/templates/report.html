@@ -9,16 +9,42 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <!-- 기간 즉석 조회 로딩 화면 — 기간 버튼은 그 자리에서 실 API(+필요하면
+       LLM) 스윕을 도는데, 캐시가 식어있으면 1~4분씩 걸릴 수 있다. 그냥
+       스피너만 보여주지 않고, /period-check로 스윕을 논블로킹으로 시작한
+       뒤 /period-status를 폴링해 실제 진행 단계("국가법령정보 API 확인
+       중 42/102건" 등)를 그대로 보여준다(webapp/live.py의 _set_progress). -->
+  <div class="loading-overlay" id="loading-overlay" hidden>
+    <div class="loading-box">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <p class="loading-title"><span class="loading-period-accent" id="loading-period-accent">조회</span><span id="loading-title-suffix"> 중이에요</span></p>
+      <p class="loading-stage" id="loading-stage">국가법령정보 API로 실시간 확인하고 있어요</p>
+      <span class="loading-hint">처음이면 1~4분 정도 걸릴 수 있어요</span>
+    </div>
+  </div>
+
   <nav class="topbar">
     <div class="topbar-inner">
       <div class="brand">
         <img class="brand-mark" src="{{ url_for('static', filename='img/logo.png') }}" alt="법인사이트 로고">
         <span class="brand-text">법인사이트</span>
       </div>
-      {% if batch_date %}
+      <!-- 기간 선택 — 5일/2주/1개월 프리셋(자유 날짜 선택 대신). 요청마다
+           실 API+LLM 비용이 드는 즉석 조회라 몇 개로 고정했다(2026-08-03). -->
+      <div class="period-nav">
+        <a class="period-link {{ 'is-active' if not period }}" href="{{ url_for('index') }}">이번 주</a>
+        {% for key, label in period_windows.items() %}
+          <a class="period-link {{ 'is-active' if period == key }}" href="{{ url_for('index', period=key) }}">{{ label }}</a>
+        {% endfor %}
+      </div>
+      {% if batch_date or period %}
         <div class="topbar-right">
-          <span class="batch-pill">{{ batch_date }} 기준</span>
-          <a class="download-btn" href="{{ url_for('download') }}">
+          {% if period %}
+            <span class="batch-pill">{{ period_from }} ~ {{ period_to }}</span>
+          {% else %}
+            <span class="batch-pill">{{ batch_date }} 기준</span>
+          {% endif %}
+          <a class="download-btn" href="{{ url_for('download', period=period) }}">
             <span>HWPX 다운로드</span>
           </a>
         </div>
@@ -28,19 +54,31 @@
 
   <div class="page-layout">
   <main class="content-col">
+  {% if period_errors %}
+    <div class="period-error-note">⚠️ 조회 중 {{ period_errors|length }}건 확인에 실패했습니다 — 다음 조회 때 다시 시도됩니다.</div>
+  {% endif %}
   {% if not laws %}
     <div class="empty-state">
       <p class="empty-icon">📭</p>
-      <p>아직 생성된 주간 요약이 없습니다.</p>
-      <code>python scripts/run_weekly.py --full</code>
+      {% if period %}
+        <p>{{ period_label }}({{ period_from }} ~ {{ period_to }}) 동안 감지된 개정사항이 없습니다.</p>
+      {% else %}
+        <p>아직 생성된 주간 요약이 없습니다.</p>
+        <code>python scripts/run_weekly.py --full</code>
+      {% endif %}
     </div>
   {% else %}
     <section class="hero">
-      <h1>이번 주 <span class="hero-accent">개정 요약</span></h1>
-      <p class="hero-sub">법령·행정규칙 개정을 매주 자동으로 감지해서, 월요일 아침에 확인하실 수 있게 보여드려요.</p>
+      {% if period %}
+        <h1>{{ period_label }} <span class="hero-accent">개정 요약</span></h1>
+        <p class="hero-sub">{{ period_from }}부터 {{ period_to }}까지, 지금 이 순간 국가법령정보 API로 즉석 확인한 결과예요.</p>
+      {% else %}
+        <h1>이번 주 <span class="hero-accent">개정 요약</span></h1>
+        <p class="hero-sub">법령·행정규칙 개정을 매주 자동으로 감지해서, 월요일 아침에 확인하실 수 있게 보여드려요.</p>
+      {% endif %}
 
       <p class="hero-lede">
-        이번 주 개정 법령은 <strong class="lede-num" data-count="{{ stats.total_laws }}">0</strong>개,
+        {% if period %}이 기간{% else %}이번 주{% endif %} 개정 법령은 <strong class="lede-num" data-count="{{ stats.total_laws }}">0</strong>개,
         변경 조문은 <strong class="lede-num" data-count="{{ stats.total_articles }}">0</strong>건입니다.
       </p>
 
@@ -95,6 +133,9 @@
             {% for item in section.entries %}
               {% set a = item.article %}
               <div class="item-row" data-law-name="{{ item.law_name|lower }}" style="--i: {{ loop.index0 }}">
+                {% if item.enforce_date %}
+                  <div class="item-enforce-date">시행일 {{ item.enforce_date }}</div>
+                {% endif %}
                 <div class="item-row-head">
                   <span class="item-law">{{ item.law_type }} · {{ item.law_name }}</span>
                   <span class="item-loc">{{ format_location(a.unit.location_label) }}</span>
@@ -116,20 +157,38 @@
                   <span class="detail-title-html" hidden>{{ item.law_type }} · {{ item.law_name }} · {{ format_location(a.unit.location_label) }}</span>
 
                   {% if a.unit.old_text or a.unit.new_text %}
-                    {% set can_diff = not a.unit.old_text_is_context and a.unit.old_text and a.unit.new_text %}
+                    {#  ★ 실측(2026-08-03, 사용자 리포트): change_type="삭제"는
+                        old_text_is_context=True로 저장되지만(loader.py의
+                        "match_status != 성공"이면 무조건 context 취급하는
+                        일괄 규칙 — 구조확장처럼 old_text가 이 위치의 정확한
+                        내용이 아닐 수 있는 경우를 가리려는 것), 삭제는 의미가
+                        정반대다: old_text는 애매한 공유 맥락이 아니라 "삭제된
+                        바로 그 문장"이다. 그래서 old_text_is_context 규칙을
+                        그대로 따르면 정작 사용자가 보고 싶어하는 개정 전
+                        문장이 통째로 숨겨진다 — 삭제는 old_text_is_context와
+                        무관하게 old_text를 보여준다(강조 없이 — 비교할
+                        new_text 자체가 실제 내용이 아니라 "<삭  제>"라는
+                        합성 표시일 뿐이라 diff가 의미가 없음).
+                        ★★ 실측 후속(2026-08-03, "개정후에도 삭제되었다고
+                        보여줘"): new_text 칸을 아예 안 내면 "이 항목이 어떻게
+                        됐는지"가 반쪽만 보인다 — 합성 표시("<삭  제>") 대신
+                        "삭제되었습니다"라는 사람이 읽는 문구로 채워서 계속
+                        보여준다. #}
+                    {% set is_deleted = a.unit.change_type == "삭제" %}
+                    {% set can_diff = not a.unit.old_text_is_context and not is_deleted and a.unit.old_text and a.unit.new_text %}
                     <button type="button" class="fulltext-trigger">원문 보기 →</button>
                     <div class="fulltext-source" hidden>
                       <div class="fulltext-body">
-                        {% if not a.unit.old_text_is_context %}
+                        {% if is_deleted or not a.unit.old_text_is_context %}
                           <div class="fulltext-col fulltext-col--old">
                             <div class="fulltext-label">개정 전</div>
-                            <div class="fulltext-text">{% if a.unit.old_text %}{% if can_diff %}{{ diff_old_html(a.unit.old_text, a.unit.new_text) }}{% else %}{{ a.unit.old_text }}{% endif %}{% else %}<span class="fulltext-empty">신설되어 개정 전 내용 없음</span>{% endif %}</div>
+                            <div class="fulltext-text">{% if a.unit.old_text %}{% if can_diff %}{{ diff_old_html(a.unit.old_text, a.unit.new_text) }}{% else %}{{ a.unit.old_text|readable_text }}{% endif %}{% else %}<span class="fulltext-empty">신설되어 개정 전 내용 없음</span>{% endif %}</div>
                           </div>
                         {% endif %}
                         {% if a.unit.new_text %}
                           <div class="fulltext-col fulltext-col--new">
                             <div class="fulltext-label">개정 후</div>
-                            <div class="fulltext-text">{% if can_diff %}{{ diff_new_html(a.unit.old_text, a.unit.new_text) }}{% else %}{{ a.unit.new_text }}{% endif %}</div>
+                            <div class="fulltext-text">{% if is_deleted %}<span class="fulltext-empty">삭제되었습니다</span>{% elif can_diff %}{{ diff_new_html(a.unit.old_text, a.unit.new_text) }}{% else %}{{ a.unit.new_text|readable_text }}{% endif %}</div>
                           </div>
                         {% endif %}
                       </div>
@@ -197,11 +256,34 @@
     // 필터 칩 — 이제 걸러내지 않고, 해당 구분 섹션으로 부드럽게
     // 스크롤만 이동한다(본문이 이미 구분별로 나뉘어 있어 "숨기기"가
     // 필요 없다 — 대신 "바로 그 자리로 가기"가 더 유용하다).
-    document.querySelectorAll("#kind-chips .kind-nav-link").forEach((chip) => {
+    const kindNavLinks = document.querySelectorAll("#kind-chips .kind-nav-link");
+    kindNavLinks.forEach((chip) => {
       chip.addEventListener("click", () => {
         document.getElementById(chip.dataset.target)?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
+
+    // 스크롤 스파이 — 사용자 요청(2026-08-03): "스크롤을 내리면 신설/
+    // 삭제/이동 구간이 바뀌는데, 위 내비게이션에서 지금 어디를 보는지
+    // 강조되면 좋겠다". 지금 뷰포트 위쪽(고정 툴바 바로 아래)에 걸려
+    // 있는 섹션을 찾아 그 kind의 nav 링크에 .is-active를 준다. 짧은
+    // 섹션 여러 개가 동시에 화면에 걸칠 수 있어, 뷰포트 맨 위에 가장
+    // 가까운(top이 가장 작은) 섹션 하나만 "지금 보는 곳"으로 삼는다.
+    if (kindNavLinks.length && "IntersectionObserver" in window) {
+      const setActiveKindLink = (id) => {
+        kindNavLinks.forEach((link) => link.classList.toggle("is-active", link.dataset.target === id));
+      };
+      const kindSpy = new IntersectionObserver(
+        (entries) => {
+          const visible = entries.filter((e) => e.isIntersecting);
+          if (visible.length === 0) return;
+          visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          setActiveKindLink(visible[0].target.id);
+        },
+        { rootMargin: "-140px 0px -70% 0px", threshold: 0 }
+      );
+      kindSections.forEach((section) => kindSpy.observe(section));
+    }
 
     // 오른쪽 상세 패널 — "원문 보기"는 같은 행 안에 hidden으로 숨겨둔
     // 내용(fulltext-source)을 그대로 옮겨 보여준다(서버가 이미 렌더링해
@@ -315,6 +397,79 @@
       }
       requestAnimationFrame(tick);
     });
+
+    // 기간 즉석 조회 로딩 화면 — 기간 버튼을 누르면 곧바로 페이지를
+    // 이동시키지 않고, /period-check로 스윕을 논블로킹으로 시작한 뒤
+    // /period-status를 폴링해 실제 진행 단계를 보여주다가, 다 되면 그때
+    // 실제 페이지로 이동한다(그 시점엔 캐시가 이미 채워져 있어 즉시
+    // 뜬다). fetch가 막힌 환경이면 그냥 원래 링크로 바로 이동한다
+    // (진행 단계를 못 보여줄 뿐 기능 자체는 그대로 동작 — 점진적 개선).
+    const loadingOverlay = document.getElementById("loading-overlay");
+    const loadingPeriodAccent = document.getElementById("loading-period-accent");
+    const loadingTitleSuffix = document.getElementById("loading-title-suffix");
+    const loadingStage = document.getElementById("loading-stage");
+    const POLL_INTERVAL_MS = 1500;
+
+    function showLoadingOverlay(labelText, suffix) {
+      if (!loadingOverlay) return;
+      if (loadingPeriodAccent && labelText) loadingPeriodAccent.textContent = labelText;
+      if (loadingTitleSuffix) loadingTitleSuffix.textContent = " " + (suffix || "조회 중이에요");
+      if (loadingStage) loadingStage.textContent = "국가법령정보 API로 실시간 확인하고 있어요";
+      loadingOverlay.hidden = false;
+    }
+
+    function setLoadingStage(stage, detail) {
+      if (!loadingStage || !stage) return;
+      loadingStage.textContent = detail ? `${stage} (${detail})` : stage;
+    }
+
+    function pollPeriodStatus(period, onDone) {
+      fetch(`/period-status?period=${encodeURIComponent(period)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          setLoadingStage(data.stage, data.detail);
+          if (data.done) onDone();
+          else setTimeout(() => pollPeriodStatus(period, onDone), POLL_INTERVAL_MS);
+        })
+        .catch(onDone);  // 폴링 자체가 실패하면 더 기다리지 않고 바로 진행
+    }
+
+    function runPeriodFlow(period, onDone) {
+      fetch(`/period-check?period=${encodeURIComponent(period)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.ready) onDone();
+          else pollPeriodStatus(period, onDone);
+        })
+        .catch(onDone);
+    }
+
+    document.querySelectorAll(".period-nav .period-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        if (link.classList.contains("is-active")) return;  // 이미 보고 있는 기간이면 아무것도 안 함
+        const period = new URL(link.href, window.location.origin).searchParams.get("period");
+        if (!period) return;  // "이번 주"는 즉석 조회가 아니라 그냥 원래대로 이동
+        e.preventDefault();
+        showLoadingOverlay(link.textContent.trim(), "조회 중이에요");
+        runPeriodFlow(period, () => { window.location.href = link.href; });
+      });
+    });
+
+    // "최근 N일" 모드일 때의 HWPX 다운로드도 같은 즉석 조회 경로를 탄다
+    // (캐시가 식어있으면 같은 대기가 생길 수 있음). 다운로드는 페이지
+    // 이동이 아니라 파일 저장으로 끝나므로, 완료 후 잠시 뒤 오버레이만
+    // 닫는다.
+    {% if period %}
+    const periodDownloadBtn = document.querySelector(".download-btn");
+    periodDownloadBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      showLoadingOverlay("{{ period_label }}", "보고서 준비 중이에요");
+      runPeriodFlow("{{ period }}", () => {
+        window.location.href = periodDownloadBtn.href;
+        setTimeout(() => { loadingOverlay.hidden = true; }, 1200);
+      });
+    });
+    {% endif %}
   </script>
 </body>
 </html>

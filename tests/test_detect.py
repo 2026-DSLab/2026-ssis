@@ -2,19 +2,11 @@
 
 from unittest.mock import MagicMock, patch
 
-import json
-
 from lawtrack.api.search import ResolveOutcome
 from lawtrack.db.repo import WatchlistEntry
-from lawtrack.detect import (
-    DetectStatus,
-    _serialize_articles,
-    _serialize_units,
-    _unchanged_clauses,
-    detect_admrul,
-)
+from lawtrack.detect import DetectStatus, _unchanged_clauses, detect_admrul
 from lawtrack.locate.locator import LocateResult, LocateStatus
-from lawtrack.parse.fulltext import ArticleUnit, ClauseNode, ItemNode, SearchUnit, SubItemNode
+from lawtrack.parse.fulltext import ArticleUnit, ClauseNode
 from lawtrack.text.split import Fragment, Level
 
 
@@ -169,74 +161,3 @@ class TestUnchangedClauses:
         )
         located = [(None, [_success(_unit("제75조", "③"))])]
         assert _unchanged_clauses([art], located) == {"제75조": ["①", "②"]}
-
-
-class TestParsedStructureSerialization:
-    """★ 실측 요구사항(2026-07-18): law_full_text(원본)와 별도로 조/항/호/목
-    파싱 결과도 DB에 저장해야 한다 — dataclasses.asdict() 로 만든 결과가
-    실제로 JSON 직렬화 가능하고, 중첩 구조(항→호→목)가 그대로 보존되는지
-    확인한다."""
-
-    def test_article_tree_round_trips_through_json(self):
-        subitem = SubItemNode(label="가.", text="목 내용")
-        item = ItemNode(no="1.", branch="", text="호 내용", subitems=(subitem,))
-        clause = ClauseNode(no="①", text="항 내용", change_type="개정", change_dates="2026.1.1.", items=(item,))
-        art = ArticleUnit(
-            code="1", branch="", label="제1조", title="목적", changed=True,
-            content="제1조(목적) 항 내용", enforce_date="20260101", clauses=(clause,),
-        )
-        serialized = _serialize_articles([art])
-        # JSON 직렬화가 실제로 되어야 함 (dataclass 등 비-JSON 타입이 안 섞여야 함)
-        dumped = json.loads(json.dumps(serialized, ensure_ascii=False))
-        assert dumped[0]["label"] == "제1조"
-        assert dumped[0]["clauses"][0]["no"] == "①"
-        assert dumped[0]["clauses"][0]["items"][0]["subitems"][0]["label"] == "가."
-
-    def test_search_units_round_trip_through_json(self):
-        unit = SearchUnit(
-            article_code="1", article_label="제1조", clause_no="①",
-            item_label="", subitem_label="", text="본문", changed=True,
-        )
-        serialized = _serialize_units([unit])
-        dumped = json.loads(json.dumps(serialized, ensure_ascii=False))
-        assert dumped[0]["article_label"] == "제1조"
-        assert dumped[0]["text"] == "본문"
-
-    def test_annotation_tags_stripped_from_stored_article_text(self):
-        """★★ 실측 발견(2026-07-18, 전자정부법 제5조③): parse_articles()가
-        만드는 ClauseNode.text 등은 lawService 원문 그대로라 "<개정
-        2020.6.9>" 같은 각주가 안 지워진 채 그대로 law_articles_parsed에
-        저장되고 있었다. article_diff.old_text에서 이미 한 번 고친
-        문제(strip_annotations 누락)가 새 캐시 컬럼에서 재발한 것 —
-        직렬화 단계에서 지워야 한다."""
-        clause = ClauseNode(
-            no="③",
-            text="③ 전자정부기본계획을 고려하여야 한다. <개정 2020.6.9>",
-            change_type="", change_dates="",
-        )
-        art = ArticleUnit(
-            code="5", branch="", label="제5조", title=None, changed=True,
-            content="제5조 <개정 2013.3.23>", clauses=(clause,),
-        )
-        serialized = _serialize_articles([art])
-        assert "<개정" not in serialized[0]["content"]
-        assert "<개정" not in serialized[0]["clauses"][0]["text"]
-        assert "전자정부기본계획을 고려하여야 한다." in serialized[0]["clauses"][0]["text"]
-
-    def test_annotation_tags_stripped_from_stored_admrul_units(self):
-        unit = SearchUnit(
-            article_code="1", article_label="제1조", clause_no="",
-            item_label="", subitem_label="", text="본문 <img id=\"1\"></img> 내용", changed=True,
-        )
-        serialized = _serialize_units([unit])
-        assert "<img" not in serialized[0]["text"]
-        assert "</img>" not in serialized[0]["text"]
-
-    def test_label_and_marker_fields_untouched_by_stripping(self):
-        """text/content가 아닌 필드(라벨, 마커, 날짜 등)는 그대로 유지되어야
-        한다 — 과도하게 넓게 지우는 회귀 방지."""
-        clause = ClauseNode(no="①", text="내용", change_type="개정", change_dates="<개정 2020.1.1>")
-        art = ArticleUnit(code="1", branch="", label="제1조", title=None, changed=True, clauses=(clause,))
-        serialized = _serialize_articles([art])
-        # change_dates는 text/content 키가 아니므로 안 건드려야 함
-        assert serialized[0]["clauses"][0]["change_dates"] == "<개정 2020.1.1>"
