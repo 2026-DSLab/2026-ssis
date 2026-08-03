@@ -1,0 +1,446 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-31",
+  "period": {
+    "from_date": "2000-01-01",
+    "to_date": "2026-07-31"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "19408",
+      "promulgation_no": "19408",
+      "promulgation_date": "",
+      "revision_type": "타법개정",
+      "affected_law_ids": [
+        "001357"
+      ],
+      "laws": [
+        {
+          "law_id": "001357",
+          "law_type": "법률",
+          "law_name": "공공기관의 정보공개에 관한 법률",
+          "internal_name": "공공기관의 정보공개에 관한 법률",
+          "dept_codes": [],
+          "old_serial_no": "251019",
+          "new_serial_no": "251019",
+          "enforce_date": "2023-11-17",
+          "revision_type": "타법개정",
+          "revision_reason": "[일괄개정] ◇ 개정이유 및 주요내용 행정기관 소속 위원회를 효율적으로 운영하기 위하여 「공공기관의 정보공개에 관한 법률」에 따른 정보공개위원회 및 「공공기록물 관리에 관한 법률」에 따른 국가기록관리위원회를 국무총리 소속에서 행정안전부장관 소속으로 변경하고, 데이터 기반 행정에 관한 정책의 개선 등에 관한 사항을 심의ㆍ조정하는 「데이터기반행정 활성화에 관한 법률」에 따른 데이터기반행정 활성화 위원회를 유사한 기능을 수행하는 「공공데이터의 제공 및 이용 활성화에 관한 법률」에 따른 공공데이터전략위원회의 분과위원회로 통합하며, 데이터의 제공 거부 등에 대한 조정업무를 총괄적으로 수행하도록 하기 위하여 데이터기반행정 활성화 위원회의 데이터 제공 거부에 대한 조정기능을 공공데이터분쟁조정위원회로 이관하는 내용으로 「공공기관의 정보공개에 관한 법률」 등 4개 법률을 개정함. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=251019&type=HTML",
+          "articles": [
+            {
+              "article_label": "제22조",
+              "clause_no": "",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "다음 각 호의 사항을 심의ㆍ조정하기 위하여 국무총리 소속으로 정보공개위원회(이하 “위원회”라 한다)를 둔다.",
+              "new_text": "다음 각 호의 사항을 심의ㆍ조정하기 위하여 행정안전부장관 소속으로 정보공개위원회(이하 “위원회”라 한다)를 둔다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제23조",
+              "clause_no": "②",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "2. 정보공개에 관하여 학식과 경험이 풍부한 사람으로서 국무총리가 위촉하는 사람",
+              "new_text": "2. 정보공개에 관하여 학식과 경험이 풍부한 사람으로서 행정안전부장관이 위촉하는 사람",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제23조",
+              "clause_no": "②",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "3. 시민단체(「비영리민간단체 지원법」 제2조에 따른 비영리민간단체를 말한다)에서 추천한 사람으로서 국무총리가 위촉하는 사람",
+              "new_text": "3. 시민단체(「비영리민간단체 지원법」 제2조에 따른 비영리민간단체를 말한다)에서 추천한 사람으로서 행정안전부장관이 위촉하는 사람",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제23조": [
+              "①",
+              "③",
+              "④",
+              "⑤",
+              "⑥"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "single-001780-252715",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "001780"
+      ],
+      "laws": [
+        {
+          "law_id": "001780",
+          "law_type": "법률",
+          "law_name": "의료급여법",
+          "internal_name": "의료급여법",
+          "dept_codes": [],
+          "old_serial_no": "252715",
+          "new_serial_no": "252715",
+          "enforce_date": "2025-07-19",
+          "revision_type": "타법개정",
+          "revision_reason": "[전부개정] ◇ 개정이유 법률의 제명을 「입양특례법」에서 「국내입양에 관한 특별법」으로 변경하는 한편, 보호대상아동의 국내입양에 관한 요건 및 절차 등에 대한 특례와 그 지원에 필요한 사항을 정함으로써 양자(養子)가 되는 사람과 입양가정의 권익과 복지를 증진하고, 아동 최선의 이익 원칙에 따라 보호대상아동의 국내입양을 활성화함. ◇ 주요내용 가. 보건복지부장관은 국내입양을 활성화하기 위하여 입양에 대한 실태조사 결과를 토대로 5년마다 국내입양 활성화 기본계획을 수립ㆍ시행하여야 함(제10조). 나. 국내입양 활성화 정책에 관한 주요 사항과 입양에 관한 사항을 심의ㆍ의결하기 위하여 아동정책조정위원회의 특별위원회로 입양정책위원회를 둠(제12조). 다. 양자가 될 아동은 보호대상아동으로서 시ㆍ도지사 또는 시장ㆍ군수ㆍ구청장이 해당 아동에게 입양이 최선의 이익이 된다고 결정한 아동이어야 함(제13조제1항). 라. 국가와 지방자치단체가 「아동복지법」에 따른 아동양육시설 등에 양자가 될 아동을 위탁하여 보호하도록 할 수 있고, 아동 보호에 필요한 비용을 보조할 수 있도록 함(제13조제3항 및 제39조). 마. 양부모가 되려는 사람은 보건복지부장관에게 신청하여야 하고, 보건복지부장관은 양부모가 되려는 사람에 대한 상담 및 가정환경 조사 등을 실시하여 그에 대한 보고서를 작성하여야 함(제19조). 바. 보건복지부장관은 입양정책위원회의 심의ㆍ의결을 거쳐 양부모가 되려는 사람과 양자가 될 아동을 결연함(제20조). 사. 보건복지부장관은 입양이 성립된 후 1년 동안 양부모와 양자의 상호적응을 위하여 정기적인 상담과 필요한 복지서비스를 지원하고 아동 적응보고서를 작성하여야 함(제31조). 아. 이 법에 따라 양자가 된 사람은 아동권리보장원의 장에게 자신과 관련된 입양정보의 공개를 청구할 수 있도록 함(제33조). 자. 보건복지부장관은 이 법에 따른 일부 업무를 아동권리보장원, 그 밖에 위탁업무를 수행하는 데 필요한 시설ㆍ종사자 등을 갖춘 사회복지법인 및 단체에 위탁할 수 있도록 함(제37조). <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=252715&type=HTML",
+          "articles": [
+            {
+              "article_label": "제3조",
+              "clause_no": "①",
+              "item_label": "4.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "4. 「입양특례법」에 따라 국내에 입양된 18세 미만의 아동",
+              "new_text": "4. 「국내입양에 관한 특별법」에 따라 입양된 18세 미만의 아동",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제3조": [
+              "②",
+              "③",
+              "④"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "single-009621-286061",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "009621"
+      ],
+      "laws": [
+        {
+          "law_id": "009621",
+          "law_type": "법률",
+          "law_name": "유아교육법",
+          "internal_name": "유아교육법",
+          "dept_codes": [],
+          "old_serial_no": "286061",
+          "new_serial_no": "286061",
+          "enforce_date": "2026-05-19",
+          "revision_type": "일부개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 교육부장관은 유치원에 제기된 민원을 공정하고 적법하게 처리할 수 있도록 정보시스템 구축 등이 포함된 계획을 수립ㆍ시행하도록 하고, 교육감은 유치원 민원을 처리하는 교원 등을 보호할 수 있는 방안 등이 포함된 계획을 수립ㆍ시행하도록 하며, 교육부장관 및 교육감은 유아생활지도에 필요한 인력 및 시설 등에 소요되는 경비를 예산의 범위에서 지원할 수 있도록 하고, 보호자는 유아의 발달단계에 적합한 학습이 이루어질 수 있게 노력하도록 하며, 교육부장관은 유아의 건전한 발달을 도모하기 위하여 사교육 실시 및 그 비용 등에 대한 실태를 조사할 수 있도록 하고, 유치원 교사에 보건교사 및 영양교사를 명시하며 해당 자격기준을 추가하려는 것임. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=286061&type=HTML",
+          "articles": [
+            {
+              "article_label": "제19조의9",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "① 교육부장관은 원장이 유치원에 제기된 민원을 공정하고 적법하게 처리할 수 있도록 다음 각 호의 사항을 포함한 계획을 수립ㆍ시행하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제19조의9",
+              "clause_no": "①",
+              "item_label": "1.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "1. 유치원 현장의 실정과 특성에 맞춘 민원 처리의 방법 및 절차",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제19조의9",
+              "clause_no": "①",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "2. 제1호의 민원 처리를 전자적으로 하기 위한 정보시스템 구축",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제19조의9",
+              "clause_no": "①",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "3. 제1호의 민원 처리를 위한 행정적ㆍ재정적 지원 방안",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제19조의9",
+              "clause_no": "①",
+              "item_label": "4.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "4. 그 밖에 유치원 민원 처리를 위하여 필요하다고 교육부장관이 인정한 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제19조의9",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "② 교육감은 유치원 민원 처리를 위하여 다음 각 호의 사항을 포함한 계획을 수립ㆍ시행하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제19조의9",
+              "clause_no": "②",
+              "item_label": "1.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "1. 유치원 민원을 처리하는 교원 및 직원 등에 대한 보호 방안",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제19조의9",
+              "clause_no": "②",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "2. 제1항제1호의 민원 처리를 위한 행정적ㆍ재정적 세부지원 방안",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제19조의9",
+              "clause_no": "②",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "3. 그 밖에 유치원 민원 처리를 위하여 필요하다고 교육감이 인정한 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제19조의9",
+              "clause_no": "③",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "③ 원장은 제1항제1호에 따른 민원 처리의 방법 및 절차에 관한 사항을 보호자에게 정기적으로 안내하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제21조의3",
+              "clause_no": "③",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "③ 교육부장관 및 교육감은 제1항에 따른 유아생활지도에 필요한 인력 및 시설 등에 소요되는 경비를 예산의 범위에서 지원할 수 있다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제21조의4",
+              "clause_no": "④",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "④ 보호자는 유아의 발달단계에 적합한 학습이 이루어질 수 있도록 노력하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제21조의6",
+              "clause_no": "",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "유치원과 원장은 교원의 전화번호, 주민등록번호 등 개인정보가 「개인정보 보호법」 및 「공공기관의 정보공개에 관한 법률」 등 관계 법률에 따라 보호될 수 있도록 필요한 조치를 하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제22조",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "②교사는 정교사(1급ㆍ2급)ㆍ준교사로 나누되, 별표 2의 자격기준에 해당하는 사람으로서 대통령령으로 정하는 바에 따라 교육부장관이 검정ㆍ수여하는 자격증을 받은 사람이어야 한다.",
+              "new_text": "②교사는 정교사(1급ㆍ2급), 준교사, 보건교사(1급ㆍ2급) 및 영양교사(1급ㆍ2급)로 나누되, 별표 2의 자격기준에 해당하는 사람으로서 대통령령으로 정하는 바에 따라 교육부장관이 검정ㆍ수여하는 자격증을 받은 사람이어야 한다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [
+            {
+              "article_label": "제21조의5",
+              "old_text": "유치원과 원장은 교원의 전화번호, 주민등록번호 등 개인정보가 「개인정보 보호법」 및 「공공기관의 정보공개에 관한 법률」 등 관계 법률에 따라 보호될 수 있도록 필요한 조치를 하여야 한다.",
+              "new_items": [
+                {
+                  "clause_no": "①",
+                  "item_label": "",
+                  "subitem_label": "",
+                  "text": "① 교육부장관은 유아의 건전한 발달과 유치원 교육과정 등의 정상적인 운영을 위하여 사교육 실시 및 그 비용 등에 대한 실태를 조사할 수 있다."
+                },
+                {
+                  "clause_no": "②",
+                  "item_label": "",
+                  "subitem_label": "",
+                  "text": "② 교육부장관은 제1항에 따른 실태조사에 필요한 인력과 예산을 확보하도록 노력하여야 한다."
+                },
+                {
+                  "clause_no": "③",
+                  "item_label": "",
+                  "subitem_label": "",
+                  "text": "③ 제1항에 따른 실태조사의 범위와 방법 등에 필요한 사항은 대통령령으로 정한다."
+                }
+              ]
+            }
+          ],
+          "unchanged_clauses": {
+            "제22조": [
+              "①",
+              "③",
+              "④",
+              "⑤"
+            ],
+            "제21조의3": [
+              "①",
+              "②"
+            ],
+            "제21조의4": [
+              "①",
+              "②",
+              "③"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "single-010164-268795",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "010164"
+      ],
+      "laws": [
+        {
+          "law_id": "010164",
+          "law_type": "법률",
+          "law_name": "에너지법",
+          "internal_name": "에너지법",
+          "dept_codes": [],
+          "old_serial_no": "268795",
+          "new_serial_no": "268795",
+          "enforce_date": "2026-02-01",
+          "revision_type": "타법개정",
+          "revision_reason": "[제정] ◇ 제정이유 기업의 연구개발을 전담하여 수행하는 기업부설연구소 또는 연구개발전담부서를 효율적으로 지원하고 관리하여 기업의 경쟁력을 강화하고 국가발전에 이바지하려는 것임. ◇ 주요내용 가. 국가 및 지방자치단체가 기업부설연구소 또는 연구개발전담부서의 연구개발을 효율적으로 지원ㆍ관리하고 그 기반을 조성하기 위한 각종 시책을 수립ㆍ시행하도록 함(제3조). 나. 과학기술정보통신부장관이 기업부설연구소 등의 육성 및 지원을 위하여 기업부설연구소 등에 관한 통계 작성ㆍ관리 및 실태조사를 실시할 수 있도록 함(제5조). 다. 과학기술정보통신부장관이 연구인력 및 시설 등의 기준을 충족하는 기업부설 연구기관 또는 기업의 연구개발부서를 기업부설연구소 또는 연구개발전담부서로 인정할 수 있도록 함(제7조). 라. 거짓 또는 그 밖의 부정한 방법으로 기업부설연구소 등의 인정을 받은 경우 과학기술정보통신부장관이 그 인정을 취소하도록 함(제8조). 마. 기업부설연구소 등에 대한 기술개발 지원, 연구개발인력 지원 및 교육과정 개설ㆍ운영 근거를 마련하고, 정부가 기업부설연구소 등이 소속된 기업에 대하여 연구개발역량 강화에 필요한 자금을 융자ㆍ투자하거나 「조세특례제한법」 등이 정하는 바에 따라 조세를 감면할 수 있는 근거를 마련함(제11조부터 제15조까지). 바. 연구개발 역량이 우수한 기업부설연구소를 우수 기업부설연구소로 지정하여 우선적으로 기술개발 등을 지원할 수 있도록 하고, 우수 기업부설연구소를 보유한 중소기업이 개발한 혁신제품을 구매할 때 수의계약을 적극 활용하도록 노력해야 함을 명시함(제16조). 사. 기업의 기술혁신에 기여한 연구자의 긍지와 자부심을 고취하기 위하여 기술개발인의 날을 지정할 수 있는 근거를 마련함(제18조). <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=268795&type=HTML",
+          "articles": [
+            {
+              "article_label": "제12조",
+              "clause_no": "①",
+              "item_label": "11.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "11. 「기초연구진흥 및 기술개발지원에 관한 법률」 제14조의2제1항에 따라 인정받은 기업부설연구소",
+              "new_text": "11. 「기업부설연구소등의 연구개발 지원에 관한 법률」 제7조제1항에 따라 인정받은 기업부설연구소",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제12조": [
+              "②"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": [
+    {
+      "law_id": "35080",
+      "law_name": "하도급거래공정화 지침",
+      "new_serial_no": "2100000251404",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000251404&type=HTML"
+    },
+    {
+      "law_id": "37812",
+      "law_name": "중소기업자간 경쟁제품 직접생산 확인기준",
+      "new_serial_no": "2100000268206",
+      "reason": "폐지제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000268206&type=HTML"
+    },
+    {
+      "law_id": "33891",
+      "law_name": "정보보호시스템 평가·인증 등에 관한 고시",
+      "new_serial_no": "2100000215508",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000215508&type=HTML"
+    },
+    {
+      "law_id": "006295",
+      "law_name": "공공기관의 정보공개에 관한 법률 시행규칙",
+      "new_serial_no": "273809",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=273809&type=HTML"
+    },
+    {
+      "law_id": "008113",
+      "law_name": "지능정보화 기본법 시행규칙",
+      "new_serial_no": "267147",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=267147&type=HTML"
+    },
+    {
+      "law_id": "014862",
+      "law_name": "가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률",
+      "new_serial_no": "270215",
+      "reason": "제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270215&type=HTML"
+    },
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    },
+    {
+      "law_id": "2054105",
+      "law_name": "중소 소프트웨어사업자의 사업 참여 지원에 관한 지침",
+      "new_serial_no": "2100000274532",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000274532&type=HTML"
+    },
+    {
+      "law_id": "42430",
+      "law_name": "행정업무용 표준 관리규정",
+      "new_serial_no": "2100000254490",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000254490&type=HTML"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "source_file": "weekly_contract_2026-07-31_v1.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "001780",
+      "law_name": "의료급여법",
+      "law_type": "법률",
+      "enforce_date": "2025-07-19",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=252715&type=HTML",
+      "new_serial_no": "252715",
+      "headline": "입양특례법 제명 변경 및 국내입양 활성화를 위한 제도 개선",
+      "body": "이번 개정은 국내입양에 관한 요건 및 절차를 정비하여 입양가정과 양자의 권익을 증진하고 아동 최선의 이익을 반영한 정책을 강화하기 위한 것입니다. 이를 통해 정부는 국내입양을 활성화하고, 입양 과정에서 필요한 지원을 확대하고자 합니다.\n\n○ 조문별 변경 내용\n- 제3조 (개정): '「입양특례법」에 따라 국내에'라는 표현이 '「국내입양에 관한 특별법」에 따라'로 수정되었습니다.",
+      "overview": "이번 개정은 국내입양에 관한 요건 및 절차를 정비하여 입양가정과 양자의 권익을 증진하고 아동 최선의 이익을 반영한 정책을 강화하기 위한 것입니다. 이를 통해 정부는 국내입양을 활성화하고, 입양 과정에서 필요한 지원을 확대하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "001780",
+            "law_name": "의료급여법",
+            "location_label": "제3조①4.",
+            "change_type": "개정",
+            "old_text": "4. 「입양특례법」에 따라 국내에 입양된 18세 미만의 아동",
+            "new_text": "4. 「국내입양에 관한 특별법」에 따라 입양된 18세 미만의 아동",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'「입양특례법」에 따라 국내에' → '「국내입양에 관한 특별법」에 따라'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'「입양특례법」에 따라 국내에'라는 표현이 '「국내입양에 관한 특별법」에 따라'로 수정되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제3조",
+          "mappings": [
+            {
+              "old_position": "①4.",
+              "new_position": "①4.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

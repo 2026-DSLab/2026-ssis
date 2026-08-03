@@ -1,0 +1,140 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-31",
+  "period": {
+    "from_date": "2026-06-30",
+    "to_date": "2026-08-01"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "single-000190-281929",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "000190"
+      ],
+      "laws": [
+        {
+          "law_id": "000190",
+          "law_type": "법률",
+          "law_name": "아동복지법",
+          "internal_name": "아동복지법",
+          "dept_codes": [],
+          "old_serial_no": "281929",
+          "new_serial_no": "281929",
+          "enforce_date": "2026-07-01",
+          "revision_type": "일부개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 아동복지시설의 장, 학교의 장, 위탁가정의 보호자, 보호대상아동의 후견인은 보장원의 장에게 친권행사 제한 또는 친권상실의 선고 청구 요청 등에 대한 법률상담의 지원을 요청할 수 있도록 하고, 보장원의 장은 「법률구조법」에 따라 등록된 법률구조법인 또는 대통령령으로 정하는 기관에 법률상담을 위탁할 수 있도록 함으로써 후견인 선임 절차 등에 어려움을 느끼고 있는 위탁가정의 보호자 등을 지원하려는 것임. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=281929&type=HTML",
+          "articles": [
+            {
+              "article_label": "제10조의2",
+              "clause_no": "②",
+              "item_label": "12의2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "12의2. 제20조의3에 따른 후견인 선임 등에 대한 법률상담의 지원",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제20조의3",
+              "clause_no": "①",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "2. 제19조에 따른 후견인 선임ㆍ변경 청구에 관한 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제20조의3",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "① 보장원의 장은 다음 각 호의 사항에 대한 법률상담을 지원할 수 있다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제20조의3",
+              "clause_no": "①",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "3. 보호대상아동 후견인의 권한 행사에 관한 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제20조의3",
+              "clause_no": "①",
+              "item_label": "4.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "4. 그 밖에 보호대상아동의 후견인과 관련하여 대통령령으로 정하는 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제20조의3",
+              "clause_no": "①",
+              "item_label": "1.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "1. 제18조에 따른 친권행사의 제한 또는 친권상실의 선고 청구 요청에 관한 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제20조의3",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "② 아동복지시설의 장, 학교의 장, 가정위탁 보호를 하고 있는 사람 및 보호대상아동의 후견인으로 선임된 사람은 보장원의 장에게 제1항에 따른 법률상담의 지원을 요청할 수 있다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제20조의3",
+              "clause_no": "③",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "③ 보장원의 장은 「법률구조법」 제3조에 따라 등록된 법률구조법인 또는 대통령령으로 정하는 기관에 제1항 각 호의 사항에 대한 법률상담을 요청할 수 있다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제20조의3",
+              "clause_no": "④",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "④ 제1항 및 제2항에 따른 법률상담 지원의 범위 및 절차와 제3항에 따른 업무 요청 등에 필요한 사항은 보건복지부령으로 정한다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제10조의2": [
+              "①",
+              "③",
+              "④",
+              "⑤",
+              "⑥",
+              "⑦",
+              "⑧"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

@@ -1,0 +1,60 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-31",
+  "period": {
+    "from_date": "2025-11-10",
+    "to_date": "2026-08-01"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "single-000836-279667",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "000836"
+      ],
+      "laws": [
+        {
+          "law_id": "000836",
+          "law_type": "법률",
+          "law_name": "문화예술진흥법",
+          "internal_name": "문화예술진흥법",
+          "dept_codes": [],
+          "old_serial_no": "279667",
+          "new_serial_no": "279667",
+          "enforce_date": "2025-11-11",
+          "revision_type": "일부개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 현행법은 국가와 지방자치단체가 문화예술 진흥을 위하여 전문예술법인 또는 전문예술단체를 지정하여 지원ㆍ육성할 수 있도록 하고, 지정된 전문예술법인ㆍ단체는 기부금품을 모집할 수 있도록 하고 있음. 그런데 「기부금품의 모집 및 사용에 관한 법률」은 기부금품의 ‘모집’과 ‘접수’를 구분하고 있는데, 현행법은 전문예술법인ㆍ단체가 기부금품을 모집할 수 있다는 사실만 명시적으로 규정하고 있어 자발적으로 기탁되는 기부금품을 접수할 수 있는지에 대하여 실무 현장에서 혼선이 발생하고 있는바, 전문예술법인ㆍ단체가 기부금품 모집 및 접수가 가능하다는 것을 법률에 명시하여 실무 현장의 혼선을 방지하고 전문예술법인ㆍ단체의 재정 여건을 개선하려는 것임. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=279667&type=HTML",
+          "articles": [
+            {
+              "article_label": "제7조",
+              "clause_no": "⑥",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "⑥ 제1항에 따라 지정된 전문예술법인ㆍ단체는 「기부금품의 모집 및 사용에 관한 법률」에도 불구하고 기부금품을 모집할 수 있다.",
+              "new_text": "⑥ 제1항에 따라 지정된 전문예술법인ㆍ단체는 「기부금품의 모집 및 사용에 관한 법률」에도 불구하고 기부금품을 모집ㆍ접수할 수 있다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제7조": [
+              "①",
+              "②",
+              "③",
+              "④",
+              "⑤",
+              "⑦",
+              "⑧"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

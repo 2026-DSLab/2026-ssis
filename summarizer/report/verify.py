@@ -38,7 +38,9 @@ def _expected_fragments(contract: ContractSummary) -> list[str]:
             frags.append(law.headline)
         if law.overview:
             frags.append(law.overview)
-        frags.extend(law.caveats)
+        # ★ caveats는 더 이상 문서에 쓰지 않는다(2026-07-31, builder.py의
+        # law_detail() 참고) — 여기서도 "빠졌다"고 잘못 보고하지 않도록
+        # 기대 목록에서 제외한다.
         for s in law.article_summaries:
             if not s.error and (s.summary or "").strip():
                 frags.append(s.summary)

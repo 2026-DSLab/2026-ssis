@@ -1,0 +1,825 @@
+{
+  "source_file": "weekly_contract_2026-07-31.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "001357",
+      "law_name": "공공기관의 정보공개에 관한 법률",
+      "law_type": "법률",
+      "enforce_date": "2023-11-17",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=251019&type=HTML",
+      "new_serial_no": "251019",
+      "headline": "정보공개위원회 소속 변경 및 데이터기반행정 관련 위원회 통합",
+      "body": "이번 개정은 정보공개위원회의 소속을 국무총리에서 행정안전부장관으로 변경하고, 데이터 기반 행정 관련 위원회를 통합하여 효율적인 운영을 도모하고자 하는 목적입니다. 이를 통해 데이터 제공 거부에 대한 조정 기능이 강화되고, 보다 체계적인 데이터 행정이 이루어질 것으로 기대됩니다.\n\n○ 조문별 변경 내용\n- 제22조 (개정): 정보공개위원회는 국무총리 소속에서 행정안전부장관 소속으로 변경됩니다.\n- 제23조\n    · ②2. (개정): 국무총리의 권한이 행정안전부장관으로 변경되었습니다.\n    · ②3. (개정): 국무총리가 수행하던 업무가 행정안전부장관에게 이관되었습니다.",
+      "overview": "이번 개정은 정보공개위원회의 소속을 국무총리에서 행정안전부장관으로 변경하고, 데이터 기반 행정 관련 위원회를 통합하여 효율적인 운영을 도모하고자 하는 목적입니다. 이를 통해 데이터 제공 거부에 대한 조정 기능이 강화되고, 보다 체계적인 데이터 행정이 이루어질 것으로 기대됩니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "001357",
+            "law_name": "공공기관의 정보공개에 관한 법률",
+            "location_label": "제22조",
+            "change_type": "개정",
+            "old_text": "다음 각 호의 사항을 심의ㆍ조정하기 위하여 국무총리 소속으로 정보공개위원회(이하 “위원회”라 한다)를 둔다.",
+            "new_text": "다음 각 호의 사항을 심의ㆍ조정하기 위하여 행정안전부장관 소속으로 정보공개위원회(이하 “위원회”라 한다)를 둔다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보공개위원회는 국무총리 소속에서 행정안전부장관 소속으로 변경됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001357",
+            "law_name": "공공기관의 정보공개에 관한 법률",
+            "location_label": "제23조②2.",
+            "change_type": "개정",
+            "old_text": "2. 정보공개에 관하여 학식과 경험이 풍부한 사람으로서 국무총리가 위촉하는 사람",
+            "new_text": "2. 정보공개에 관하여 학식과 경험이 풍부한 사람으로서 행정안전부장관이 위촉하는 사람",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'국무총리가' → '행정안전부장관이'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국무총리의 권한이 행정안전부장관으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001357",
+            "law_name": "공공기관의 정보공개에 관한 법률",
+            "location_label": "제23조②3.",
+            "change_type": "개정",
+            "old_text": "3. 시민단체(「비영리민간단체 지원법」 제2조에 따른 비영리민간단체를 말한다)에서 추천한 사람으로서 국무총리가 위촉하는 사람",
+            "new_text": "3. 시민단체(「비영리민간단체 지원법」 제2조에 따른 비영리민간단체를 말한다)에서 추천한 사람으로서 행정안전부장관이 위촉하는 사람",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'국무총리가' → '행정안전부장관이'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국무총리가 수행하던 업무가 행정안전부장관에게 이관되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제22조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제23조",
+          "mappings": [
+            {
+              "old_position": "②2.",
+              "new_position": "②2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②3.",
+              "new_position": "②3.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "001780",
+      "law_name": "의료급여법",
+      "law_type": "법률",
+      "enforce_date": "2025-07-19",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=252715&type=HTML",
+      "new_serial_no": "252715",
+      "headline": "국내입양 활성화를 위한 입양특례법 전부개정 및 절차와 지원 강화",
+      "body": "이번 개정은 국내입양을 활성화하고 아동의 권익과 복지를 증진하기 위한 내용을 담고 있습니다. 보호대상아동의 입양 요건 및 절차를 명확히 하여 양부모와 아동의 상호 적응을 지원하는 방안을 마련하였습니다.\n\n○ 조문별 변경 내용\n- 제3조 (개정): \"입양특례법\" 대신 \"국내입양에 관한 특별법\"에 따른 내용으로 수정되었습니다.",
+      "overview": "이번 개정은 국내입양을 활성화하고 아동의 권익과 복지를 증진하기 위한 내용을 담고 있습니다. 보호대상아동의 입양 요건 및 절차를 명확히 하여 양부모와 아동의 상호 적응을 지원하는 방안을 마련하였습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "001780",
+            "law_name": "의료급여법",
+            "location_label": "제3조①4.",
+            "change_type": "개정",
+            "old_text": "4. 「입양특례법」에 따라 국내에 입양된 18세 미만의 아동",
+            "new_text": "4. 「국내입양에 관한 특별법」에 따라 입양된 18세 미만의 아동",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'「입양특례법」에 따라 국내에' → '「국내입양에 관한 특별법」에 따라'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "\"입양특례법\" 대신 \"국내입양에 관한 특별법\"에 따른 내용으로 수정되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제3조",
+          "mappings": [
+            {
+              "old_position": "①4.",
+              "new_position": "①4.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "009621",
+      "law_name": "유아교육법",
+      "law_type": "법률",
+      "enforce_date": "2026-05-19",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=286061&type=HTML",
+      "new_serial_no": "286061",
+      "headline": "유치원 민원 처리 시스템 구축 및 교사 보호 방안 마련",
+      "body": "이번 개정은 유치원에서 발생하는 민원을 보다 공정하고 효율적으로 처리하기 위한 시스템 마련과 현장에서 교원을 보호하는 방안을 포함하고 있습니다. 또한, 유아의 건전한 발달을 도모하기 위하여 사교육 실태조사와 관련한 규정을 신설해 전반적인 유아교육 환경 개선을 목표로 하고 있습니다.\n\n○ 조문별 변경 내용\n- 제19조의9 (신설, 10개 항·호·목): 교육부장관은 원장이 유치원에 제기된 민원을 공정하고 적법하게 처리할 수 있도록 관련 사항을 포함한 계획을 수립하고 시행하여야 합니다.\n- 제21조의3 (신설): 교육부장관 및 교육감은 유아생활지도에 필요한 인력 및 시설에 소요되는 경비를 예산의 범위 내에서 지원할 수 있습니다.\n- 제21조의4 (신설): 보호자는 유아의 발달단계에 적합한 학습이 이루어질 수 있도록 노력하여야 합니다.\n- 제21조의6 (신설): 유치원과 원장은 교원의 전화번호, 주민등록번호 등 개인정보가 관계 법률에 따라 보호될 수 있도록 필요한 조치를 하여야 합니다.\n- 제22조 (개정): 정교사(1급ㆍ2급), 준교사, 보건교사(1급ㆍ2급) 및 영양교사(1급ㆍ2급)로 변경되었습니다.\n- 제21조의5 (신설, 3개 항·호·목): 교육부장관은 유아의 건전한 발달과 유치원 교육과정 등의 정상적인 운영을 위해 사교육 실시 및 그 비용 등에 대한 실태를 조사할 수 있습니다.",
+      "overview": "이번 개정은 유치원에서 발생하는 민원을 보다 공정하고 효율적으로 처리하기 위한 시스템 마련과 현장에서 교원을 보호하는 방안을 포함하고 있습니다. 또한, 유아의 건전한 발달을 도모하기 위하여 사교육 실태조사와 관련한 규정을 신설해 전반적인 유아교육 환경 개선을 목표로 하고 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제19조의9①",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "① 교육부장관은 원장이 유치원에 제기된 민원을 공정하고 적법하게 처리할 수 있도록 다음 각 호의 사항을 포함한 계획을 수립ㆍ시행하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관은 원장이 유치원에 제기된 민원을 공정하고 적법하게 처리할 수 있도록 관련 사항을 포함한 계획을 수립하고 시행하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제19조의9①1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 유치원 현장의 실정과 특성에 맞춘 민원 처리의 방법 및 절차",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "유치원 현장의 실정과 특성에 맞춘 민원 처리의 방법 및 절차가 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제19조의9①2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 제1호의 민원 처리를 전자적으로 하기 위한 정보시스템 구축",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "민원 처리를 전자적으로 하기 위한 정보시스템이 새로 구축됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제19조의9①3.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 제1호의 민원 처리를 위한 행정적ㆍ재정적 지원 방안",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "민원 처리를 위한 행정적 및 재정적 지원 방안이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제19조의9①4.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "4. 그 밖에 유치원 민원 처리를 위하여 필요하다고 교육부장관이 인정한 사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "유치원 민원 처리를 위하여 필요하다고 교육부장관이 인정한 사항이 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제19조의9②",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "② 교육감은 유치원 민원 처리를 위하여 다음 각 호의 사항을 포함한 계획을 수립ㆍ시행하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육감은 유치원 민원 처리를 위하여 각 호의 사항을 포함한 계획을 수립하고 시행하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제19조의9②1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 유치원 민원을 처리하는 교원 및 직원 등에 대한 보호 방안",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "유치원 민원을 처리하는 교원 및 직원 등에 대한 보호 방안이 새로 마련되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제19조의9②2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 제1항제1호의 민원 처리를 위한 행정적ㆍ재정적 세부지원 방안",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "민원 처리를 위한 행정적 및 재정적 세부지원 방안이 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제19조의9②3.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 그 밖에 유치원 민원 처리를 위하여 필요하다고 교육감이 인정한 사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육감이 유치원 민원 처리를 위하여 필요하다고 인정한 사항이 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제19조의9③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 원장은 제1항제1호에 따른 민원 처리의 방법 및 절차에 관한 사항을 보호자에게 정기적으로 안내하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "원장은 민원 처리의 방법 및 절차에 관한 사항을 보호자에게 정기적으로 안내하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제21조의3③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 교육부장관 및 교육감은 제1항에 따른 유아생활지도에 필요한 인력 및 시설 등에 소요되는 경비를 예산의 범위에서 지원할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관 및 교육감은 유아생활지도에 필요한 인력 및 시설에 소요되는 경비를 예산의 범위 내에서 지원할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제21조의4④",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "④ 보호자는 유아의 발달단계에 적합한 학습이 이루어질 수 있도록 노력하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보호자는 유아의 발달단계에 적합한 학습이 이루어질 수 있도록 노력하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제21조의6",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "유치원과 원장은 교원의 전화번호, 주민등록번호 등 개인정보가 「개인정보 보호법」 및 「공공기관의 정보공개에 관한 법률」 등 관계 법률에 따라 보호될 수 있도록 필요한 조치를 하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "유치원과 원장은 교원의 전화번호, 주민등록번호 등 개인정보가 관계 법률에 따라 보호될 수 있도록 필요한 조치를 하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제22조②",
+            "change_type": "개정",
+            "old_text": "②교사는 정교사(1급ㆍ2급)ㆍ준교사로 나누되, 별표 2의 자격기준에 해당하는 사람으로서 대통령령으로 정하는 바에 따라 교육부장관이 검정ㆍ수여하는 자격증을 받은 사람이어야 한다.",
+            "new_text": "②교사는 정교사(1급ㆍ2급), 준교사, 보건교사(1급ㆍ2급) 및 영양교사(1급ㆍ2급)로 나누되, 별표 2의 자격기준에 해당하는 사람으로서 대통령령으로 정하는 바에 따라 교육부장관이 검정ㆍ수여하는 자격증을 받은 사람이어야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'정교사(1급ㆍ2급)ㆍ준교사로' → '정교사(1급ㆍ2급), 준교사, 보건교사(1급ㆍ2급) 및 영양교사(1급ㆍ2급)로'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정교사(1급ㆍ2급), 준교사, 보건교사(1급ㆍ2급) 및 영양교사(1급ㆍ2급)로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제21조의5①",
+            "change_type": "신설",
+            "old_text": "유치원과 원장은 교원의 전화번호, 주민등록번호 등 개인정보가 「개인정보 보호법」 및 「공공기관의 정보공개에 관한 법률」 등 관계 법률에 따라 보호될 수 있도록 필요한 조치를 하여야 한다.",
+            "new_text": "① 교육부장관은 유아의 건전한 발달과 유치원 교육과정 등의 정상적인 운영을 위하여 사교육 실시 및 그 비용 등에 대한 실태를 조사할 수 있다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관은 유아의 건전한 발달과 유치원 교육과정 등의 정상적인 운영을 위해 사교육 실시 및 그 비용 등에 대한 실태를 조사할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제21조의5②",
+            "change_type": "신설",
+            "old_text": "유치원과 원장은 교원의 전화번호, 주민등록번호 등 개인정보가 「개인정보 보호법」 및 「공공기관의 정보공개에 관한 법률」 등 관계 법률에 따라 보호될 수 있도록 필요한 조치를 하여야 한다.",
+            "new_text": "② 교육부장관은 제1항에 따른 실태조사에 필요한 인력과 예산을 확보하도록 노력하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관은 실태조사에 필요한 인력과 예산을 확보하도록 노력하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009621",
+            "law_name": "유아교육법",
+            "location_label": "제21조의5③",
+            "change_type": "신설",
+            "old_text": "유치원과 원장은 교원의 전화번호, 주민등록번호 등 개인정보가 「개인정보 보호법」 및 「공공기관의 정보공개에 관한 법률」 등 관계 법률에 따라 보호될 수 있도록 필요한 조치를 하여야 한다.",
+            "new_text": "③ 제1항에 따른 실태조사의 범위와 방법 등에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "실태조사의 범위와 방법 등에 필요한 사항은 대통령령으로 정합니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제19조의9",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "①",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①3.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①4.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②3.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제21조의3",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제21조의4",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "④",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제21조의6",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제22조",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "010164",
+      "law_name": "에너지법",
+      "law_type": "법률",
+      "enforce_date": "2026-02-01",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=268795&type=HTML",
+      "new_serial_no": "268795",
+      "headline": "기업부설연구소 지원을 위한 연구개발 관련 법령 정비 및 지원 체계 강화",
+      "body": "이번 개정은 기업부설연구소 및 연구개발전담부서의 효율적인 지원과 관리를 통해 기업 경쟁력 강화와 국가 발전에 기여하기 위한 것입니다. 이를 위해 연구개발 지원에 관한 법적 근거를 마련하고, 기업의 기술 혁신을 촉진하는 다양한 정책을 포함하고 있습니다.\n\n○ 조문별 변경 내용\n- 제12조 (개정): '기초연구진흥 및 기술개발지원에 관한 법률' 제14조의2제1항에 대한 내용을 '기업부설연구소등의 연구개발 지원에 관한 법률' 제7조제1항으로 변경하였습니다.",
+      "overview": "이번 개정은 기업부설연구소 및 연구개발전담부서의 효율적인 지원과 관리를 통해 기업 경쟁력 강화와 국가 발전에 기여하기 위한 것입니다. 이를 위해 연구개발 지원에 관한 법적 근거를 마련하고, 기업의 기술 혁신을 촉진하는 다양한 정책을 포함하고 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "010164",
+            "law_name": "에너지법",
+            "location_label": "제12조①11.",
+            "change_type": "개정",
+            "old_text": "11. 「기초연구진흥 및 기술개발지원에 관한 법률」 제14조의2제1항에 따라 인정받은 기업부설연구소",
+            "new_text": "11. 「기업부설연구소등의 연구개발 지원에 관한 법률」 제7조제1항에 따라 인정받은 기업부설연구소",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'「기초연구진흥 및 기술개발지원에 관한 법률」 제14조의2제1항에' → '「기업부설연구소등의 연구개발 지원에 관한 법률」 제7조제1항에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'기초연구진흥 및 기술개발지원에 관한 법률' 제14조의2제1항에 대한 내용을 '기업부설연구소등의 연구개발 지원에 관한 법률' 제7조제1항으로 변경하였습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제12조",
+          "mappings": [
+            {
+              "old_position": "①11.",
+              "new_position": "①11.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": [
+    {
+      "law_id": "35080",
+      "law_name": "하도급거래공정화 지침",
+      "new_serial_no": "2100000251404",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000251404&type=HTML"
+    },
+    {
+      "law_id": "37812",
+      "law_name": "중소기업자간 경쟁제품 직접생산 확인기준",
+      "new_serial_no": "2100000268206",
+      "reason": "폐지제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000268206&type=HTML"
+    },
+    {
+      "law_id": "33891",
+      "law_name": "정보보호시스템 평가·인증 등에 관한 고시",
+      "new_serial_no": "2100000215508",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000215508&type=HTML"
+    },
+    {
+      "law_id": "006295",
+      "law_name": "공공기관의 정보공개에 관한 법률 시행규칙",
+      "new_serial_no": "273809",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=273809&type=HTML"
+    },
+    {
+      "law_id": "008113",
+      "law_name": "지능정보화 기본법 시행규칙",
+      "new_serial_no": "267147",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=267147&type=HTML"
+    },
+    {
+      "law_id": "014862",
+      "law_name": "가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률",
+      "new_serial_no": "270215",
+      "reason": "제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270215&type=HTML"
+    },
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    },
+    {
+      "law_id": "2054105",
+      "law_name": "중소 소프트웨어사업자의 사업 참여 지원에 관한 지침",
+      "new_serial_no": "2100000274532",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000274532&type=HTML"
+    },
+    {
+      "law_id": "42430",
+      "law_name": "행정업무용 표준 관리규정",
+      "new_serial_no": "2100000254490",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000254490&type=HTML"
+    }
+  ]
+}

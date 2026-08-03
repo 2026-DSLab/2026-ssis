@@ -1,0 +1,194 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-31",
+  "period": {
+    "from_date": "2024-07-23",
+    "to_date": "2026-08-01"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "single-001736-258991",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "001736"
+      ],
+      "laws": [
+        {
+          "law_id": "001736",
+          "law_type": "법률",
+          "law_name": "별정우체국법",
+          "internal_name": "별정우체국법",
+          "dept_codes": [],
+          "old_serial_no": "258991",
+          "new_serial_no": "258991",
+          "enforce_date": "2024-07-24",
+          "revision_type": "일부개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 별정우체국 직원의 결격사유, 국장 및 직원의 당연퇴직 규정을 신설함. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=258991&type=HTML",
+          "articles": [
+            {
+              "article_label": "제10조의2",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "② 20년 미만을 근속한 사람이 제15조제1항제3호에 따른 정부의 계획에 따라 별정우체국의 지정이 취소되거나 정원의 개정ㆍ폐지 또는 예산의 감소 등으로 폐국 또는 정원 초과가 되었을 경우에 정년 전에 스스로 퇴직하면 예산의 범위에서 수당을 지급할 수 있다.",
+              "new_text": "② 국장 또는 직원이 「국가공무원법」 제69조제1호에 해당할 때에는 당연히 퇴직한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조의2",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "① 직원(국장은 제외한다)으로서 20년 이상 근속한 사람이 정년 전에 스스로 퇴직하면 예산의 범위에서 명예퇴직수당을 지급할 수 있다.",
+              "new_text": "① 제3조제3항 및 제15조에 따라 별정우체국 지정이 해지 또는 취소된 때에는 해당 국장 및 직원은 당연히 퇴직한다. 다만, 피지정인의 추천을 받아 임용된 국장이 그 별정우체국의 업무를 인수하여 새로 피지정인으로 지정받았을 때에는 그러하지 아니한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조의3",
+              "clause_no": "③",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "③ 제1항 및 제2항에 따라 명예퇴직수당 등을 받은 사람이 다음 각 호의 어느 하나에 해당하는 경우에는 과학기술정보통신부장관은 그 명예퇴직수당 등을 환수하여야 한다. 이 경우 환수금을 내야 할 사람이 기한까지 내지 아니하면 국세 체납처분의 예에 따라 징수할 수 있다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조의3",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "① 직원은 직무 외에 영리를 목적으로 하는 대통령령으로 정하는 업무에 종사할 수 없다.",
+              "new_text": "① 직원(국장은 제외한다)으로서 20년 이상 근속한 사람이 정년 전에 스스로 퇴직하면 예산의 범위에서 명예퇴직수당을 지급할 수 있다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제10조의3",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "② 직원은 다음 각 호의 어느 하나에 해당하는 직을 겸직할 수 없다.1. 국회의원 또는 지방의회의원2. 각급선거관리위원회의 위원3. 농업협동조합, 수산업협동조합, 산림조합, 엽연초생산협동조합, 신용협동조합 및 새마을금고(이들 조합의 중앙회와 연합회를 포함한다)의 임직원",
+              "new_text": "② 20년 미만을 근속한 사람이 제15조제1항제3호에 따른 정부의 계획에 따라 별정우체국의 지정이 취소되거나 정원의 개정ㆍ폐지 또는 예산의 감소 등으로 폐국 또는 정원 초과가 되었을 경우에 정년 전에 스스로 퇴직하면 예산의 범위에서 수당을 지급할 수 있다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제10조의3",
+              "clause_no": "③",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "2. 직원으로 다시 임용되거나 채용되는 경우",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조의3",
+              "clause_no": "③",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "3. 명예퇴직수당 등을 초과하여 받거나 그 밖에 명예퇴직수당 등의 지급 대상이 아닌 사람이 받은 경우",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조의3",
+              "clause_no": "④",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "④ 제1항에 따른 명예퇴직수당, 제2항에 따른 수당의 지급 대상 범위, 지급액, 지급 절차와 제3항에 따른 명예퇴직수당의 환수액, 환수절차 등에 관하여 필요한 사항은 과학기술정보통신부령으로 정한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조의4",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "① 직원은 직무 외에 영리를 목적으로 하는 대통령령으로 정하는 업무에 종사할 수 없다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조의4",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "② 직원은 다음 각 호의 어느 하나에 해당하는 직을 겸직할 수 없다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조의4",
+              "clause_no": "②",
+              "item_label": "1.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "1. 국회의원 또는 지방의회의원",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조의4",
+              "clause_no": "②",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "2. 각급선거관리위원회의 위원",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조의4",
+              "clause_no": "②",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "3. 농업협동조합, 수산업협동조합, 산림조합, 엽연초생산협동조합, 신용협동조합 및 새마을금고(이들 조합의 중앙회와 연합회를 포함한다)의 임직원",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제8조",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "② 「국가공무원법」 제33조 각 호의 어느 하나에 해당하는 사람은 직원으로 채용할 수 없다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {}
+        }
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "law_id": "001736",
+      "law_name": "별정우체국법",
+      "new_serial_no": "258991",
+      "reason": "중복실패",
+      "detail": "본문검색: '재직 중의 사유로 금고 이상의 형을 받은 경…'; 중복 2건 → 번호결합 재검색: '1. 재직 중의 사유로 금고 이상의 형을 받…'; 번호결합 후에도 중복 2건",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=258991&type=HTML",
+      "guards_tried": [
+        "본문검색: '재직 중의 사유로 금고 이상의 형을 받은 경…'",
+        "중복 2건 → 번호결합 재검색: '1. 재직 중의 사유로 금고 이상의 형을 받…'",
+        "번호결합 후에도 중복 2건"
+      ]
+    }
+  ],
+  "no_comparison": []
+}

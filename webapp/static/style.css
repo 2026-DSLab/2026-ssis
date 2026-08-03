@@ -40,10 +40,247 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-main {
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 0 20px 80px;
+/* 왼쪽으로 몰고 — 가운데 좁은 칼럼 하나에 갇혀 화면 대부분이 여백으로
+   낭비되던 이전 구조를 버린다. margin:auto로 가운데 정렬하지 않아
+   뷰포트가 넓을수록 왼쪽부터 채워진다. */
+.page-layout {
+  max-width: 1600px;
+  padding: 0 28px 80px;
+}
+
+.content-col { width: 100%; }
+
+/* ---------- 오른쪽 상세 패널 ---------- */
+
+/* 상세 패널을 고정 폭 그리드 칼럼으로 항상 자리 잡아 두면, 아무것도
+   선택하지 않은 기본 상태에서 그 자리가 통째로 빈 채 남아 오히려
+   답답해 보인다("원문 보기" 전엔 보여줄 내용 자체가 없으니 당연하다).
+   그래서 평소엔 공간을 전혀 차지하지 않는 오버레이 패널로 바꾸고,
+   실제로 뭔가를 열었을 때만 오른쪽에서 슬라이드로 나타나게 한다 —
+   그동안은 본문이 화면 전체 폭을 그대로 쓴다. */
+.detail-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 20, 35, 0.32);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.32s ease;
+  z-index: 39;
+}
+
+.detail-backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+/* 기본값(법제처 원문 보기 = iframe): 화면 가운데에 큼직한 모달로 띄운다
+   — 외부 웹페이지를 "새 창처럼" 보여주는 데는 이 편이 낫다.
+   cubic-bezier에 살짝 오버슈트를 줘서 톡 튀어 오르듯 열리는 "동적인"
+   느낌을 낸다(밋밋한 ease보다 반응이 생기 있게 느껴진다). */
+.detail-col {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: min(80vw, 1500px);
+  height: min(85vh, 920px);
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 28px 20px;
+  box-shadow: 0 30px 80px -20px rgba(20, 30, 60, 0.4), 0 10px 30px rgba(20, 30, 60, 0.15);
+  transform: translate(-50%, -50%) scale(0.94);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.38s cubic-bezier(0.34, 1.28, 0.64, 1), opacity 0.28s ease;
+  z-index: 40;
+}
+
+.detail-col.is-open { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+
+/* "그냥 원문 보기"(개정 전/후 비교)는 아까(가운데 모달로 바꾸기 전)
+   처럼 오른쪽에 붙어 슬라이드로 나오는 편이 낫다는 피드백 — 목록을
+   훑으면서 옆에 펼쳐 대조하는 용도라 화면을 통째로 덮는 모달보다
+   도킹된 패널이 더 자연스럽다. 다만 위/오른쪽/아래에 여백 없이 화면
+   가장자리에 딱 붙여두면 "정렬됐다"는 느낌보다 잘려 나간 것처럼
+   보인다 — 사방에 여백을 주고 모서리를 둥글리고 그림자를 둘러
+   가운데 모달과 같은 "떠 있는 카드" 느낌을 오른쪽에 도킹한 형태로
+   유지한다. */
+.detail-col.detail-col--docked {
+  top: 80px;
+  left: auto;
+  right: 24px;
+  width: min(680px, 50vw);
+  height: calc(100vh - 104px);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 60px -16px rgba(20, 30, 60, 0.35), 0 8px 24px rgba(20, 30, 60, 0.12);
+  transform: translateX(calc(100% + 24px));
+}
+
+.detail-col.detail-col--docked.is-open { transform: translateX(0); }
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-header-title {
+  font-weight: 700;
+  font-size: 1.02rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 위치(제10조⑥항 등) 부분의 loc-* span들은 목록에서는 옅은 회색으로
+   덜 강조하지만, 여기(상세 패널 제목)는 제목 전체가 하나로 읽혀야
+   하므로 색을 따로 두지 않고 제목과 같은 색을 쓴다. */
+.detail-header-title .loc-article,
+.detail-header-title .loc-clause,
+.detail-header-title .loc-item,
+.detail-header-title .loc-subitem,
+.detail-header-title .loc-suffix {
+  color: inherit;
+}
+
+.detail-close {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.detail-close:hover { background: var(--primary-soft); color: var(--primary-dark); }
+
+.detail-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+/* display:flex를 위에서 무조건 걸어두면(author 스타일이 항상
+   user-agent의 [hidden]{display:none}을 이긴다) hidden 속성을 줘도
+   안 사라진다 — 패널을 열어도 안내 문구가 계속 떠 있던 원인. */
+.detail-empty[hidden] { display: none; }
+
+.detail-body { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow-y: auto; }
+
+/* 목록 안에서는 작게 접혀 있던 내용이 여기서는 페이지의 실제 주인공이다
+   — 패널 폭이 넓어진 만큼 글자 크기·여백도 키워 "확대해서 보기"라는
+   목적에 맞게 크게 보여준다. */
+.detail-body .fulltext-body { flex-direction: column; gap: 16px; }
+
+.detail-body .fulltext-col { padding: 16px 20px; }
+
+.detail-body .fulltext-label { font-size: 0.78rem; }
+
+.detail-body .fulltext-text { font-size: 1rem; line-height: 1.8; }
+
+/* 진짜 웹페이지를 보여주는 iframe이라는 걸 한눈에 알 수 있도록, 브라우저
+   창의 주소창 바를 흉내낸다(신호등 점 + 자물쇠 + 도메인 + 새 탭 아이콘).
+   법제처 원문 보기를 눌렀을 때만 쓰인다. */
+.browser-chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  padding: 9px 12px;
+}
+
+.browser-chrome-dots { display: flex; gap: 6px; flex-shrink: 0; }
+
+.browser-chrome-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dfe2e8;
+}
+
+.browser-chrome-url {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.browser-chrome-lock { flex-shrink: 0; color: #15803d; font-size: 0.78rem; }
+
+.browser-chrome-open {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.browser-chrome-open:hover { background: var(--primary-soft); color: var(--primary-dark); }
+
+.detail-iframe {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0 0 8px 8px;
+}
+
+@media (max-width: 760px) {
+  .page-layout { padding: 0 20px 80px; }
+
+  .detail-col {
+    width: 94vw;
+    height: 92vh;
+    padding: 14px 16px 16px;
+  }
+
+  /* 좁은 화면에서는 오른쪽 도킹이 의미가 없다 — 원문 보기도 iframe과
+     같은 가운데 모달 크기로 맞춘다. */
+  .detail-col.detail-col--docked {
+    top: 50%;
+    left: 50%;
+    right: auto;
+    width: 94vw;
+    height: 92vh;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 30px 80px -20px rgba(20, 30, 60, 0.4), 0 10px 30px rgba(20, 30, 60, 0.15);
+    transform: translate(-50%, -50%) scale(0.94);
+  }
+
+  .detail-col.detail-col--docked.is-open { transform: translate(-50%, -50%) scale(1); }
 }
 
 /* ---------- topbar ---------- */
@@ -59,9 +296,7 @@ main {
 }
 
 .topbar-inner {
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 16px 20px;
+  padding: 16px 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -145,22 +380,6 @@ main {
 
 .hero { position: relative; padding: 44px 0 8px; }
 
-/* 히어로 뒤편의 은은한 그라디언트 블롭 — 화면이 평평하지 않고 살짝
-   떠 있는 느낌을 준다. 아이콘/이모지 없이 색과 블러만으로 "요즘
-   스타일" 깊이감을 낸다(과한 장식은 예전에 "AI스러운" 인상을 줘서
-   피한다). */
-.hero-glow {
-  position: absolute;
-  top: -60px;
-  right: -80px;
-  width: 340px;
-  height: 340px;
-  background: radial-gradient(circle, rgba(59, 91, 253, 0.16), rgba(59, 91, 253, 0) 70%);
-  filter: blur(10px);
-  pointer-events: none;
-  z-index: -1;
-}
-
 .hero h1 {
   font-size: 2rem;
   font-weight: 800;
@@ -177,59 +396,44 @@ main {
 
 .hero-sub { color: var(--muted); margin: 0 0 26px; }
 
-/* 박스 없이 숫자 자체를 크게 — 개정 법령/변경 조문 두 핵심 수치를
-   세로 구분선 하나로만 나눈 "리드 문단"처럼 배치한다(신문 표지의
-   헤드라인 숫자를 참고). 카드형 통계 타일에서 완전히 벗어나는 지점. */
-.stat-lede {
-  display: flex;
-  align-items: baseline;
-  gap: 28px;
-  margin: 4px 0 18px;
+/* 숫자만 덩그러니 크게 있으면(3 / 개정 법령) 뭘 세는 숫자인지 한
+   박자 더 생각해야 한다 — "개정 법령은 3개이고, 변경 조문은 27건"처럼
+   문장으로 풀어서, 숫자와 단위가 바로 붙어 읽히게 한다. */
+.hero-lede {
+  font-size: 1.2rem;
+  color: var(--text);
+  margin: 4px 0 10px;
 }
 
-.stat-lede-block { display: flex; align-items: baseline; gap: 10px; }
-
-.stat-lede-num {
-  font-size: 2.6rem;
+.lede-num {
   font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--text);
+  color: var(--primary);
   font-variant-numeric: tabular-nums;
 }
 
-.stat-lede-label { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
-
-.stat-lede-divider { width: 1px; align-self: stretch; background: var(--border); }
-
-/* 구분별 세부 수치는 위쪽 얇은 선 하나로만 본문과 나뉘는 한 줄 목록 —
-   점(dot) 색으로만 구분을 표시하고 배경 박스는 쓰지 않는다. */
-.stat-breakdown {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 20px;
+/* 구분별 내역도 같은 방식 — "이 중 신설 4건, 개정 18건, ...입니다"
+   문장 안에서 구분명+건수만 그 구분 색으로 강조한다. */
+.hero-breakdown {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
   padding-top: 14px;
   border-top: 1px solid var(--border);
   margin-bottom: 4px;
-  font-size: 0.86rem;
-  color: var(--ink-soft);
 }
 
-.stat-breakdown-item { display: inline-flex; align-items: center; gap: 6px; }
+.breakdown-item { font-weight: 600; }
 
-.stat-breakdown-item strong { font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+.breakdown-item strong { font-weight: 800; font-variant-numeric: tabular-nums; }
 
-.stat-breakdown-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-
-.stat-breakdown-item--new .stat-breakdown-dot { background: var(--k-new); }
-.stat-breakdown-item--amend .stat-breakdown-dot { background: var(--k-amend); }
-.stat-breakdown-item--delete .stat-breakdown-dot { background: var(--k-delete); }
-.stat-breakdown-item--move .stat-breakdown-dot { background: var(--k-move); }
-.stat-breakdown-item--nochange .stat-breakdown-dot { background: var(--k-nochange); }
-.stat-breakdown-item--other .stat-breakdown-dot { background: var(--k-other); }
+.breakdown-item--new { color: var(--k-new); }
+.breakdown-item--amend { color: var(--k-amend); }
+.breakdown-item--delete { color: var(--k-delete); }
+.breakdown-item--move { color: var(--k-move); }
+.breakdown-item--nochange { color: var(--k-nochange); }
+.breakdown-item--other { color: var(--k-other); }
 
 @media (max-width: 560px) {
-  .stat-lede { gap: 18px; }
-  .stat-lede-num { font-size: 2rem; }
+  .hero-lede { font-size: 1.05rem; }
 }
 
 /* ---------- toolbar ---------- */
@@ -275,19 +479,19 @@ main {
 /* 필터가 아니라 "그 구분 섹션으로 이동"하는 내비게이션이므로 버튼처럼
    보이지 않게 — 배경/테두리 없는 텍스트 링크 목록. 점(dot) 색만으로
    구분을 표시한다. */
-.kind-nav { display: flex; gap: 6px 20px; flex-wrap: wrap; }
+.kind-nav { display: flex; gap: 10px 28px; flex-wrap: wrap; }
 
 .kind-nav-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  padding: 4px 0;
+  padding: 5px 0;
   color: var(--ink-soft);
-  font-size: 0.86rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   font-family: inherit;
   cursor: pointer;
   transition: color 0.12s ease, border-color 0.12s ease;
@@ -295,7 +499,7 @@ main {
 
 .kind-nav-link:hover { color: var(--primary); border-color: var(--primary-soft); }
 
-.kind-nav-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.kind-nav-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 
 .kind-nav-count { color: var(--muted); font-weight: 500; }
 
@@ -364,12 +568,6 @@ main {
 
 .overview-headline { color: var(--ink-soft); font-size: 0.88rem; }
 
-.overview-caveat {
-  flex-basis: 100%;
-  color: #92400e;
-  font-size: 0.8rem;
-}
-
 /* ---------- 구분별 섹션 ---------- */
 
 .kind-sections { display: flex; flex-direction: column; gap: 32px; }
@@ -379,20 +577,20 @@ main {
 .kind-section-title {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 1.1rem;
+  gap: 10px;
+  font-size: 1.45rem;
   font-weight: 800;
   letter-spacing: -0.01em;
-  margin: 0 0 12px;
-  padding-bottom: 8px;
+  margin: 0 0 14px;
+  padding-bottom: 10px;
   border-bottom: 2px solid var(--border);
 }
 
-.kind-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.kind-dot { width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; }
 
 .kind-count {
   margin-left: 2px;
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--muted);
 }
@@ -434,11 +632,11 @@ main {
   margin-bottom: 6px;
 }
 
-.item-law { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+.item-law { font-weight: 700; font-size: 1.05rem; color: var(--text); }
 
 .item-loc {
   font-weight: 600;
-  font-size: 0.82rem;
+  font-size: 0.98rem;
   white-space: nowrap;
   display: inline-flex;
   align-items: baseline;
@@ -447,8 +645,9 @@ main {
 
 .item-loc .loc-article { color: var(--ink-soft); }
 
-/* 칩(배경 박스) 대신 가운뎃점(·)으로만 구획을 나눈다 — 배경색 없이도
-   조/항/호/목 경계가 눈에 들어오도록 색과 굵기만 다르게 준다. */
+/* 칩(배경 박스)이나 색 구분 대신 가운뎃점(·)으로만 구획을 나눈다 —
+   항/호/목은 색이 아니라 숫자 뒤에 붙는 회색 글자(항/호/목, loc-suffix)로
+   구분한다. */
 .item-loc > span:not(:first-child)::before {
   content: "·";
   display: inline-block;
@@ -457,49 +656,44 @@ main {
   margin: 0 3px;
 }
 
-.loc-clause {
-  color: var(--primary-dark);
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 2px;
+.loc-clause, .loc-item, .loc-subitem {
+  color: var(--ink-soft);
+  font-weight: 600;
 }
 
-.loc-item {
-  color: #92400e;
-  font-weight: 700;
-}
-
-.loc-subitem {
+.loc-suffix {
   color: var(--muted);
   font-weight: 500;
-  font-size: 0.85rem;
+  margin-left: 1px;
 }
 
 .item-row-body p { margin: 0 0 4px; font-size: 0.92rem; }
 
 .note {
   color: #92580a;
-  font-size: 0.82rem !important;
+  font-size: 0.95rem !important;
 }
 
 .error { color: #b91c1c; font-weight: 600; }
 
-.fulltext { margin-top: 8px; }
-
-.fulltext summary {
-  cursor: pointer;
+/* 원문/법제처 버튼 — 이제 인라인 펼침이 아니라 오른쪽 상세 패널을
+   채우는 트리거다. 링크처럼 가볍게, 버튼 기본 스타일은 지운다. */
+.fulltext-trigger, .source-trigger {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 0;
+  border: none;
+  background: none;
   color: var(--primary);
+  font-family: inherit;
   font-size: 0.8rem;
   font-weight: 600;
-  user-select: none;
-  list-style: none;
+  cursor: pointer;
 }
 
-.fulltext summary::-webkit-details-marker { display: none; }
-.fulltext summary::before { content: "▸ "; }
-.fulltext[open] summary::before { content: "▾ "; }
+.fulltext-trigger:hover, .source-trigger:hover { color: var(--primary-dark); text-decoration: underline; }
 
-.fulltext summary:hover { color: var(--primary-dark); }
+.item-row.is-active { background: var(--primary-soft); border-radius: 8px; padding-left: 10px; padding-right: 10px; margin: 0 -10px; }
 
 .fulltext-body {
   display: flex;

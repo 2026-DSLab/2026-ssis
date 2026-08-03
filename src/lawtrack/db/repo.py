@@ -791,6 +791,17 @@ class LawSummaryRepo:
             )
             return [_decode_summary_row(row) for row in cur.fetchall()]
 
+    def latest_batch_date(self) -> date | None:
+        """가장 최근 배치의 batch_date. 요약이 하나도 없으면 None.
+
+        웹페이지가 "이번 주 배치"를 찾는 진입점 — batch_date에 이미
+        인덱스(idx_law_summary_batch)가 있어 가볍다.
+        """
+        with self._db.cursor() as (_, cur):
+            cur.execute("SELECT MAX(batch_date) AS d FROM law_summary")
+            row = cur.fetchone()
+            return row["d"] if row else None
+
 
 #: law_summary 의 JSON 컬럼들. 드라이버 설정에 따라 str 로 오기도 하고 이미
 #: 파싱된 객체로 오기도 해서(mysql-connector 버전차), 양쪽 다 받는다.

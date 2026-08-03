@@ -1,0 +1,64 @@
+{
+  "source_file": "weekly_contract_2026-07-31_w8.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "000836",
+      "law_name": "문화예술진흥법",
+      "law_type": "법률",
+      "enforce_date": "2025-11-11",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=279667&type=HTML",
+      "new_serial_no": "279667",
+      "headline": "전문예술법인·단체의 기부금품 모집 및 접수 규정 명확화",
+      "body": "이번 개정은 전문예술법인 및 단체가 기부금품을 모집하고 접수할 수 있는 근거를 명확히 하여 실무 현장의 혼선을 줄이고, 이들 법인의 재정 개선을 도모하는 데 목적이 있습니다. 이를 통해 문화예술 분야의 지속적인 발전과 진흥을 지원하고자 합니다.\n\n○ 조문별 변경 내용\n- 제7조 (개정): 모집할 사항을 모집ㆍ접수할 사항으로 변경하였습니다.",
+      "overview": "이번 개정은 전문예술법인 및 단체가 기부금품을 모집하고 접수할 수 있는 근거를 명확히 하여 실무 현장의 혼선을 줄이고, 이들 법인의 재정 개선을 도모하는 데 목적이 있습니다. 이를 통해 문화예술 분야의 지속적인 발전과 진흥을 지원하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "000836",
+            "law_name": "문화예술진흥법",
+            "location_label": "제7조⑥",
+            "change_type": "개정",
+            "old_text": "⑥ 제1항에 따라 지정된 전문예술법인ㆍ단체는 「기부금품의 모집 및 사용에 관한 법률」에도 불구하고 기부금품을 모집할 수 있다.",
+            "new_text": "⑥ 제1항에 따라 지정된 전문예술법인ㆍ단체는 「기부금품의 모집 및 사용에 관한 법률」에도 불구하고 기부금품을 모집ㆍ접수할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'모집할' → '모집ㆍ접수할'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "모집할 사항을 모집ㆍ접수할 사항으로 변경하였습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제7조",
+          "mappings": [
+            {
+              "old_position": "⑥",
+              "new_position": "⑥",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

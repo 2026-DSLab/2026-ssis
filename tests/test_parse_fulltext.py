@@ -7,6 +7,7 @@ from lawtrack.parse.fulltext import (
     SubItemNode,
     flatten_searchable,
     parse_admrul_units,
+    parse_articles,
 )
 
 
@@ -230,3 +231,94 @@ class TestParseAdmrulUnits:
 
         subs = {u.subitem_label for u in units if u.clause_no == "④" and u.item_label == "1."}
         assert subs == {"", "가.", "나.", "다."}  # "" 는 "공사" 전제문
+
+
+def _raw_article_with_sibling_mok(extra_item: dict | None = None) -> dict:
+    """실측(2026-07-31, 국가를 당사자로 하는 계약에 관한 법률 시행령
+    제26조①) 구조의 축소 재현: 목이 각 호 안에 있지 않고, 항의 형제로
+    호 개수만큼의 목 그룹이 하나의 배열에 통째로 붙는다. 목번호가 '가.'
+    로 리셋되는 지점이 새 호의 시작이다(실측에서는 호 5개·목 40개)."""
+    hos = [
+        {"호번호": "1.", "호내용": "1. 첫째 사유"},
+        {"호번호": "2.", "호내용": "2. 둘째 사유"},
+    ]
+    if extra_item:
+        hos.append(extra_item)
+    return {
+        "법령": {
+            "조문": {
+                "조문단위": [
+                    {
+                        "조문번호": "26",
+                        "조문가지번호": "",
+                        "조문내용": "제26조(수의계약에 의할 수 있는 경우)",
+                        "조문제목": "수의계약에 의할 수 있는 경우",
+                        "조문변경여부": "N",
+                        "항": [
+                            {
+                                "항번호": "①",
+                                "항내용": "① 법 제7조제1항 단서에 따라 수의계약을 할 수 있는 "
+                                "경우는 다음 각 호와 같다.",
+                                "호": hos,
+                                "목": [
+                                    {"목번호": "가.", "목내용": "가. 첫째의 가목"},
+                                    {"목번호": "나.", "목내용": "나. 첫째의 나목"},
+                                    {"목번호": "가.", "목내용": "가. 둘째의 가목"},
+                                ],
+                            }
+                        ],
+                    }
+                ]
+            }
+        }
+    }
+
+
+class TestSiblingMokRecoveredIntoItems:
+    """실측(2026-07-31, 국가를 당사자로 하는 계약에 관한 법률 시행령
+    제26조①, redo5.py 3번째 재처리 케이스): 목이 호 안이 아니라 항의
+    형제로 통째로(호 5개분 목 40개가 배열 하나에) 붙어 나오는 문서가
+    있었다 — 각 호 객체엔 "목" 키 자체가 없었다. 그 결과 "지정받은 제품"
+    같은 실제 개정 문구가 검색 유닛(units)에 전혀 안 잡혀 위치확정이
+    100% 실패(0건실패)했다. 목번호가 '가.'로 리셋되는 지점을 호 경계로
+    보고 순서대로 이어붙이면 복구된다."""
+
+    def test_sibling_mok_split_and_attached_to_matching_item(self):
+        articles = parse_articles(_raw_article_with_sibling_mok())
+        assert len(articles) == 1
+        clause = articles[0].clauses[0]
+        assert len(clause.items) == 2
+        item1, item2 = clause.items
+        assert [s.text for s in item1.subitems] == ["가. 첫째의 가목", "나. 첫째의 나목"]
+        assert [s.text for s in item2.subitems] == ["가. 둘째의 가목"]
+
+    def test_sibling_mok_not_attached_when_group_count_mismatches_item_count(self):
+        """그룹 수와 호 개수가 안 맞아 모호하면 잘못된 호에 붙이지 않고
+        그대로 둔다 — 조용한 오귀속보다 0건실패가 낫다는 이 프로젝트의
+        원칙 그대로다."""
+        raw = _raw_article_with_sibling_mok(extra_item={"호번호": "3.", "호내용": "3. 셋째 사유"})
+        articles = parse_articles(raw)
+        clause = articles[0].clauses[0]
+        assert len(clause.items) == 3
+        assert all(len(it.subitems) == 0 for it in clause.items)
+
+    def test_normal_nested_mok_unaffected(self):
+        """목이 정상적으로 각 호 안에 이미 있는 경우(원래 동작)는 그대로
+        보존된다 — 회귀 방지."""
+        raw = {
+            "법령": {"조문": {"조문단위": [{
+                "조문번호": "2", "조문가지번호": "",
+                "조문내용": "제2조(정의)", "조문제목": "정의", "조문변경여부": "N",
+                "항": [{
+                    "항번호": "", "항내용": "",
+                    "호": [{
+                        "호번호": "11.", "호내용": "11. 정보자원",
+                        "목": [{"목번호": "가.", "목내용": "가. 행정정보"}],
+                    }],
+                }],
+            }]}}
+        }
+        articles = parse_articles(raw)
+        clause = articles[0].clauses[0]
+        assert len(clause.items) == 1
+        assert [s.text for s in clause.items[0].subitems] == ["가. 행정정보"]

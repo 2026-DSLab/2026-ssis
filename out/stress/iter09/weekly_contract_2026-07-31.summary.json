@@ -1,0 +1,1410 @@
+{
+  "source_file": "weekly_contract_2026-07-31.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "009942",
+      "law_name": "실종아동등의 보호 및 지원에 관한 법률",
+      "law_type": "법률",
+      "enforce_date": "2026-05-12",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=279713&type=HTML",
+      "new_serial_no": "279713",
+      "headline": "아동권리보장원 명칭 변경 및 보호대상 아동의 법정대리권 확대",
+      "body": "이번 개정은 위탁가정에서의 보호자에게 일정 기간 법정대리권을 부여하고, 아동권리보장원의 명칭을 국가아동권리보장원으로 변경함으로써 아동에 대한 국가의 책임을 명확히 할 목적입니다. 또한, 장애 아동에 대한 보호체계를 강화하여 보다 나은 지원을 제공하고자 하는 취지를 가지고 있습니다.\n\n○ 조문별 변경 내용\n- 제5조\n    · ① (개정): '아동권리보장원'이 '국가아동권리보장원'으로 변경되었습니다.\n    · ② (개정): '아동권리보장원'이 '국가아동권리보장원'으로 변경되었습니다.",
+      "overview": "이번 개정은 위탁가정에서의 보호자에게 일정 기간 법정대리권을 부여하고, 아동권리보장원의 명칭을 국가아동권리보장원으로 변경함으로써 아동에 대한 국가의 책임을 명확히 할 목적입니다. 또한, 장애 아동에 대한 보호체계를 강화하여 보다 나은 지원을 제공하고자 하는 취지를 가지고 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "009942",
+            "law_name": "실종아동등의 보호 및 지원에 관한 법률",
+            "location_label": "제5조①",
+            "change_type": "개정",
+            "old_text": "① 보건복지부장관은 제3조제1항제2호부터 제7호까지의 업무를 「아동복지법」 제10조의2에 따른 아동권리보장원 및 대통령령으로 정하는 법인ㆍ단체에 위탁할 수 있다.",
+            "new_text": "① 보건복지부장관은 제3조제1항제2호부터 제7호까지의 업무를 「아동복지법」 제10조의2에 따른 국가아동권리보장원 및 대통령령으로 정하는 법인ㆍ단체에 위탁할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'아동권리보장원' → '국가아동권리보장원'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'아동권리보장원'이 '국가아동권리보장원'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009942",
+            "law_name": "실종아동등의 보호 및 지원에 관한 법률",
+            "location_label": "제5조②",
+            "change_type": "개정",
+            "old_text": "② 제1항에 따른 아동권리보장원 및 법인ㆍ단체(이하 “전문기관”이라 한다)의 위탁 운영 등에 필요한 사항은 대통령령으로 정한다.",
+            "new_text": "② 제1항에 따른 국가아동권리보장원 및 법인ㆍ단체(이하 “전문기관”이라 한다)의 위탁 운영 등에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'아동권리보장원' → '국가아동권리보장원'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'아동권리보장원'이 '국가아동권리보장원'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제5조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "011181",
+      "law_name": "장애인연금법",
+      "law_type": "법률",
+      "enforce_date": "2025-10-01",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=276683&type=HTML",
+      "new_serial_no": "276683",
+      "headline": "통계청장 직위 명칭 변경 및 정부조직 개편에 따른 법 개정",
+      "body": "이번 개정은 정부조직 체계의 재설계를 통해 권한 분산과 전문성 강화를 도모하고, 기후위기 및 인공지능 대전환 등 현대 행정환경 변화에 능동적으로 대응하기 위한 것입니다. 또한, 통계청의 직위 명칭을 변경하는 등 관련 법령을 정비하여 효율적인 행정을 위한 기틀을 마련하고자 합니다.\n\n○ 조문별 변경 내용\n- 제6조 (개정): 통계청장이 국가데이터처장으로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+      "overview": "이번 개정은 정부조직 체계의 재설계를 통해 권한 분산과 전문성 강화를 도모하고, 기후위기 및 인공지능 대전환 등 현대 행정환경 변화에 능동적으로 대응하기 위한 것입니다. 또한, 통계청의 직위 명칭을 변경하는 등 관련 법령을 정비하여 효율적인 행정을 위한 기틀을 마련하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "011181",
+            "law_name": "장애인연금법",
+            "location_label": "제6조①",
+            "change_type": "개정",
+            "old_text": "① 기초급여의 금액(이하 “기초급여액”이라 한다)은 보건복지부장관이 그 전년도 기초급여액에 대통령령으로 정하는 바에 따라 전국소비자물가변동률(「통계법」 제3조에 따라 통계청장이 매년 고시하는 전국소비자물가변동률을 말한다)을 반영하여 매년 고시한다. 다만, 2018년부터 2021년까지의 기초급여액은 다음 각 호의 구분에 따른다.",
+            "new_text": "① 기초급여의 금액(이하 “기초급여액”이라 한다)은 보건복지부장관이 그 전년도 기초급여액에 대통령령으로 정하는 바에 따라 전국소비자물가변동률(「통계법」 제3조에 따라 국가데이터처장이 매년 고시하는 전국소비자물가변동률을 말한다)을 반영하여 매년 고시한다. 다만, 2018년부터 2021년까지의 기초급여액은 다음 각 호의 구분에 따른다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'통계청장이' → '국가데이터처장이'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "통계청장이 국가데이터처장으로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제6조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "34470",
+      "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+      "law_type": "행정규칙",
+      "enforce_date": "2026-04-01",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000276688&type=HTML",
+      "new_serial_no": "2100000276688",
+      "headline": "선금 지급 절차 및 조건 개선으로 계약 이행의 투명성 제고",
+      "body": "이번 개정은 선금 지급 조건을 명확히 하고 계약 상대자의 권리 보호를 강화하는 데 중점을 두었습니다. 이를 통해 계약집행 시 발생할 수 있는 분쟁을 최소화하고, 계약 이행을 보다 투명하게 함으로써 공공재정의 효율적인 관리를 도모하고자 합니다.\n\n○ 조문별 변경 내용\n- 제1조 (개정): 개정 전후 내용이 동일하여 변화가 없습니다. 이 예규는 공사 등의 입찰 및 계약의 집행과 관련하여 시행령, 시행규칙 및 특례규정에서 위임된 사항과 그 시행에 관한 필요한 사항을 규정하는 것을 목적으로 합니다.\n- 제34조\n    · ① (개정): 계약상대자가 선금의무지급률 이하로 신청하는 경우에 대한 지급 규정이 삭제되었습니다.\n    · ⑩ (이동): 내용 변경 없이 ⑦에서 제34조⑩(으)로 번호만 이동했습니다.\n    · ⑪ (이동): 내용 변경 없이 ⑧에서 제34조⑪(으)로 번호만 이동했습니다.\n    · ⑬ (이동): 내용 변경 없이 ⑪에서 제34조⑬(으)로 번호만 이동했습니다.\n    · ⑭ (신설): 계약담당공무원은 계약상대자로 하여금 선금을 지급받은 날로부터 5일 이내에 하수급인에게 선금수령 사실을 서면으로 통지하도록 하여야 합니다.\n    · ⑮ (신설): 계약담당공무원은 선금을 지급하는 경우, 발주기관이 계약 상대자의 의사에 반하는 선금 신청을 요구하거나 강제해서는 안 됩니다.\n    · ② (개정): 계약상대자가 제1항에 따른 선금의 지급을 최초로 신청하는 경우, 제4항 및 제5항에 따른 금액을 초과하지 않는 범위 내에서 선금을 지급하여야 하며, 계약상대자가 제4항 및 제5항에 따른 금액 이하로 신청하는 경우에는 신청한 바에 따라 지급하여야 합니다.\n    · ③ (개정): 계약담당공무원은 계약상대자가 선금지급을 요청하는 경우 선금사용계획서 및 선금전용계좌를 제출하도록 하여야 하며, 필요시 기한을 정해 보완을 요구할 수 있습니다. 이전의 선금 지급 기준은 삭제되었습니다.\n    · ④ (개정): 계약담당공무원은 계약상대자의 청구를 받은 날로부터 14일 이내에 선금을 지급하여야 하며, 제3항에 따라 서류 보완을 요구한 경우에는 보완서류를 제출한 날부터 14일 이내에 지급하여야 합니다. 기존의 계약상대자의 청구에 의해 추가로 지급하는 규정이 삭제되었습니다.\n    · ⑥ (신설): 계약담당공무원은 계약상대자가 최초 선금 신청 시 제4항 및 제5항의 금액을 초과한 선금을 요청할 경우, 계약의 목적과 특성 등을 고려하여 불가피하다고 인정되는 때에 한해 초과분에 대해 선금을 지급할 수 있습니다.\n    · ⑦ (신설): 계약담당공무원은 계약상대자가 선금을 수령한 후 추가로 선금 지급을 요청할 경우, 이미 지급된 선금의 사용내역 또는 선금 지급분에 해당하는 공정률을 확인한 후 추가로 선금을 지급할 수 있습니다.\n    · ⑧ (신설): 제2항, 제4항부터 제7항의 경우에 기성부분 또는 기납부분에 대하여 대가를 지급한 때에는 계약금액에서 그 대가를 공제한 금액을 기준으로 하여야 합니다.\n    · ⑨ (이동): 내용 변경 없이 ⑥에서 제34조⑨(으)로 번호만 이동했습니다.\n    · ⑫ (신설): 선금 지급이 불가능한 경우에 대한 정의가 신설되어, 이는 다음 각호의 경우를 포함합니다.\n    · ⑫1. (신설): 자금배정이 지연될 경우, 자금배정이 있을 때에는 즉시 선금을 지급하여야 합니다.\n    · ⑫2. (신설): 계약체결 후 불가피한 사유로 이행착수가 상당기간 지연될 것이 명백한 경우에는 해당 사유가 해제되면 즉시 선금 지급을 하여야 합니다.\n    · ⑫3. (신설): 계약상대자로부터 선금지급 요청이 없거나 유예신청이 있는 경우에 대한 규정이 새로 생겼습니다.\n    · ④1.가. (신설): 계약금액이 100억원 이상인 경우에는 계약금액의 30%를 요구합니다.\n    · ④1.나. (신설): 계약금액이 20억원 이상 100억원 미만인 경우, 계약 이행 보증금은 100분의 40으로 설정되었습니다.\n    · ④502. (신설): 물품의 제조 및 용역에 관한 내용이 새로 추가되었습니다.\n    · ④502.가. (신설): 계약금액이 10억원 이상인 경우에는 계약이행을 위한 보증금 비율이 100분의 30으로 설정됩니다.\n    · ④502.나. (신설): 계약금액이 3억 원 이상 10억 원 미만인 경우에는 100분의 40을 적용합니다.\n    · ④503. (신설): 수해복구공사에 대한 규정이 새롭게 추가되었습니다.\n    · ④503.가. (신설): 계약금액이 20억원 미만인 경우, 계약 성과 평가의 기준 비율은 100분의 70으로 설정됩니다.\n    · ④503.나. (신설): 계약금액이 20억원 이상인 경우, 해당 계약의 계약금액의 50%에 해당하는 금액이 적용됩니다.\n    · ⑤ (신설): 계약담당공무원은 계약상대자의 청구에 의해 제4항제1호 또는 제2호에 해당하는 금액 이외에 해당 계약금액의 10% 범위 내에서 추가로 지급하여야 합니다.\n    · ⑤1. (신설): 원자재 가격이 급등한 경우에 관한 규정이 신설되었습니다.\n    · ⑤2. (신설): 신기술을 사용하는 물품 및 용역계약에서 기술개발투자를 위한 자금이 계약이행 초기에 집중적으로 소요되는 경우에 대한 규정이 새로 생겼습니다.\n    · ⑤3. (신설): 계약상대방이 「기후위기 대응을 위한 탄소중립ㆍ녹색성장 기본법」 제60조제2항에 따라 녹색기술 및 녹색사업에 대한 적합성 인증을 받거나 녹색전문기업으로 확인받은 경우에는 해당 요건을 충족해야 합니다. 단, 제60조제3항 각호에 해당하는 자는 제외됩니다.\n- 제36조 (개정): 계약담당공무원은 지급된 선금이 용도로 사용되었는지 확인하기 위해 계약상대자에게 선금사용내역서 및 세금계산서 등 증빙서류를 제출하도록 할 수 있습니다.\n- 제38조\n    · ① (개정): '각호의 1에'가 '각호에'로 수정되었습니다.\n    · ①2. (개정): 선금사용계획 등을 포함하여 계약 집행기준이 개정되었습니다.\n    · ①6. (신설): 선금사용내역 확인에 필요한 자료를 제출하지 않거나 위ㆍ변조 및 허위 서류를 제출하는 등 선금사용내역 확인에 협조하지 않으면 제재를 받을 수 있습니다.\n- 제4조\n    · ①1. (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n    · ①2. (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n- 제70조의5 (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n- 제76조의5 (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n- 제87조의2 (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n- 제99조 (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+      "overview": "이번 개정은 선금 지급 조건을 명확히 하고 계약 상대자의 권리 보호를 강화하는 데 중점을 두었습니다. 이를 통해 계약집행 시 발생할 수 있는 분쟁을 최소화하고, 계약 이행을 보다 투명하게 함으로써 공공재정의 효율적인 관리를 도모하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제1조",
+            "change_type": "개정",
+            "old_text": "이 예규는 공사 등의 입찰ㆍ계약의 집행과 관련하여 「국가를 당사자로 하는 계약에 관한 법률시행령」(이하 “시행령”이라 한다), 「국가를 당사자로 하는 계약에 관한 법률 시행규칙」(이하 “시행규칙”이라 한다) 및 「특정조달을 위한 국가를 당사자로 하는 계약에 관한 법률 시행령 특례규정」(이하 “특례규정”이라 한다)에서 위임된 사항과 그 시행에 관하여 필요한 사항을 규정함을 목적으로 한다.",
+            "new_text": "이 예규는 공사 등의 입찰ㆍ계약의 집행과 관련하여 「국가를 당사자로 하는 계약에 관한 법률시행령」(이하 “시행령”이라 한다), 「국가를 당사자로 하는 계약에 관한 법률시행규칙」(이하 “시행규칙”이라 한다) 및 「특정조달을 위한 국가를 당사자로 하는 계약에 관한 법률 시행령 특례규정」(이하 “특례규정”이라 한다)에서 위임된 사항과 그 시행에 관하여 필요한 사항을 규정함을 목적으로 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "개정 전후 내용이 동일하여 변화가 없습니다. 이 예규는 공사 등의 입찰 및 계약의 집행과 관련하여 시행령, 시행규칙 및 특례규정에서 위임된 사항과 그 시행에 관한 필요한 사항을 규정하는 것을 목적으로 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조①",
+            "change_type": "개정",
+            "old_text": "① 계약담당공무원은 다음 각호의 요건을 충족하는 경우로서 계약상대자가 선금의 지급을 요청할 때에는 계약금액의 100분의 70을 초과하지 아니하는 범위 내에서 선금을 지급할 수 있다. 다만, 계약상대자가 선금의무지급률 이하로 신청하는 경우에는 신청한 바에 따라 지급한다.",
+            "new_text": "① 계약담당공무원은 다음 각호의 요건을 충족하는 경우로서 계약상대자가 선금의 지급을 요청할 때에는 계약금액의 100분의 70을 초과하지 아니하는 범위 내에서 선금을 지급할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 다만, 계약상대자가 선금의무지급률 이하로 신청하는 경우에는 신청한 바에 따라 지급한다.' 삭제"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약상대자가 선금의무지급률 이하로 신청하는 경우에 대한 지급 규정이 삭제되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑩",
+            "change_type": "이동",
+            "old_text": "⑩",
+            "new_text": "⑩ 계약담당공무원은 국고채무부담행위예산에 의한 계약에 대하여 선금을 지급하는 경우에 국고채무부담행위액 상환을 위한 세출예산이 계상된 년도에만 할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "⑦",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ⑦에서 제34조⑩(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑪",
+            "change_type": "이동",
+            "old_text": "⑪ 계약담당공무원은 계약이행에 필요한 기간등에 비추어 계약을 체결한 연도내에 해당 예산을 전액 집행할 수 없는 경우로서 해당 예산의 사고이월이 불가피하다고 인정되는 때에는 제3항 및 제4항에도 불구하고 계약을 체결한 연도내에 집행할 수 있는 금액을 한도로 선금을 지급하여야 하며, 제3항 및 제4항에 의하여 지급하여야 할 선금중 미지급된 금액은 예산이 이월된 연도에 지급하여야 한다.",
+            "new_text": "⑪ 제1항 내지 제10항의 경우에 계약담당공무원은 자금사정등 불가피한 사유에 의하여 선금 지급이 불가능한 때에는 지체 없이 소속 중앙관서의 장의 승인을 얻어 계약상대자에게 그 사유를 서면으로 통지하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "⑧",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ⑧에서 제34조⑪(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑬",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "⑬ 계약담당공무원은 계약이행에 필요한 기간등에 비추어 계약을 체결한 연도내에 해당 예산을 전액 집행할 수 없는 경우로서 해당 예산의 사고이월이 불가피하다고 인정되는 때에는 제4항 내지 제7항에도 불구하고 계약을 체결한 연도내에 집행할 수 있는 금액을 한도로 선금을 지급하여야 하며, 제4항 내지 제6항에 의하여 지급하여야 할 선금중 미지급된 금액은 예산이 이월된 연도에 지급하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "⑪",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ⑪에서 제34조⑬(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑭",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑭ 계약담당공무원은 계약상대자로 하여금 제2항, 제6항 및 제7항에 따른 선금을 지급받은 날로부터 5일 이내에 하수급인에게 선금수령 사실을 서면으로 통지하도록 하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약담당공무원은 계약상대자로 하여금 선금을 지급받은 날로부터 5일 이내에 하수급인에게 선금수령 사실을 서면으로 통지하도록 하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑮",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑮ 계약담당공무원은 제2항, 제6항 및 제7항에 따라 선금을 지급하는 경우, 발주기관은 계약 상대자의 의사에 반하는 선금의 신청을 요구하거나 강제하여서는 아니 된다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약담당공무원은 선금을 지급하는 경우, 발주기관이 계약 상대자의 의사에 반하는 선금 신청을 요구하거나 강제해서는 안 됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조②",
+            "change_type": "개정",
+            "old_text": "② 계약담당공무원은 계약상대자가 제1항에 따라 선금지급을 요청하는 경우에 하수급인에 대한 선금지급계획을 제출하도록 하여야 한다.",
+            "new_text": "② 계약상대자가 제1항에 따른 선금의 지급을 최초로 신청하는 경우 제4항 및 제5항에 따른 금액을 초과하지 아니하는 범위 내에서 선금을 지급하여야 한다. 다만, 계약상대자가 제4항 및 제5항에 따른 금액 이하로 신청하는 경우에는 신청한 바에 따라 지급하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 계약담당공무원은 계약상대자가 제1항에 따라 선금지급을 요청하는 경우에 하수급인에 대한 선금지급계획을 제출하도록 하여야' → ' 계약상대자가 제1항에 따른 선금의 지급을 최초로 신청하는 경우 제4항 및 제5항에 따른 금액을 초과하지 아니하는 범위 내에서 선금을 지급하여야 한다. 다만, 계약상대자가 제4항 및 제5항에 따른 금액 이하로 신청하는 경우에는 신청한 바에 따라 지급하여야'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약상대자가 제1항에 따른 선금의 지급을 최초로 신청하는 경우, 제4항 및 제5항에 따른 금액을 초과하지 않는 범위 내에서 선금을 지급하여야 하며, 계약상대자가 제4항 및 제5항에 따른 금액 이하로 신청하는 경우에는 신청한 바에 따라 지급하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조③",
+            "change_type": "개정",
+            "old_text": "③ 계약담당공무원은 다음 각호에 해당되는 선금에 대하여는 계약상대자의 청구를 받은 날로부터 14일 이내에 지급하여야 한다.  1. 공사   가. 계약금액이 100억원이상인 경우 : 100분의 30   나. 계약금액이 20억원이상 100억원 미만인 경우 : 100분의 40   다. 계약금액이 20억원 미만인 경우 : 100분의 50  2. 물품의 제조 및 용역   가. 계약금액이 10억원이상인 경우 : 100분의 30   나. 계약금액이 3억원이상 10억원 미만인 경우 : 100분의 40   다. 계약금액이 3억원 미만인 경우 : 100분의 50  3. 수해복구공사   가. 계약금액이 20억원미만인 경우 : 100분의 70   나. 계약금액이 20억원이상인 경우 : 100분의 50",
+            "new_text": "③ 계약담당공무원은 계약상대자가 제4항 내지 제7항에 따라 선금지급을 요청하는 경우 하수급인에 대한 선금지급계획을 포함한 선금사용계획서 및 당해 계약만을 위해 사용되는 선금전용계좌를 제출하도록 하여야 하며, 필요시 기한을 정해 보완을 요구할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": true,
+            "no_change": false
+          },
+          "summary": "계약담당공무원은 계약상대자가 선금지급을 요청하는 경우 선금사용계획서 및 선금전용계좌를 제출하도록 하여야 하며, 필요시 기한을 정해 보완을 요구할 수 있습니다. 이전의 선금 지급 기준은 삭제되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조④",
+            "change_type": "개정",
+            "old_text": "④ 계약담당공무원은 다음 각호의 어느 하나에 해당하는 경우에는 계약상대자의 청구에 의해 제3항제1호 또는 제2호에 해당하는 금액 이외에 해당 계약금액의 100분의 10범위 내에서 추가로 지급하여야 한다.",
+            "new_text": "④ 계약담당공무원은 다음 각호 및 제5항 내지 제7항에 해당되는 선금에 대하여는 계약상대자의 청구를 받은 날로부터 14일 이내에 지급하여야 한다. 다만, 제3항에 따라 서류 보완을 요구한 경우에는 보완서류를 제출한 날부터 14일 이내에 지급하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": true,
+            "no_change": false
+          },
+          "summary": "계약담당공무원은 계약상대자의 청구를 받은 날로부터 14일 이내에 선금을 지급하여야 하며, 제3항에 따라 서류 보완을 요구한 경우에는 보완서류를 제출한 날부터 14일 이내에 지급하여야 합니다. 기존의 계약상대자의 청구에 의해 추가로 지급하는 규정이 삭제되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑥",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑥ 계약담당공무원은 제2항에도 불구하고 계약상대자가 최초 선금 신청시 제4항 및 제5항의 금액을 초과한 선금을 요청할 경우 계약의 목적, 특성 등을 고려하여 불가피하다고 인정되는 때에는 그 초과분에 대하여 선금을 지급할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약담당공무원은 계약상대자가 최초 선금 신청 시 제4항 및 제5항의 금액을 초과한 선금을 요청할 경우, 계약의 목적과 특성 등을 고려하여 불가피하다고 인정되는 때에 한해 초과분에 대해 선금을 지급할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑦",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑦ 계약담당공무원은 계약상대자가 제4항 내지 제6항에 따라 선금을 수령한 후 추가로 선금 지급을 요청할 경우, 제36조제2항에 따라 이미 지급된 선금의 사용내역 또는 선금 지급분에 해당하는 공정률을 확인한 후 추가로 선금을 지급할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약담당공무원은 계약상대자가 선금을 수령한 후 추가로 선금 지급을 요청할 경우, 이미 지급된 선금의 사용내역 또는 선금 지급분에 해당하는 공정률을 확인한 후 추가로 선금을 지급할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑧",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑧ 제2항, 제4항 내지 제7항의 경우에서 「국가를 당사자로 하는 계약에 관한 법률」 제15조에 의하여 기성부분 또는 기납부분에 대하여 대가를 지급한 때에는 계약금액(단가계약의 경우에는 발주금액)에서 그 대가를 공제한 금액을 기준으로 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제2항, 제4항부터 제7항의 경우에 기성부분 또는 기납부분에 대하여 대가를 지급한 때에는 계약금액에서 그 대가를 공제한 금액을 기준으로 하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑨",
+            "change_type": "이동",
+            "old_text": "⑨ 제8항에 의한 “선금지급이 불가능한 경우”라 함은 다음 각호의 경우를 말한다.  1. 자금배정이 지연될 경우. 단, 자금배정이 있을 경우에는 즉시 선금지급을 하여야 함  2. 계약체결후 불가피한 사유로 이행착수가 상당기간 지연될 것이 명백한 경우.  단, 동 사유 해제시 즉시 선금지급을 하여야 함  3. 계약상대자로부터 선금지급 요청이 없거나 유예신청이 있는 경우",
+            "new_text": "⑨ 계약담당공무원은 계속비와 명시이월비 예산에 의한 계약에 대하여 선금을 지급하는 경우에 계약금액중 해당년도 이행금액을 기준으로 하며, 장기계속계약의 경우에는 각 연차계약금액을 기준으로 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "⑥",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ⑥에서 제34조⑨(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제36조②",
+            "change_type": "개정",
+            "old_text": "②",
+            "new_text": "② 계약담당공무원은 지급된 선금이 제1항에 의한 용도로 사용되었는지 여부를 확인하기 위하여 계약상대자로 하여금 선금사용내역서 및 세금계산서 등 증빙서류를 제출하게 할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 계약담당공무원은 지급된 선금이 제1항에 의한 용도로 사용되었는지 여부를 확인하기 위하여 계약상대자로 하여금 선금사용내역서 및 세금계산서 등 증빙서류를 제출하게 할 수 있다.' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약담당공무원은 지급된 선금이 용도로 사용되었는지 확인하기 위해 계약상대자에게 선금사용내역서 및 세금계산서 등 증빙서류를 제출하도록 할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제38조①",
+            "change_type": "개정",
+            "old_text": "① 계약담당공무원은 선금을 지급한 후 다음 각호의 1에 해당하는 경우에는 해당 선금잔액에 대해서 계약상대자에게 지체 없이 그 반환을 청구하여야 한다. 다만, 계약상대자의 귀책사유에 의하여 반환하는 경우에는 해당 선금잔액에 대한 약정이자상당액을 가산하여 청구하여야 한다. 이 경우에 약정이자율은 선금을 지급한 시점을 기준으로 한다.",
+            "new_text": "① 계약담당공무원은 선금을 지급한 후 다음 각호에 해당하는 경우에는 해당 선금잔액에 대해서 계약상대자에게 지체 없이 그 반환을 청구하여야 한다. 다만, 계약상대자의 귀책사유에 의하여 반환하는 경우에는 해당 선금잔액에 대한 약정이자상당액을 가산하여 청구하여야 한다. 이 경우에 약정이자율은 선금을 지급한 시점을 기준으로 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'각호의 1에' → '각호에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'각호의 1에'가 '각호에'로 수정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제38조①2.",
+            "change_type": "개정",
+            "old_text": "2. 선금지급조건을 위배한 경우",
+            "new_text": "2. 선금사용계획 등 선금지급조건을 위배한 경우",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 선금사용계획 등' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "선금사용계획 등을 포함하여 계약 집행기준이 개정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제38조①6.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "6. 선금사용내역 확인에 필요한 자료를 제출하지 않거나, 위ㆍ변조, 허위 서류를 제출하는 등 선금사용내역 확인에 협조하지 않는 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "선금사용내역 확인에 필요한 자료를 제출하지 않거나 위ㆍ변조 및 허위 서류를 제출하는 등 선금사용내역 확인에 협조하지 않으면 제재를 받을 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제4조①1.",
+            "change_type": "개정",
+            "old_text": "1. 특수기술이 필요한 공사    (1) 터널을 수반하는 공사    (2) 활주로 공사    (3) 지하철 공사    (4) 저수ㆍ유조하천공사 또는 수중작업을 수반하는 공사    (5) 댐 축조공사    (6) 취수장, 정수장, 유수지(遊水池) 또는 오수처리장 공사로서 수중 작업을 수반하는 공사    (7) 송ㆍ배수관공사    (8) 수중관ㆍ사이폰ㆍ저수지 또는 제방공사    (9) 매립지등 연약지반에서 파일 또는 우물통공사를 수반하는 공사    (10) 독크 축조공사    (11) 간척(방조제포함) 또는 매립공사    (12) 「항만법」 제2조제5호에 의한 항만시설공사 및 「어촌ㆍ어항법」 제2조제3호에 의한 어항시설공사     (13) 장대교(길이 100m 이상인 교량을 말한다) 제작 또는 가설공사    (14) 철도 및 철도궤도공사    (15) 정밀한 시공이 필요하거나 위험을 수반하는 기계설치공사    (16) 발전ㆍ변전ㆍ송전 또는 배전설비공사    (17) 전기철도 또는 전차시설공사    (18) 정밀시공ㆍ고위험 전기기계 설치공사      (19) 신호집중제어 또는 특수제어장치설치공사    (20) 자동신호 또는 연동장치공사    (21) 원형차량 감지기 설치공사    (22) 국가유산 보수공사    (23) 차선도색공사    (24) 도로봉합제를 사용한 신축이음 및 균열 보수공사    (25) 상수도관 세척갱생공사    (26) 하수도 흡입 준설공사    (27) 심정공사(深井工事)    (28) 산간벽지등 특수지역에서 시공하여야 하는 군사시설공사    (29) 하천환경정비사업    (30) 기타 특수한 기술이 요구되는 공사로 각 중앙관서의 장이 특별히 인정하는 공사",
+            "new_text": "1. 특수기술이 필요한 공사   (1) 터널을 수반하는 공사   (2) 활주로 공사   (3) 지하철 공사   (4) 저수ㆍ유조하천공사 또는 수중작업을 수반하는 공사   (5) 댐 축조공사   (6) 취수장, 정수장, 유수지(遊水池) 또는 오수처리장 공사로서 수중 작업을 수반하는 공사   (7) 송ㆍ배수관공사   (8) 수중관ㆍ사이폰ㆍ저수지 또는 제방공사   (9) 매립지등 연약지반에서 파일 또는 우물통공사를 수반하는 공사  (10) 독크 축조공사  (11) 간척(방조제포함) 또는 매립공사  (12) 「항만법」 제2조제5호에 의한 항만시설공사 및 「어촌ㆍ어항법」 제2조제3호에 의한 어항시설공사   (13) 장대교(길이 100m 이상인 교량을 말한다) 제작 또는 가설공사  (14) 철도 및 철도궤도공사  (15) 정밀한 시공이 필요하거나 위험을 수반하는 기계설치공사  (16) 발전ㆍ변전ㆍ송전 또는 배전설비공사  (17) 전기철도 또는 전차시설공사  (18) 정밀시공ㆍ고위험 전기기계 설치공사    (19) 신호집중제어 또는 특수제어장치설치공사  (20) 자동신호 또는 연동장치공사  (21) 원형차량 감지기 설치공사  (22) 국가유산 보수공사  (23) 차선도색공사  (24) 도로봉합제를 사용한 신축이음 및 균열 보수공사  (25) 상수도관 세척갱생공사  (26) 하수도 흡입 준설공사  (27) 심정공사(深井工事)  (28) 산간벽지등 특수지역에서 시공하여야 하는 군사시설공사  (29) 하천환경정비사업  (30) 기타 특수한 기술이 요구되는 공사로 각 중앙관서의 장이 특별히 인정하는 공사",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제4조①2.",
+            "change_type": "개정",
+            "old_text": "2. 특수공법이 필요한 공사    (1) 스폼공법 또는 철골공법에 의한 공사    (2) 피ㆍ시공법등 중앙관서장이 특수공법으로 지정ㆍ고시한 공법에 의한 공사    (3) 특수설계 또는 특수사양에 의한 선박 공사",
+            "new_text": "2. 특수공법이 필요한 공사   (1) 스폼공법 또는 철골공법에 의한 공사   (2) 피ㆍ시공법등 중앙관서장이 특수공법으로 지정ㆍ고시한 공법에 의한 공사   (3) 특수설계 또는 특수사양에 의한 선박 공사",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제70조의5⑨2006.",
+            "change_type": "개정",
+            "old_text": "2.",
+            "new_text": "2.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제76조의5②1.",
+            "change_type": "개정",
+            "old_text": "1. 노무비(기본급)의 등락률:",
+            "new_text": "1. 노무비(기본급)의 등락률:",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제87조의2⑥",
+            "change_type": "개정",
+            "old_text": "⑥계약담당공무원은 제1항 내지 제5항에도 불구하고 보상대상자 중 가장 높은 설계점수를 받은 자에게 지급하는 것으로 산정된 설계보상비가 실시설계적격자 또는 낙찰자의 기본설계비(계약담당공무원이「건설엔지니어링 대가 등에 관한 기준」, 「공공발주사업에 대한 건축사의 업무범위와 대가 기준」등에 따라 산정한 기본설계비를 말한다.) 보다 큰 경우, 실시설계 적격자 또는 낙찰자의 기본설계비를 한도로 설계보상비를 지급하며, 보상대상자가 2인 이상인 경우에는 다음 계산식에 따라 보상비를 지급한다.",
+            "new_text": "⑥계약담당공무원은 제1항 내지 제5항에도 불구하고 보상대상자 중 가장 높은 설계점수를 받은 자에게 지급하는 것으로 산정된 설계보상비가 실시설계적격자 또는 낙찰자의 기본설계비(계약담당공무원이「건설엔지니어링 대가 등에 관한 기준」, 「공공발주사업에 대한 건축사의 업무범위와 대가 기준」등에 따라 산정한 기본설계비를 말한다.) 보다 큰 경우, 실시설계 적격자 또는 낙찰자의 기본설계비를 한도로 설계보상비를 지급하며, 보상대상자가 2인 이상인 경우에는 다음 계산식에 따라 보상비를 지급한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제99조③",
+            "change_type": "개정",
+            "old_text": "③ 시행령 제26조부터 제30조까지에 따라 체결하는 수의계약의 경우에도 제1항 및 제2항의 사항을 준용하여야 한다.",
+            "new_text": "③ 시행령 제26조부터 제30조까지에 따라 체결하는 수의계약의 경우에도 제1항 및 제2항의 사항을 준용하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑫",
+            "change_type": "신설",
+            "old_text": "⑫ 계약담당공무원은 계약상대자로 하여금 제1항에 따른 선금을 지급받은 날로부터 5일 이내에 하수급인에게 선금수령 사실을 서면으로 통지하도록 하여야 한다.",
+            "new_text": "⑫ 제11항에 의한 “선금지급이 불가능한 경우”라 함은 다음 각호의 경우를 말한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "선금 지급이 불가능한 경우에 대한 정의가 신설되어, 이는 다음 각호의 경우를 포함합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑫1.",
+            "change_type": "신설",
+            "old_text": "⑫ 계약담당공무원은 계약상대자로 하여금 제1항에 따른 선금을 지급받은 날로부터 5일 이내에 하수급인에게 선금수령 사실을 서면으로 통지하도록 하여야 한다.",
+            "new_text": "1. 자금배정이 지연될 경우. 단, 자금배정이 있을 경우에는 즉시 선금지급을 하여야 함",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "자금배정이 지연될 경우, 자금배정이 있을 때에는 즉시 선금을 지급하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑫2.",
+            "change_type": "신설",
+            "old_text": "⑫ 계약담당공무원은 계약상대자로 하여금 제1항에 따른 선금을 지급받은 날로부터 5일 이내에 하수급인에게 선금수령 사실을 서면으로 통지하도록 하여야 한다.",
+            "new_text": "2. 계약체결후 불가피한 사유로 이행착수가 상당기간 지연될 것이 명백한 경우. 단, 동 사유 해제시 즉시 선금지급을 하여야 함",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약체결 후 불가피한 사유로 이행착수가 상당기간 지연될 것이 명백한 경우에는 해당 사유가 해제되면 즉시 선금 지급을 하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑫3.",
+            "change_type": "신설",
+            "old_text": "⑫ 계약담당공무원은 계약상대자로 하여금 제1항에 따른 선금을 지급받은 날로부터 5일 이내에 하수급인에게 선금수령 사실을 서면으로 통지하도록 하여야 한다.",
+            "new_text": "3. 계약상대자로부터 선금지급 요청이 없거나 유예신청이 있는 경우",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약상대자로부터 선금지급 요청이 없거나 유예신청이 있는 경우에 대한 규정이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조④1.가.",
+            "change_type": "신설",
+            "old_text": "1. 제70조4제1항 각호에 따른 원자재 가격이 급등한 경우",
+            "new_text": "가. 계약금액이 100억원이상인 경우 : 100분의 30",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약금액이 100억원 이상인 경우에는 계약금액의 30%를 요구합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조④1.나.",
+            "change_type": "신설",
+            "old_text": "1. 제70조4제1항 각호에 따른 원자재 가격이 급등한 경우",
+            "new_text": "나. 계약금액이 20억원이상 100억원 미만인 경우 : 100분의 40",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약금액이 20억원 이상 100억원 미만인 경우, 계약 이행 보증금은 100분의 40으로 설정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조④502.",
+            "change_type": "신설",
+            "old_text": "2. 신기술을 사용하는 물품 및 용역계약에 있어서 기술개발투자를 위한 자금이 계약이행초기에 집중적으로 소요되는 경우",
+            "new_text": "물품의 제조 및 용역",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "물품의 제조 및 용역에 관한 내용이 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조④502.가.",
+            "change_type": "신설",
+            "old_text": "2. 신기술을 사용하는 물품 및 용역계약에 있어서 기술개발투자를 위한 자금이 계약이행초기에 집중적으로 소요되는 경우",
+            "new_text": "가. 계약금액이 10억원이상인 경우 : 100분의 30",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약금액이 10억원 이상인 경우에는 계약이행을 위한 보증금 비율이 100분의 30으로 설정됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조④502.나.",
+            "change_type": "신설",
+            "old_text": "2. 신기술을 사용하는 물품 및 용역계약에 있어서 기술개발투자를 위한 자금이 계약이행초기에 집중적으로 소요되는 경우",
+            "new_text": "나. 계약금액이 3억원이상 10억원 미만인 경우 : 100분의 40",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약금액이 3억 원 이상 10억 원 미만인 경우에는 100분의 40을 적용합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조④503.",
+            "change_type": "신설",
+            "old_text": "3. 계약상대방이 「기후위기 대응을 위한 탄소중립ㆍ녹색성장 기본법」 제60조제2항」에 따라 녹색기술ㆍ녹색사업에 대한 적합성 인증을 받거나 녹색전문기업으로 확인받은 경우(제60조제3항 각호에 해당하는 자 제외)",
+            "new_text": "수해복구공사",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "수해복구공사에 대한 규정이 새롭게 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조④503.가.",
+            "change_type": "신설",
+            "old_text": "3. 계약상대방이 「기후위기 대응을 위한 탄소중립ㆍ녹색성장 기본법」 제60조제2항」에 따라 녹색기술ㆍ녹색사업에 대한 적합성 인증을 받거나 녹색전문기업으로 확인받은 경우(제60조제3항 각호에 해당하는 자 제외)",
+            "new_text": "가. 계약금액이 20억원미만인 경우 : 100분의 70",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약금액이 20억원 미만인 경우, 계약 성과 평가의 기준 비율은 100분의 70으로 설정됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조④503.나.",
+            "change_type": "신설",
+            "old_text": "3. 계약상대방이 「기후위기 대응을 위한 탄소중립ㆍ녹색성장 기본법」 제60조제2항」에 따라 녹색기술ㆍ녹색사업에 대한 적합성 인증을 받거나 녹색전문기업으로 확인받은 경우(제60조제3항 각호에 해당하는 자 제외)",
+            "new_text": "나. 계약금액이 20억원이상인 경우 : 100분의 50",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약금액이 20억원 이상인 경우, 해당 계약의 계약금액의 50%에 해당하는 금액이 적용됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑤",
+            "change_type": "신설",
+            "old_text": "⑤ 제1항, 제3항 및 제4항의 경우에서 「국가를 당사자로 하는 계약에 관한 법률」 제15조에 의하여 기성부분 또는 기납부분에 대하여 대가를 지급한 때에는 계약금액(단가계약의 경우에는 발주금액)에서 그 대가를 공제한 금액을 기준으로 한다.",
+            "new_text": "⑤ 계약담당공무원은 다음 각호의 어느 하나에 해당하는 경우에는 계약상대자의 청구에 의해 제4항제1호 또는 제2호에 해당하는 금액 이외에 해당 계약금액의 100분의 10범위 내에서 추가로 지급하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약담당공무원은 계약상대자의 청구에 의해 제4항제1호 또는 제2호에 해당하는 금액 이외에 해당 계약금액의 10% 범위 내에서 추가로 지급하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑤1.",
+            "change_type": "신설",
+            "old_text": "⑤ 제1항, 제3항 및 제4항의 경우에서 「국가를 당사자로 하는 계약에 관한 법률」 제15조에 의하여 기성부분 또는 기납부분에 대하여 대가를 지급한 때에는 계약금액(단가계약의 경우에는 발주금액)에서 그 대가를 공제한 금액을 기준으로 한다.",
+            "new_text": "1. 제70조4제1항 각호에 따른 원자재 가격이 급등한 경우",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "원자재 가격이 급등한 경우에 관한 규정이 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑤2.",
+            "change_type": "신설",
+            "old_text": "⑤ 제1항, 제3항 및 제4항의 경우에서 「국가를 당사자로 하는 계약에 관한 법률」 제15조에 의하여 기성부분 또는 기납부분에 대하여 대가를 지급한 때에는 계약금액(단가계약의 경우에는 발주금액)에서 그 대가를 공제한 금액을 기준으로 한다.",
+            "new_text": "2. 신기술을 사용하는 물품 및 용역계약에 있어서 기술개발투자를 위한 자금이 계약이행초기에 집중적으로 소요되는 경우",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "신기술을 사용하는 물품 및 용역계약에서 기술개발투자를 위한 자금이 계약이행 초기에 집중적으로 소요되는 경우에 대한 규정이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "34470",
+            "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+            "location_label": "제34조⑤3.",
+            "change_type": "신설",
+            "old_text": "⑤ 제1항, 제3항 및 제4항의 경우에서 「국가를 당사자로 하는 계약에 관한 법률」 제15조에 의하여 기성부분 또는 기납부분에 대하여 대가를 지급한 때에는 계약금액(단가계약의 경우에는 발주금액)에서 그 대가를 공제한 금액을 기준으로 한다.",
+            "new_text": "3. 계약상대방이 「기후위기 대응을 위한 탄소중립ㆍ녹색성장 기본법」 제60조제2항」에 따라 녹색기술ㆍ녹색사업에 대한 적합성 인증을 받거나 녹색전문기업으로 확인받은 경우(제60조제3항 각호에 해당하는 자 제외)",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약상대방이 「기후위기 대응을 위한 탄소중립ㆍ녹색성장 기본법」 제60조제2항에 따라 녹색기술 및 녹색사업에 대한 적합성 인증을 받거나 녹색전문기업으로 확인받은 경우에는 해당 요건을 충족해야 합니다. 단, 제60조제3항 각호에 해당하는 자는 제외됩니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제1조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제34조",
+          "mappings": [
+            {
+              "old_position": "⑥",
+              "new_position": "⑨",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "⑦",
+              "new_position": "⑩",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "⑪",
+              "new_position": "⑬",
+              "relation": "이동",
+              "basis": "LLM판정",
+              "note": "내용이 확장되어 '제4항 내지 제7항'으로 변경됨."
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "LLM판정",
+              "note": "내용 변화 없이 이동됨."
+            },
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "LLM판정",
+              "note": "내용 변화 없이 이동됨."
+            },
+            {
+              "old_position": "④",
+              "new_position": "④",
+              "relation": "개정",
+              "basis": "LLM판정",
+              "note": "내용 변화 없이 이동됨."
+            },
+            {
+              "old_position": "⑧",
+              "new_position": "⑪",
+              "relation": "이동",
+              "basis": "LLM판정",
+              "note": "내용 변화 없이 이동됨."
+            },
+            {
+              "old_position": null,
+              "new_position": "⑭",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑮",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑥",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑦",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑧",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": "⑩",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": "⑨",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "소거법",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제36조",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제38조",
+          "mappings": [
+            {
+              "old_position": "①2.",
+              "new_position": "①2.",
+              "relation": "개정",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①6.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목이 없음으로, 새로 나타난 항목이 신설된 것으로 판단됨."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제4조",
+          "mappings": [
+            {
+              "old_position": "①1.",
+              "new_position": "①1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "①2.",
+              "new_position": "①2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제70조의5",
+          "mappings": [
+            {
+              "old_position": "⑨2006.",
+              "new_position": "⑨2006.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제76조의5",
+          "mappings": [
+            {
+              "old_position": "②1.",
+              "new_position": "②1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제87조의2",
+          "mappings": [
+            {
+              "old_position": "⑥",
+              "new_position": "⑥",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제99조",
+          "mappings": [
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [
+    {
+      "law_id": "34470",
+      "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+      "new_serial_no": "2100000276688",
+      "reason": "0건실패",
+      "detail": "본문검색: '(계약예규) 정부 입찰ㆍ계약 집행기준'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000276688&type=HTML",
+      "guards_tried": [
+        "본문검색: '(계약예규) 정부 입찰ㆍ계약 집행기준'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    },
+    {
+      "law_id": "34470",
+      "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+      "new_serial_no": "2100000276688",
+      "reason": "중복실패",
+      "detail": "본문검색: '공사'; 중복 307건, 마커 없어 번호결합 불가",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000276688&type=HTML",
+      "guards_tried": [
+        "본문검색: '공사'",
+        "중복 307건, 마커 없어 번호결합 불가"
+      ]
+    },
+    {
+      "law_id": "34470",
+      "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+      "new_serial_no": "2100000276688",
+      "reason": "0건실패",
+      "detail": "본문검색: '계약금액이 20억원 미만인 경우 : 100분…'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000276688&type=HTML",
+      "guards_tried": [
+        "본문검색: '계약금액이 20억원 미만인 경우 : 100분…'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    },
+    {
+      "law_id": "34470",
+      "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+      "new_serial_no": "2100000276688",
+      "reason": "0건실패",
+      "detail": "본문검색: '계약금액이 3억원 미만인 경우 : 100분의…'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000276688&type=HTML",
+      "guards_tried": [
+        "본문검색: '계약금액이 3억원 미만인 경우 : 100분의…'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    },
+    {
+      "law_id": "34470",
+      "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+      "new_serial_no": "2100000276688",
+      "reason": "0건실패",
+      "detail": "본문검색: '1.'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000276688&type=HTML",
+      "guards_tried": [
+        "본문검색: '1.'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    },
+    {
+      "law_id": "34470",
+      "law_name": "(계약예규) 정부 입찰·계약 집행기준",
+      "new_serial_no": "2100000276688",
+      "reason": "0건실패",
+      "detail": "본문검색: '1.'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000276688&type=HTML",
+      "guards_tried": [
+        "본문검색: '1.'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    }
+  ],
+  "no_comparison": [
+    {
+      "law_id": "35080",
+      "law_name": "하도급거래공정화 지침",
+      "new_serial_no": "2100000251404",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000251404&type=HTML"
+    },
+    {
+      "law_id": "37812",
+      "law_name": "중소기업자간 경쟁제품 직접생산 확인기준",
+      "new_serial_no": "2100000268206",
+      "reason": "폐지제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000268206&type=HTML"
+    },
+    {
+      "law_id": "33891",
+      "law_name": "정보보호시스템 평가·인증 등에 관한 고시",
+      "new_serial_no": "2100000215508",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000215508&type=HTML"
+    },
+    {
+      "law_id": "006295",
+      "law_name": "공공기관의 정보공개에 관한 법률 시행규칙",
+      "new_serial_no": "273809",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=273809&type=HTML"
+    },
+    {
+      "law_id": "008113",
+      "law_name": "지능정보화 기본법 시행규칙",
+      "new_serial_no": "267147",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=267147&type=HTML"
+    },
+    {
+      "law_id": "014862",
+      "law_name": "가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률",
+      "new_serial_no": "270215",
+      "reason": "제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270215&type=HTML"
+    },
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    },
+    {
+      "law_id": "2054105",
+      "law_name": "중소 소프트웨어사업자의 사업 참여 지원에 관한 지침",
+      "new_serial_no": "2100000274532",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000274532&type=HTML"
+    },
+    {
+      "law_id": "42430",
+      "law_name": "행정업무용 표준 관리규정",
+      "new_serial_no": "2100000254490",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000254490&type=HTML"
+    }
+  ]
+}

@@ -1,10 +1,17 @@
-"""요약 멀티 에이전트 — 네 에이전트를 한 곳에 모은다.
+"""요약 멀티 에이전트 — 세 에이전트를 한 곳에 모은다.
 
 파이프라인 순서:
     MappingAgent   구(舊) 위치가 신(新) 어디로 갔는지 판정 (요약보다 먼저)
     ArticleAgent   개별 조문 요약 (조문당 1회, 병렬)
     LawAgent       법령 단위 종합 요약 (법당 1회)
-    VerifierAgent  감수 — 요약이 사실과 맞는지 재검토 (마지막)
+
+★ 감수(사실 대조)는 별도 LLM 에이전트가 아니라 코드로 한다
+  (summarizer/verifier.py 의 verify_summaries) — 2026-07-25 재설계.
+  LLM 에게 "요약이 맞는지 봐줘"라고 시키면 정확한 요약에도 트집을 잡거나
+  (분량·표현 문제를 사실 오류로 오인), 자기모순되는 지적을 낸다. 한때
+  이 파일에 VerifierAgent(LLM 기반 감수)가 있었지만 실제 파이프라인에서
+  쓰이지 않는 죽은 코드였다가 삭제됐다(2026-07-30) — 대체재인 코드 기반
+  검증이 이미 pipeline.py 에 연결돼 있었기 때문이다.
 
 각 에이전트는 LLMClient 프로토콜만 보고, 어떤 구현체(OpenAI/QWEN 등)가
 꽂혔는지 모른다. 프롬프트는 summarizer/prompts/ 에 따로 둔다 — 가장 자주
@@ -14,7 +21,6 @@
 from __future__ import annotations
 
 import logging
-import re
 from typing import Sequence
 
 from lawtrack.contract.schema import ArticleDiffItem, LawChange
@@ -31,26 +37,23 @@ from summarizer.matching import (
     resolve_article,
     trivial_mappings,
 )
+from summarizer.triage import ChangeClass, triage
 from summarizer.models import (
     ArticleMapping,
     ArticleSummary,
     ArticleUnit,
     LawSummary,
     PositionMapping,
-    VerifierIssue,
 )
 from summarizer.postprocess import clean_summary
 from summarizer.render import build_change_section
 from summarizer.prompts import (
     LAW_SUMMARY_SCHEMA,
     MAPPING_SCHEMA,
-    VERIFIER_SCHEMA,
     build_article_prompt,
     build_law_prompt,
     build_mapping_prompt,
-    build_verifier_prompt,
 )
-from summarizer.prompts.verifier import source_text_for_check
 
 log = logging.getLogger(__name__)
 
@@ -204,6 +207,66 @@ class MappingAgent:
 # ===========================================================================
 
 
+def _has_batchim(word: str) -> bool:
+    """마지막 글자가 받침으로 끝나는가 — 조사(이/가, 으로/로) 선택용."""
+    if not word:
+        return False
+    code = ord(word[-1])
+    if 0xAC00 <= code <= 0xD7A3:
+        return (code - 0xAC00) % 28 != 0
+    return False
+
+
+_TRAILING_JOSA = ("은", "는", "이", "가", "로", "의", "을", "를")
+"""_strip_trailing_josa()가 떼어낼 후보 조사(길이 1). "으로"는 별도로
+2글자째 처리한다.
+
+★★ 실측(2026-07-31, 환경개선비용 부담법 제22조 "환경부장관의 권한은" →
+"기후에너지환경부장관의 권한은"): 소유격 "의"가 붙은 채로 diff에 뽑히면
+"환경부장관의" + "가" = "환경부장관의가"라는 조사 두 개가 겹친 비문이
+나왔다. "은는이가로" 뿐 아니라 diff 어절 끝에 올 수 있는 다른 조사도
+먼저 떼어내야 한다."""
+
+
+def _strip_trailing_josa(word: str) -> str:
+    """단어 끝에 이미 붙어 있는 조사를 뗀다 — 다시 알맞은 조사를 붙이기 전
+    깨끗한 어간을 만들기 위해서다.
+
+    ★★ 실측(2026-07-31, 환경개선비용 부담법 제20조① "환경부장관은" →
+    "기후에너지환경부장관은", 국민기초생활보장법 제6조의2① "통계청이" →
+    "국가데이터처가"): deleted_words/inserted_words 는 원문 문장 안에서
+    diff로 뽑힌 어절이라, 이미 그 자리에 맞는 조사(은/는/이/가)가 붙어
+    있는 채로 온다. 그런데 아래 _describe_formal_change()는 항상 새
+    조사를 덧붙였다 — "환경부장관은"(이미 은 있음) + 배치침 판정으로 뽑은
+    "이" = "환경부장관은이", "통계청이" + "가" = "통계청이가" 처럼 조사가
+    중복되는 비문이 나왔다. 조사를 새로 계산하기 전에 기존 조사를 먼저
+    떼어내면, 원래 조사가 있었든 없었든 항상 올바른 조사 하나만 남는다.
+    """
+    if word.endswith("으로") and len(word) > 2:
+        return word[:-2]
+    if len(word) > 1 and word[-1] in _TRAILING_JOSA:
+        return word[:-1]
+    return word
+
+
+def _describe_formal_change(deleted_words: list[str], inserted_words: list[str]) -> str:
+    """기관명·인용 법령명 정비를 자연스러운 문장으로 서술한다.
+
+    ★ 화살표("'A' → 'B'") 표기 대신 자연스러운 문장으로 바꿨다
+    (2026-07-31, 사용자 요청) — "A가 B로 변경되는 등" 형태가 요약 톤을
+    조문 요약(ArticleAgent가 LLM으로 쓰는 문장)과 통일해 준다.
+    """
+    parts = []
+    for d, i in zip(deleted_words, inserted_words):
+        d_stem, i_stem = _strip_trailing_josa(d), _strip_trailing_josa(i)
+        josa_ga = "이" if _has_batchim(d_stem) else "가"
+        josa_ro = "으로" if _has_batchim(i_stem) else "로"
+        parts.append(f"{d_stem}{josa_ga} {i_stem}{josa_ro}")
+    if not parts:
+        return "기관명·인용 법령명이 정비되었습니다."
+    return ", ".join(parts) + " 변경되는 등 기관명·인용 법령명이 정비되었습니다."
+
+
 class ArticleAgent:
     """조문 하나를 한두 문장으로 요약한다. 조문끼리 독립이라 병렬 실행된다."""
 
@@ -241,6 +304,25 @@ class ArticleAgent:
                 summary="이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
                 caveats=caveats,
             )
+
+        # ★ 이식(2026-07-30, seongbeen2 브랜치): 형식적 정비(기관명·인용
+        # 법령명 일괄 교체 등)는 결정론적으로 확신할 수 있을 때만 LLM을
+        # 건너뛴다 — 실측(704건 중 52%)으로 확인된 정부조직개편발 기관명
+        # 교체가 전형적인 예다. old_text가 이 위치의 실제 개정 전 문장이
+        # 아니라 참고 맥락일 뿐인 경우(구조확장/위치재배치의심,
+        # unit.old_text_is_context)는 두 문장이 애초에 같은 위치를
+        # 가리키지 않으므로 이 판정 자체를 적용하지 않는다.
+        if not unit.old_text_is_context:
+            triaged = triage(unit.old_text, unit.new_text, change_type=unit.change_type)
+            if triaged.change_class is ChangeClass.NO_CHANGE:
+                return ArticleSummary(
+                    unit=unit,
+                    summary="이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+                    caveats=caveats,
+                )
+            if triaged.change_class is ChangeClass.FORMAL:
+                summary = _describe_formal_change(triaged.deleted_words, triaged.inserted_words)
+                return ArticleSummary(unit=unit, summary=summary, caveats=caveats)
 
         system, user = build_article_prompt(unit)
         try:
@@ -342,101 +424,4 @@ class LawAgent:
         )
 
 
-# ===========================================================================
-# 감수: Verifier — 요약이 사실과 맞는지 재검토
-# ===========================================================================
-
-
-class VerifierAgent:
-    """조문별 요약을 원문(개정 전/후)과 대조해 '사실 오류'만 잡는다.
-
-    ★ 사실 대조 검증 (2026-07-25 재설계):
-        정답이 있는 것만 검증한다 — 요약이 원문 조문과 어긋나는지. 취지·
-        표현 같은 주관 판단은 검증하지 않는다. 그래야 검증이 흔들리지 않고,
-        지적하면 반드시 맞다(회사가 믿고 쓸 수 있는 조건).
-
-    두 겹 안전장치로 오탐을 막는다:
-        1. 자기모순 지적("~라고 썼으나 맞다") 제거
-        2. 근거 인용이 실제 원문에 없으면 제거 (지어낸 지적 차단)
-    """
-
-    def __init__(self, client: LLMClient, settings: LLMSettings):
-        self._client = client
-        self._settings = settings
-
-    # 자기모순 지적("~라고 썼으나 그게 맞다")을 거르는 표지.
-    _SELF_CONTRADICT = ("맞고", "맞습니다", "맞지만", "올바르", "정확하", "적절하", "문제 없", "언급되지 않")
-
-    # 분량·표현 트집을 거르는 표지 — 이건 사실 오류가 아니다. 요약이 짧고
-    # 정확한데도 "덜 다뤘다"고 올리는 걸 막는다(2026-07-25 실측).
-    _NOT_FACT_ERROR = (
-        "충분히", "자세히", "구체적으로", "상세", "덜 ", "부족",
-        "다루지 않", "반영하지 않", "반영되지 않", "다루지 못", "포함되지 않", "언급하지 않",
-    )
-
-    # 이 유형만 사실 오류로 인정한다. 스키마가 enum 으로 강제하지만, 코드에서
-    # 한 번 더 막는다(모델이 스키마를 어기는 경우 대비).
-    _FACT_TYPES = ("환각", "방향오류")
-
-    def run(
-        self,
-        law: LawChange,
-        headline: str,
-        overview: str,
-        summaries: Sequence[ArticleSummary],
-        mappings: Sequence[ArticleMapping],
-    ) -> list[VerifierIssue]:
-        if not summaries:
-            return []
-        system, user = build_verifier_prompt(law, headline, overview, summaries, mappings)
-        try:
-            payload = self._client.complete_json(
-                system=system,
-                user=user,
-                schema=VERIFIER_SCHEMA,
-                max_tokens=self._settings.verifier_max_tokens,
-                thinking=self._settings.verifier_thinking,
-            )
-        except LLMError as exc:
-            log.warning("[%s] %s 감수 실패: %s", law.law_id, law.law_name, exc)
-            return []
-
-        # 검증이 인용한 문장이 실제 조문 원문에 있는지 대조할 기준.
-        source_norm = source_text_for_check(law, summaries)
-
-        issues: list[VerifierIssue] = []
-        for i in payload.get("issues", []):
-            problem = i.get("problem", "")
-            quote = i.get("source_quote", "")
-            location = i.get("location", "")
-            itype = i.get("issue_type", "")
-
-            # ① 유형이 환각/방향오류가 아니면 사실 오류가 아니다 → 제거.
-            if itype not in self._FACT_TYPES:
-                log.info("[%s] 감수 비사실 유형(%s) 무시: %s", law.law_id, itype, problem[:40])
-                continue
-
-            # ② 분량·표현 트집("덜 다뤘다" 류)은 사실 오류가 아니다 → 제거.
-            if any(w in problem for w in self._NOT_FACT_ERROR):
-                log.info("[%s] 감수 분량트집 무시: %s", law.law_id, problem[:50])
-                continue
-
-            # ③ 자기모순 지적 제거.
-            if any(w in problem for w in self._SELF_CONTRADICT):
-                log.info("[%s] 감수 자기모순 지적 무시: %s", law.law_id, problem[:50])
-                continue
-
-            # ④ 근거 인용이 실제 원문에 없으면 지어낸 것 → 제거.
-            qn = re.sub(r"\s+", "", quote)
-            if not qn or qn not in source_norm:
-                log.info("[%s] 감수 근거없는 지적 무시: %s", law.law_id, problem[:50])
-                continue
-
-            issues.append(VerifierIssue(severity="high", where=f"{location}({itype})", problem=problem))
-
-        for i in issues:
-            log.info("[%s] 감수 사실오류 %s: %s", law.law_id, i.where, i.problem)
-        return issues
-
-
-__all__ = ["MappingAgent", "ArticleAgent", "LawAgent", "VerifierAgent"]
+__all__ = ["MappingAgent", "ArticleAgent", "LawAgent"]

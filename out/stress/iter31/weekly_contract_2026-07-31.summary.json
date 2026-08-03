@@ -1,0 +1,1691 @@
+{
+  "source_file": "weekly_contract_2026-07-31.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "011895",
+      "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+      "law_type": "법률",
+      "enforce_date": "2023-11-17",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=251023&type=HTML",
+      "new_serial_no": "251023",
+      "headline": "공공데이터 및 데이터기반행정 활성화를 위한 위원회 통합 및 조정기능 이관",
+      "body": "이번 개정은 데이터 기반 행정의 효율성을 제고하기 위해 관련 위원회를 통합하고, 공공데이터 및 데이터기반행정 관련 조정을 총괄하는 기능을 강화하는 데 목적이 있습니다. 이를 통해 데이터 제공 거부와 관련된 분쟁 조정 등의 업무가 보다 체계적으로 운영될 것으로 기대됩니다.\n\n○ 조문별 변경 내용\n- 제13조 (개정): 공공데이터제공분쟁조정위원회가 공공데이터분쟁조정위원회로 변경되는 등 기관명·인용 법령명이 정비되었습니다.\n- 제28조 (개정): 공공데이터제공분쟁조정위원회가 공공데이터분쟁조정위원회로 변경되는 등 기관명·인용 법령명이 정비되었습니다.\n- 제29조\n    · ① (개정): 분쟁조정과 데이터기반행정 활성화에 관한 법률 제13조에 따른 데이터의 제공 거부에 대한 조정을 하게 하기 위하여 전략위원회에 공공데이터분쟁조정위원회(이하) 가 설치됩니다.\n    · ② (개정): '공공데이터의 제공 및 이용'이라는 표현이 '공공데이터 및 데이터기반행정'으로 변경되었습니다.\n    · ②1. (개정): 공공데이터의 제공 및 이용이 공공데이터 및 데이터기반행정으로 변경되었습니다.\n    · ②4. (개정): '공공데이터의 제공 및 이용'이라는 표현이 '공공데이터 및 데이터기반행정'으로 변경되었습니다.\n- 제5조\n    · ① (개정): 공공데이터는 이제 데이터기반행정에 포함되어 데이터기반행정은 「데이터기반행정 활성화에 관한 법률」에 따른 데이터로 정의됩니다.\n    · ② (개정): 규제 기관에 소속된 인원 수가 35명에서 37명으로 변경되었습니다.\n    · ③2. (개정): 공공데이터의 제공 및 이용에 관한 내용을 공공데이터 및 데이터기반행정에 관한 것으로 변경하였습니다.\n    · ⑥ (개정): 공공데이터전략실무위원회 대신 다음 각 호의 분과위원회를 두며, 분과위원회로 명칭이 변경됩니다.\n    · ⑥1. (신설): 데이터기반행정 분과위원회가 새로 신설되었습니다.\n    · ⑥2. (신설): 공공데이터 개방ㆍ활용 분과위원회가 새로 설립됩니다.\n    · ⑦ (개정): '실무위원회'가 '분과위원회'로 변경되었습니다.\n- 제6조\n    · ①6의2. (신설): 데이터기반행정 활성화에 관한 법률의 제5조 각 호의 사항이 새로 생겼습니다.\n    · ①8. (개정): '공공데이터의 제공 및 이용과'가 '공공데이터 및 데이터기반행정과'로 변경되었습니다.\n    · ② (개정): '공공데이터에'라는 표현이 '공공데이터 및 데이터기반행정에'로 변경되었습니다.",
+      "overview": "이번 개정은 데이터 기반 행정의 효율성을 제고하기 위해 관련 위원회를 통합하고, 공공데이터 및 데이터기반행정 관련 조정을 총괄하는 기능을 강화하는 데 목적이 있습니다. 이를 통해 데이터 제공 거부와 관련된 분쟁 조정 등의 업무가 보다 체계적으로 운영될 것으로 기대됩니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제13조②16.",
+            "change_type": "개정",
+            "old_text": "16. 제29조에 따른 공공데이터제공분쟁조정위원회 운영 지원",
+            "new_text": "16. 제29조에 따른 공공데이터분쟁조정위원회 운영 지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공공데이터제공분쟁조정위원회' → '공공데이터분쟁조정위원회'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공데이터제공분쟁조정위원회가 공공데이터분쟁조정위원회로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제28조①4.",
+            "change_type": "개정",
+            "old_text": "4. 그 밖에 공공데이터의 관리 및 이용에 적합하지 아니한 경우로서 제29조에 따른 공공데이터제공분쟁조정위원회가 정하는 경우",
+            "new_text": "4. 그 밖에 공공데이터의 관리 및 이용에 적합하지 아니한 경우로서 제29조에 따른 공공데이터분쟁조정위원회가 정하는 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공공데이터제공분쟁조정위원회가' → '공공데이터분쟁조정위원회가'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공데이터제공분쟁조정위원회가 공공데이터분쟁조정위원회로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제29조①",
+            "change_type": "개정",
+            "old_text": "① 공공기관의 공공데이터 제공거부 및 제공중단에 관한 분쟁조정을 하게 하기 위하여 행정안전부장관 소속으로 공공데이터제공분쟁조정위원회(이하 “분쟁조정위원회”라 한다)를 둔다.",
+            "new_text": "① 공공기관의 공공데이터 제공거부 및 제공중단에 관한 분쟁조정과 「데이터기반행정 활성화에 관한 법률」 제13조에 따른 데이터의 제공 거부에 대한 조정을 하게 하기 위하여 전략위원회에 공공데이터분쟁조정위원회(이하 “분쟁조정위원회”라 한다)를 둔다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'분쟁조정을 하게 하기 위하여 행정안전부장관 소속으로 공공데이터제공분쟁조정위원회(이하' → '분쟁조정과 「데이터기반행정 활성화에 관한 법률」 제13조에 따른 데이터의 제공 거부에 대한 조정을 하게 하기 위하여 전략위원회에 공공데이터분쟁조정위원회(이하'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "분쟁조정과 데이터기반행정 활성화에 관한 법률 제13조에 따른 데이터의 제공 거부에 대한 조정을 하게 하기 위하여 전략위원회에 공공데이터분쟁조정위원회(이하) 가 설치됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제29조②",
+            "change_type": "개정",
+            "old_text": "② 분쟁조정위원회는 위원장 1명을 포함하여 공공데이터의 제공 및 이용 등에 관한 전문지식과 경험을 두루 갖춘 다음 각 호의 사람 중에서 행정안전부장관이 위촉한 25명 이내의 위원으로 구성하며, 그 중 1명은 상임위원으로 한다.",
+            "new_text": "② 분쟁조정위원회는 위원장 1명을 포함하여 공공데이터 및 데이터기반행정 등에 관한 전문지식과 경험을 두루 갖춘 다음 각 호의 사람 중에서 행정안전부장관이 위촉한 25명 이내의 위원으로 구성하며, 그 중 1명은 상임위원으로 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공공데이터의 제공 및 이용' → '공공데이터 및 데이터기반행정'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'공공데이터의 제공 및 이용'이라는 표현이 '공공데이터 및 데이터기반행정'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제29조②1.",
+            "change_type": "개정",
+            "old_text": "1. 공공데이터 업무를 관장하는 중앙행정기관의 고위공무원단에 속하는 공무원 또는 이에 상당하는 공공부문 및 관련 단체의 직에 재직하고 있거나 재직하였던 사람으로서 공공데이터의 제공 및 이용 등의 업무 경험이 있는 사람",
+            "new_text": "1. 공공데이터 및 데이터기반행정 업무를 관장하는 중앙행정기관의 고위공무원단에 속하는 공무원 또는 이에 상당하는 공공부문 및 관련 단체의 직에 재직하고 있거나 재직하였던 사람으로서 공공데이터 및 데이터기반행정 등의 업무 경험이 있는 사람",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 및 데이터기반행정' 추가",
+              "'공공데이터의 제공 및 이용' → '공공데이터 및 데이터기반행정'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공데이터의 제공 및 이용이 공공데이터 및 데이터기반행정으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제29조②4.",
+            "change_type": "개정",
+            "old_text": "4. 그 밖에 공공데이터의 제공 및 이용 등에 대한 학식과 경험이 풍부한 사람으로서 행정안전부장관이 인정하는 사람",
+            "new_text": "4. 그 밖에 공공데이터 및 데이터기반행정 등에 대한 학식과 경험이 풍부한 사람으로서 행정안전부장관이 인정하는 사람",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공공데이터의 제공 및 이용' → '공공데이터 및 데이터기반행정'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'공공데이터의 제공 및 이용'이라는 표현이 '공공데이터 및 데이터기반행정'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제5조①",
+            "change_type": "개정",
+            "old_text": "① 공공데이터에 관한 정부의 주요 정책과 계획을 심의ㆍ조정하고 그 추진사항을 점검ㆍ평가하기 위하여 국무총리 소속으로 공공데이터전략위원회(이하 “전략위원회”라 한다)를 둔다.",
+            "new_text": "① 공공데이터 및 「데이터기반행정 활성화에 관한 법률」에 따른 데이터기반행정(이하 “데이터기반행정”이라 한다)에 관한 정부의 주요 정책과 계획을 심의ㆍ조정하고 그 추진사항을 점검ㆍ평가하기 위하여 국무총리 소속으로 공공데이터전략위원회(이하 “전략위원회”라 한다)를 둔다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공공데이터에' → '공공데이터 및 「데이터기반행정 활성화에 관한 법률」에 따른 데이터기반행정(이하 “데이터기반행정”이라 한다)에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공데이터는 이제 데이터기반행정에 포함되어 데이터기반행정은 「데이터기반행정 활성화에 관한 법률」에 따른 데이터로 정의됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제5조②",
+            "change_type": "개정",
+            "old_text": "② 위원은 위원장 2명을 포함하여 35명 이내로 한다.",
+            "new_text": "② 위원은 위원장 2명을 포함하여 37명 이내로 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'35명' → '37명'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "규제 기관에 소속된 인원 수가 35명에서 37명으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제5조③2.",
+            "change_type": "개정",
+            "old_text": "2. 공공데이터의 제공 및 이용에 관한 전문지식과 경험이 풍부한 사람 중에서 국무총리가 위촉하는 사람",
+            "new_text": "2. 공공데이터 및 데이터기반행정에 관한 전문지식과 경험이 풍부한 사람 중에서 국무총리가 위촉하는 사람",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공공데이터의 제공 및 이용에' → '공공데이터 및 데이터기반행정에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공데이터의 제공 및 이용에 관한 내용을 공공데이터 및 데이터기반행정에 관한 것으로 변경하였습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제5조⑥",
+            "change_type": "개정",
+            "old_text": "⑥ 전략위원회에 상정할 안건을 미리 검토하고 전략위원회가 위임한 안건을 심의하기 위하여 전략위원회에 공공데이터전략실무위원회(이하 “실무위원회”라 한다)를 두며, 실무위원회 소속으로 안건 심의 등을 지원하기 위하여 분야별 전문위원회를 둘 수 있다.",
+            "new_text": "⑥ 전략위원회에 상정할 안건을 미리 검토하고 전략위원회가 위임한 안건을 심의하기 위하여 전략위원회에 다음 각 호의 분과위원회(이하 “분과위원회”라 한다)를 두며, 분과위원회 소속으로 안건 심의 등을 지원하기 위하여 분야별 전문위원회를 둘 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공공데이터전략실무위원회(이하 “실무위원회”라 한다)를 두며, 실무위원회' → '다음 각 호의 분과위원회(이하 “분과위원회”라 한다)를 두며, 분과위원회'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공데이터전략실무위원회 대신 다음 각 호의 분과위원회를 두며, 분과위원회로 명칭이 변경됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제5조⑥1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 데이터기반행정 분과위원회",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "데이터기반행정 분과위원회가 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제5조⑥2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 공공데이터 개방ㆍ활용 분과위원회",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공데이터 개방ㆍ활용 분과위원회가 새로 설립됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제5조⑦",
+            "change_type": "개정",
+            "old_text": "⑦ 전략위원회 및 실무위원회, 분야별 전문위원회의 구성과 운영에 필요한 사항은 대통령령으로 정한다.",
+            "new_text": "⑦ 전략위원회 및 분과위원회, 분야별 전문위원회의 구성과 운영에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'실무위원회,' → '분과위원회,'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'실무위원회'가 '분과위원회'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제6조①6의2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "6의2. 「데이터기반행정 활성화에 관한 법률」 제5조 각 호의 사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "데이터기반행정 활성화에 관한 법률의 제5조 각 호의 사항이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제6조①8.",
+            "change_type": "개정",
+            "old_text": "8. 그 밖에 공공데이터의 제공 및 이용과 관련하여 위원장이 필요하다고 인정하는 사항",
+            "new_text": "8. 그 밖에 공공데이터 및 데이터기반행정과 관련하여 위원장이 필요하다고 인정하는 사항",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공공데이터의 제공 및 이용과' → '공공데이터 및 데이터기반행정과'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'공공데이터의 제공 및 이용과'가 '공공데이터 및 데이터기반행정과'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011895",
+            "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+            "location_label": "제6조②",
+            "change_type": "개정",
+            "old_text": "② 전략위원회는 제1항 각 호의 사항을 심의하기 위하여 필요하면 관계 공무원 및 공공기관 임직원, 공공데이터에 관한 전문 지식이 있는 사람이나 관련 이용자로부터 의견을 들을 수 있고, 관계 기관 등에 대하여 자료 등의 제출을 요구할 수 있다.",
+            "new_text": "② 전략위원회는 제1항 각 호의 사항을 심의하기 위하여 필요하면 관계 공무원 및 공공기관 임직원, 공공데이터 및 데이터기반행정에 관한 전문 지식이 있는 사람이나 관련 이용자로부터 의견을 들을 수 있고, 관계 기관 등에 대하여 자료 등의 제출을 요구할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공공데이터에' → '공공데이터 및 데이터기반행정에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'공공데이터에'라는 표현이 '공공데이터 및 데이터기반행정에'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제13조",
+          "mappings": [
+            {
+              "old_position": "②16.",
+              "new_position": "②16.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제28조",
+          "mappings": [
+            {
+              "old_position": "①4.",
+              "new_position": "①4.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제29조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②1.",
+              "new_position": "②1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②4.",
+              "new_position": "②4.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제5조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "③2.",
+              "new_position": "③2.",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "⑥",
+              "new_position": "⑥",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "⑦",
+              "new_position": "⑦",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑥1.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "새로 추가된 항목으로, 이전 법문에는 해당 내용이 없었습니다."
+            },
+            {
+              "old_position": null,
+              "new_position": "⑥2.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "새로 추가된 항목으로, 이전 법문에는 해당 내용이 없었습니다."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제6조",
+          "mappings": [
+            {
+              "old_position": "①8.",
+              "new_position": "①8.",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①6의2.",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "014531",
+      "law_name": "위기임신 및 보호출산 지원과 아동보호에 관한 특별법",
+      "law_type": "법률",
+      "enforce_date": "2026-05-12",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=279721&type=HTML",
+      "new_serial_no": "279721",
+      "headline": "국가아동권리보장원 명칭 변경 및 장애아동 보호체계 강화",
+      "body": "이번 개정은 아동권리보장원의 명칭을 국가아동권리보장원으로 변경하여 기관의 위상을 제고하고, 장애아동에 대한 법정대리권 및 보호조치 절차 개선을 통해 장애아동 보호 체계를 강화하는 것을 목적으로 하고 있습니다. 또한, 아동에 대한 국가의 책임을 명확히 하고, 관련 기관의 협력체계를 마련하여 아동의 권리보장을 더욱 강화하려는 의도를 갖고 있습니다.\n\n○ 조문별 변경 내용\n- 제13조 (개정): '아동권리보장원'이 '국가아동권리보장원'으로 변경됨에 따라 관련 문서에서 '아동권리보장원의'도 '국가아동권리보장원의'로 수정되었습니다.\n- 제15조 (개정): '아동권리보장원으로'라는 표현이 '국가아동권리보장원으로'로 변경되었습니다.\n- 제16조\n    · ① (개정): '아동권리보장원에'를 '국가아동권리보장원에'로 변경하였습니다.\n    · ② (개정): 아동권리보장원이라는 명칭이 국가아동권리보장원으로 변경되었습니다.\n- 제19조 (개정): '아동권리보장원의' 표현이 '국가아동권리보장원의'로 변경되었습니다.\n- 제23조 (개정): 국가아동권리보장원이 중앙상담지원기관, 지역상담기관, 한부모가족복지시설, 사회복지시설, 의료기관과 함께 비밀을 누설해서는 안 되는 기관 목록에 포함되었습니다.",
+      "overview": "이번 개정은 아동권리보장원의 명칭을 국가아동권리보장원으로 변경하여 기관의 위상을 제고하고, 장애아동에 대한 법정대리권 및 보호조치 절차 개선을 통해 장애아동 보호 체계를 강화하는 것을 목적으로 하고 있습니다. 또한, 아동에 대한 국가의 책임을 명확히 하고, 관련 기관의 협력체계를 마련하여 아동의 권리보장을 더욱 강화하려는 의도를 갖고 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "014531",
+            "law_name": "위기임신 및 보호출산 지원과 아동보호에 관한 특별법",
+            "location_label": "제13조④",
+            "change_type": "개정",
+            "old_text": "④ 제1항에 따라 신청인이 신청을 철회하였을 경우 지역상담기관의 장은 해당 아동에 대한 출생증서를 지체 없이 폐기하여야 한다. 다만, 제16조제1항에 따라 이미 출생증서를 「아동복지법」 제10조의2에 따른 아동권리보장원(이하 “아동권리보장원”이라 한다)에 이관한 경우에는 보건복지부령으로 정하는 바에 따라 아동권리보장원의 장(이하 “보장원장”이라 한다)에게 이 사실을 통지하여야 한다.",
+            "new_text": "④ 제1항에 따라 신청인이 신청을 철회하였을 경우 지역상담기관의 장은 해당 아동에 대한 출생증서를 지체 없이 폐기하여야 한다. 다만, 제16조제1항에 따라 이미 출생증서를 「아동복지법」 제10조의2에 따른 국가아동권리보장원(이하 “국가아동권리보장원”이라 한다)에 이관한 경우에는 보건복지부령으로 정하는 바에 따라 국가아동권리보장원의 장(이하 “보장원장”이라 한다)에게 이 사실을 통지하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'아동권리보장원(이하 “아동권리보장원”이라' → '국가아동권리보장원(이하 “국가아동권리보장원”이라'",
+              "'아동권리보장원의' → '국가아동권리보장원의'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'아동권리보장원'이 '국가아동권리보장원'으로 변경됨에 따라 관련 문서에서 '아동권리보장원의'도 '국가아동권리보장원의'로 수정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014531",
+            "law_name": "위기임신 및 보호출산 지원과 아동보호에 관한 특별법",
+            "location_label": "제15조②",
+            "change_type": "개정",
+            "old_text": "② 지역상담기관의 장은 제1항에 따라 작성한 출생증서를 봉투에 넣어 밀봉하고, 봉투 겉면에 출생증서가 들어있다는 사실, 비식별화된 신청인의 가명, 출생증서를 작성한 지역상담기관의 명칭 및 주소를 기재한 후 아동권리보장원으로 이관할 때까지 이를 보관한다.",
+            "new_text": "② 지역상담기관의 장은 제1항에 따라 작성한 출생증서를 봉투에 넣어 밀봉하고, 봉투 겉면에 출생증서가 들어있다는 사실, 비식별화된 신청인의 가명, 출생증서를 작성한 지역상담기관의 명칭 및 주소를 기재한 후 국가아동권리보장원으로 이관할 때까지 이를 보관한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'아동권리보장원으로' → '국가아동권리보장원으로'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'아동권리보장원으로'라는 표현이 '국가아동권리보장원으로'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014531",
+            "law_name": "위기임신 및 보호출산 지원과 아동보호에 관한 특별법",
+            "location_label": "제16조①",
+            "change_type": "개정",
+            "old_text": "① 제11조제6항에 따라 아동의 출생기록 사실을 통보받은 지역상담기관의 장은 제15조제2항에 따른 출생증서가 담긴 봉투 겉면에 아동의 성명, 성별, 주민등록번호를 추가로 기재한 뒤 이를 지체 없이 아동권리보장원에 이관하여야 한다.",
+            "new_text": "① 제11조제6항에 따라 아동의 출생기록 사실을 통보받은 지역상담기관의 장은 제15조제2항에 따른 출생증서가 담긴 봉투 겉면에 아동의 성명, 성별, 주민등록번호를 추가로 기재한 뒤 이를 지체 없이 국가아동권리보장원에 이관하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'아동권리보장원에' → '국가아동권리보장원에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'아동권리보장원에'를 '국가아동권리보장원에'로 변경하였습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014531",
+            "law_name": "위기임신 및 보호출산 지원과 아동보호에 관한 특별법",
+            "location_label": "제16조②",
+            "change_type": "개정",
+            "old_text": "② 아동권리보장원은 제1항에 따라 이관받은 출생증서를 영구보존하여야 한다. 다만, 제13조제4항 단서에 따른 철회통지를 받은 경우에는 이를 지체 없이 폐기하여야 한다.",
+            "new_text": "② 국가아동권리보장원은 제1항에 따라 이관받은 출생증서를 영구보존하여야 한다. 다만, 제13조제4항 단서에 따른 철회통지를 받은 경우에는 이를 지체 없이 폐기하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'아동권리보장원은' → '국가아동권리보장원은'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "아동권리보장원이라는 명칭이 국가아동권리보장원으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014531",
+            "law_name": "위기임신 및 보호출산 지원과 아동보호에 관한 특별법",
+            "location_label": "제19조2.",
+            "change_type": "개정",
+            "old_text": "2. 제16조제2항에 따라 출생증서의 영구보존에 필요한 아동권리보장원의 업무수행경비",
+            "new_text": "2. 제16조제2항에 따라 출생증서의 영구보존에 필요한 국가아동권리보장원의 업무수행경비",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'아동권리보장원의' → '국가아동권리보장원의'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'아동권리보장원의' 표현이 '국가아동권리보장원의'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "014531",
+            "law_name": "위기임신 및 보호출산 지원과 아동보호에 관한 특별법",
+            "location_label": "제23조",
+            "change_type": "개정",
+            "old_text": "중앙상담지원기관, 지역상담기관, 한부모가족복지시설, 사회복지시설, 의료기관, 아동권리보장원에 종사하는 사람 또는 종사하였던 사람은 이 법에 따른 업무를 행하는 과정에서 알게 된 비밀을 누설하여서는 아니 된다.",
+            "new_text": "중앙상담지원기관, 지역상담기관, 한부모가족복지시설, 사회복지시설, 의료기관, 국가아동권리보장원에 종사하는 사람 또는 종사하였던 사람은 이 법에 따른 업무를 행하는 과정에서 알게 된 비밀을 누설하여서는 아니 된다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국가아동권리보장원이 중앙상담지원기관, 지역상담기관, 한부모가족복지시설, 사회복지시설, 의료기관과 함께 비밀을 누설해서는 안 되는 기관 목록에 포함되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제13조",
+          "mappings": [
+            {
+              "old_position": "④",
+              "new_position": "④",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제15조",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제16조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제19조",
+          "mappings": [
+            {
+              "old_position": "2.",
+              "new_position": "2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제23조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [
+        {
+          "severity": "high",
+          "where": "제13조④",
+          "problem": "요약이 '국→아동권리보장원의'라 했으나 실제로는 반대 방향(방향오류)"
+        },
+        {
+          "severity": "high",
+          "where": "제16조①",
+          "problem": "요약이 '국→아동권리보장원에'라 했으나 실제로는 반대 방향(방향오류)"
+        }
+      ],
+      "error": null
+    },
+    {
+      "law_id": "23559",
+      "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+      "law_type": "행정규칙",
+      "enforce_date": "2024-07-24",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000244750&type=HTML",
+      "new_serial_no": "2100000244750",
+      "headline": "정보보호 및 개인정보보호 관리체계 인증 관련 수수료 감면 및 인증 기준 완화 도입",
+      "body": "이번 개정은 정보통신망 이용촉진 및 정보보호 법률 개정에 따라 정보를 보호하고 개인정보를 관리하기 위한 인증절차의 부담을 줄이기 위해 수수료 감면 및 인증 기준을 완화하려는 목적입니다. 이를 통해 다양한 규모의 조직이 인증을 더 쉽게 받을 수 있도록 지원하고 있습니다.\n\n○ 조문별 변경 내용\n- 제11조\n    · ①4. (개정): 개인정보보호법이 「개인정보보호법」로 변경되는 등 기관명·인용 법령명이 정비되었습니다.\n    · ①5. (개정): 개인정보보호법이 「개인정보보호법으로, 시행령이 시행령」로 변경되는 등 기관명·인용 법령명이 정비되었습니다.\n    · ② (개정): '시행령(이하 “정보통신망법 시행령”이라 한다)'의 위치가 변경되어 제54조에 포함되었습니다.\n- 제20조\n    · ① (개정): 신청인은 제18조제1항 각 호의 어느 하나에 해당하는 인증을 받아야 합니다.\n    · ② (개정): '정보보호 관리체계'가 삭제되었습니다.\n    · ②1. (개정): 인증의 범위에 제18조제1항 각 호의 어느 하나에 해당하는 인증이 포함될 수 있습니다.\n    · ②2. (개정): '정보보호 관리체계'가 '제18조제1항 각 호의 어느 하나에 해당하는'으로 변경되었습니다.\n    · ③ (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n- 제21조\n    · ③4. (신설): 정보통신망법 제47조의7제1항 각 호의 어느 하나에 해당하는 자는 제23조제3항 및 제4항에 따른 인증심사 기준을 적용받아야 합니다.\n    · ③5. (이동): 내용 변경 없이 ③4.에서 제21조③5.(으)로 번호만 이동했습니다.\n- 제23조 (신설, 6개 항·호·목): 제1항에도 불구하고 정보통신망법 제47조의7제1항제1호 및 같은 법 시행령 제49조의2제1항제1호에 해당하는 자에게는 다음 각 호의 인증의 구분에 따라 인증기준이 적용됩니다.\n- 제25조 (개정): 인증기준이 '별표 7의 인증기준에'서 '제23조에 따른 인증심사 기준에'로 변경되었습니다.\n- 제2조 (개정): 이 고시에서 사용하는 용어의 정의가 '뜻'으로 변경되었습니다.",
+      "overview": "이번 개정은 정보통신망 이용촉진 및 정보보호 법률 개정에 따라 정보를 보호하고 개인정보를 관리하기 위한 인증절차의 부담을 줄이기 위해 수수료 감면 및 인증 기준을 완화하려는 목적입니다. 이를 통해 다양한 규모의 조직이 인증을 더 쉽게 받을 수 있도록 지원하고 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제11조①4.",
+            "change_type": "개정",
+            "old_text": "4. 정보통신망법 제47조제11항 및 개인정보보호법 제32조의2제5항을 위반하여 인증 또는 인증심사를 한 경우",
+            "new_text": "4. 정보통신망법 제47조제11항 및 「개인정보보호법」 제32조의2제5항을 위반하여 인증 또는 인증심사를 한 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'개인정보보호법' → '「개인정보보호법」'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "개인정보보호법이 「개인정보보호법」로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제11조①5.",
+            "change_type": "개정",
+            "old_text": "5. 정보통신망법 제47조제12항 및 개인정보보호법 시행령 제34조의6제1항제2호에 따른 지정기준에 적합하지 아니하게 된 경우",
+            "new_text": "5. 정보통신망법 제47조제12항 및 「개인정보보호법 시행령」 제34조의6제1항제2호에 따른 지정기준에 적합하지 아니하게 된 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'개인정보보호법 시행령' → '「개인정보보호법 시행령」'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "개인정보보호법이 「개인정보보호법으로, 시행령이 시행령」로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제11조②",
+            "change_type": "개정",
+            "old_text": "② 지정취소 및 업무정지에 대해서는 「정보통신망 이용촉진 및 정보보호 등에 관한 법률 시행령(이하 “정보통신망법 시행령”이라 한다)」제54조에 따른 지정취소 및 업무정지에 관한 행정처분의 기준을 따른다.",
+            "new_text": "② 지정취소 및 업무정지에 대해서는 「정보통신망 이용촉진 및 정보보호 등에 관한 법률 시행령」(이하 “정보통신망법 시행령”이라 한다) 제54조에 따른 지정취소 및 업무정지에 관한 행정처분의 기준을 따른다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'시행령(이하 “정보통신망법 시행령”이라 한다)」제54조에' → '시행령」(이하 “정보통신망법 시행령”이라 한다) 제54조에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'시행령(이하 “정보통신망법 시행령”이라 한다)'의 위치가 변경되어 제54조에 포함되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제20조①",
+            "change_type": "개정",
+            "old_text": "① 신청인이 제18조제1항제2호의 정보보호 관리체계 인증을 신청한 자가 다음 각 호의 어느 하나에 해당하는 인증을 받거나 정보보호 조치를 취한 경우 별표 5의 인증심사 일부 생략의 범위 내에서 인증심사의 일부를 생략할 수 있다.",
+            "new_text": "① 제18조제1항 각 호의 어느 하나에 해당하는인증을 신청한 자가 다음 각 호의 어느 하나에 해당하는 인증을 받거나 정보보호 조치를 취한 경우 별표 5의 인증심사 일부 생략의 범위 내에서 인증심사의 일부를 생략할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'신청인이 제18조제1항제2호의 정보보호 관리체계 인증을' → '제18조제1항 각 호의 어느 하나에 해당하는인증을'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "신청인은 제18조제1항 각 호의 어느 하나에 해당하는 인증을 받아야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제20조②",
+            "change_type": "개정",
+            "old_text": "② 제1항에 따라 정보보호 관리체계 인증심사의 일부를 생략하려는 경우에는 다음 각 호의 요건을 모두 충족하여야 한다.",
+            "new_text": "② 제1항에 따라 인증심사의 일부를 생략하려는 경우에는 다음 각 호의 요건을 모두 충족하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 정보보호 관리체계' 삭제"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'정보보호 관리체계'가 삭제되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제20조②1.",
+            "change_type": "개정",
+            "old_text": "1. 해당 국제표준 정보보호 인증 또는 정보보호 조치의 범위가 정보보호 관리체계 인증의 범위와 일치할 것",
+            "new_text": "1. 제18조제1항 각 호의 어느 하나에 해당하는 인증의 범위에 해당 국제표준 정보보호 인증 또는 정보보호 조치의 범위가 포함될 것",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 제18조제1항 각 호의 어느 하나에 해당하는 인증의 범위에' 추가",
+              "'정보보호 관리체계 인증의 범위와 일치할' → '포함될'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "인증의 범위에 제18조제1항 각 호의 어느 하나에 해당하는 인증이 포함될 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제20조②2.",
+            "change_type": "개정",
+            "old_text": "2. 정보보호 관리체계 인증 신청 및 심사 시에 해당 국제표준 정보보호 인증이나 정보보호 조치가 유효하게 유지되고 있을 것",
+            "new_text": "2. 제18조제1항 각 호의 어느 하나에 해당하는 인증 신청 및 심사 시에 해당 국제표준 정보보호 인증이나 정보보호 조치가 유효하게 유지되고 있을 것",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'정보보호 관리체계' → '제18조제1항 각 호의 어느 하나에 해당하는'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'정보보호 관리체계'가 '제18조제1항 각 호의 어느 하나에 해당하는'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제20조③",
+            "change_type": "개정",
+            "old_text": "③ 제1항에 따른 인증심사 일부 생략을 신청하고자하는 자는 별지 제10호서식의 인증심사 일부 생략 신청서를 심사수행기관에 제출하여야 한다.",
+            "new_text": "③ 제1항에 따른 인증심사 일부 생략을 신청하고자 하는 자는 별지 제10호서식의 인증심사 일부 생략 신청서를 심사수행기관에 제출하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제21조③4.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "4. 정보통신망법 제47조의7제1항 각 호의 어느 하나에 해당하는 자로서 제23조제3항 및 제4항에 따른 인증심사 기준을 적용받는 경우",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보통신망법 제47조의7제1항 각 호의 어느 하나에 해당하는 자는 제23조제3항 및 제4항에 따른 인증심사 기준을 적용받아야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제21조③5.",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "5. 그 밖에 신청인과 협의하여 수수료 조정이 필요하다고 판단되는 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "③4.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ③4.에서 제21조③5.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 제1항에도 불구하고 정보통신망법 제47조의7제1항제1호 및 같은 법 시행령 제49조의2제1항제1호에 해당하는 자에 대해서는 다음 각 호의 인증의 구분에 따라 인증기준을 적용한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제1항에도 불구하고 정보통신망법 제47조의7제1항제1호 및 같은 법 시행령 제49조의2제1항제1호에 해당하는 자에게는 다음 각 호의 인증의 구분에 따라 인증기준이 적용됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조③1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 정보보호 및 개인정보보호 관리체계 인증 : 별표 7의2 가목부터 다목",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보보호 및 개인정보보호 관리체계 인증에 관한 규정이 별표 7의2 가목부터 다목까지 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조③2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 정보보호 관리체계 인증 : 별표 7의2 가목(1.1.2. 항목 제외) 및 나목",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보보호 관리체계 인증이 신설되었으며, 이는 별표 7의2 가목(1.1.2. 항목 제외) 및 나목에 따라 수행됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조④",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "④ 정보통신망법 시행령 제49조의2제1항제2호에 해당하는 자에 대해서는 다음 각 호의 인증의 구분에 따라 인증기준을 적용한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보통신망법 시행령 제49조의2제1항제2호에 해당하는 자에게는 각 인증의 구분에 따라 인증기준을 적용합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조④1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 정보보호 및 개인정보보호 관리체계 인증 : 별표 7의3 가목부터 다목",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보보호 및 개인정보보호 관리체계 인증에 관한 규정이 새로 생겼으며, 이는 별표 7의3 가목부터 다목에서 확인할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조④2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 정보보호 관리체계 인증 : 별표 7의3 가목 및 나목",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보보호 관리체계 인증이 별표 7의3 가목 및 나목에 따라 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제25조②",
+            "change_type": "개정",
+            "old_text": "② 서면심사는 별표 7의 인증기준에 적합한지에 대하여 정보보호 및 개인정보보호 관리체계 구축ㆍ운영 관련 정책, 지침, 절차 및 이행의 증거자료 검토, 정보보호대책 및 개인정보 처리단계별 요구사항 적용 여부 확인 등의 방법으로 관리적 요소를 심사한다.",
+            "new_text": "② 서면심사는 제23조에 따른 인증심사 기준에 적합한지에 대하여 정보보호 및 개인정보보호 관리체계 구축ㆍ운영 관련 정책, 지침, 절차 및 이행의 증거자료 검토, 정보보호대책 및 개인정보 처리단계별 요구사항 적용 여부 확인 등의 방법으로 관리적 요소를 심사한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'별표 7의 인증기준에' → '제23조에 따른 인증심사 기준에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "인증기준이 '별표 7의 인증기준에'서 '제23조에 따른 인증심사 기준에'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제2조",
+            "change_type": "개정",
+            "old_text": "이 고시에서 사용하는 용어의 정의는 다음 각 호와 같다.",
+            "new_text": "이 고시에서 사용하는 용어의 뜻은 다음 각 호와 같다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "이 고시에서 사용하는 용어의 정의가 '뜻'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제11조",
+          "mappings": [
+            {
+              "old_position": "①4.",
+              "new_position": "①4.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "①5.",
+              "new_position": "①5.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제20조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②1.",
+              "new_position": "②1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②2.",
+              "new_position": "②2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제21조",
+          "mappings": [
+            {
+              "old_position": "③4.",
+              "new_position": "③5.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③4.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "기존에 해당하는 내용이 없며, 새롭게 추가된 항목."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제23조",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제25조",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제2조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "33440",
+      "law_name": "소프트웨어사업 계약 및 관리감독에 관한 지침",
+      "law_type": "행정규칙",
+      "enforce_date": "2023-05-15",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000223356&type=HTML",
+      "new_serial_no": "2100000223356",
+      "headline": "소프트웨어사업 추진계획의 구체화 및 상용소프트웨어 직접구매 요건 강화",
+      "body": "이번 개정은 공공의 상용소프트웨어 도입 확대를 위해 소프트웨어사업 추진계획에서 필요한 사항을 보다 명확히 하고, 상용소프트웨어 직접구매 제도를 강화하는 데 주안점을 두고 있습니다. 이를 통해 소프트웨어 구매 시 요구되는 정보의 체계적 관리와 상용소프트웨어 시장의 활성화를 도모하고자 합니다.\n\n○ 조문별 변경 내용\n- 제13조 (개정): '하도급법'이라 표기된 부분이 '‘하도급법’이라'로 수정되었습니다.\n- 제4조의2 (신설): 소프트웨어사업 추진계획에는 영 제34조제3항에 따라 포함되어야 하는 항목이 다음 각 호와 같이 신설되었습니다.\n- 제4조의21 (신설): 상용소프트웨어가 사용되는 소프트웨어사업의 경우 상용소프트웨어 구매 수요 정보를 제공해야 합니다.\n- 제4조의22 (신설): 정보화전략계획 수립 사업의 경우 소프트웨어 개발에 필요한 사항이 새로 생겼습니다.\n- 제4조의23 (신설): 소프트웨어사업 추진을 위하여 과학기술정보통신부장관이 공지하는 사항이 새로 신설되었습니다.\n- 제7조 (개정): 국가종합전자조달시스템 종합쇼핑몰 등록 소프트웨어는 제2조제4호 및 「국가종합전자조달시스템 종합쇼핑몰 운영규정」에 따른 국가종합전자조달시스템 종합쇼핑몰 또는 디지털서비스몰에 등록된 소프트웨어로 변경되며, 이는 「클라우드컴퓨팅 발전 및 이용자 보호에 관한 법률 시행령」 제3조제2호에 해당하는 서비스도 포함합니다.\n- 제8조 (개정): 소프트웨어사업 계약 및 관리감독에 관한 지침에서 숫자 '50'이 '40'으로 변경되었습니다.",
+      "overview": "이번 개정은 공공의 상용소프트웨어 도입 확대를 위해 소프트웨어사업 추진계획에서 필요한 사항을 보다 명확히 하고, 상용소프트웨어 직접구매 제도를 강화하는 데 주안점을 두고 있습니다. 이를 통해 소프트웨어 구매 시 요구되는 정보의 체계적 관리와 상용소프트웨어 시장의 활성화를 도모하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "33440",
+            "law_name": "소프트웨어사업 계약 및 관리감독에 관한 지침",
+            "location_label": "제13조①2.",
+            "change_type": "개정",
+            "old_text": "2. 소프트웨어사업자가 「하도급거래 공정화에 관한 법률」(이하 '하도급법'이라 한다) 제2조제2항의 원사업자인 경우 : 하도급법 제3조의2에 따른 소프트웨어사업 표준하도급계약서",
+            "new_text": "2. 소프트웨어사업자가 「하도급거래 공정화에 관한 법률」(이하 ‘하도급법’이라 한다) 제2조제2항의 원사업자인 경우 : 하도급법 제3조의2에 따른 소프트웨어사업 표준하도급계약서",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "''하도급법'이라' → '‘하도급법’이라'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'하도급법'이라 표기된 부분이 '‘하도급법’이라'로 수정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "33440",
+            "law_name": "소프트웨어사업 계약 및 관리감독에 관한 지침",
+            "location_label": "제4조의2",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "영 제34조제3항에 따라 소프트웨어사업 추진계획에 포함되어야 하는 항목은 다음 각 호와 같다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "소프트웨어사업 추진계획에는 영 제34조제3항에 따라 포함되어야 하는 항목이 다음 각 호와 같이 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "33440",
+            "law_name": "소프트웨어사업 계약 및 관리감독에 관한 지침",
+            "location_label": "제4조의21.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 상용소프트웨어가 사용되는 소프트웨어사업의 경우 상용소프트웨어 구매 수요 정보",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "상용소프트웨어가 사용되는 소프트웨어사업의 경우 상용소프트웨어 구매 수요 정보를 제공해야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "33440",
+            "law_name": "소프트웨어사업 계약 및 관리감독에 관한 지침",
+            "location_label": "제4조의22.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 정보화전략계획 수립 사업의 경우 소프트웨어 개발 필요사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보화전략계획 수립 사업의 경우 소프트웨어 개발에 필요한 사항이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "33440",
+            "law_name": "소프트웨어사업 계약 및 관리감독에 관한 지침",
+            "location_label": "제4조의23.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 그 밖에 소프트웨어사업 추진을 위하여 과학기술정보통신부장관이 공지하는 사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "소프트웨어사업 추진을 위하여 과학기술정보통신부장관이 공지하는 사항이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "33440",
+            "law_name": "소프트웨어사업 계약 및 관리감독에 관한 지침",
+            "location_label": "제7조③1.",
+            "change_type": "개정",
+            "old_text": "1. 「전자조달의 이용 및 촉진에 관한 법률」 제2조제4호에 따른 국가종합전자조달시스템 종합쇼핑몰 등록 소프트웨어",
+            "new_text": "1. 「전자조달의 이용 및 촉진에 관한 법률」 제2조제4호 및 「국가종합전자조달시스템 종합쇼핑몰 운영규정」에 따른 국가종합전자조달시스템 종합쇼핑몰 또는 디지털서비스몰에 등록된 소프트웨어(「클라우드컴퓨팅 발전 및 이용자 보호에 관한 법률 시행령」 제3조제2호에 해당하는 서비스도 포함한다.)",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제2조제4호에 따른 국가종합전자조달시스템 종합쇼핑몰 등록 소프트웨어' → '제2조제4호 및 「국가종합전자조달시스템 종합쇼핑몰 운영규정」에 따른 국가종합전자조달시스템 종합쇼핑몰 또는 디지털서비스몰에 등록된 소프트웨어(「클라우드컴퓨팅 발전 및 이용자 보호에 관한 법률 시행령」 제3조제2호에 해당하는 서비스도 포함한다.)'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국가종합전자조달시스템 종합쇼핑몰 등록 소프트웨어는 제2조제4호 및 「국가종합전자조달시스템 종합쇼핑몰 운영규정」에 따른 국가종합전자조달시스템 종합쇼핑몰 또는 디지털서비스몰에 등록된 소프트웨어로 변경되며, 이는 「클라우드컴퓨팅 발전 및 이용자 보호에 관한 법률 시행령」 제3조제2호에 해당하는 서비스도 포함합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "33440",
+            "law_name": "소프트웨어사업 계약 및 관리감독에 관한 지침",
+            "location_label": "제8조③",
+            "change_type": "개정",
+            "old_text": "③ 국가기관등의 장은 제7조제1항에 해당하는 사업에서 구매하는 제7조제2항의 직접 구매대상 상용소프트웨어 품목 중 제1항의 제외사유를 적용하는 품목의 비율이 100분의 50 미만인 경우 제2항 각 호에 따른 검토를 별지 제2호서식의 제출로 대체할 수 있다.",
+            "new_text": "③ 국가기관등의 장은 제7조제1항에 해당하는 사업에서 구매하는 제7조제2항의 직접 구매대상 상용소프트웨어 품목 중 제1항의 제외사유를 적용하는 품목의 비율이 100분의 40 미만인 경우 제2항 각 호에 따른 검토를 별지 제2호서식의 제출로 대체할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'50' → '40'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "소프트웨어사업 계약 및 관리감독에 관한 지침에서 숫자 '50'이 '40'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제13조",
+          "mappings": [
+            {
+              "old_position": "①2.",
+              "new_position": "①2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제4조의2",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "3.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제7조",
+          "mappings": [
+            {
+              "old_position": "③1.",
+              "new_position": "③1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제8조",
+          "mappings": [
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [
+        {
+          "severity": "high",
+          "where": "제13조①2.",
+          "problem": "요약이 '하도급법→라'라 했으나 실제로는 반대 방향(방향오류)"
+        }
+      ],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": [
+    {
+      "law_id": "35080",
+      "law_name": "하도급거래공정화 지침",
+      "new_serial_no": "2100000251404",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000251404&type=HTML"
+    },
+    {
+      "law_id": "37812",
+      "law_name": "중소기업자간 경쟁제품 직접생산 확인기준",
+      "new_serial_no": "2100000268206",
+      "reason": "폐지제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000268206&type=HTML"
+    },
+    {
+      "law_id": "33891",
+      "law_name": "정보보호시스템 평가·인증 등에 관한 고시",
+      "new_serial_no": "2100000215508",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000215508&type=HTML"
+    },
+    {
+      "law_id": "006295",
+      "law_name": "공공기관의 정보공개에 관한 법률 시행규칙",
+      "new_serial_no": "273809",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=273809&type=HTML"
+    },
+    {
+      "law_id": "008113",
+      "law_name": "지능정보화 기본법 시행규칙",
+      "new_serial_no": "267147",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=267147&type=HTML"
+    },
+    {
+      "law_id": "014862",
+      "law_name": "가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률",
+      "new_serial_no": "270215",
+      "reason": "제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270215&type=HTML"
+    },
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    },
+    {
+      "law_id": "2054105",
+      "law_name": "중소 소프트웨어사업자의 사업 참여 지원에 관한 지침",
+      "new_serial_no": "2100000274532",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000274532&type=HTML"
+    },
+    {
+      "law_id": "42430",
+      "law_name": "행정업무용 표준 관리규정",
+      "new_serial_no": "2100000254490",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000254490&type=HTML"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-31",
+  "period": {
+    "from_date": "2026-06-02",
+    "to_date": "2026-08-01"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "36338",
+      "promulgation_no": "36338",
+      "promulgation_date": "",
+      "revision_type": "타법개정",
+      "affected_law_ids": [
+        "002652"
+      ],
+      "laws": [
+        {
+          "law_id": "002652",
+          "law_type": "시행령",
+          "law_name": "국가를 당사자로 하는 계약에 관한 법률 시행령",
+          "internal_name": "국가를 당사자로 하는 계약에 관한 법률 시행령",
+          "dept_codes": [],
+          "old_serial_no": "285893",
+          "new_serial_no": "285893",
+          "enforce_date": "2026-06-03",
+          "revision_type": "타법개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 제도의 성격을 고려하여 신기술ㆍ신제품의 ‘인증’ 제도를 ‘지정’ 제도로 변경하는 내용으로 「산업기술혁신 촉진법」이 개정(법률 제21154호, 2025. 12. 2. 공포, 2026. 6. 3. 시행)됨에 따라, 해당 제도와 관련하여 이 영에서 사용하던 ‘인증’의 용어를 ‘지정’으로 변경하려는 것임. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=285893&type=HTML",
+          "articles": [
+            {
+              "article_label": "제26조",
+              "clause_no": "①",
+              "item_label": "3.",
+              "subitem_label": "라.",
+              "change_type": "개정",
+              "old_text": "라. 「산업기술혁신 촉진법」 제16조에 따라 신제품으로 인증받은 제품",
+              "new_text": "라. 「산업기술혁신 촉진법」 제16조에 따라 신제품으로 지정받은 제품",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제26조": [
+              "②",
+              "③",
+              "④",
+              "⑤",
+              "⑥"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

@@ -1,0 +1,65 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-31",
+  "period": {
+    "from_date": "2026-06-10",
+    "to_date": "2026-08-01"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "single-000695-283877",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "000695"
+      ],
+      "laws": [
+        {
+          "law_id": "000695",
+          "law_type": "법률",
+          "law_name": "국가를 당사자로 하는 계약에 관한 법률",
+          "internal_name": "국가를 당사자로 하는 계약에 관한 법률",
+          "dept_codes": [],
+          "old_serial_no": "283877",
+          "new_serial_no": "283877",
+          "enforce_date": "2026-06-11",
+          "revision_type": "일부개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 현행법상 이의신청에 관한 규정을 「행정기본법」의 내용에 부합하도록 하기 위하여 중앙관서의 장 또는 계약담당공무원의 행위로 계약에 불이익을 받은 자의 이의신청 및 재심청구 기간을 각각 연장함으로써 이의신청 제도의 실효성을 제고하고 실질적인 국민 권리보호를 도모하려는 것임. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=283877&type=HTML",
+          "articles": [
+            {
+              "article_label": "제28조",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "② 이의신청은 이의신청의 원인이 되는 행위가 있었던 날부터 20일 이내 또는 그 행위가 있음을 안 날부터 15일 이내에 해당 중앙관서의 장에게 하여야 한다.",
+              "new_text": "② 이의신청은 이의신청의 원인이 되는 행위가 있었던 날부터 30일 이내 또는 그 행위가 있음을 안 날부터 25일 이내에 해당 중앙관서의 장에게 하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제28조",
+              "clause_no": "④",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "④ 제3항에 따른 조치에 이의가 있는 자는 통지를 받은 날부터 20일 이내에 제29조에 따른 국가계약분쟁조정위원회에 조정(調停)을 위한 재심(再審)을 청구할 수 있다.",
+              "new_text": "④ 제3항에 따른 조치에 이의가 있는 자는 통지를 받은 날부터 30일 이내에 제29조에 따른 국가계약분쟁조정위원회에 조정(調停)을 위한 재심(再審)을 청구할 수 있다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제28조": [
+              "①",
+              "③"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

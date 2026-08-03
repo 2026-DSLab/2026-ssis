@@ -1,0 +1,426 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-31",
+  "period": {
+    "from_date": "2000-01-01",
+    "to_date": "2026-07-31"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "20929",
+      "promulgation_no": "20929",
+      "promulgation_date": "",
+      "revision_type": "타법개정",
+      "affected_law_ids": [
+        "010111"
+      ],
+      "laws": [
+        {
+          "law_id": "010111",
+          "law_type": "법률",
+          "law_name": "긴급복지지원법",
+          "internal_name": "긴급복지지원법",
+          "dept_codes": [],
+          "old_serial_no": "270789",
+          "new_serial_no": "270789",
+          "enforce_date": "2025-10-23",
+          "revision_type": "타법개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 가족정책을 효율적이고 체계적으로 지원하기 위하여 국가 및 지방자치단체가 이 법에 따른 건강가정지원센터와 「다문화가족지원법」에 따른 다문화가족지원센터를 통합하여 가족센터를 설치ㆍ운영할 수 있도록 하는 한편, 건강가정지원센터 및 가족센터가 제공하는 서비스의 질을 제고하기 위하여 여성가족부장관이 건강가정지원센터 및 가족센터의 사업수행 실적을 3년마다 평가하여 그 결과를 공표하고, 해당 평가결과를 건강가정지원센터와 가족센터의 감독 및 지원 등에 반영할 수 있도록 하는 등 현행 제도의 운영상 나타난 일부 미비점을 개선ㆍ보완함. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270789&type=HTML",
+          "articles": [
+            {
+              "article_label": "제7조",
+              "clause_no": "③",
+              "item_label": "7.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "7. 「건강가정기본법」 제35조에 따른 건강가정지원센터의 장과 그 종사자",
+              "new_text": "7. 「건강가정기본법」 제35조에 따른 건강가정지원센터 및 제35조의2에 따른 가족센터의 장과 그 종사자",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제7조": [
+              "①",
+              "②",
+              "④",
+              "⑤",
+              "⑥",
+              "⑦"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "single-013070-249317",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "013070"
+      ],
+      "laws": [
+        {
+          "law_id": "013070",
+          "law_type": "법률",
+          "law_name": "재난적의료비 지원에 관한 법률",
+          "internal_name": "재난적의료비 지원에 관한 법률",
+          "dept_codes": [],
+          "old_serial_no": "249317",
+          "new_serial_no": "249317",
+          "enforce_date": "2023-09-29",
+          "revision_type": "일부개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 외래로 진료를 받는 경우에도 입원과 동일하게 모든 질환에 대하여 지원할 수 있도록 근거를 마련하고, 의료기관 등의 처방에 따라 희귀질환을 진단하거나 치료하기 위한 목적으로 사용되는 의료기기로서 국내에 대체 가능한 제품이 없는 의료기기를 구입한 비용에 대해서도 재난적의료비 지급을 신청할 수 있도록 하는 한편, 행정기관 소속 위원회를 효율적으로 운영하기 위하여 운영 실적이 저조한 재난적의료비지원정책심의위원회를 폐지하는 등 현행 제도의 운영상 나타난 일부 미비점을 개선ㆍ보완함. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=249317&type=HTML",
+          "articles": [
+            {
+              "article_label": "(위치미상#0-0)",
+              "clause_no": "",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "삭제",
+              "old_text": "①  재난적의료비 지원사업에 관한 다음 각 호의 사항을 심의ㆍ의결하기 위하여 보건복지부장관 소속으로 재난적의료비지원정책심의위원회(이하 “심의위원회”라 한다)를 둔다.1. 재난적의료비 지원사업의 운영 계획에 관한 사항2. 제9조에 따른 지원대상자 선정 및 그 기준 설정에 관한 사항3. 제13조에 따른 지급범위 및 상한 결정에 관한 사항4. 제19조에 따른 결손처분에 관한 사항5. 그 밖에 재난적의료비 지원사업의 운영과 관련하여 보건복지부령으로 정하는 사항② 심의위원회는 위원장을 포함하여 20명 이내의 위원으로 구성한다.③ 심의위원회의 위원장은 보건복지부차관이 되며, 위원은 다음 각 호의 사람을 보건복지부장관이 임명 또는 위촉한다.1. 의약계를 대표하는 단체에서 추천하는 보건의료에 관한 전문가 4명 이내2. 환자를 대표하는 단체에서 추천하는 사람 4명 이내3. 사회복지에 관한 전문가 4명 이내4. 보건복지부 소속 공무원 1명5. 공단의 상임이사 중 1명6. 제20조제1항제4호에 따른 기금의 기금관리주체(「국가재정법」에 따른 기금관리주체를 말한다)가 추천하는 사람 중 1명7. 제20조제1항제5호에 따른 관련 법인ㆍ단체가 추천하는 사람 중 1명8. 공익을 대표하는 사람 3명 이내④ 재난적의료비 지원사업의 운영을 실무적으로 지원하고 심의위원회가 대통령령으로 정하는 바에 따라 위임한 사항을 처리하기 위하여 지역별로 재난적의료비 지원사업 실무위원회(이하 “실무위원회”라 한다)를 둘 수 있다.⑤ 그 밖에 심의위원회 및 실무위원회의 구성 및 운영 등에 필요한 사항은 대통령령으로 정한다.",
+              "new_text": "<삭  제>",
+              "match_status": "삭제(위치탐색제외)"
+            },
+            {
+              "article_label": "(위치미상#7-0)",
+              "clause_no": "",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "삭제",
+              "old_text": "2. 대통령령으로 정하는 중증질환에 대한 치료를 위하여 의료기관등에서 외래로 진료를 받는 경우",
+              "new_text": "<삭  제>",
+              "match_status": "삭제(위치탐색제외)"
+            },
+            {
+              "article_label": "제10조",
+              "clause_no": "①",
+              "item_label": "1.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "1. 다음 각 목의 의료기관 등(이하 “의료기관등”이라 한다)에 입원하여 진료를 받는 경우",
+              "new_text": "1. 다음 각 목의 어느 하나에 해당하는 기관(이하 “의료기관등”이라 한다)에서 입원 또는 외래로 진료를 받는 경우",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제10조",
+              "clause_no": "①",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "3. 제1호 또는 제2호의 진료 과정에서 의료기관등의 처방에 따라 「약사법」에 따라 등록한 약국 또는 같은 법 제91조에 따라 설립된 한국희귀ㆍ필수의약품센터(이하 “한국희귀ㆍ필수의약품센터”라 한다)에서 의약품을 구입한 경우로서 대통령령으로 정하는 경우",
+              "new_text": "제1호의 진료 과정에서 의료기관등의 처방에 따라 다음 각 목의 어느 하나에 해당하는 의약품 또는 의료기기를 구입한 경우",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제19조",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "① 공단은 다음 각 호의 어느 하나에 해당하는 사유가 있으면 심의위원회의 의결을 거쳐 부당이득금, 연체금 및 제17조제7항에 따른 체납처분비(이하 “체납액”이라 한다)를 결손처분할 수 있다.",
+              "new_text": "① 공단은 다음 각 호의 어느 하나에 해당하는 사유가 있는 경우에는 부당이득금, 연체금 및 제17조제7항에 따른 체납처분비(이하 “체납액”이라 한다)를 결손처분할 수 있다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제25조",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "① 보건복지부장관, 공단(제27조에 따라 업무를 위탁받아 수행하는 자를 포함한다), 요양기관 또는 의료급여기관 등은 이 법에 따른 재난적의료비 지원사업과 관련하여 「개인정보 보호법」 제23조에 따른 건강에 관한 정보와 같은 법 제24조에 따른 고유식별정보가 포함된 자료를 처리할 수 있다.",
+              "new_text": "① 보건복지부장관, 공단(제27조에 따라 업무를 위탁받아 수행하는 자를 포함한다), 요양기관 또는 의료급여기관 등은 다음 각 호의 사무를 수행하기 위하여 불가피한 경우 「개인정보 보호법」 제23조에 따른 건강에 관한 정보와 같은 법 제24조에 따른 고유식별정보가 포함된 자료를 처리할 수 있다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제25조",
+              "clause_no": "①",
+              "item_label": "1.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "1. 제5조제3항 각 호에 따른 재난적의료비 지원사업의 관리운영에 관한 사무",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제25조",
+              "clause_no": "①",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "2. 제11조에 따른 금융정보등의 제공 요청에 관한 사무",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제25조",
+              "clause_no": "①",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "3. 제23조에 따른 이의신청에 관한 사무",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제25조",
+              "clause_no": "①",
+              "item_label": "4.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "4. 그 밖에 이 법에 따른 재난적의료비 지원사업을 수행하기 위하여 필요한 사무로서 대통령령으로 정하는 사무",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제9조",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "② 제1항에 따른 기준에도 불구하고 재난적의료비를 부담하는 사람의 질환 특성, 가구 여건 및 지원 필요성 등을 고려하여 심의위원회가 지원이 필요한 것으로 인정한 경우에는 지원대상자 기준을 충족한 것으로 본다.",
+              "new_text": "② 제1항에 따른 기준에도 불구하고 보건복지부장관이 재난적의료비를 부담하는 사람의 질환 특성, 가구 여건 및 지원 필요성 등을 고려하여 지원이 필요한 것으로 인정한 경우에는 지원대상자 기준을 충족한 것으로 본다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제9조": [
+              "①",
+              "③",
+              "④"
+            ],
+            "제10조": [
+              "②",
+              "③",
+              "④"
+            ],
+            "제19조": [
+              "②"
+            ],
+            "제25조": [
+              "②"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "single-014151-270407",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "014151"
+      ],
+      "laws": [
+        {
+          "law_id": "014151",
+          "law_type": "법률",
+          "law_name": "사회서비스 지원 및 사회서비스원 설립ㆍ운영에 관한 법률",
+          "internal_name": "사회서비스원법",
+          "dept_codes": [],
+          "old_serial_no": "270407",
+          "new_serial_no": "270407",
+          "enforce_date": "2025-10-02",
+          "revision_type": "일부개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 사회서비스 기본계획에 ‘사회서비스 공급이 취약한 지역에 대한 사회서비스 제공 방안’이 포함되도록 하고, 보건복지부장관이 사회서비스 관련 정책의 수립ㆍ시행을 위하여 정기적으로 지역별ㆍ생애주기별ㆍ서비스영역별 사회서비스 공급 현황 등을 조사하도록 하는 등 지역 간 사회서비스 격차를 해소하기 위하여 현행 제도의 운영상 나타난 일부 미비점을 개선ㆍ보완함. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270407&type=HTML",
+          "articles": [
+            {
+              "article_label": "제5조",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "① 보건복지부장관은 사회서비스의 발전 및 지원을 위하여 사회서비스 실태조사 및 관계 중앙행정기관의 장과의 협의를 거쳐 사회서비스 기본계획(이하 “기본계획”이라 한다)을 5년마다 수립하여야 한다. 이 경우 기본계획은 「사회보장기본법」 제16조제1항에 따른 사회보장에 관한 기본계획과 연계되도록 하여야 한다.",
+              "new_text": "① 보건복지부장관은 사회서비스의 발전 및 지원을 위하여 제5조의2에 따른 사회서비스 실태조사 및 관계 중앙행정기관의 장과의 협의를 거쳐 사회서비스 기본계획(이하 “기본계획”이라 한다)을 5년마다 수립하여야 한다. 이 경우 기본계획은 「사회보장기본법」 제16조제1항에 따른 사회보장에 관한 기본계획과 연계되도록 하여야 한다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "②",
+              "item_label": "2의2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "2의2. 사회서비스 공급이 취약한 지역에 대한 사회서비스 제공 방안",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "②",
+              "item_label": "9.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "9. 제1호부터 제8호까지의 사항과 관련한 통계 및 정보의 관리에 관한 사항",
+              "new_text": "9. 제1호, 제2호, 제2호의2 및 제3호부터 제8호까지의 사항과 관련한 통계 및 정보의 관리에 관한 사항",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제5조의2",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "① 보건복지부장관은 사회서비스 관련 정책의 수립ㆍ시행을 위하여 정기적으로 다음 각 호의 사항에 관한 사회서비스 실태조사를 실시하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조의2",
+              "clause_no": "①",
+              "item_label": "1.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "1. 지역별ㆍ생애주기별ㆍ서비스영역별 사회서비스 공급 현황, 이용 현황 및 이용 만족도 등에 관한 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조의2",
+              "clause_no": "①",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "2. 사회서비스 제공기관 운영 및 사회서비스 종사자의 고용 등에 관한 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조의2",
+              "clause_no": "①",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "3. 그 밖에 사회서비스 정책의 수립ㆍ시행을 위하여 보건복지부장관이 필요하다고 인정하는 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조의2",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "② 제1항에 따른 사회서비스 실태조사의 방법 및 절차, 그 밖에 필요한 사항은 대통령령으로 정한다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제5조": [
+              "③",
+              "④",
+              "⑤"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "law_id": "013070",
+      "law_name": "재난적의료비 지원에 관한 법률",
+      "new_serial_no": "249317",
+      "reason": "0건실패",
+      "detail": "본문검색: '「약사법」에 따라 등록한 약국 또는 같은 법…'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=249317&type=HTML",
+      "guards_tried": [
+        "본문검색: '「약사법」에 따라 등록한 약국 또는 같은 법…'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    },
+    {
+      "law_id": "013070",
+      "law_name": "재난적의료비 지원에 관한 법률",
+      "new_serial_no": "249317",
+      "reason": "0건실패",
+      "detail": "본문검색: '「의료기기법」 제15조의2제1항제1호에 따른…'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=249317&type=HTML",
+      "guards_tried": [
+        "본문검색: '「의료기기법」 제15조의2제1항제1호에 따른…'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    }
+  ],
+  "no_comparison": [
+    {
+      "law_id": "35080",
+      "law_name": "하도급거래공정화 지침",
+      "new_serial_no": "2100000251404",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000251404&type=HTML"
+    },
+    {
+      "law_id": "37812",
+      "law_name": "중소기업자간 경쟁제품 직접생산 확인기준",
+      "new_serial_no": "2100000268206",
+      "reason": "폐지제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000268206&type=HTML"
+    },
+    {
+      "law_id": "33891",
+      "law_name": "정보보호시스템 평가·인증 등에 관한 고시",
+      "new_serial_no": "2100000215508",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000215508&type=HTML"
+    },
+    {
+      "law_id": "006295",
+      "law_name": "공공기관의 정보공개에 관한 법률 시행규칙",
+      "new_serial_no": "273809",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=273809&type=HTML"
+    },
+    {
+      "law_id": "008113",
+      "law_name": "지능정보화 기본법 시행규칙",
+      "new_serial_no": "267147",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=267147&type=HTML"
+    },
+    {
+      "law_id": "014862",
+      "law_name": "가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률",
+      "new_serial_no": "270215",
+      "reason": "제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270215&type=HTML"
+    },
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    },
+    {
+      "law_id": "2054105",
+      "law_name": "중소 소프트웨어사업자의 사업 참여 지원에 관한 지침",
+      "new_serial_no": "2100000274532",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000274532&type=HTML"
+    },
+    {
+      "law_id": "42430",
+      "law_name": "행정업무용 표준 관리규정",
+      "new_serial_no": "2100000254490",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000254490&type=HTML"
+    }
+  ]
+}

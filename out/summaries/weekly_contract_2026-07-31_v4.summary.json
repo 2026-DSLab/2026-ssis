@@ -1,0 +1,846 @@
+{
+  "source_file": "weekly_contract_2026-07-31_v4.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "001733",
+      "law_name": "전기통신사업법",
+      "law_type": "법률",
+      "enforce_date": "2026-11-20",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=286079&type=HTML",
+      "new_serial_no": "286079",
+      "headline": "이동통신서비스 계약 시 가입제한서비스 자동 가입 및 발신번호 변작 금지 규정 강화",
+      "body": "이번 개정은 이동통신서비스 계약 시 가입제한서비스가 자동으로 포함되도록 하여 이용자의 권익을 보호하고, 발신번호 변작을 금지함으로써 통신질서를 확립하려는 목적이 있습니다. 또한, 기간통신사업자의 지배구조 변경에 대한 공익성 심사를 강화하여 국가안전보장과 공공의 안녕을 도모하려는 취지를 가지고 있습니다.\n\n○ 조문별 변경 내용\n- 제104조 (개정): 신고 또는 같은 조 제8항에 따른 통지ㆍ보고를 하여야 합니다.\n- 제10조\n    · ⑤ (신설): 과학기술정보통신부장관은 공익성 심사의 결과에 따라 국가안전보장, 공공의 안녕, 질서의 유지 등 공공의 이익 보호와 관련하여 기간통신사업자 또는 관련자에게 의무 또는 조치를 이행하게 하는 조건을 부과할 수 있습니다.\n    · ⑥ (이동): 내용 변경 없이 ⑤에서 제10조⑥(으)로 번호만 이동했습니다.\n    · ⑧ (신설): 특수관계인과 합산하여 기간통신사업자의 발행주식 총수의 5% 이상을 보유하거나 보유하게 된 주주는 주식 보유 수 또는 보유 목적의 변동 시 대통령령에 따라 기간통신사업자에게 통지하여야 하며, 기간통신사업자는 최대주주 변동을 알게 된 즉시 과학기술정보통신부장관에게 보고하여야 합니다.\n    · ⑨ (이동·개정): 신고 및 공익성심사의 절차와 그 밖에 필요한 사항은 대통령령으로 정하도록 규정하였습니다.\n    · ⑦ (신설): 신고를 하여야 하거나 공익성 심사를 요청할 수 있는 기간통신사업자의 범위가 새로 규정되었습니다.\n    · ⑦1. (신설): 중요 통신을 운영ㆍ관리하고 있는 기간통신사업자가 새로 추가되었습니다.\n    · ⑦2. (신설): 우주무선통신업무를 하는 무선국이 개설된 인공위성을 소유하고 있는 기간통신사업자가 새로 지정되었습니다.\n    · ⑦3. (신설): 과학기술정보통신부장관은 제35조 제2항 제1호 및 제3호, 제39조 제3항, 제41조 제3항 및 제42조 제3항에 해당하는 기간통신사업자를 지정하고 고시합니다.\n    · ⑦4. (신설): 기간통신사업자는 「전파법」에 따라 할당받은 주파수를 사용하여 전기통신역무를 제공하며, 전년도 전기통신역무 매출액이 시장상황과 시장점유율 등을 고려하여 대통령령으로 정하는 금액 미만인 기간통신사업자는 제외됩니다.\n    · ⑦5. (신설): 전년도 전기통신역무 매출액이 300억원 이상인 기간통신사업자는 그 매출액이 과학기술정보통신부장관이 시장상황 및 시장점유율 등을 고려하여 고시하는 금액을 초과할 경우 제8조제1항에 따른 기간통신사업자로 신설됩니다.\n    · ⑦6. (신설): 대한민국이 외국과 체결하여 발효된 자유무역협정의 상대국 또는 경제협력개발기구 회원국의 외국인 투자법인이 기간통신사업자의 발행주식 총수의 49%를 초과하여 소유하는 경우 해당 기간통신사업자에 대한 규정이 새로 생겼습니다.\n- 제13조 (개정): 제10조제5항이 제10조제6항으로 변경되었습니다.\n- 제18조\n    · ①4. (개정): 회사의 최대주주가 된 자에는 자본금 감소 또는 다른 주주의 보유주식 처분 등으로 인해 최대주주가 된 자도 포함됩니다.\n    · ⑪ (신설): 최대주주가 된 사실을 안 날 이후에 해당자는 대통령령으로 정하는 바에 따라 인가를 신청하거나 신고하여야 합니다.\n    · ⑫ (이동): 내용 변경 없이 ⑪에서 제18조⑫(으)로 번호만 이동했습니다.\n- 제32조의6\n    · ③ (신설): 제1항에 따른 서비스를 제공하는 전기통신사업자는 이용자와 이용계약을 체결할 때 가입제한서비스를 기본으로 제공해야 하며, 이 사실을 계약 이전에 이용자에게 고지하고 이용자는 해당 서비스의 가입 및 제공을 거부할 수 있습니다.\n    · ④ (신설): 가입제한서비스에 가입된 이용자는 언제든지 전기통신사업자에게 해지를 요청할 수 있으며, 전기통신사업자는 요청을 받은 즉시 이를 처리하여야 합니다.\n    · ⑤ (이동): 내용 변경 없이 ③에서 제32조의6⑤(으)로 번호만 이동했습니다.\n    · ⑥ (이동): 내용 변경 없이 ④에서 제32조의6⑥(으)로 번호만 이동했습니다.\n    · ⑦ (이동·개정): 과학기술정보통신부장관은 공익성심사의 결과에 따라 협정 내용의 변경 및 그 실행의 중지, 의결권 행사의 정지 또는 해당 주식의 매각을 명할 수 있으며, 주민등록전산정보자료를 요청하는 경우에는 과학기술정보통신부장관의 심사를 받아야 합니다.\n    · ⑧ (이동·개정): 과학기술정보통신부장관의 심사를 받은 경우에는 주민등록법에 따라 관계 중앙행정기관의 장의 심사를 거친 것으로 봅니다. 이때 주민등록전산정보자료 처리 절차 등에 관한 사항은 주민등록법을 따르고, 사용료 및 수수료는 면제됩니다.\n    · ⑨ (신설): 전기통신사업자는 명의도용방지서비스, 가입사실현황조회서비스 및 가입제한서비스를 제공 또는 지원하기 위해 이용자의 고유식별정보를 처리할 수 있으며, 수집한 이용자의 고유식별정보를 전담기관에 제공하여야 합니다.\n    · ⑩ (이동): 내용 변경 없이 ⑦에서 제32조의6⑩(으)로 번호만 이동했습니다.\n- 제84조의2 (개정): 거짓으로 표시할 수 있는 장치를 제조, 수입, 배포, 판매, 대여하여서는 안되며, 이는 송신인의 전화번호를 변작하는 것을 포함합니다.\n- 제8조 (개정): 제10조제7항제1호부터로 변경되었습니다.\n- 제95조의25 (개정): 거짓으로 표시할 수 있는 장치를 제조, 수입, 배포, 판매, 대여한 경우에 대해 규정하였습니다.\n- 제97조 (개정): '제10조제5항에'이라는 표현이 '제10조제6항에'로 변경되었습니다.",
+      "overview": "이번 개정은 이동통신서비스 계약 시 가입제한서비스가 자동으로 포함되도록 하여 이용자의 권익을 보호하고, 발신번호 변작을 금지함으로써 통신질서를 확립하려는 목적이 있습니다. 또한, 기간통신사업자의 지배구조 변경에 대한 공익성 심사를 강화하여 국가안전보장과 공공의 안녕을 도모하려는 취지를 가지고 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제104조⑤1.",
+            "change_type": "개정",
+            "old_text": "1. 제10조제2항에 따른 신고를 하지 아니하거나 제11조제3항 또는 제4항에 따른 자료의 제공 요청이나 출석명령에 따르지 아니한 자",
+            "new_text": "1. 제10조제2항에 따른 신고 또는 같은 조 제8항에 따른 통지ㆍ보고를 하지 아니하거나 제11조제3항 또는 제4항에 따른 자료의 제공 요청이나 출석명령에 따르지 아니한 자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'신고를' → '신고 또는 같은 조 제8항에 따른 통지ㆍ보고를'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "신고 또는 같은 조 제8항에 따른 통지ㆍ보고를 하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑤",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑤ 과학기술정보통신부장관은 공익성심사의 결과에 따라 국가안전보장, 공공의 안녕, 질서의 유지 등 공공의 이익 보호와 관련하여 기간통신사업자 또는 제1항 각 호와 관련된 자에게 의무 또는 조치를 이행하게 하는 등의 필요한 조건을 부과할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "과학기술정보통신부장관은 공익성 심사의 결과에 따라 국가안전보장, 공공의 안녕, 질서의 유지 등 공공의 이익 보호와 관련하여 기간통신사업자 또는 관련자에게 의무 또는 조치를 이행하게 하는 조건을 부과할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑥",
+            "change_type": "이동",
+            "old_text": "⑥ 제2항 또는 제3항에 따라 신고를 하여야 하거나 공익성심사를 요청할 수 있는 기간통신사업자의 범위는 다음 각 호와 같다.1. 제92조제2항제3호에 따른 중요 통신을 운영ㆍ관리하고 있는 기간통신사업자2. 「전파법」 제20조의2제3항에 따른 무선국 중 위성방송업무 외의 우주무선통신업무를 하는 무선국이 개설된 인공위성을 소유하고 있는 기간통신사업자3. 과학기술정보통신부장관이 제35조제2항제1호ㆍ제3호, 제39조제3항, 제41조제3항 및 제42조제3항에 해당하는 기간통신사업자로 지정ㆍ고시한 기간통신사업자4. 「전파법」에 따라 할당받은 주파수를 사용하여 전기통신역무를 제공하는 제8조제1항에 따른 기간통신사업자. 다만, 전년도 전기통신역무 매출액이 시장상황, 시장점유율 등을 고려하여 대통령령으로 정하는 금액 미만인 기간통신사업자는 제외한다.5. 전년도 전기통신역무 매출액이 300억원 이상인 기간통신사업자 중 그 매출액이 과학기술정보통신부장관이 시장상황, 시장점유율 등을 고려하여 고시하는 금액을 초과하는 제8조제1항에 따른 기간통신사업자6. 대한민국이 외국과 양자 간 또는 다자 간으로 체결하여 발효된 자유무역협정 중 과학기술정보통신부장관이 정하여 고시하는 자유무역협정의 상대국 또는 「경제협력개발기구에 관한 협약」의 회원국의 외국인의제법인이 제8조제1항에 따른 기간통신사업자의 발행주식 총수의 100분의 49를 초과하여 소유하게 되는 경우 해당 기간통신사업자",
+            "new_text": "⑥ 과학기술정보통신부장관은 공익성심사의 결과에 따라 제1항 각 호의 경우가 공공의 이익을 해칠 위험이 있다고 판단되면 협정 내용의 변경 및 그 실행의 중지, 의결권 행사의 정지 또는 해당 주식의 매각을 명할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "⑤",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ⑤에서 제10조⑥(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑧",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑧ 특수관계인과 합산하여 기간통신사업자(제32조의10제2항에 따른 기준에 해당하는 자에 한정한다. 이하 이 항에서 같다)의 발행주식 총수의 100분의 5 이상을 보유하거나 보유하게 된 주주는 보유주식 수나 주식 보유목적의 변동이 있는 경우 대통령령에 따라 기간통신사업자에게 통지하여야 하고, 기간통신사업자는 최대주주 변동을 알게 된 즉시 과학기술정보통신부장관에게 보고하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "특수관계인과 합산하여 기간통신사업자의 발행주식 총수의 5% 이상을 보유하거나 보유하게 된 주주는 주식 보유 수 또는 보유 목적의 변동 시 대통령령에 따라 기간통신사업자에게 통지하여야 하며, 기간통신사업자는 최대주주 변동을 알게 된 즉시 과학기술정보통신부장관에게 보고하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑨",
+            "change_type": "이동후개정",
+            "old_text": "⑥ 제2항 또는 제3항에 따라 신고를 하여야 하거나 공익성심사를 요청할 수 있는 기간통신사업자의 범위는 다음 각 호와 같다.1. 제92조제2항제3호에 따른 중요 통신을 운영ㆍ관리하고 있는 기간통신사업자2. 「전파법」 제20조의2제3항에 따른 무선국 중 위성방송업무 외의 우주무선통신업무를 하는 무선국이 개설된 인공위성을 소유하고 있는 기간통신사업자3. 과학기술정보통신부장관이 제35조제2항제1호ㆍ제3호, 제39조제3항, 제41조제3항 및 제42조제3항에 해당하는 기간통신사업자로 지정ㆍ고시한 기간통신사업자4. 「전파법」에 따라 할당받은 주파수를 사용하여 전기통신역무를 제공하는 제8조제1항에 따른 기간통신사업자. 다만, 전년도 전기통신역무 매출액이 시장상황, 시장점유율 등을 고려하여 대통령령으로 정하는 금액 미만인 기간통신사업자는 제외한다.5. 전년도 전기통신역무 매출액이 300억원 이상인 기간통신사업자 중 그 매출액이 과학기술정보통신부장관이 시장상황, 시장점유율 등을 고려하여 고시하는 금액을 초과하는 제8조제1항에 따른 기간통신사업자6. 대한민국이 외국과 양자 간 또는 다자 간으로 체결하여 발효된 자유무역협정 중 과학기술정보통신부장관이 정하여 고시하는 자유무역협정의 상대국 또는 「경제협력개발기구에 관한 협약」의 회원국의 외국인의제법인이 제8조제1항에 따른 기간통신사업자의 발행주식 총수의 100분의 49를 초과하여 소유하게 되는 경우 해당 기간통신사업자",
+            "new_text": "⑨ 제2항 또는 제3항에 따른 신고 및 공익성심사의 절차, 그 밖에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "⑥",
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "신고 및 공익성심사의 절차와 그 밖에 필요한 사항은 대통령령으로 정하도록 규정하였습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제13조①",
+            "change_type": "개정",
+            "old_text": "① 과학기술정보통신부장관은 제10조제5항, 제12조제2항 또는 제18조제8항에 따른 명령(이하 이 조에서 “시정명령”이라 한다)을 받은 후 시정명령에서 정한 기간에 이를 이행하지 아니하는 자에 대하여 이행강제금을 부과할 수 있다. 이 경우 하루당 부과할 수 있는 이행강제금은 그 소유한 주식 매입가액의 1천분의 3 이내로 하되, 주식 소유와 관련되지 아니한 사항인 경우에는 1억원 이내의 금액으로 한다.",
+            "new_text": "① 과학기술정보통신부장관은 제10조제6항, 제12조제2항 또는 제18조제8항에 따른 명령(이하 이 조에서 “시정명령”이라 한다)을 받은 후 시정명령에서 정한 기간에 이를 이행하지 아니하는 자에 대하여 이행강제금을 부과할 수 있다. 이 경우 하루당 부과할 수 있는 이행강제금은 그 소유한 주식 매입가액의 1천분의 3 이내로 하되, 주식 소유와 관련되지 아니한 사항인 경우에는 1억원 이내의 금액으로 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제10조제5항,' → '제10조제6항,'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제10조제5항이 제10조제6항으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제18조①4.",
+            "change_type": "개정",
+            "old_text": "4. 특수관계인과 합하여 기간통신사업자의 발행주식 총수의 100분의 15 이상을 소유하려는 자 또는 기간통신사업자의 최대주주가 되려는 자",
+            "new_text": "4. 특수관계인과 합하여 기간통신사업자의 발행주식 총수의 100분의 15 이상을 소유하려는 자 또는 기간통신사업자의 최대주주가 되려는 자. 이 경우 회사의 자본금 감소 또는 다른 주주의 보유주식 처분 등으로 인하여 최대주주가 된 자를 포함한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'자' → '자. 이 경우 회사의 자본금 감소 또는 다른 주주의 보유주식 처분 등으로 인하여 최대주주가 된 자를 포함한다.'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "회사의 최대주주가 된 자에는 자본금 감소 또는 다른 주주의 보유주식 처분 등으로 인해 최대주주가 된 자도 포함됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제18조⑪",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑪ 제1항제4호 후단에 해당하는 자는 최대주주가 된 사실을 안 날 이후에 대통령령으로 정하는 바에 따라 제1항에 따른 인가를 신청하거나 신고를 하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "최대주주가 된 사실을 안 날 이후에 해당자는 대통령령으로 정하는 바에 따라 인가를 신청하거나 신고하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제18조⑫",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "⑫ 제2항 단서에 따른 기간통신사업의 경쟁에 미치는 영향이 경미한 경우 및 심사 생략의 절차에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "⑪",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ⑪에서 제18조⑫(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제32조의6③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 제1항에 따른 서비스를 제공하는 전기통신사업자는 이용자와 전기통신역무의 이용계약을 체결하는 경우 가입제한서비스가 함께 가입되어 기본으로 제공되도록 하여야 한다. 이 경우 전기통신사업자는 전기통신역무의 이용계약 체결 전에 가입제한서비스가 함께 가입되어 기본으로 제공된다는 사실을 이용자에게 고지하여야 하며, 이용자는 가입제한서비스의 가입ㆍ제공을 거부할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제1항에 따른 서비스를 제공하는 전기통신사업자는 이용자와 이용계약을 체결할 때 가입제한서비스를 기본으로 제공해야 하며, 이 사실을 계약 이전에 이용자에게 고지하고 이용자는 해당 서비스의 가입 및 제공을 거부할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제32조의6④",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "④ 제3항에 따라 가입제한서비스에 가입된 이용자는 언제든지 전기통신사업자에 해지를 요청할 수 있으며, 전기통신사업자는 요청을 받은 즉시 조치하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "가입제한서비스에 가입된 이용자는 언제든지 전기통신사업자에게 해지를 요청할 수 있으며, 전기통신사업자는 요청을 받은 즉시 이를 처리하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제32조의6⑤",
+            "change_type": "이동",
+            "old_text": "⑤ 제4항에 따라 주민등록전산정보자료를 요청하는 경우에는 과학기술정보통신부장관의 심사를 받아야 한다.",
+            "new_text": "⑤ 과학기술정보통신부장관은 명의도용방지서비스, 가입사실현황조회서비스 및 가입제한서비스의 제공을 지원하기 위하여 한국정보통신진흥협회를 전담기관으로 지정할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "③",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ③에서 제32조의6⑤(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제32조의6⑥",
+            "change_type": "이동",
+            "old_text": "⑥ 제5항에 따라 과학기술정보통신부장관의 심사를 받은 경우에는 「주민등록법」 제30조제1항에 따른 관계 중앙행정기관의 장의 심사를 거친 것으로 본다. 이 경우 주민등록전산정보자료 처리 절차 등에 관한 사항은 「주민등록법」에 따르고, 사용료 또는 수수료는 면제한다.",
+            "new_text": "⑥ 제5항의 전담기관은 명의도용방지서비스의 제공을 지원하기 위하여 행정안전부장관에게 「주민등록법」 제30조제1항에 따른 주민등록전산정보자료의 제공을 요청할 수 있다. 이 경우 요청을 받은 행정안전부장관은 특별한 사유가 없으면 그 요청에 따라야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "④",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ④에서 제32조의6⑥(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제32조의6⑦",
+            "change_type": "이동후개정",
+            "old_text": "⑤ 과학기술정보통신부장관은 공익성심사의 결과에 따라 제1항 각 호의 경우가 공공의 이익을 해칠 위험이 있다고 판단되면 협정 내용의 변경 및 그 실행의 중지, 의결권 행사의 정지 또는 해당 주식의 매각을 명할 수 있다.",
+            "new_text": "⑦ 제6항에 따라 주민등록전산정보자료를 요청하는 경우에는 과학기술정보통신부장관의 심사를 받아야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "⑤",
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "과학기술정보통신부장관은 공익성심사의 결과에 따라 협정 내용의 변경 및 그 실행의 중지, 의결권 행사의 정지 또는 해당 주식의 매각을 명할 수 있으며, 주민등록전산정보자료를 요청하는 경우에는 과학기술정보통신부장관의 심사를 받아야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제32조의6⑧",
+            "change_type": "이동후개정",
+            "old_text": "⑥ 제2항 또는 제3항에 따라 신고를 하여야 하거나 공익성심사를 요청할 수 있는 기간통신사업자의 범위는 다음 각 호와 같다.1. 제92조제2항제3호에 따른 중요 통신을 운영ㆍ관리하고 있는 기간통신사업자2. 「전파법」 제20조의2제3항에 따른 무선국 중 위성방송업무 외의 우주무선통신업무를 하는 무선국이 개설된 인공위성을 소유하고 있는 기간통신사업자3. 과학기술정보통신부장관이 제35조제2항제1호ㆍ제3호, 제39조제3항, 제41조제3항 및 제42조제3항에 해당하는 기간통신사업자로 지정ㆍ고시한 기간통신사업자4. 「전파법」에 따라 할당받은 주파수를 사용하여 전기통신역무를 제공하는 제8조제1항에 따른 기간통신사업자. 다만, 전년도 전기통신역무 매출액이 시장상황, 시장점유율 등을 고려하여 대통령령으로 정하는 금액 미만인 기간통신사업자는 제외한다.5. 전년도 전기통신역무 매출액이 300억원 이상인 기간통신사업자 중 그 매출액이 과학기술정보통신부장관이 시장상황, 시장점유율 등을 고려하여 고시하는 금액을 초과하는 제8조제1항에 따른 기간통신사업자6. 대한민국이 외국과 양자 간 또는 다자 간으로 체결하여 발효된 자유무역협정 중 과학기술정보통신부장관이 정하여 고시하는 자유무역협정의 상대국 또는 「경제협력개발기구에 관한 협약」의 회원국의 외국인의제법인이 제8조제1항에 따른 기간통신사업자의 발행주식 총수의 100분의 49를 초과하여 소유하게 되는 경우 해당 기간통신사업자",
+            "new_text": "⑧ 제7항에 따라 과학기술정보통신부장관의 심사를 받은 경우에는 「주민등록법」 제30조제1항에 따른 관계 중앙행정기관의 장의 심사를 거친 것으로 본다. 이 경우 주민등록전산정보자료 처리 절차 등에 관한 사항은 「주민등록법」에 따르고, 사용료 또는 수수료는 면제한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "⑥",
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "과학기술정보통신부장관의 심사를 받은 경우에는 주민등록법에 따라 관계 중앙행정기관의 장의 심사를 거친 것으로 봅니다. 이때 주민등록전산정보자료 처리 절차 등에 관한 사항은 주민등록법을 따르고, 사용료 및 수수료는 면제됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제32조의6⑨",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑨ 명의도용방지서비스, 가입사실현황조회서비스 및 가입제한서비스를 제공 또는 지원하기 위하여 전기통신사업자와 제5항의 전담기관은 이용자의 고유식별정보(주민등록번호를 포함한다. 이하 이 항에서 같다)를 처리할 수 있으며, 전기통신사업자는 수집한 이용자의 고유식별정보를 전담기관에 제공하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "전기통신사업자는 명의도용방지서비스, 가입사실현황조회서비스 및 가입제한서비스를 제공 또는 지원하기 위해 이용자의 고유식별정보를 처리할 수 있으며, 수집한 이용자의 고유식별정보를 전담기관에 제공하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제32조의6⑩",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "⑩ 명의도용방지서비스, 가입사실현황조회서비스 및 가입제한서비스의 제공 방법, 절차, 그 밖에 필요한 사항은 과학기술정보통신부장관이 정하여 고시한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "⑦",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ⑦에서 제32조의6⑩(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제84조의2②",
+            "change_type": "개정",
+            "old_text": "② 누구든지 영리를 목적으로 송신인의 전화번호를 변작하는 등 거짓으로 표시할 수 있는 서비스를 제공하여서는 아니 된다. 다만, 공익을 목적으로 하거나 수신인에게 편의를 제공하는 등 정당한 사유가 있는 경우에는 그러하지 아니하다.",
+            "new_text": "② 누구든지 영리를 목적으로 송신인의 전화번호를 변작하는 등 거짓으로 표시할 수 있는 서비스를 제공하거나 송신인의 전화번호를 변작하는 등 거짓으로 표시할 수 있는 장치를 제조, 수입, 배포, 판매, 대여하여서는 아니 된다. 다만, 공익을 목적으로 하거나 수신인에게 편의를 제공하는 등 정당한 사유가 있는 경우에는 그러하지 아니하다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제공하여서는' → '제공하거나 송신인의 전화번호를 변작하는 등 거짓으로 표시할 수 있는 장치를 제조, 수입, 배포, 판매, 대여하여서는'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "거짓으로 표시할 수 있는 장치를 제조, 수입, 배포, 판매, 대여하여서는 안되며, 이는 송신인의 전화번호를 변작하는 것을 포함합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제8조⑤1.",
+            "change_type": "개정",
+            "old_text": "1. 2021년 1월 1일 현재 제10조제6항제1호부터 제3호까지의 규정 중 어느 하나에 해당하는 기간통신사업자",
+            "new_text": "1. 2021년 1월 1일 현재 제10조제7항제1호부터 제3호까지의 규정 중 어느 하나에 해당하는 기간통신사업자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제10조제6항제1호부터' → '제10조제7항제1호부터'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제10조제7항제1호부터로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제95조의25.",
+            "change_type": "개정",
+            "old_text": "5. 제84조의2제2항을 위반하여 영리를 목적으로 송신인의 전화번호를 변작하는 등 거짓으로 표시하는 서비스를 제공한 자",
+            "new_text": "5. 제84조의2제2항을 위반하여 영리를 목적으로 송신인의 전화번호를 변작하는 등 거짓으로 표시하는 서비스를 제공하거나 송신인의 전화번호를 변작하는 등 거짓으로 표시할 수 있는 장치를 제조, 수입, 배포, 판매, 대여한 자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제공한' → '제공하거나 송신인의 전화번호를 변작하는 등 거짓으로 표시할 수 있는 장치를 제조, 수입, 배포, 판매, 대여한'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "거짓으로 표시할 수 있는 장치를 제조, 수입, 배포, 판매, 대여한 경우에 대해 규정하였습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제97조1.",
+            "change_type": "개정",
+            "old_text": "1. 제10조제5항에 따른 명령을 이행하지 아니한 자, 제12조제2항(법률 제5385호 전기통신사업법중개정법률 부칙 제4조제4항에 따라 준용되는 경우를 포함한다) 또는 제18조제8항에 따른 명령을 이행하지 아니한 자",
+            "new_text": "1. 제10조제6항에 따른 명령을 이행하지 아니한 자, 제12조제2항(법률 제5385호 전기통신사업법중개정법률 부칙 제4조제4항에 따라 준용되는 경우를 포함한다) 또는 제18조제8항에 따른 명령을 이행하지 아니한 자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제10조제5항에' → '제10조제6항에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'제10조제5항에'이라는 표현이 '제10조제6항에'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑦",
+            "change_type": "신설",
+            "old_text": "⑦ 제2항 또는 제3항에 따른 신고 및 공익성심사의 절차, 그 밖에 필요한 사항은 대통령령으로 정한다.",
+            "new_text": "⑦ 제2항 또는 제3항에 따라 신고를 하여야 하거나 공익성심사를 요청할 수 있는 기간통신사업자의 범위는 다음 각 호와 같다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "신고를 하여야 하거나 공익성 심사를 요청할 수 있는 기간통신사업자의 범위가 새로 규정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑦1.",
+            "change_type": "신설",
+            "old_text": "⑦ 제2항 또는 제3항에 따른 신고 및 공익성심사의 절차, 그 밖에 필요한 사항은 대통령령으로 정한다.",
+            "new_text": "1. 제92조제2항제3호에 따른 중요 통신을 운영ㆍ관리하고 있는 기간통신사업자",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "중요 통신을 운영ㆍ관리하고 있는 기간통신사업자가 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑦2.",
+            "change_type": "신설",
+            "old_text": "⑦ 제2항 또는 제3항에 따른 신고 및 공익성심사의 절차, 그 밖에 필요한 사항은 대통령령으로 정한다.",
+            "new_text": "2. 「전파법」 제20조의2제3항에 따른 무선국 중 위성방송업무 외의 우주무선통신업무를 하는 무선국이 개설된 인공위성을 소유하고 있는 기간통신사업자",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "우주무선통신업무를 하는 무선국이 개설된 인공위성을 소유하고 있는 기간통신사업자가 새로 지정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑦3.",
+            "change_type": "신설",
+            "old_text": "⑦ 제2항 또는 제3항에 따른 신고 및 공익성심사의 절차, 그 밖에 필요한 사항은 대통령령으로 정한다.",
+            "new_text": "3. 과학기술정보통신부장관이 제35조제2항제1호ㆍ제3호, 제39조제3항, 제41조제3항 및 제42조제3항에 해당하는 기간통신사업자로 지정ㆍ고시한 기간통신사업자",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "과학기술정보통신부장관은 제35조 제2항 제1호 및 제3호, 제39조 제3항, 제41조 제3항 및 제42조 제3항에 해당하는 기간통신사업자를 지정하고 고시합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑦4.",
+            "change_type": "신설",
+            "old_text": "⑦ 제2항 또는 제3항에 따른 신고 및 공익성심사의 절차, 그 밖에 필요한 사항은 대통령령으로 정한다.",
+            "new_text": "4. 「전파법」에 따라 할당받은 주파수를 사용하여 전기통신역무를 제공하는 제8조제1항에 따른 기간통신사업자. 다만, 전년도 전기통신역무 매출액이 시장상황, 시장점유율 등을 고려하여 대통령령으로 정하는 금액 미만인 기간통신사업자는 제외한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기간통신사업자는 「전파법」에 따라 할당받은 주파수를 사용하여 전기통신역무를 제공하며, 전년도 전기통신역무 매출액이 시장상황과 시장점유율 등을 고려하여 대통령령으로 정하는 금액 미만인 기간통신사업자는 제외됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑦5.",
+            "change_type": "신설",
+            "old_text": "⑦ 제2항 또는 제3항에 따른 신고 및 공익성심사의 절차, 그 밖에 필요한 사항은 대통령령으로 정한다.",
+            "new_text": "5. 전년도 전기통신역무 매출액이 300억원 이상인 기간통신사업자 중 그 매출액이 과학기술정보통신부장관이 시장상황, 시장점유율 등을 고려하여 고시하는 금액을 초과하는 제8조제1항에 따른 기간통신사업자",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "전년도 전기통신역무 매출액이 300억원 이상인 기간통신사업자는 그 매출액이 과학기술정보통신부장관이 시장상황 및 시장점유율 등을 고려하여 고시하는 금액을 초과할 경우 제8조제1항에 따른 기간통신사업자로 신설됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001733",
+            "law_name": "전기통신사업법",
+            "location_label": "제10조⑦6.",
+            "change_type": "신설",
+            "old_text": "⑦ 제2항 또는 제3항에 따른 신고 및 공익성심사의 절차, 그 밖에 필요한 사항은 대통령령으로 정한다.",
+            "new_text": "6. 대한민국이 외국과 양자 간 또는 다자 간으로 체결하여 발효된 자유무역협정 중 과학기술정보통신부장관이 정하여 고시하는 자유무역협정의 상대국 또는 「경제협력개발기구에 관한 협약」의 회원국의 외국인의제법인이 제8조제1항에 따른 기간통신사업자의 발행주식 총수의 100분의 49를 초과하여 소유하게 되는 경우 해당 기간통신사업자",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대한민국이 외국과 체결하여 발효된 자유무역협정의 상대국 또는 경제협력개발기구 회원국의 외국인 투자법인이 기간통신사업자의 발행주식 총수의 49%를 초과하여 소유하는 경우 해당 기간통신사업자에 대한 규정이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제104조",
+          "mappings": [
+            {
+              "old_position": "⑤1.",
+              "new_position": "⑤1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제10조",
+          "mappings": [
+            {
+              "old_position": "⑤",
+              "new_position": "⑥",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "⑥",
+              "new_position": "⑨",
+              "relation": "이동",
+              "basis": "LLM판정",
+              "note": "신고 및 공익성심사의 절차가 새 항목으로 포함되었으나 그 취지가 약간 달라짐."
+            },
+            {
+              "old_position": "⑥",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "LLM판정",
+              "note": "기간통신사업자의 범위에 대한 사라진 항목은 새 항목으로 옮겨지지 않고 삭제됨."
+            },
+            {
+              "old_position": null,
+              "new_position": "⑤",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑧",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제13조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제18조",
+          "mappings": [
+            {
+              "old_position": "①4.",
+              "new_position": "①4.",
+              "relation": "개정",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "⑪",
+              "new_position": "⑫",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑪",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목이 없으므로, 새로 나타난 항목은 신설로 판단됨."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제32조의6",
+          "mappings": [
+            {
+              "old_position": "③",
+              "new_position": "⑤",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "⑦",
+              "new_position": "⑩",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "④",
+              "new_position": "⑥",
+              "relation": "이동",
+              "basis": "LLM판정",
+              "note": "전담기관이 명의도용방지서비스 제공을 지원하기 위해 행정안전부장관에게 요청하는 내용이 이전 항목에서 이 항목으로 이동함."
+            },
+            {
+              "old_position": "⑤",
+              "new_position": "⑦",
+              "relation": "이동",
+              "basis": "LLM판정",
+              "note": "주민등록전산정보자료 요청 시 과학기술정보통신부장관의 심사를 받아야 하는 내용이 이전 항목에서 이 항목으로 이동함."
+            },
+            {
+              "old_position": "⑥",
+              "new_position": "⑧",
+              "relation": "이동",
+              "basis": "LLM판정",
+              "note": "과학기술정보통신부장관의 심사를 받은 경우 관계 중앙행정기관의 장의 심사를 거친 것으로 본다는 내용이 이전 항목에서 이 항목으로 이동함."
+            },
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "⑨",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제84조의2",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제8조",
+          "mappings": [
+            {
+              "old_position": "⑤1.",
+              "new_position": "⑤1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제95조의2",
+          "mappings": [
+            {
+              "old_position": "5.",
+              "new_position": "5.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제97조",
+          "mappings": [
+            {
+              "old_position": "1.",
+              "new_position": "1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

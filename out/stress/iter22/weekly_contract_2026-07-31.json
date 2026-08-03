@@ -1,0 +1,402 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-31",
+  "period": {
+    "from_date": "2000-01-01",
+    "to_date": "2026-07-31"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "19408",
+      "promulgation_no": "19408",
+      "promulgation_date": "",
+      "revision_type": "타법개정",
+      "affected_law_ids": [
+        "001357",
+        "011895"
+      ],
+      "laws": [
+        {
+          "law_id": "001357",
+          "law_type": "법률",
+          "law_name": "공공기관의 정보공개에 관한 법률",
+          "internal_name": "공공기관의 정보공개에 관한 법률",
+          "dept_codes": [],
+          "old_serial_no": "251019",
+          "new_serial_no": "251019",
+          "enforce_date": "2023-11-17",
+          "revision_type": "타법개정",
+          "revision_reason": "[일괄개정] ◇ 개정이유 및 주요내용 행정기관 소속 위원회를 효율적으로 운영하기 위하여 「공공기관의 정보공개에 관한 법률」에 따른 정보공개위원회 및 「공공기록물 관리에 관한 법률」에 따른 국가기록관리위원회를 국무총리 소속에서 행정안전부장관 소속으로 변경하고, 데이터 기반 행정에 관한 정책의 개선 등에 관한 사항을 심의ㆍ조정하는 「데이터기반행정 활성화에 관한 법률」에 따른 데이터기반행정 활성화 위원회를 유사한 기능을 수행하는 「공공데이터의 제공 및 이용 활성화에 관한 법률」에 따른 공공데이터전략위원회의 분과위원회로 통합하며, 데이터의 제공 거부 등에 대한 조정업무를 총괄적으로 수행하도록 하기 위하여 데이터기반행정 활성화 위원회의 데이터 제공 거부에 대한 조정기능을 공공데이터분쟁조정위원회로 이관하는 내용으로 「공공기관의 정보공개에 관한 법률」 등 4개 법률을 개정함. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=251019&type=HTML",
+          "articles": [
+            {
+              "article_label": "제22조",
+              "clause_no": "",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "다음 각 호의 사항을 심의ㆍ조정하기 위하여 국무총리 소속으로 정보공개위원회(이하 “위원회”라 한다)를 둔다.",
+              "new_text": "다음 각 호의 사항을 심의ㆍ조정하기 위하여 행정안전부장관 소속으로 정보공개위원회(이하 “위원회”라 한다)를 둔다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제23조",
+              "clause_no": "②",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "2. 정보공개에 관하여 학식과 경험이 풍부한 사람으로서 국무총리가 위촉하는 사람",
+              "new_text": "2. 정보공개에 관하여 학식과 경험이 풍부한 사람으로서 행정안전부장관이 위촉하는 사람",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제23조",
+              "clause_no": "②",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "3. 시민단체(「비영리민간단체 지원법」 제2조에 따른 비영리민간단체를 말한다)에서 추천한 사람으로서 국무총리가 위촉하는 사람",
+              "new_text": "3. 시민단체(「비영리민간단체 지원법」 제2조에 따른 비영리민간단체를 말한다)에서 추천한 사람으로서 행정안전부장관이 위촉하는 사람",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제23조": [
+              "①",
+              "③",
+              "④",
+              "⑤",
+              "⑥"
+            ]
+          }
+        },
+        {
+          "law_id": "011895",
+          "law_type": "법률",
+          "law_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+          "internal_name": "공공데이터의 제공 및 이용 활성화에 관한 법률",
+          "dept_codes": [],
+          "old_serial_no": "251023",
+          "new_serial_no": "251023",
+          "enforce_date": "2023-11-17",
+          "revision_type": "타법개정",
+          "revision_reason": "[일괄개정] ◇개정이유 및 주요내용 행정기관 소속 위원회를 효율적으로 운영하기 위하여 「공공기관의 정보공개에 관한 법률」에 따른 정보공개위원회 및 「공공기록물 관리에 관한 법률」에 따른 국가기록관리위원회를 국무총리 소속에서 행정안전부장관 소속으로 변경하고, 데이터 기반 행정에 관한 정책의 개선 등에 관한 사항을 심의ㆍ조정하는 「데이터기반행정 활성화에 관한 법률」에 따른 데이터기반행정 활성화 위원회를 유사한 기능을 수행하는 「공공데이터의 제공 및 이용 활성화에 관한 법률」에 따른 공공데이터전략위원회의 분과위원회로 통합하며, 데이터의 제공 거부 등에 대한 조정업무를 총괄적으로 수행하도록 하기 위하여 데이터기반행정 활성화 위원회의 데이터 제공 거부에 대한 조정기능을 공공데이터분쟁조정위원회로 이관하는 내용으로 「공공기관의 정보공개에 관한 법률」 등 4개 법률을 개정함. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=251023&type=HTML",
+          "articles": [
+            {
+              "article_label": "제13조",
+              "clause_no": "②",
+              "item_label": "16.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "16. 제29조에 따른 공공데이터제공분쟁조정위원회 운영 지원",
+              "new_text": "16. 제29조에 따른 공공데이터분쟁조정위원회 운영 지원",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제28조",
+              "clause_no": "①",
+              "item_label": "4.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "4. 그 밖에 공공데이터의 관리 및 이용에 적합하지 아니한 경우로서 제29조에 따른 공공데이터제공분쟁조정위원회가 정하는 경우",
+              "new_text": "4. 그 밖에 공공데이터의 관리 및 이용에 적합하지 아니한 경우로서 제29조에 따른 공공데이터분쟁조정위원회가 정하는 경우",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제29조",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "① 공공기관의 공공데이터 제공거부 및 제공중단에 관한 분쟁조정을 하게 하기 위하여 행정안전부장관 소속으로 공공데이터제공분쟁조정위원회(이하 “분쟁조정위원회”라 한다)를 둔다.",
+              "new_text": "① 공공기관의 공공데이터 제공거부 및 제공중단에 관한 분쟁조정과 「데이터기반행정 활성화에 관한 법률」 제13조에 따른 데이터의 제공 거부에 대한 조정을 하게 하기 위하여 전략위원회에 공공데이터분쟁조정위원회(이하 “분쟁조정위원회”라 한다)를 둔다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제29조",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "② 분쟁조정위원회는 위원장 1명을 포함하여 공공데이터의 제공 및 이용 등에 관한 전문지식과 경험을 두루 갖춘 다음 각 호의 사람 중에서 행정안전부장관이 위촉한 25명 이내의 위원으로 구성하며, 그 중 1명은 상임위원으로 한다.",
+              "new_text": "② 분쟁조정위원회는 위원장 1명을 포함하여 공공데이터 및 데이터기반행정 등에 관한 전문지식과 경험을 두루 갖춘 다음 각 호의 사람 중에서 행정안전부장관이 위촉한 25명 이내의 위원으로 구성하며, 그 중 1명은 상임위원으로 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제29조",
+              "clause_no": "②",
+              "item_label": "1.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "1. 공공데이터 업무를 관장하는 중앙행정기관의 고위공무원단에 속하는 공무원 또는 이에 상당하는 공공부문 및 관련 단체의 직에 재직하고 있거나 재직하였던 사람으로서 공공데이터의 제공 및 이용 등의 업무 경험이 있는 사람",
+              "new_text": "1. 공공데이터 및 데이터기반행정 업무를 관장하는 중앙행정기관의 고위공무원단에 속하는 공무원 또는 이에 상당하는 공공부문 및 관련 단체의 직에 재직하고 있거나 재직하였던 사람으로서 공공데이터 및 데이터기반행정 등의 업무 경험이 있는 사람",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제29조",
+              "clause_no": "②",
+              "item_label": "4.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "4. 그 밖에 공공데이터의 제공 및 이용 등에 대한 학식과 경험이 풍부한 사람으로서 행정안전부장관이 인정하는 사람",
+              "new_text": "4. 그 밖에 공공데이터 및 데이터기반행정 등에 대한 학식과 경험이 풍부한 사람으로서 행정안전부장관이 인정하는 사람",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "① 공공데이터에 관한 정부의 주요 정책과 계획을 심의ㆍ조정하고 그 추진사항을 점검ㆍ평가하기 위하여 국무총리 소속으로 공공데이터전략위원회(이하 “전략위원회”라 한다)를 둔다.",
+              "new_text": "① 공공데이터 및 「데이터기반행정 활성화에 관한 법률」에 따른 데이터기반행정(이하 “데이터기반행정”이라 한다)에 관한 정부의 주요 정책과 계획을 심의ㆍ조정하고 그 추진사항을 점검ㆍ평가하기 위하여 국무총리 소속으로 공공데이터전략위원회(이하 “전략위원회”라 한다)를 둔다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "② 위원은 위원장 2명을 포함하여 35명 이내로 한다.",
+              "new_text": "② 위원은 위원장 2명을 포함하여 37명 이내로 한다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "③",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "2. 공공데이터의 제공 및 이용에 관한 전문지식과 경험이 풍부한 사람 중에서 국무총리가 위촉하는 사람",
+              "new_text": "2. 공공데이터 및 데이터기반행정에 관한 전문지식과 경험이 풍부한 사람 중에서 국무총리가 위촉하는 사람",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "⑥",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "⑥ 전략위원회에 상정할 안건을 미리 검토하고 전략위원회가 위임한 안건을 심의하기 위하여 전략위원회에 공공데이터전략실무위원회(이하 “실무위원회”라 한다)를 두며, 실무위원회 소속으로 안건 심의 등을 지원하기 위하여 분야별 전문위원회를 둘 수 있다.",
+              "new_text": "⑥ 전략위원회에 상정할 안건을 미리 검토하고 전략위원회가 위임한 안건을 심의하기 위하여 전략위원회에 다음 각 호의 분과위원회(이하 “분과위원회”라 한다)를 두며, 분과위원회 소속으로 안건 심의 등을 지원하기 위하여 분야별 전문위원회를 둘 수 있다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "⑥",
+              "item_label": "1.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "1. 데이터기반행정 분과위원회",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "⑥",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "2. 공공데이터 개방ㆍ활용 분과위원회",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "⑦",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "⑦ 전략위원회 및 실무위원회, 분야별 전문위원회의 구성과 운영에 필요한 사항은 대통령령으로 정한다.",
+              "new_text": "⑦ 전략위원회 및 분과위원회, 분야별 전문위원회의 구성과 운영에 필요한 사항은 대통령령으로 정한다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제6조",
+              "clause_no": "①",
+              "item_label": "6의2.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "6의2. 「데이터기반행정 활성화에 관한 법률」 제5조 각 호의 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제6조",
+              "clause_no": "①",
+              "item_label": "8.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "8. 그 밖에 공공데이터의 제공 및 이용과 관련하여 위원장이 필요하다고 인정하는 사항",
+              "new_text": "8. 그 밖에 공공데이터 및 데이터기반행정과 관련하여 위원장이 필요하다고 인정하는 사항",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제6조",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "② 전략위원회는 제1항 각 호의 사항을 심의하기 위하여 필요하면 관계 공무원 및 공공기관 임직원, 공공데이터에 관한 전문 지식이 있는 사람이나 관련 이용자로부터 의견을 들을 수 있고, 관계 기관 등에 대하여 자료 등의 제출을 요구할 수 있다.",
+              "new_text": "② 전략위원회는 제1항 각 호의 사항을 심의하기 위하여 필요하면 관계 공무원 및 공공기관 임직원, 공공데이터 및 데이터기반행정에 관한 전문 지식이 있는 사람이나 관련 이용자로부터 의견을 들을 수 있고, 관계 기관 등에 대하여 자료 등의 제출을 요구할 수 있다.",
+              "match_status": "위치재배치의심"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제5조": [
+              "④",
+              "⑤"
+            ],
+            "제13조": [
+              "①",
+              "③",
+              "④",
+              "⑤"
+            ],
+            "제28조": [
+              "②",
+              "③",
+              "④"
+            ],
+            "제29조": [
+              "③",
+              "④",
+              "⑤",
+              "⑥",
+              "⑦",
+              "⑧",
+              "⑨"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "21108",
+      "promulgation_no": "21108",
+      "promulgation_date": "",
+      "revision_type": "타법개정",
+      "affected_law_ids": [
+        "009942"
+      ],
+      "laws": [
+        {
+          "law_id": "009942",
+          "law_type": "법률",
+          "law_name": "실종아동등의 보호 및 지원에 관한 법률",
+          "internal_name": "실종아동법",
+          "dept_codes": [],
+          "old_serial_no": "279713",
+          "new_serial_no": "279713",
+          "enforce_date": "2026-05-12",
+          "revision_type": "타법개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 위탁가정에서의 보호자가 미성년후견인이 되지 아니하더라도 최대 1년의 범위에서 금융계좌 개설 등의 영역에서 보호대상아동에 대한 법정대리권을 행사할 수 있도록 하고, 아동에 대한 국가의 관심과 책임을 대외적으로 명시하며, 아동권리보장원의 위상을 제고하기 위하여 기관명칭을 ‘아동권리보장원’에서 ‘국가아동권리보장원’으로 변경하는 한편, 보호대상아동 또는 그 보호자가 장애가 있거나 장애가 있다고 의심되는 경우 지방자치단체가 보호조치 및 피해아동보호계획 수립 시 장애인권익옹호기관 등의 의견을 들을 수 있도록 하고, 보호조치에 따른 입소시설에 보건복지부장관이 정하는 장애인복지시설을 추가하며, 해당 시설에 입소한 보호아동에 대한 양육상황 점검 등 필요한 경우 장애인권익옹호기관의 지원을 받도록 하고, 학대피해아동 또는 피해아동의 보호자가 장애가 있거나 장애가 있는 것으로 의심되는 경우 아동통합정보시스템에 입력ㆍ관리해야 하는 정보에 장애 관련 정보를 포함하면서 장애인학대정보시스템을 통하여 해당 정보를 확인할 수 있도록 하며, 연차보고서의 내용별 작성 대상 아동, 작성 절차 및 방법 등에 필요한 내용을 보건복지부령으로 정하도록 하여 장애아동 등 관련 사항은 분리하여 작성될 수 있도록 함으로써 장애아동에 대한 보호 체계를 강화하려는 것임. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=279713&type=HTML",
+          "articles": [
+            {
+              "article_label": "제5조",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "① 보건복지부장관은 제3조제1항제2호부터 제7호까지의 업무를 「아동복지법」 제10조의2에 따른 아동권리보장원 및 대통령령으로 정하는 법인ㆍ단체에 위탁할 수 있다.",
+              "new_text": "① 보건복지부장관은 제3조제1항제2호부터 제7호까지의 업무를 「아동복지법」 제10조의2에 따른 국가아동권리보장원 및 대통령령으로 정하는 법인ㆍ단체에 위탁할 수 있다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "② 제1항에 따른 아동권리보장원 및 법인ㆍ단체(이하 “전문기관”이라 한다)의 위탁 운영 등에 필요한 사항은 대통령령으로 정한다.",
+              "new_text": "② 제1항에 따른 국가아동권리보장원 및 법인ㆍ단체(이하 “전문기관”이라 한다)의 위탁 운영 등에 필요한 사항은 대통령령으로 정한다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {}
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": [
+    {
+      "law_id": "35080",
+      "law_name": "하도급거래공정화 지침",
+      "new_serial_no": "2100000251404",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000251404&type=HTML"
+    },
+    {
+      "law_id": "37812",
+      "law_name": "중소기업자간 경쟁제품 직접생산 확인기준",
+      "new_serial_no": "2100000268206",
+      "reason": "폐지제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000268206&type=HTML"
+    },
+    {
+      "law_id": "33891",
+      "law_name": "정보보호시스템 평가·인증 등에 관한 고시",
+      "new_serial_no": "2100000215508",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000215508&type=HTML"
+    },
+    {
+      "law_id": "006295",
+      "law_name": "공공기관의 정보공개에 관한 법률 시행규칙",
+      "new_serial_no": "273809",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=273809&type=HTML"
+    },
+    {
+      "law_id": "008113",
+      "law_name": "지능정보화 기본법 시행규칙",
+      "new_serial_no": "267147",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=267147&type=HTML"
+    },
+    {
+      "law_id": "014862",
+      "law_name": "가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률",
+      "new_serial_no": "270215",
+      "reason": "제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270215&type=HTML"
+    },
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    },
+    {
+      "law_id": "2054105",
+      "law_name": "중소 소프트웨어사업자의 사업 참여 지원에 관한 지침",
+      "new_serial_no": "2100000274532",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000274532&type=HTML"
+    },
+    {
+      "law_id": "42430",
+      "law_name": "행정업무용 표준 관리규정",
+      "new_serial_no": "2100000254490",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000254490&type=HTML"
+    }
+  ]
+}

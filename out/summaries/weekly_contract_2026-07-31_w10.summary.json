@@ -1,0 +1,129 @@
+{
+  "source_file": "weekly_contract_2026-07-31_w10.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "001357",
+      "law_name": "공공기관의 정보공개에 관한 법률",
+      "law_type": "법률",
+      "enforce_date": "2023-11-17",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=251019&type=HTML",
+      "new_serial_no": "251019",
+      "headline": "정보공개위원회의 소속기관 변경 및 위원회 통합 조정",
+      "body": "행정기관 소속 위원회의 효율적 운영을 위해 정보공개위원회와 국가기록관리위원회의 소속이 국무총리에서 행정안전부장관으로 변경됩니다. 또한, 데이터 기반 행정의 활성화를 위한 위원회가 공공데이터 전략위원회의 분과위원회로 통합되어 데이터 제공 조정 기능을 강화하게 됩니다.\n\n○ 조문별 변경 내용\n- 제22조 (개정): 정보공개위원회는 국무총리 소속에서 행정안전부장관 소속으로 변경되었습니다.\n- 제23조\n    · ②2. (개정): 국무총리가 하던 역할이 행정안전부장관으로 변경되었습니다.\n    · ②3. (개정): 국무총리가 수행하던 해당 업무를 행정안전부장관이 맡게 됩니다.",
+      "overview": "행정기관 소속 위원회의 효율적 운영을 위해 정보공개위원회와 국가기록관리위원회의 소속이 국무총리에서 행정안전부장관으로 변경됩니다. 또한, 데이터 기반 행정의 활성화를 위한 위원회가 공공데이터 전략위원회의 분과위원회로 통합되어 데이터 제공 조정 기능을 강화하게 됩니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "001357",
+            "law_name": "공공기관의 정보공개에 관한 법률",
+            "location_label": "제22조",
+            "change_type": "개정",
+            "old_text": "다음 각 호의 사항을 심의ㆍ조정하기 위하여 국무총리 소속으로 정보공개위원회(이하 “위원회”라 한다)를 둔다.",
+            "new_text": "다음 각 호의 사항을 심의ㆍ조정하기 위하여 행정안전부장관 소속으로 정보공개위원회(이하 “위원회”라 한다)를 둔다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보공개위원회는 국무총리 소속에서 행정안전부장관 소속으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001357",
+            "law_name": "공공기관의 정보공개에 관한 법률",
+            "location_label": "제23조②2.",
+            "change_type": "개정",
+            "old_text": "2. 정보공개에 관하여 학식과 경험이 풍부한 사람으로서 국무총리가 위촉하는 사람",
+            "new_text": "2. 정보공개에 관하여 학식과 경험이 풍부한 사람으로서 행정안전부장관이 위촉하는 사람",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'국무총리가' → '행정안전부장관이'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국무총리가 하던 역할이 행정안전부장관으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001357",
+            "law_name": "공공기관의 정보공개에 관한 법률",
+            "location_label": "제23조②3.",
+            "change_type": "개정",
+            "old_text": "3. 시민단체(「비영리민간단체 지원법」 제2조에 따른 비영리민간단체를 말한다)에서 추천한 사람으로서 국무총리가 위촉하는 사람",
+            "new_text": "3. 시민단체(「비영리민간단체 지원법」 제2조에 따른 비영리민간단체를 말한다)에서 추천한 사람으로서 행정안전부장관이 위촉하는 사람",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'국무총리가' → '행정안전부장관이'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국무총리가 수행하던 해당 업무를 행정안전부장관이 맡게 됩니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제22조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제23조",
+          "mappings": [
+            {
+              "old_position": "②2.",
+              "new_position": "②2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②3.",
+              "new_position": "②3.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

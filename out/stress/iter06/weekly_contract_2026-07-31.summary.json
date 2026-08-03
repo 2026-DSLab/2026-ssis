@@ -1,0 +1,760 @@
+{
+  "source_file": "weekly_contract_2026-07-31.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "012197",
+      "law_name": "사회보장급여의 이용ㆍ제공 및 수급권자 발굴에 관한 법률",
+      "law_type": "법률",
+      "enforce_date": "2025-10-23",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270795&type=HTML",
+      "new_serial_no": "270795",
+      "headline": "건강가정지원센터와 가족센터 통합 운영 및 서비스 평가 제도 도입",
+      "body": "이번 개정은 가족정책의 효율적인 지원을 위해 건강가정지원센터와 다문화가족지원센터를 통합하여 가족센터를 설립하도록 하고, 제공되는 서비스의 질을 제고하기 위한 평가제도를 도입합니다. 이를 통해 가족 관련 서비스의 체계성과 품질을 개선하여 보다 나은 지원을 제공하고자 합니다.\n\n○ 조문별 변경 내용\n- 제13조 (개정): 건강가정지원센터 및 제35조의2에 따른 가족센터의 역할이 포함됩니다.",
+      "overview": "이번 개정은 가족정책의 효율적인 지원을 위해 건강가정지원센터와 다문화가족지원센터를 통합하여 가족센터를 설립하도록 하고, 제공되는 서비스의 질을 제고하기 위한 평가제도를 도입합니다. 이를 통해 가족 관련 서비스의 체계성과 품질을 개선하여 보다 나은 지원을 제공하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "012197",
+            "law_name": "사회보장급여의 이용ㆍ제공 및 수급권자 발굴에 관한 법률",
+            "location_label": "제13조②17.",
+            "change_type": "개정",
+            "old_text": "17. 「건강가정기본법」 제35조에 따른 건강가정지원센터의 장과 그 종사자",
+            "new_text": "17. 「건강가정기본법」 제35조에 따른 건강가정지원센터 및 제35조의2에 따른 가족센터의 장과 그 종사자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'건강가정지원센터의' → '건강가정지원센터 및 제35조의2에 따른 가족센터의'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "건강가정지원센터 및 제35조의2에 따른 가족센터의 역할이 포함됩니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제13조",
+          "mappings": [
+            {
+              "old_position": "②17.",
+              "new_position": "②17.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "009933",
+      "law_name": "저출산ㆍ고령사회기본법",
+      "law_type": "법률",
+      "enforce_date": "2024-04-24",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=259255&type=HTML",
+      "new_serial_no": "259255",
+      "headline": "저출산ㆍ고령사회위원회 사무기구 법적 근거 마련",
+      "body": "이번 개정은 저출산ㆍ고령사회위원회의 원활한 운영을 지원하기 위한 사무기구의 법적 근거를 마련함으로써, 위원회의 기능을 강화하고 효율성을 높이는 데 기여하고자 합니다. 이를 통해 저출산 및 고령화 문제 해결을 위한 정책과 대응이 보다 체계적으로 이루어질 수 있을 것으로 기대됩니다.\n\n○ 조문별 변경 내용\n- 제23조의2 (신설, 2개 항·호·목): 위원회에 위원회의 원활한 운영을 지원하고 사무를 처리하기 위한 사무기구가 새로 생깁니다.",
+      "overview": "이번 개정은 저출산ㆍ고령사회위원회의 원활한 운영을 지원하기 위한 사무기구의 법적 근거를 마련함으로써, 위원회의 기능을 강화하고 효율성을 높이는 데 기여하고자 합니다. 이를 통해 저출산 및 고령화 문제 해결을 위한 정책과 대응이 보다 체계적으로 이루어질 수 있을 것으로 기대됩니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "009933",
+            "law_name": "저출산ㆍ고령사회기본법",
+            "location_label": "제23조의2①",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "① 위원회의 원활한 운영을 지원하고, 사무를 처리하기 위하여 위원회에 사무기구를 둔다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "위원회에 위원회의 원활한 운영을 지원하고 사무를 처리하기 위한 사무기구가 새로 생깁니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "009933",
+            "law_name": "저출산ㆍ고령사회기본법",
+            "location_label": "제23조의2②",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "② 제1항에 따른 사무기구의 구성ㆍ조직 및 운영 등에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "사무기구의 구성, 조직 및 운영 등에 필요한 사항은 대통령령으로 정합니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제23조의2",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "①",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "011357",
+      "law_name": "개인정보 보호법",
+      "law_type": "법률",
+      "enforce_date": "2025-10-02",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270351&type=HTML",
+      "new_serial_no": "270351",
+      "headline": "국내대리인 지정 및 관리체계 강화와 과태료 제도 신설",
+      "body": "개정된 개인정보 보호법은 국내에 주소가 없는 개인정보처리자가 국내대리인을 지정하는 절차와 의무를 명확히 하고, 이를 위반할 경우 부과되는 과태료를 신설하여 제도의 실효성을 높이고자 합니다. 또한, 국내대리인의 정보 기재 의무를 강화하여 개인정보 보호를 더욱 철저히 이행하도록 유도하고 있습니다.\n\n○ 조문별 변경 내용\n- 제31조의2\n    · ①1. (개정): 개인정보 보호책임자는 제31조제3항제3호에 따라 개인정보 처리와 관련한 불만을 처리하고 피해를 구제하여야 합니다.\n    · ② (개정): 개인정보처리자는 특정 경우에 다음 각 호의 어느 하나에 해당하는 법인이 있는 경우 그 법인 중에서 국내대리인을 지정하여야 합니다.\n    · ②1. (신설): 해당 개인정보처리자가 설립한 국내 법인이 새로 생겼습니다.\n    · ②2. (신설): 해당 개인정보처리자는 임원 구성 및 사업 운영 등에 지배적인 영향력을 행사하는 국내 법인으로서 대통령령으로 정하는 법인입니다.\n    · ③ (신설): 국내대리인을 지정한 개인정보처리자는 해당 대리인이 업무를 충실히 수행하도록 대통령령으로 정하는 바에 따라 교육하고, 업무현황을 점검하는 등의 관리ㆍ감독을 하여야 합니다.\n    · ⑤ (신설): 국내대리인이 제1항 각 호와 관련하여 개인정보 보호법을 위반한 경우, 개인정보처리자가 그 행위를 한 것으로 간주됩니다.\n    · ④ (신설): 개인정보처리자는 국내대리인을 지정하는 경우, 이에 따라 다음 각 호의 사항을 개인정보 처리방침에 포함하여야 합니다.\n    · ④1. (신설): 국내대리인의 성명으로 법인의 경우에는 그 명칭 및 대표자의 성명을 포함하여야 합니다.\n    · ④2. (신설): 국내대리인의 주소, 전화번호 및 전자우편 주소가 새로 생겼습니다. 법인의 경우에는 영업소의 소재지를 주소로 포함합니다.\n- 제75조 (신설, 3개 항·호·목): 국내대리인을 지정한 자는 제31조의2제2항을 위반하여야 합니다.",
+      "overview": "개정된 개인정보 보호법은 국내에 주소가 없는 개인정보처리자가 국내대리인을 지정하는 절차와 의무를 명확히 하고, 이를 위반할 경우 부과되는 과태료를 신설하여 제도의 실효성을 높이고자 합니다. 또한, 국내대리인의 정보 기재 의무를 강화하여 개인정보 보호를 더욱 철저히 이행하도록 유도하고 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제31조의2①1.",
+            "change_type": "개정",
+            "old_text": "1. 제31조제3항에 따른 개인정보 보호책임자의 업무",
+            "new_text": "1. 제31조제3항제3호에 따른 개인정보 처리와 관련한 불만의 처리 및 피해 구제 업무",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제31조제3항에 따른 개인정보 보호책임자의' → '제31조제3항제3호에 따른 개인정보 처리와 관련한 불만의 처리 및 피해 구제'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "개인정보 보호책임자는 제31조제3항제3호에 따라 개인정보 처리와 관련한 불만을 처리하고 피해를 구제하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제31조의2②",
+            "change_type": "개정",
+            "old_text": "② 국내대리인은 국내에 주소 또는 영업소가 있어야 한다.",
+            "new_text": "② 국내대리인은 국내에 주소 또는 영업소가 있어야 한다. 이 경우 다음 각 호의 어느 하나에 해당하는 법인이 있는 개인정보처리자는 그 법인 중에서 국내대리인을 지정하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 이 경우 다음 각 호의 어느 하나에 해당하는 법인이 있는 개인정보처리자는 그 법인 중에서 국내대리인을 지정하여야 한다.' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "개인정보처리자는 특정 경우에 다음 각 호의 어느 하나에 해당하는 법인이 있는 경우 그 법인 중에서 국내대리인을 지정하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제31조의2②1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 해당 개인정보처리자가 설립한 국내 법인",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "해당 개인정보처리자가 설립한 국내 법인이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제31조의2②2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 해당 개인정보처리자가 임원 구성, 사업 운영 등에 지배적인 영향력을 행사하는 국내 법인으로서 대통령령으로 정하는 법인",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "해당 개인정보처리자는 임원 구성 및 사업 운영 등에 지배적인 영향력을 행사하는 국내 법인으로서 대통령령으로 정하는 법인입니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제31조의2③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 제1항에 따라 국내대리인을 지정한 개인정보처리자는 국내대리인이 업무를 충실히 수행하도록 대통령령으로 정하는 바에 따라 교육하고 업무현황을 점검하는 등의 관리ㆍ감독을 하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국내대리인을 지정한 개인정보처리자는 해당 대리인이 업무를 충실히 수행하도록 대통령령으로 정하는 바에 따라 교육하고, 업무현황을 점검하는 등의 관리ㆍ감독을 하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제31조의2⑤",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑤ 국내대리인이 제1항 각 호와 관련하여 이 법을 위반한 경우에는 개인정보처리자가 그 행위를 한 것으로 본다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국내대리인이 제1항 각 호와 관련하여 개인정보 보호법을 위반한 경우, 개인정보처리자가 그 행위를 한 것으로 간주됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제75조③3.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 제31조의2제2항을 위반하여 국내대리인을 지정한 자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국내대리인을 지정한 자는 제31조의2제2항을 위반하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제75조③4.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "4. 제31조의2제3항을 위반하여 국내대리인을 관리ㆍ감독하지 아니한 자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국내대리인을 관리ㆍ감독하지 아니한 경우, 제31조의2제3항을 위반한 자에 대한 규정이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제75조④9의2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "9의2. 제31조의2제4항을 위반하여 국내대리인의 성명ㆍ주소ㆍ전화번호 및 전자우편 주소를 개인정보 처리방침에 포함하지 아니한 자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "개인정보 처리방침에 국내대리인의 성명, 주소, 전화번호 및 전자우편 주소를 포함하지 않은 경우에 해당하는 조항이 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제31조의2④",
+            "change_type": "신설",
+            "old_text": "④ 국내대리인이 제1항 각 호와 관련하여 이 법을 위반한 경우에는 개인정보처리자가 그 행위를 한 것으로 본다.",
+            "new_text": "④ 개인정보처리자는 제1항에 따라 국내대리인을 지정하는 경우에는 다음 각 호의 사항을 개인정보 처리방침에 포함하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "개인정보처리자는 국내대리인을 지정하는 경우, 이에 따라 다음 각 호의 사항을 개인정보 처리방침에 포함하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제31조의2④1.",
+            "change_type": "신설",
+            "old_text": "④ 국내대리인이 제1항 각 호와 관련하여 이 법을 위반한 경우에는 개인정보처리자가 그 행위를 한 것으로 본다.",
+            "new_text": "1. 국내대리인의 성명(법인의 경우에는 그 명칭 및 대표자의 성명을 말한다)",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국내대리인의 성명으로 법인의 경우에는 그 명칭 및 대표자의 성명을 포함하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011357",
+            "law_name": "개인정보 보호법",
+            "location_label": "제31조의2④2.",
+            "change_type": "신설",
+            "old_text": "④ 국내대리인이 제1항 각 호와 관련하여 이 법을 위반한 경우에는 개인정보처리자가 그 행위를 한 것으로 본다.",
+            "new_text": "2. 국내대리인의 주소(법인의 경우에는 영업소의 소재지를 말한다), 전화번호 및 전자우편 주소",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국내대리인의 주소, 전화번호 및 전자우편 주소가 새로 생겼습니다. 법인의 경우에는 영업소의 소재지를 주소로 포함합니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제31조의2",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "①1.",
+              "new_position": "①1.",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②1.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "국내대리인에 대한 정보 요구 사항이 변경됨에 따라 해당 내용을 포함하는 새로운 조문으로 이동."
+            },
+            {
+              "old_position": null,
+              "new_position": "②2.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "국내대리인을 지배하는 법인에 대한 요구 사항으로 독립적인 범위 확장됨."
+            },
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "국내대리인의 관리 및 감독에 대한 내용이 새롭게 추가됨."
+            },
+            {
+              "old_position": null,
+              "new_position": "⑤",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "국내대리인의 법 위반에 대한 개인정보처리자의 책임에 대한 내용이 새롭게 추가됨."
+            },
+            {
+              "old_position": "③",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "소거법",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제75조",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "③3.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③4.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④9의2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "73493",
+      "law_name": "개인정보의 안전성 확보조치 기준",
+      "law_type": "행정규칙",
+      "enforce_date": "2026-07-01",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000281400&type=HTML",
+      "new_serial_no": "2100000281400",
+      "headline": "공공시스템운영기관의 취약점 점검 및 침투테스트 의무화로 개인정보 보호 강화",
+      "body": "이번 개정은 공공부문에서의 해킹으로 인한 개인정보 유출에 대한 사전 예방조치를 강화하기 위해 시행됩니다. 특히, 공공시스템운영기관이 연 1회 이상 취약점 점검 및 침투테스트를 실시하도록 의무화하여, 개인정보 보호 수준을 효과적으로 높이는 데 목적이 있습니다.\n\n○ 조문별 변경 내용\n- 제15조\n    · 전체 (개정): 공공시스템운영기관은 공공시스템 별로 다음 각 호의 사항을 포함하여 내부 관리계획을 수립하고 시행하여야 합니다.\n    · 5. (개정): 제16조부터 제18조까지에 대한 내용이 수정되었습니다.\n- 제19조 (신설): 개인정보보호위원회는 2023년 9월 15일을 기준으로 매 3년마다 이 고시에 대하여 그 타당성을 검토하고 개선 등의 조치를 하여야 합니다.\n- 제18조 (신설, 3개 항·호·목): 공공시스템운영기관은 내부 관리계획에 따라 공공시스템별로 연 1회 이상 취약점 점검을 실시하여야 합니다.",
+      "overview": "이번 개정은 공공부문에서의 해킹으로 인한 개인정보 유출에 대한 사전 예방조치를 강화하기 위해 시행됩니다. 특히, 공공시스템운영기관이 연 1회 이상 취약점 점검 및 침투테스트를 실시하도록 의무화하여, 개인정보 보호 수준을 효과적으로 높이는 데 목적이 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "73493",
+            "law_name": "개인정보의 안전성 확보조치 기준",
+            "location_label": "제15조",
+            "change_type": "개정",
+            "old_text": "공공시스템운영기관은 공공시스템 별로 다음 각 호의 사항을 포함하여 내부 관리계획을 수립하여야 한다.",
+            "new_text": "공공시스템운영기관은 공공시스템 별로 다음 각 호의 사항을 포함하여 내부 관리계획을 수립ㆍ시행하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공시스템운영기관은 공공시스템 별로 다음 각 호의 사항을 포함하여 내부 관리계획을 수립하고 시행하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73493",
+            "law_name": "개인정보의 안전성 확보조치 기준",
+            "location_label": "제15조5.",
+            "change_type": "개정",
+            "old_text": "5. 제16조 및 제17조에 관한 사항",
+            "new_text": "5. 제16조부터 제18조까지에 관한 사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제16조 및 제17조에' → '제16조부터 제18조까지에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제16조부터 제18조까지에 대한 내용이 수정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73493",
+            "law_name": "개인정보의 안전성 확보조치 기준",
+            "location_label": "제19조",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "개인정보보호위원회는 「행정규제기본법」 제8조 및 「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 이 고시에 대하여 2023년 9월 15일을 기준으로 매 3년이 되는 시점(매 3년째의 9월 14일까지를 말한다)마다 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "개인정보보호위원회는 2023년 9월 15일을 기준으로 매 3년마다 이 고시에 대하여 그 타당성을 검토하고 개선 등의 조치를 하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73493",
+            "law_name": "개인정보의 안전성 확보조치 기준",
+            "location_label": "제18조①",
+            "change_type": "신설",
+            "old_text": "개인정보보호위원회는 「행정규제기본법」 제8조 및 「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 이 고시에 대하여 2023년 9월 15일을 기준으로 매 3년이 되는 시점(매 3년째의 9월 14일까지를 말한다)마다 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+            "new_text": "① 공공시스템운영기관은 내부 관리계획에서 정한 취약점 점검을 공공시스템별로 연 1회 이상 실시하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공시스템운영기관은 내부 관리계획에 따라 공공시스템별로 연 1회 이상 취약점 점검을 실시하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73493",
+            "law_name": "개인정보의 안전성 확보조치 기준",
+            "location_label": "제18조②",
+            "change_type": "신설",
+            "old_text": "개인정보보호위원회는 「행정규제기본법」 제8조 및 「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 이 고시에 대하여 2023년 9월 15일을 기준으로 매 3년이 되는 시점(매 3년째의 9월 14일까지를 말한다)마다 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+            "new_text": "② 공공시스템운영기관은 제1항에 따른 취약점 점검 외에 별도로 외부 전문기관 또는 외부 전문가에 의한 침투테스트를 공공시스템별로 연 1회 이상 실시하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공시스템운영기관은 취약점 점검 외에 외부 전문기관 또는 외부 전문가에 의한 침투테스트를 공공시스템별로 연 1회 이상 실시하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73493",
+            "law_name": "개인정보의 안전성 확보조치 기준",
+            "location_label": "제18조③",
+            "change_type": "신설",
+            "old_text": "개인정보보호위원회는 「행정규제기본법」 제8조 및 「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 이 고시에 대하여 2023년 9월 15일을 기준으로 매 3년이 되는 시점(매 3년째의 9월 14일까지를 말한다)마다 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+            "new_text": "③ 공공시스템운영기관은 제1항과 제2항에 따른 점검 결과 등에 따라 필요한 보완조치를 지체 없이 시행하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공공시스템운영기관은 점검 결과에 따라 필요한 보완조치를 지체 없이 시행하여야 합니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제15조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "5.",
+              "new_position": "5.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제19조",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": [
+    {
+      "law_id": "35080",
+      "law_name": "하도급거래공정화 지침",
+      "new_serial_no": "2100000251404",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000251404&type=HTML"
+    },
+    {
+      "law_id": "37812",
+      "law_name": "중소기업자간 경쟁제품 직접생산 확인기준",
+      "new_serial_no": "2100000268206",
+      "reason": "폐지제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000268206&type=HTML"
+    },
+    {
+      "law_id": "33891",
+      "law_name": "정보보호시스템 평가·인증 등에 관한 고시",
+      "new_serial_no": "2100000215508",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000215508&type=HTML"
+    },
+    {
+      "law_id": "006295",
+      "law_name": "공공기관의 정보공개에 관한 법률 시행규칙",
+      "new_serial_no": "273809",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=273809&type=HTML"
+    },
+    {
+      "law_id": "008113",
+      "law_name": "지능정보화 기본법 시행규칙",
+      "new_serial_no": "267147",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=267147&type=HTML"
+    },
+    {
+      "law_id": "014862",
+      "law_name": "가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률",
+      "new_serial_no": "270215",
+      "reason": "제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270215&type=HTML"
+    },
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    },
+    {
+      "law_id": "2054105",
+      "law_name": "중소 소프트웨어사업자의 사업 참여 지원에 관한 지침",
+      "new_serial_no": "2100000274532",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000274532&type=HTML"
+    },
+    {
+      "law_id": "42430",
+      "law_name": "행정업무용 표준 관리규정",
+      "new_serial_no": "2100000254490",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000254490&type=HTML"
+    }
+  ]
+}

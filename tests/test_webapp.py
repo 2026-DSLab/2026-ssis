@@ -41,6 +41,26 @@ def _law_row(**kw) -> dict:
     return base
 
 
+def test_law_dominant_kind_prioritizes_new_over_amend():
+    """신설이 1건만 섞여 있어도(나머지는 개정) 카드 강조색은 신설이어야
+    한다 — 다수결로 고르면 눈에 띄어야 할 신설이 묻힌다."""
+    from webapp.app import _law_dominant_kind
+
+    law = {"article_summaries": [
+        {"unit": {"change_type": "개정", "no_change": False}},
+        {"unit": {"change_type": "개정", "no_change": False}},
+        {"unit": {"change_type": "신설", "no_change": False}},
+    ]}
+
+    assert _law_dominant_kind(law) == "신설"
+
+
+def test_law_dominant_kind_falls_back_when_no_articles():
+    from webapp.app import _law_dominant_kind
+
+    assert _law_dominant_kind({"article_summaries": []}) == "변경"
+
+
 def test_index_shows_empty_state_when_no_batch():
     app = create_app(repo=_FakeRepo(batch_date=None))
     client = app.test_client()
@@ -48,7 +68,7 @@ def test_index_shows_empty_state_when_no_batch():
     resp = client.get("/")
 
     assert resp.status_code == 200
-    assert "아직 생성된 배치가 없습니다" in resp.get_data(as_text=True)
+    assert "아직 생성된 주간 요약이 없습니다" in resp.get_data(as_text=True)
 
 
 def test_index_renders_headline_and_article_row():
@@ -71,10 +91,13 @@ def test_index_renders_headline_and_article_row():
     assert resp.status_code == 200
     assert "정보시스템 장애관리 체계 강화" in html
     # location_label은 조/항 구획마다 다른 span으로 쪼개져 렌더링된다(format_location).
+    # 항/호/목은 색 대신 회색 글자(항/호/목)로 구분한다.
     assert '<span class="loc-article">제56조의2</span>' in html
-    assert '<span class="loc-clause">⑤</span>' in html
+    assert '<span class="loc-clause">⑤<span class="loc-suffix">항</span></span>' in html
     assert "이동개정" in html  # _TAG 축약 규칙 적용됨
-    assert "※ 이동 전 위치: ②" in html
+    # moved_from("②")도 "제N조" 없이 항/호만 오는 값이라 같은
+    # format_location 규칙(항/호/목 회색 접미사)을 거쳐 렌더링된다.
+    assert '※ 이동 전 위치: <span class="item-loc"><span class="loc-clause">②<span class="loc-suffix">항</span></span></span>' in html
 
 
 def test_format_location_wraps_branch_numbered_item_as_one_chip():
@@ -87,8 +110,8 @@ def test_format_location_wraps_branch_numbered_item_as_one_chip():
     html = str(_format_location("제10조의2②12의2."))
     assert html == (
         '<span class="loc-article">제10조의2</span>'
-        '<span class="loc-clause">②</span>'
-        '<span class="loc-item">12의2.</span>'
+        '<span class="loc-clause">②<span class="loc-suffix">항</span></span>'
+        '<span class="loc-item">12의2<span class="loc-suffix">호</span></span>'
     )
 
 

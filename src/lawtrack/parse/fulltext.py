@@ -27,7 +27,7 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from lawtrack.parse.jsonutil import as_list, dig, find_key, text_of
 from lawtrack.text.split import (
@@ -209,16 +209,51 @@ def parse_articles(raw: dict) -> list[ArticleUnit]:
     return units
 
 
+def _split_mok_groups(mok_list: list) -> list[list]:
+    """항의 형제로 붙은 평탄화된 목 배열을, 목번호가 '가'로 리셋되는
+    지점마다 끊어 원래의 호별 그룹으로 되돌린다.
+
+    ✅ 실측(2026-07-31, 국가를 당사자로 하는 계약에 관한 법률 시행령
+    제26조①): 호가 5개고 각각 목을 갖는 항인데, API가 목을 각 호 안에
+    넣지 않고 항의 형제로 통째로(호 5개의 목 40개를 배열 하나에) 내려줬다
+    — 각 호 객체엔 "목" 키 자체가 없었다. 목번호가 "가."로 되돌아가는
+    지점이 곧 새 호의 목록 시작이므로, 그 경계로 그룹을 복원한다.
+    """
+    groups: list[list] = []
+    for raw_sub in mok_list:
+        label = text_of(raw_sub.get("목번호") or raw_sub.get("목가지번호")) if isinstance(raw_sub, dict) else ""
+        if not groups or label.startswith("가"):
+            groups.append([])
+        groups[-1].append(raw_sub)
+    return groups
+
+
 def _parse_clause(raw_clause: dict) -> ClauseNode:
     if not isinstance(raw_clause, dict):
         raw_clause = {}
-    items = tuple(_parse_item(i) for i in as_list(raw_clause.get("호")))
+    items = [_parse_item(i) for i in as_list(raw_clause.get("호"))]
+
+    # 위 _split_mok_groups 독스트링 참고: 정상 경로로 목을 하나도 못 찾았고
+    # (모든 호의 subitems가 비어있고) 항의 형제로 목 배열이 붙어있으면,
+    # 그걸 호 개수만큼 그룹으로 쪼개 순서대로 이어붙인다. 그룹 수가 호
+    # 개수와 정확히 같을 때만 적용한다 — 안 맞으면 잘못된 호에 붙일
+    # 위험이 있으니 차라리 기존처럼 목 없이 둔다(회귀 없음, 조용한
+    # 오귀속보다 "0건실패"가 낫다).
+    sibling_mok = as_list(raw_clause.get("목"))
+    if sibling_mok and items and not any(it.subitems for it in items):
+        groups = _split_mok_groups(sibling_mok)
+        if len(groups) == len(items):
+            items = [
+                replace(it, subitems=tuple(_parse_subitem(s) for s in g))
+                for it, g in zip(items, groups)
+            ]
+
     return ClauseNode(
         no=text_of(raw_clause.get("항번호")),
         text=text_of(raw_clause.get("항내용")),
         change_type=text_of(raw_clause.get("항제개정유형")),
         change_dates=text_of(raw_clause.get("항제개정일자문자열")),
-        items=items,
+        items=tuple(items),
     )
 
 

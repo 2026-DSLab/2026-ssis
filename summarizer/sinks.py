@@ -42,9 +42,13 @@ class JsonSink:
 class HwpxSink:
     """계약 파일 하나당 HWPX 보고서 하나를 쓴다.
 
-    생성 후 곧바로 검증한다 — 요약 텍스트가 문서에 온전히 들어갔는지
-    (특수문자·긴 문단에서 누락 없는지) 코드로 대조하고, 빠진 게 있으면
-    경고한다. 계획서 4번(HWP 계열 문서 제공)을 충족한다.
+    생성 후 곧바로 두 가지를 검증한다:
+      1) 요약 텍스트가 문서에 온전히 들어갔는지(특수문자·긴 문단에서
+         누락 없는지) — verify_report, 내용 완전성.
+      2) 문서 서식이 깨지지 않았는지(표 너비, 셀 정렬, 빈 문단 비율 등) —
+         inspect_document, 구조/레이아웃. 둘 다 사람이 한글로 직접 열어야
+         보이는 문제라서 자동화 없이는 매주 놓친다. 계획서 4번(HWP 계열
+         문서 제공)을 충족한다.
     """
 
     def __init__(self, output_dir: Path):
@@ -52,21 +56,32 @@ class HwpxSink:
 
     def write(self, summaries: Sequence[ContractSummary]) -> None:
         # 무거운 hwpx 임포트는 이 sink 를 쓸 때만.
-        from summarizer.report import build_report, verify_report
+        from summarizer.report import build_report, inspect_document, verify_report
 
         self._dir.mkdir(parents=True, exist_ok=True)
         for summary in summaries:
             stem = Path(summary.source_file).stem
             path = self._dir / f"{stem}.hwpx"
             build_report(summary, path)
+
             missing = verify_report(summary, path)
             if missing:
                 log.warning(
                     "HWPX 검증 — %s 에서 텍스트 %d건 누락: %s",
                     path.name, len(missing), "; ".join(m[:30] for m in missing[:5]),
                 )
-            else:
-                log.info("보고서: %s (검증 통과)", path)
+
+            inspection = inspect_document(path)
+            if not inspection.ok:
+                log.warning(
+                    "HWPX 서식 검사 — %s: %s", path.name,
+                    "; ".join(str(f) for f in inspection.errors),
+                )
+            for w in inspection.warnings:
+                log.info("HWPX 서식 경고 — %s: %s", path.name, w)
+
+            if not missing and inspection.ok:
+                log.info("보고서: %s (검증 통과, %s)", path, inspection.summary())
 
 
 class DbSink:

@@ -1,0 +1,64 @@
+{
+  "source_file": "weekly_contract_2026-07-31_r3_fixed.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "002652",
+      "law_name": "국가를 당사자로 하는 계약에 관한 법률 시행령",
+      "law_type": "시행령",
+      "enforce_date": "2026-06-03",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=285893&type=HTML",
+      "new_serial_no": "285893",
+      "headline": "신기술·신제품 인증 제도를 지정 제도로 변경",
+      "body": "이번 개정은 신기술 및 신제품의 인증을 지정으로 변경함으로써 제도의 성격에 보다 부합하도록 하기 위한 것입니다. 이는 2025년 개정된 산업기술혁신 촉진법과의 일관성을 유지하고, 관련 절차의 명확성을 높이기 위한 목적이 있습니다.\n\n○ 조문별 변경 내용\n- 제26조 (개정): '인증받은'을 '지정받은'으로 변경하였습니다.",
+      "overview": "이번 개정은 신기술 및 신제품의 인증을 지정으로 변경함으로써 제도의 성격에 보다 부합하도록 하기 위한 것입니다. 이는 2025년 개정된 산업기술혁신 촉진법과의 일관성을 유지하고, 관련 절차의 명확성을 높이기 위한 목적이 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "002652",
+            "law_name": "국가를 당사자로 하는 계약에 관한 법률 시행령",
+            "location_label": "제26조①3.라.",
+            "change_type": "개정",
+            "old_text": "라. 「산업기술혁신 촉진법」 제16조에 따라 신제품으로 인증받은 제품",
+            "new_text": "라. 「산업기술혁신 촉진법」 제16조에 따라 신제품으로 지정받은 제품",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'인증받은' → '지정받은'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'인증받은'을 '지정받은'으로 변경하였습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제26조",
+          "mappings": [
+            {
+              "old_position": "①3.라.",
+              "new_position": "①3.라.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

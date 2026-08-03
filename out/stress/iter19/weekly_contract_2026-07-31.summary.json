@@ -1,0 +1,426 @@
+{
+  "source_file": "weekly_contract_2026-07-31.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "012226",
+      "law_name": "주택도시기금법",
+      "law_type": "법률",
+      "enforce_date": "2026-06-02",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=286599&type=HTML",
+      "new_serial_no": "286599",
+      "headline": "지역균형발전 관련 용어 변경 및 균형성장 관련 제도 도입",
+      "body": "이번 개정은 지역균형발전을 균형성장으로 변경하고, 균형성장에 기여한 개인 및 기관에 대한 포상 제도와 관련된 법적 근거를 마련하기 위한 것입니다. 더불어, 균형성장이 미치는 영향을 평가하는 제도와 초광역 협력사업을 위한 협약 및 추진체계 구축을 통해 지역 발전과 협력을 강화하고자 합니다.\n\n○ 조문별 변경 내용\n- 제5조 (개정): 지역균형발전에가 균형성장에로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+      "overview": "이번 개정은 지역균형발전을 균형성장으로 변경하고, 균형성장에 기여한 개인 및 기관에 대한 포상 제도와 관련된 법적 근거를 마련하기 위한 것입니다. 더불어, 균형성장이 미치는 영향을 평가하는 제도와 초광역 협력사업을 위한 협약 및 추진체계 구축을 통해 지역 발전과 협력을 강화하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "012226",
+            "law_name": "주택도시기금법",
+            "location_label": "제5조②2.",
+            "change_type": "개정",
+            "old_text": "2. 「지방자치분권 및 지역균형발전에 관한 특별법」에 따른 지역균형발전특별회계로부터의 출연금 또는 예수금",
+            "new_text": "2. 「지방자치분권 및 균형성장에 관한 특별법」에 따른 지역균형발전특별회계로부터의 출연금 또는 예수금",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'지역균형발전에' → '균형성장에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "지역균형발전에가 균형성장에로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제5조",
+          "mappings": [
+            {
+              "old_position": "②2.",
+              "new_position": "②2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "013242",
+      "law_name": "재외국민보호를 위한 영사조력법",
+      "law_type": "법률",
+      "enforce_date": "2021-04-20",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=231661&type=HTML",
+      "new_serial_no": "231661",
+      "headline": "법률 용어의 순화에 따른 '지불'을 '지급'으로 변경",
+      "body": "이번 개정은 일반 국민이 법률을 보다 쉽게 이해할 수 있도록 일본식 한자어를 우리말 어법에 맞는 표현으로 순화하는 데 중점을 두고 있습니다. 특히, 법률에서 사용되는 용어의 명확성을 강화하여 법 적용의 일관성을 높이는 것이 목표입니다.\n\n○ 조문별 변경 내용\n- 제19조 (개정): '지불하기'라는 표현이 '지급하기'로 변경되었습니다.",
+      "overview": "이번 개정은 일반 국민이 법률을 보다 쉽게 이해할 수 있도록 일본식 한자어를 우리말 어법에 맞는 표현으로 순화하는 데 중점을 두고 있습니다. 특히, 법률에서 사용되는 용어의 명확성을 강화하여 법 적용의 일관성을 높이는 것이 목표입니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "013242",
+            "law_name": "재외국민보호를 위한 영사조력법",
+            "location_label": "제19조③",
+            "change_type": "개정",
+            "old_text": "③ 외교부장관은 제1항 단서에 해당하지 아니하는 재외국민이 제1항 본문에 따라 자신이 부담하여야 할 비용을 즉시 지불하기 곤란한 경우로서 해외위난상황으로부터 해당 재외국민을 안전한 지역으로 이동시키기 위한 수단을 투입하는 경우에는 그 비용을 대신하여 지급할 수 있다. 이 경우 해당 재외국민은 외교부장관이 합리적인 범위 내에서 청구하는 비용을 상환하여야 한다.",
+            "new_text": "③ 외교부장관은 제1항 단서에 해당하지 아니하는 재외국민이 제1항 본문에 따라 자신이 부담하여야 할 비용을 즉시 지급하기 곤란한 경우로서 해외위난상황으로부터 해당 재외국민을 안전한 지역으로 이동시키기 위한 수단을 투입하는 경우에는 그 비용을 대신하여 지급할 수 있다. 이 경우 해당 재외국민은 외교부장관이 합리적인 범위 내에서 청구하는 비용을 상환하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'지불하기' → '지급하기'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'지불하기'라는 표현이 '지급하기'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제19조",
+          "mappings": [
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "73464",
+      "law_name": "표준 개인정보 보호지침",
+      "law_type": "행정규칙",
+      "enforce_date": "2025-04-11",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000257592&type=HTML",
+      "new_serial_no": "2100000257592",
+      "headline": "표준 개인정보 보호지침 재검토 기한 설정 및 인용 조문 정비",
+      "body": "이번 개정은 개인정보 보호법 시행령의 변경사항을 반영하여 관련 인용 조문을 정비하고, 재검토 기한을 설정하여 표준 지침의 지속적인 적합성을 확보하기 위한 목적입니다. 이를 통해 개인정보 보호책임자의 교육과 관련된 규정이 명확해지고, 지침의 현행성이 강화될 것으로 기대됩니다.\n\n○ 조문별 변경 내용\n- (위치미상#15-0) (삭제): 표준 개인정보 보호지침에서 특정 내용이 삭제되었습니다.\n- (위치미상#6-0) (삭제): 표준 개인정보 보호지침에서 특정 내용을 삭제하였습니다.\n- 제23조 (개정): 보호위원회가 개설 운영할 수 있는 개인정보 보호책임자에 대한 교육의 내용이 영 제32조제5항에 따라 규정됩니다.\n- 제2조 (개정): '제32조제2항'이 '제32조제1항'으로 변경되었습니다.\n- 제43조 (개정): 제39조의2가 제39조의3으로 변경되었습니다.\n- 제62조 (개정): 보호위원회는 이 고시에 대하여 2025년 1월 1일을 기준으로 3년마다 그 타당성을 검토하고 개선 등의 조치를 하여야 합니다.",
+      "overview": "이번 개정은 개인정보 보호법 시행령의 변경사항을 반영하여 관련 인용 조문을 정비하고, 재검토 기한을 설정하여 표준 지침의 지속적인 적합성을 확보하기 위한 목적입니다. 이를 통해 개인정보 보호책임자의 교육과 관련된 규정이 명확해지고, 지침의 현행성이 강화될 것으로 기대됩니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "73464",
+            "law_name": "표준 개인정보 보호지침",
+            "location_label": "(위치미상#15-0)",
+            "change_type": "삭제",
+            "old_text": "1. 삭제",
+            "new_text": "1. ∼3. 삭제",
+            "match_status": "삭제(위치탐색제외)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "표준 개인정보 보호지침에서 특정 내용이 삭제되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73464",
+            "law_name": "표준 개인정보 보호지침",
+            "location_label": "(위치미상#6-0)",
+            "change_type": "삭제",
+            "old_text": "1. 삭제",
+            "new_text": "1. ∼5. 삭제",
+            "match_status": "삭제(위치탐색제외)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "표준 개인정보 보호지침에서 특정 내용을 삭제하였습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73464",
+            "law_name": "표준 개인정보 보호지침",
+            "location_label": "제23조",
+            "change_type": "개정",
+            "old_text": "영 제32조제4항에 따라 보호위원회가 개설 운영할 수 있는 개인정보 보호책임자에 대한 교육의 내용은 다음 각 호와 같다.",
+            "new_text": "영 제32조제5항에 따라 보호위원회가 개설 운영할 수 있는 개인정보 보호책임자에 대한 교육의 내용은 다음 각 호와 같다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보호위원회가 개설 운영할 수 있는 개인정보 보호책임자에 대한 교육의 내용이 영 제32조제5항에 따라 규정됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73464",
+            "law_name": "표준 개인정보 보호지침",
+            "location_label": "제2조5.",
+            "change_type": "개정",
+            "old_text": "5. “개인정보 보호책임자”란 개인정보처리자의 개인정보 처리에 관한 업무를 총괄해서 책임지는 자로서 영 제32조제2항 또는 제3항에 해당하는 자를 말한다.",
+            "new_text": "5. “개인정보 보호책임자”란 개인정보처리자의 개인정보 처리에 관한 업무를 총괄해서 책임지는 자로서 영 제32조제1항 또는 제3항에 해당하는 자를 말한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제32조제2항' → '제32조제1항'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'제32조제2항'이 '제32조제1항'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73464",
+            "law_name": "표준 개인정보 보호지침",
+            "location_label": "제43조②",
+            "change_type": "개정",
+            "old_text": "② 이동형영상정보처리기기운영자가 법 제25조의2제4항에 따라 영 제26조를 준용하여 이동형 영상정보처리기기의 운영에 관한 사무를 제3자에게 위탁하는 경우에는 제39조의2에 따른 이동형 영상정보처리기기 운영ㆍ관리 방침에 수탁자의 명칭 등을 공개하여야 한다.",
+            "new_text": "② 이동형영상정보처리기기운영자가 법 제25조의2제4항에 따라 영 제26조를 준용하여 이동형 영상정보처리기기의 운영에 관한 사무를 제3자에게 위탁하는 경우에는 제39조의3에 따른 이동형 영상정보처리기기 운영ㆍ관리 방침에 수탁자의 명칭 등을 공개하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제39조의2에' → '제39조의3에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제39조의2가 제39조의3으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73464",
+            "law_name": "표준 개인정보 보호지침",
+            "location_label": "제62조",
+            "change_type": "개정",
+            "old_text": "삭제",
+            "new_text": "보호위원회는 이 고시에 대하여 「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 2025년 1월 1일을 기준으로 3년마다(매 3년이 되는 해의 1월 1일 전까지를 말한다) 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보호위원회는 이 고시에 대하여 2025년 1월 1일을 기준으로 3년마다 그 타당성을 검토하고 개선 등의 조치를 하여야 합니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "(위치미상#15-0)",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "(위치미상#6-0)",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": null,
+              "relation": "삭제",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제23조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제2조",
+          "mappings": [
+            {
+              "old_position": "5.",
+              "new_position": "5.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제43조",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제62조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": [
+    {
+      "law_id": "35080",
+      "law_name": "하도급거래공정화 지침",
+      "new_serial_no": "2100000251404",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000251404&type=HTML"
+    },
+    {
+      "law_id": "37812",
+      "law_name": "중소기업자간 경쟁제품 직접생산 확인기준",
+      "new_serial_no": "2100000268206",
+      "reason": "폐지제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000268206&type=HTML"
+    },
+    {
+      "law_id": "33891",
+      "law_name": "정보보호시스템 평가·인증 등에 관한 고시",
+      "new_serial_no": "2100000215508",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000215508&type=HTML"
+    },
+    {
+      "law_id": "006295",
+      "law_name": "공공기관의 정보공개에 관한 법률 시행규칙",
+      "new_serial_no": "273809",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=273809&type=HTML"
+    },
+    {
+      "law_id": "008113",
+      "law_name": "지능정보화 기본법 시행규칙",
+      "new_serial_no": "267147",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=267147&type=HTML"
+    },
+    {
+      "law_id": "014862",
+      "law_name": "가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률",
+      "new_serial_no": "270215",
+      "reason": "제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270215&type=HTML"
+    },
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    },
+    {
+      "law_id": "2054105",
+      "law_name": "중소 소프트웨어사업자의 사업 참여 지원에 관한 지침",
+      "new_serial_no": "2100000274532",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000274532&type=HTML"
+    },
+    {
+      "law_id": "42430",
+      "law_name": "행정업무용 표준 관리규정",
+      "new_serial_no": "2100000254490",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000254490&type=HTML"
+    }
+  ]
+}

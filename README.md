@@ -48,7 +48,7 @@ python -m summarizer out/weekly_contract_2026-07-19.json --dry-run --echo  # API
 - LLM API 키 (요약 단계를 쓸 경우)
 
 ```bash
-pip install -e ".[openai]"        # 요약까지 (원내 QWEN 도 OpenAI 호환이면 이것)
+pip install -e ".[openai]"        # 요약까지 (OpenRouter/원내 QWEN 도 OpenAI 호환이면 이것)
 pip install -e ".[anthropic]"     # Anthropic 을 쓸 경우
 pip install -e ".[openai,dev]"    # + pytest
 ```
@@ -73,6 +73,13 @@ MYSQL_PASSWORD=MySQL_비밀번호
 OPENAI_API_KEY=발급받은_API_키
 SUMMARY_PROVIDER=openai
 SUMMARY_MODEL=gpt-5.4-mini
+
+# OpenRouter(여러 모델을 한 키로 호출하는 중계 서비스)를 쓰는 경우, 위
+# 3줄 대신 이 3줄만 쓴다 — base_url(https://openrouter.ai/api/v1)은
+# 코드가 자동으로 채우므로 SUMMARY_BASE_URL을 따로 적을 필요 없다.
+# SUMMARY_PROVIDER=openrouter
+# OPENROUTER_API_KEY=발급받은_API_키
+# SUMMARY_MODEL=openai/gpt-4o-mini   # 형식: provider/model — openrouter.ai/models 참고
 
 # 선택 (기본값 있음)
 MYSQL_HOST=127.0.0.1
@@ -545,16 +552,23 @@ summarizer/           계약 JSON → LLM 요약 → 검증 → HWPX 보고서 (
   llm.py                LLMClient 프로토콜 + OpenAI/Anthropic 구현 + DryRunClient (프로바이더 교체 지점)
   loader.py             계약 JSON 로드 → 조문 단위(ArticleUnit)로 정규화. 전부 결정론적, LLM 미개입
   matching.py           구↔신 위치 대응의 계산 가능한 부분 (완전일치·밀림 가능성 판정)
-  agents.py             MappingAgent / ArticleAgent / LawAgent / VerifierAgent(현재 미사용)
+  textdiff.py           어절 단위 텍스트 비교(공백 보존 토큰화) — triage/렌더러가 공유하는 토대
+  triage.py             LLM 투입 전 결정론적 사전 선별 — 형식정비(기관명·인용법령명 일괄교체)는
+                        LLM 없이 규칙으로 분류해 비용·리포트 노이즈를 줄임 (ArticleAgent.run() 안에서 호출)
+  agents.py             MappingAgent / ArticleAgent / LawAgent (감수 에이전트는 없음 — 아래 verifier.py 참고)
   prompts/              에이전트별 프롬프트 — 가장 자주 고치는 부분이라 로직과 분리
   pipeline.py           오케스트레이션: 매핑 → 조문 팬아웃(병렬) → 법령 종합 → 검증
-  verifier.py           요약을 원문과 코드로 대조 (환각·방향오류만). LLM 을 판단자로 쓰지 않는 이유는 파일 상단 주석 참고
+  verifier.py           요약을 원문과 코드로 대조 (환각·방향오류만). LLM 을 판단자로 쓰지 않는 이유는 파일 상단 주석 참고.
+                        한때 LLM 기반 VerifierAgent가 agents.py에 있었으나 실제로는 안 쓰이는 죽은 코드였고,
+                        이미 연결돼 있던 이 코드 기반 검증으로 충분하다고 판단해 삭제함(2026-07-30)
   postprocess.py        LLM 출력 정리 (한자 오타 등)
   render.py             조문별 변경 목록을 코드로 조립 — 구조 사실은 LLM 에 맡기지 않는다
   report/               HWPX 보고서
     builder.py            ContractSummary → HWPX (표지/개요/목록/조문별 변경표/미확정/비교불가)
     layout.py             지면·표 배치 (폭, 열 너비, 칸 여백, 머리행)
-    verify.py             생성한 HWPX 를 다시 열어 요약이 온전히 들어갔는지 대조
+    verify.py             생성한 HWPX 를 다시 열어 요약 텍스트가 온전히 들어갔는지 대조(내용 완전성)
+    inspect.py            생성한 HWPX 를 다시 열어 표 너비·셀 정렬·빈 문단 비율 등 서식이 안 깨졌는지 검사(구조/레이아웃) —
+                          둘 다 사람이 한글로 직접 열어봐야 보이는 문제라 자동화 없이는 매주 놓친다
   sinks.py              저장처 — JsonSink / HwpxSink / DbSink (모두 같은 Sink 프로토콜)
   __main__.py           `python -m summarizer` 진입점
 

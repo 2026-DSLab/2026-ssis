@@ -73,13 +73,20 @@ class SummaryPipeline:
 
         # 마지막 단계 — 감수. 조문 요약을 원문과 '코드로' 대조해 사실 오류만
         # 잡는다. LLM 판단을 쓰지 않으므로 오탐(취향·분량 트집)이 없다.
+        #
+        # ★★★ 설계(2026-07-31, 사용자 최종 결정): 감수에서 걸린 내용을
+        # caveats 문장으로 만들어 내보내던 걸 그만둔다 — caveats_for()를
+        # 완전히 제거했던(webapp "확인이 필요한 항목" 박스 삭제) 것과
+        # 같은 이유다: 검증 결과가 정답이라 해도, 이걸 "※ 확인 필요"
+        # 형태로 사용자에게 노출하면 그 자체가 불안감을 조성한다는 게
+        # 이번 세션 내내 반복된 결론이었다. verifier_issues 는 계속
+        # 저장한다(DB/내부 점검용 원자료로서의 가치는 남아 있다) — 다만
+        # 그걸 다시 caveats 문장으로 바꿔 HWPX/웹페이지에 노출하는
+        # 마지막 남은 경로를 여기서 끊는다.
         if self._settings.llm.enable_verifier and not summary.error:
             issues = verify_summaries(summaries)
             if issues:
-                caveats = list(summary.caveats)
-                detail = "; ".join(f"{i.where}: {i.problem}" for i in issues)
-                caveats.append("감수: 요약이 원문과 다른 부분 발견 — " + detail)
-                summary = replace(summary, verifier_issues=issues, caveats=caveats)
+                summary = replace(summary, verifier_issues=issues)
 
         return summary
 

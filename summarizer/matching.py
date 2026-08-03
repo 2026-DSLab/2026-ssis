@@ -33,11 +33,12 @@ from __future__ import annotations
 
 import difflib
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 from lawtrack.contract.schema import ArticleDiffItem, LawChange
 
 from summarizer.models import PositionMapping
+from summarizer.textdiff import tokenize
 
 # 문장 앞의 항/호/목 번호. 내용 비교 전에 떼어낸다 — 번호가 밀리면 이
 # 부분만 달라지므로, 붙여둔 채 비교하면 같은 내용을 다른 것으로 본다.
@@ -123,11 +124,88 @@ def diff_is_meaningful(old_text: str, new_text: str) -> bool:
     return matched / len(o) >= 0.5
 
 
+_MERGE_GAP_WORDS = 3
+"""바뀐 조각 두 개 사이에 안 바뀐 어절이 이 개수 이하로 끼어 있으면 하나로
+합친다.
+
+★★ 실측(2026-07-31, 전기사업법 제7조의3① "제3항에 따라 미리 관계
+행정기관의 장과 협의한" → "인ㆍ허가등의 관계 행정기관의 장과 미리
+협의한"): "미리"라는 단어가 문장 안에서 자리만 옮겨가면, SequenceMatcher는
+이걸 '이동'으로 보지 못하고 "'제3항에 따라 미리' → '인ㆍ허가등의'"(replace)와
+"' 미리' 추가"(insert) 두 조각으로 따로 뽑는다. 두 조각을 각각 따로 받은
+LLM은 "미리"가 왜 지워졌다가 다시 생기는지 맥락을 모른 채 "인ㆍ허가등의
+미리를 추가하였습니다" 같은 비문을 만들었다. 사이에 낀 안 바뀐 어절
+("관계 행정기관의 장과", 3어절)이 짧으면 같은 구절 안에서 일어난 하나의
+재구성일 가능성이 높으므로, 통째로 합쳐 "'제3항에 따라 미리 관계
+행정기관의 장과' → '인ㆍ허가등의 관계 행정기관의 장과 미리'"처럼 하나의
+완결된 치환으로 준다.
+
+3으로 잡은 이유: "20일 이내 또는 그 행위가 있음을 안 날부터 15일"(제28조②
+실측)처럼 서로 무관한 두 변경 사이에 낀 어절은 보통 7개 이상이라, 이 값
+이하에서는 두 독립된 변경을 잘못 하나로 합칠 위험이 낮다.
+"""
+
+
+def _merge_close_opcodes(
+    opcodes: list[tuple[str, int, int, int, int]], a: list[str],
+) -> list[tuple[str, int, int, int, int]]:
+    """가까이 붙은(사이에 낀 안 바뀐 어절이 적은) 변경 조각들을 하나로 합친다.
+
+    SequenceMatcher.get_opcodes()는 non-equal(replace/delete/insert) 조각들
+    사이에 항상 equal 조각을 하나씩 두고 나온다(둘이 붙어 있으면 애초에
+    replace 하나로 합쳐서 나온다) — 그래서 "change, equal(짧음), change"
+    패턴만 살피면 된다.
+    """
+    ops = list(opcodes)
+    merged: list[tuple[str, int, int, int, int]] = []
+    i = 0
+    n = len(ops)
+    while i < n:
+        tag, i1, i2, j1, j2 = ops[i]
+        if tag == "equal":
+            merged.append(ops[i])
+            i += 1
+            continue
+
+        cur_i1, cur_i2, cur_j1, cur_j2 = i1, i2, j1, j2
+        i += 1
+        while i + 1 < n and ops[i][0] == "equal" and ops[i + 1][0] != "equal":
+            gap_i1, gap_i2 = ops[i][1], ops[i][2]
+            gap_words = len([t for t in a[gap_i1:gap_i2] if t.strip()])
+            if gap_words > _MERGE_GAP_WORDS:
+                break
+            cur_i2 = ops[i + 1][2]
+            cur_j2 = ops[i + 1][4]
+            i += 2
+
+        if cur_i1 == cur_i2:
+            final_tag = "insert"
+        elif cur_j1 == cur_j2:
+            final_tag = "delete"
+        else:
+            final_tag = "replace"
+        merged.append((final_tag, cur_i1, cur_i2, cur_j1, cur_j2))
+    return merged
+
+
 def describe_change(old_text: str, new_text: str, *, max_len: int = 4000) -> list[str]:
-    """구/신 문장을 글자단위로 비교해 '바뀐 조각'만 뽑는다.
+    """구/신 문장을 어절단위로 비교해 '바뀐 조각'만 뽑는다.
 
     실측(국민체육진흥법 제21조): "대한올림픽위원회 → 대한체육회" 처럼
     한 단어만 바뀐 경우, 긴 문장 전체가 아니라 바뀐 부분만 정확히 나온다.
+
+    ★★ 실측(2026-07-31, 국가를 당사자로 하는 계약에 관한 법률 제28조②
+    "…20일 이내…15일 이내…" → "…30일 이내…25일 이내…"): 예전엔 글자
+    단위(difflib.SequenceMatcher(None, o, n))로 비교했는데, "20일"과
+    "30일"은 앞 숫자 한 글자만 다르고 "0일"은 같아서 SequenceMatcher가
+    "'2' → '3'"처럼 숫자 한 글자만 조각으로 뽑아버렸다("15일"→"25일"도
+    "'1' → '2'"로 동일). 단위(單位)를 잃은 맨 숫자만 LLM에게 던지니,
+    LLM이 그 숫자가 뭘 가리키는지 지어내 "당사자의 수가 2에서 3으로"
+    같은 완전히 무관한 문장을 만들어냈다(구체적으로 쓰라는 프롬프트
+    규칙과 맞물려 없는 맥락을 채워 넣은 것). 어절(단어) 단위로 바꾸면
+    "20일"/"30일" 전체가 한 조각으로 나와 이 문제가 생기지 않는다.
+    summarizer.textdiff.tokenize()는 이미 같은 이유(한글 글자단위 diff의
+    무의미한 쪼개짐)로 어절 토큰화를 쓰고 있어 그대로 재사용한다.
 
     ★ 단, 항목이 통째로 교체된 경우(diff_is_meaningful=False) 빈 목록을
       돌려준다. 실측(2026-07-25, 예정가격 제9조②2., "부분품비"→"소모공구
@@ -139,16 +217,36 @@ def describe_change(old_text: str, new_text: str, *, max_len: int = 4000) -> lis
     if o and n and not diff_is_meaningful(o, n):
         return []  # 통째 교체 — diff 로 쪼개면 안 된다
 
-    sm = difflib.SequenceMatcher(None, o, n)
+    a, b = tokenize(o), tokenize(n)
+    sm = difflib.SequenceMatcher(None, a, b, autojunk=False)
+    opcodes = _merge_close_opcodes(sm.get_opcodes(), a)
     parts: list[str] = []
-    for tag, i1, i2, j1, j2 in sm.get_opcodes():
+    for tag, i1, i2, j1, j2 in opcodes:
         if tag == "replace":
-            parts.append(f"'{o[i1:i2]}' → '{n[j1:j2]}'")
+            parts.append(f"'{''.join(a[i1:i2])}' → '{''.join(b[j1:j2])}'")
         elif tag == "delete":
-            parts.append(f"'{o[i1:i2]}' 삭제")
+            parts.append(f"'{''.join(a[i1:i2])}' 삭제")
         elif tag == "insert":
-            parts.append(f"'{n[j1:j2]}' 추가")
-    return [p[:max_len] for p in parts]
+            parts.append(f"'{''.join(b[j1:j2])}' 추가")
+
+    # ★★ 실측(2026-07-31, 산업재해보상보험법 제116조③ "증명을 생략할 수
+    # 있다" → "증명 또는 자료의 제공을 생략할 수 있다"): 같은 조각("
+    # 또는 자료의 제공' 추가")이 문장 안 서로 다른 두 곳에 각각 삽입되면
+    # 완전히 같은 문자열이 목록에 두 번 나온다. LLM이 이걸 "왜 두 번
+    # 나오지?"로 받아들여 "~항목이 두 번 언급되었습니다" 같은, 내용과
+    # 무관한 문장을 지어낸 적이 있다. 위치 정보까지 줄 필요는 없고,
+    # 중복을 하나로 합쳐 "(N곳)"만 표시하면 충분하다 — 문자열 자체는
+    # 그대로 두 곳 모두에 적용된다는 뜻이 이미 통한다.
+    counts = Counter(parts)
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for p in parts:
+        if p in seen:
+            continue
+        seen.add(p)
+        deduped.append(f"{p} ({counts[p]}곳)" if counts[p] > 1 else p)
+
+    return [p[:max_len] for p in deduped]
 
 
 def group_by_article(law: LawChange) -> dict[str, list[ArticleDiffItem]]:

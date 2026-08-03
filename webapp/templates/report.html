@@ -26,38 +26,31 @@
     </div>
   </nav>
 
-  <main>
+  <div class="page-layout">
+  <main class="content-col">
   {% if not laws %}
     <div class="empty-state">
       <p class="empty-icon">📭</p>
-      <p>아직 생성된 배치가 없습니다.</p>
+      <p>아직 생성된 주간 요약이 없습니다.</p>
       <code>python scripts/run_weekly.py --full</code>
     </div>
   {% else %}
     <section class="hero">
-      <div class="hero-glow" aria-hidden="true"></div>
-      <h1>이번 배치 <span class="hero-accent">개정 요약</span></h1>
-      <p class="hero-sub">{{ batch_date }} 기준으로 감지된 법령·행정규칙 개정 내역입니다.</p>
+      <h1>이번 주 <span class="hero-accent">개정 요약</span></h1>
+      <p class="hero-sub">법령·행정규칙 개정을 매주 자동으로 감지해서, 월요일 아침에 확인하실 수 있게 보여드려요.</p>
 
-      <div class="stat-lede">
-        <div class="stat-lede-block">
-          <span class="stat-lede-num" data-count="{{ stats.total_laws }}">0</span>
-          <span class="stat-lede-label">개정 법령</span>
-        </div>
-        <div class="stat-lede-divider" aria-hidden="true"></div>
-        <div class="stat-lede-block">
-          <span class="stat-lede-num" data-count="{{ stats.total_articles }}">0</span>
-          <span class="stat-lede-label">변경 조문</span>
-        </div>
-      </div>
+      <p class="hero-lede">
+        이번 주 개정 법령은 <strong class="lede-num" data-count="{{ stats.total_laws }}">0</strong>개,
+        변경 조문은 <strong class="lede-num" data-count="{{ stats.total_articles }}">0</strong>건입니다.
+      </p>
 
-      <div class="stat-breakdown">
+      <p class="hero-breakdown">
+        이 중
         {% for kind, count in stats.breakdown %}
-        <span class="stat-breakdown-item stat-breakdown-item--{{ kind_css_for_label(kind) }}">
-          <span class="stat-breakdown-dot" aria-hidden="true"></span>{{ kind }} <strong data-count="{{ count }}">0</strong>
-        </span>
+        <span class="breakdown-item breakdown-item--{{ kind_css_for_label(kind) }}">{{ kind }} <strong data-count="{{ count }}">0</strong>건</span>{% if not loop.last %},{% endif %}
         {% endfor %}
-      </div>
+        입니다.
+      </p>
     </section>
 
     <section class="toolbar">
@@ -87,9 +80,6 @@
           <span class="overview-type">{{ law.law_type or "-" }}</span>
           <span class="overview-name">{{ law.law_name }}</span>
           <span class="overview-headline">{{ law.headline or law.overview or "" }}</span>
-          {% if law.caveats %}
-            <span class="overview-caveat">※ {{ law.caveats[0] }}</span>
-          {% endif %}
         </div>
       {% endfor %}
     </section>
@@ -116,13 +106,19 @@
                     <p>{{ a.summary or "[내용 없음]" }}</p>
                   {% endif %}
                   {% if a.unit.moved_from %}
-                    <p class="note">※ 이동 전 위치: {{ a.unit.moved_from }}</p>
+                    <p class="note">※ 이동 전 위치: <span class="item-loc">{{ format_location(a.unit.moved_from) }}</span></p>
                   {% endif %}
+
+                  <!-- 상세 패널 제목용 — "원문 보기"/"법제처 원문 보기" 둘 다
+                       같은 항목 제목을 쓰므로 행마다 하나만 만들어 공유한다.
+                       바깥 목록과 같은 format_location() 규칙(항/호/목 회색
+                       접미사)을 그대로 재사용한다. -->
+                  <span class="detail-title-html" hidden>{{ item.law_type }} · {{ item.law_name }} · {{ format_location(a.unit.location_label) }}</span>
 
                   {% if a.unit.old_text or a.unit.new_text %}
                     {% set can_diff = not a.unit.old_text_is_context and a.unit.old_text and a.unit.new_text %}
-                    <details class="fulltext">
-                      <summary>원문 보기</summary>
+                    <button type="button" class="fulltext-trigger">원문 보기 →</button>
+                    <div class="fulltext-source" hidden>
                       <div class="fulltext-body">
                         {% if not a.unit.old_text_is_context %}
                           <div class="fulltext-col fulltext-col--old">
@@ -137,11 +133,11 @@
                           </div>
                         {% endif %}
                       </div>
-                    </details>
+                    </div>
                   {% endif %}
 
                   <p class="item-source">
-                    <a href="{{ public_law_url(item.law_type, item.law_name) }}" target="_blank" rel="noopener">법제처 원문 보기 ↗</a>
+                    <button type="button" class="source-trigger" data-url="{{ public_law_url(item.law_type, item.law_name) }}">법제처 원문 보기 →</button>
                   </p>
                 </div>
               </div>
@@ -152,6 +148,25 @@
     </div>
   {% endif %}
   </main>
+
+  {% if laws %}
+    <!-- 오른쪽 상세 패널 — "원문 보기"/"법제처 원문 보기"를 누르면 왼쪽
+         목록 안에 접혀 있던(hidden) 내용을 여기로 옮겨 크게 보여준다.
+         평소엔 자리를 차지하지 않는 오버레이라 본문이 화면 전체 폭을
+         쓰고, 열었을 때만 오른쪽에서 슬라이드로 나타난다. -->
+    <div class="detail-backdrop" id="detail-backdrop"></div>
+    <aside class="detail-col" id="detail-panel">
+      <div class="detail-header">
+        <span class="detail-header-title" id="detail-title">원문 보기</span>
+        <button type="button" class="detail-close" id="detail-close" aria-label="닫기">✕</button>
+      </div>
+      <div class="detail-empty" id="detail-empty">
+        <p>왼쪽 목록에서 "원문 보기" 또는 "법제처 원문 보기"를 누르면<br>여기에 크게 표시됩니다.</p>
+      </div>
+      <div class="detail-body" id="detail-body" hidden></div>
+    </aside>
+  {% endif %}
+  </div>
 
   <script>
     // 검색 — 법령명으로 "법령별 개요" 행과 구분별 섹션의 항목 행을 함께
@@ -187,6 +202,98 @@
         document.getElementById(chip.dataset.target)?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
+
+    // 오른쪽 상세 패널 — "원문 보기"는 같은 행 안에 hidden으로 숨겨둔
+    // 내용(fulltext-source)을 그대로 옮겨 보여준다(서버가 이미 렌더링해
+    // 둔 마크업을 재사용하므로 diff 강조 등이 그대로 유지된다).
+    // "법제처 원문 보기"는 외부 URL이라 iframe으로 시도하되, law.go.kr이
+    // 프레임 삽입을 막을 수 있어 새 탭 링크를 항상 함께 보여준다.
+    const detailPanel = document.getElementById("detail-panel");
+    const detailBackdrop = document.getElementById("detail-backdrop");
+    const detailTitle = document.getElementById("detail-title");
+    const detailEmpty = document.getElementById("detail-empty");
+    const detailBody = document.getElementById("detail-body");
+    const detailClose = document.getElementById("detail-close");
+
+    function openDetail(titleHtml, { docked = false } = {}) {
+      if (detailTitle) detailTitle.innerHTML = titleHtml || "원문 보기";
+      if (detailEmpty) detailEmpty.hidden = true;
+      if (detailBody) detailBody.hidden = false;
+      detailPanel?.classList.toggle("detail-col--docked", docked);
+      detailPanel?.classList.add("is-open");
+      detailBackdrop?.classList.add("is-open");
+      document.querySelectorAll(".item-row.is-active").forEach((r) => r.classList.remove("is-active"));
+    }
+
+    function closeDetail() {
+      detailPanel?.classList.remove("is-open");
+      detailBackdrop?.classList.remove("is-open");
+      if (detailBody) { detailBody.hidden = true; detailBody.innerHTML = ""; }
+      if (detailEmpty) detailEmpty.hidden = false;
+      if (detailTitle) detailTitle.textContent = "원문 보기";
+      document.querySelectorAll(".item-row.is-active").forEach((r) => r.classList.remove("is-active"));
+    }
+
+    document.querySelectorAll(".fulltext-trigger").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const source = btn.nextElementSibling;
+        if (!detailBody || !source) return;
+        detailBody.innerHTML = source.innerHTML;
+        const titleEl = btn.closest(".item-row")?.querySelector(".detail-title-html");
+        openDetail(titleEl ? titleEl.innerHTML : "", { docked: true });
+        btn.closest(".item-row")?.classList.add("is-active");
+      });
+    });
+
+    document.querySelectorAll(".source-trigger").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (!detailBody) return;
+        const url = btn.dataset.url;
+        let hostname = url;
+        try { hostname = new URL(url).hostname; } catch (e) { /* 상대/잘못된 URL이면 원문 그대로 표시 */ }
+        detailBody.replaceChildren();
+
+        // 실제 웹페이지를 iframe으로 보여준다는 걸 한눈에 알 수 있게
+        // 브라우저 주소창을 흉내낸 바를 iframe 위에 붙인다. "새 탭에서
+        // 열기"는 이제 별도 문단이 아니라 이 바의 아이콘 버튼 하나로.
+        const chrome = document.createElement("div");
+        chrome.className = "browser-chrome";
+
+        const dots = document.createElement("div");
+        dots.className = "browser-chrome-dots";
+        for (let i = 0; i < 3; i += 1) dots.appendChild(document.createElement("span"));
+
+        const addressBar = document.createElement("div");
+        addressBar.className = "browser-chrome-url";
+        const lock = document.createElement("span");
+        lock.className = "browser-chrome-lock";
+        lock.textContent = "🔒";
+        addressBar.append(lock, document.createTextNode(hostname));
+
+        const openLink = document.createElement("a");
+        openLink.className = "browser-chrome-open";
+        openLink.href = url;
+        openLink.target = "_blank";
+        openLink.rel = "noopener";
+        openLink.title = "새 탭에서 열기";
+        openLink.textContent = "↗";
+
+        chrome.append(dots, addressBar, openLink);
+
+        const iframe = document.createElement("iframe");
+        iframe.className = "detail-iframe";
+        iframe.loading = "lazy";
+        iframe.src = url;
+
+        detailBody.append(chrome, iframe);
+        const titleEl = btn.closest(".item-row")?.querySelector(".detail-title-html");
+        openDetail(titleEl ? titleEl.innerHTML : "");
+        btn.closest(".item-row")?.classList.add("is-active");
+      });
+    });
+
+    detailClose?.addEventListener("click", closeDetail);
+    detailBackdrop?.addEventListener("click", closeDetail);
 
     // 헤더 숫자(개정 법령/변경 조문/구분별 통계)를 0에서 목표값까지
     // 애니메이션으로 세어 올린다 — 정적인 숫자 나열 대신 페이지가

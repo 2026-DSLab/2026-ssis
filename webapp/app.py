@@ -42,24 +42,39 @@ _POS_TOKEN_RE = re.compile(r"[①-⑳]|[가-힣](?:의\d+)?\.|\d+(?:의\d+)?\.|\
 
 
 def _format_location(label: str) -> Markup:
-    """location_label 을 조/항/호/목 구획마다 다른 스타일의 span 으로 감싼다."""
-    m = _ARTICLE_RE.match(label or "")
-    if not m:
-        return Markup(escape(label or ""))
-    article, rest = m.group(0), label[m.end():]
-    out = [f'<span class="loc-article">{escape(article)}</span>']
+    """location_label 을 조/항/호/목 구획마다 span 으로 감싼다.
+
+    ★ 색으로 항/호/목을 구분하던 걸 그만두고(구분이 잘 안 와닿는다는
+      피드백), 대신 숫자 뒤에 "항"/"호"/"목" 글자를 회색으로 덧붙인다
+      — "③항", "1호", "가목"처럼. 원래 표기의 "." 같은 구두점은 말로
+      풀어 쓰면 어색해서 떼어내고 그 자리에 한글 단위를 넣는다.
+
+    ★ "제N조" 없이 "③1."처럼 항/호만 오는 값도 있다(이동 전 위치 —
+      같은 조 안에서 옮겨진 경우 조 번호를 다시 안 적는다). 그런
+      값도 같은 규칙으로 항/호/목만 포맷한다.
+    """
+    label = label or ""
+    m = _ARTICLE_RE.match(label)
+    if m:
+        article, rest = m.group(0), label[m.end():]
+        out = [f'<span class="loc-article">{escape(article)}</span>']
+    else:
+        rest = label
+        out = []
     pos = 0
     for tm in _POS_TOKEN_RE.finditer(rest):
         if tm.start() > pos:
             out.append(str(escape(rest[pos:tm.start()])))
         tok = tm.group(0)
         if re.fullmatch(r"[①-⑳]", tok):
-            cls = "loc-clause"  # 항 — ①②③
+            cls, suffix, num = "loc-clause", "항", tok  # 항 — ①②③
         elif re.fullmatch(r"[가-힣](?:의\d+)?\.", tok):
-            cls = "loc-subitem"  # 목 — 가.나.다. / 가의2.
+            cls, suffix, num = "loc-subitem", "목", tok[:-1]  # 목 — 가.나.다. / 가의2.
         else:
-            cls = "loc-item"  # 호 — 1.2.3. / 12의2. / 1)2)
-        out.append(f'<span class="{cls}">{escape(tok)}</span>')
+            cls, suffix, num = "loc-item", "호", tok.rstrip(".)")  # 호 — 1.2.3. / 12의2. / 1)2)
+        out.append(
+            f'<span class="{cls}">{escape(num)}<span class="loc-suffix">{suffix}</span></span>'
+        )
         pos = tm.end()
     if pos < len(rest):
         out.append(str(escape(rest[pos:])))
@@ -174,7 +189,7 @@ def _public_law_url(law_type: str, law_name: str) -> str:
 
 #: _group_by_kind()가 만드는 섹션 순서 — _summary_stats()의 order와
 #: 반드시 같아야 통계 타일 순서와 본문 섹션 순서가 어긋나지 않는다.
-_KIND_ORDER = ["신설", "개정", "삭제", "이동", "이동개정", "변경없음", "변경"]
+_KIND_ORDER = ["개정", "신설", "삭제", "이동", "이동개정", "변경없음", "변경"]
 
 
 def _group_by_kind(laws: list[dict]) -> list[dict]:

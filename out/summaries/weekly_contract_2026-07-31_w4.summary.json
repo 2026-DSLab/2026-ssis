@@ -1,0 +1,837 @@
+{
+  "source_file": "weekly_contract_2026-07-31_w4.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "000191",
+      "law_name": "영유아보육법",
+      "law_type": "법률",
+      "enforce_date": "2026-05-19",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=286057&type=HTML",
+      "new_serial_no": "286057",
+      "headline": "한국영유아보육ㆍ교육진흥원 명칭 변경 및 유아 교육정책 지원 업무 확대",
+      "body": "이번 개정은 한국영유아보육ㆍ교육진흥원의 명칭을 변경하고, 영유아 보육 및 교육 정책의 체계적인 지원을 통해 보육 서비스의 질을 높이는 것을 목표로 합니다. 또한, 아동학대 관련 범죄자의 자격 재교부 기준을 명확히 하여 공공성을 강화하고, 과잉금지 원칙에 부합하도록 위헌성을 해소하는 방향으로 추진되었습니다.\n\n○ 조문별 변경 내용\n- 제16조\n    · 5. (개정): 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간은 20년 이내로 설정됩니다.\n    · 6. (개정): 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이 20년 이내로 변경되었습니다.\n    · 8. (개정): 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이 10년 이내로 변경되었습니다.\n- 제20조 (신설): 자격 재교부 사유를 충족하지 아니한 자에 대한 규정이 새로 생겼습니다.\n- 제48조\n    · ②2. (개정): 제1항제3호에 해당하는 경우 10년으로 명시되었으며, 형의 집행 종료 또는 집행 면제일, 형의 집행유예 확정일로부터 20년 이내에서 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이 지나지 아니하면 자격을 재교부할 수 없다는 내용이 추가되었습니다.\n    · ③ (신설): 교육부장관은 자격이 취소된 사람이 일정 기간이 지나 다시 자격을 취득하려는 경우, 취소 원인이 없거나 뉘우치는 빛이 뚜렷하며 교육부령으로 정하는 교육프로그램을 이수한 자에 한해 자격을 재교부할 수 있습니다.\n- 제51조의2\n    · ① (개정): '제2호'에 '제2호의2'가 추가되었습니다.\n    · ①2의2. (신설): 어린이집에 임면되는 보육교직원의 결격사유와 결격기간에 관한 정보를 관리 지원해야 합니다. 이 정보에는 보육교직원의 자격정지, 자격취소 및 자격재교부금지기간, 교육명령에 관한 정보가 포함됩니다.\n- 제8조\n    · ① (개정): 영유아 보육ㆍ교육 서비스의 질 향상을 도모하고 영유아 중심의 보육ㆍ교육 정책을 체계적으로 지원하기 위하여 한국영유아보육ㆍ교육진흥원이 새로 지정되었습니다.\n    · ②1. (개정): '영유아의 보육ㆍ교육 정책 및 사업에 관한 조사ㆍ연구ㆍ분석'으로 개정되었습니다.\n    · ②2. (개정): 어린이집과 「유아교육법」 제2조에 따른 유치원의 원활한 운영 및 보육ㆍ교육 서비스로 변경되었습니다.\n    · ②3. (신설): 보육교직원 및 유치원 교원의 전문성 향상을 위해 통합연수체계를 마련하고 운영하는 업무가 새로 생겼습니다.\n    · ②4. (신설): 보육교직원 및 유치원 교원의 정서와 심리 지원 및 역량 강화를 위한 업무가 새로 생겼습니다.\n    · ②5. (신설): 영유아의 신체, 건강, 정서, 심리, 보건 등 안전에 관한 업무가 새로 신설되었습니다.\n    · ②6. (신설): 보육교직원의 보육 활동 보호에 관한 업무가 새롭게 생겼습니다.\n    · ②7. (신설): 영유아의 인권 보호에 관한 업무가 새로 생겼습니다.\n    · ②8. (이동·개정): 영유아의 항목이 ②9. 에서 ②8. 로 이동하였습니다.\n    · ②9. (이동·개정): 영유아 보육에 관한 항목의 제목이 '영유아 보육'에서 '영유아 보육ㆍ교육'으로 변경되었습니다.\n    · ②10. (이동): 내용 변경 없이 ②3.에서 제8조②10.(으)로 번호만 이동했습니다.\n    · ②11. (이동): 내용 변경 없이 ②4.에서 제8조②11.(으)로 번호만 이동했습니다.\n    · ②12. (이동): 내용 변경 없이 ②5.에서 제8조②12.(으)로 번호만 이동했습니다.\n    · ②13. (이동): 내용 변경 없이 ②6.에서 제8조②13.(으)로 번호만 이동했습니다.\n    · ②14. (이동): 내용 변경 없이 ②7.에서 제8조②14.(으)로 번호만 이동했습니다.\n    · ②15. (이동): 내용 변경 없이 ②10.에서 제8조②15.(으)로 번호만 이동했습니다.\n    · ⑤ (개정): 교육부장관의 역할이 국가 및 지방자치단체로 변경되었습니다.\n    · ⑥ (개정): '제2항제8호의'가 '제2항제9호의'로 변경되었습니다.",
+      "overview": "이번 개정은 한국영유아보육ㆍ교육진흥원의 명칭을 변경하고, 영유아 보육 및 교육 정책의 체계적인 지원을 통해 보육 서비스의 질을 높이는 것을 목표로 합니다. 또한, 아동학대 관련 범죄자의 자격 재교부 기준을 명확히 하여 공공성을 강화하고, 과잉금지 원칙에 부합하도록 위헌성을 해소하는 방향으로 추진되었습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제16조5.",
+            "change_type": "개정",
+            "old_text": "5. 금고 이상의 실형을 선고받고 그 집행이 종료(집행이 종료된 것으로 보는 경우를 포함한다)되거나 집행이 면제된 날부터 5년(「아동복지법」 제3조제7호의2에 따른 아동학대관련범죄를 저지른 경우에는 20년)이 경과되지 아니한 자",
+            "new_text": "5. 금고 이상의 실형을 선고받고 그 집행이 종료(집행이 종료된 것으로 보는 경우를 포함한다)되거나 집행이 면제된 날부터 5년(「아동복지법」 제3조제7호의2에 따른 아동학대관련범죄를 저지른 경우에는 20년 이내에서 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간)이 경과되지 아니한 자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'20년)이' → '20년 이내에서 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간)이'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간은 20년 이내로 설정됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제16조6.",
+            "change_type": "개정",
+            "old_text": "6. 금고 이상의 형의 집행유예를 선고받고 그 유예기간 중에 있는 사람. 다만, 「아동복지법」 제3조제7호의2에 따른 아동학대관련범죄로 금고 이상의 형의 집행유예를 선고받은 경우에는 그 집행유예가 확정된 날부터 20년이 지나지 아니한 사람",
+            "new_text": "6. 금고 이상의 형의 집행유예를 선고받고 그 유예기간 중에 있는 사람. 다만, 「아동복지법」 제3조제7호의2에 따른 아동학대관련범죄로 금고 이상의 형의 집행유예를 선고받은 경우에는 그 집행유예가 확정된 날부터 20년 이내에서 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이 지나지 아니한 사람",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'20년이' → '20년 이내에서 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이 20년 이내로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제16조8.",
+            "change_type": "개정",
+            "old_text": "8. 제54조제2항부터 제4항까지의 규정에 따라 300만원 이상의 벌금형이 확정된 날부터 2년이 지나지 아니한 사람 또는 「아동복지법」 제3조제7호의2에 따른 아동학대관련범죄로 벌금형이 확정된 날부터 10년이 지나지 아니한 사람",
+            "new_text": "8. 제54조제2항부터 제4항까지의 규정에 따라 300만원 이상의 벌금형이 확정된 날부터 2년이 지나지 아니한 사람 또는 「아동복지법」 제3조제7호의2에 따른 아동학대관련범죄로 벌금형이 확정된 날부터 10년 이내에서 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이 지나지 아니한 사람",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'10년이' → '10년 이내에서 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이 10년 이내로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제20조4.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "4. 제48조제3항에 따른 자격 재교부 사유를 충족하지 아니한 자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "자격 재교부 사유를 충족하지 아니한 자에 대한 규정이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제48조②2.",
+            "change_type": "개정",
+            "old_text": "2. 제1항제3호에 해당하는 경우: 10년(다만, 「아동복지법」 제3조제7호의2에 따른 아동학대관련범죄로 금고 이상의 실형을 선고받고 그 집행이 종료되거나 집행이 면제된 날부터 20년이 지나지 아니한 사람 또는 「아동복지법」 제3조제7호의2에 따른 아동학대관련범죄로 금고 이상의 형의 집행유예가 확정된 날부터 20년이 지나지 아니한 사람에게는 자격을 재교부할 수 없다)",
+            "new_text": "제1항제3호에 해당하는 경우: 10년. 다만, 다음 각 목에 해당하는 사람의 경우 형의 집행이 종료(종료된 것으로 보는 경우를 포함한다)되거나 집행이 면제된 날 또는 형의 집행유예가 확정된 날부터 20년 이내에서 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이 지나지 아니하면 자격을 재교부할 수 없 다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": true,
+            "no_change": false
+          },
+          "summary": "제1항제3호에 해당하는 경우 10년으로 명시되었으며, 형의 집행 종료 또는 집행 면제일, 형의 집행유예 확정일로부터 20년 이내에서 범죄의 종류, 형기의 장단 및 재범위험성 등을 고려하여 대통령령으로 정하는 기간이 지나지 아니하면 자격을 재교부할 수 없다는 내용이 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제48조③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 교육부장관은 제1항에 따라 자격이 취소된 사람이 제2항에 따른 기간이 경과하여 다시 자격을 취득하려는 경우에는 취소의 원인이 된 사유가 없어지거나 뉘우치는 빛이 뚜렷하다고 인정되고 교육부령으로 정하는 교육프로그램을 이수한 자에 한정하여 자격을 재교부할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관은 자격이 취소된 사람이 일정 기간이 지나 다시 자격을 취득하려는 경우, 취소 원인이 없거나 뉘우치는 빛이 뚜렷하며 교육부령으로 정하는 교육프로그램을 이수한 자에 한해 자격을 재교부할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제51조의2①",
+            "change_type": "개정",
+            "old_text": "① 교육부장관, 시ㆍ도지사 또는 시장ㆍ군수ㆍ구청장은 대통령령으로 정하는 바에 따라 다음 각 호에 해당하는 업무를 공공기관 또는 민간기관ㆍ단체 등에 위탁할 수 있다. 이 경우 제2호 및 제4호의 업무는 진흥원에 위탁할 수 있다.",
+            "new_text": "① 교육부장관, 시ㆍ도지사 또는 시장ㆍ군수ㆍ구청장은 대통령령으로 정하는 바에 따라 다음 각 호에 해당하는 업무를 공공기관 또는 민간기관ㆍ단체 등에 위탁할 수 있다. 이 경우 제2호, 제2호의2 및 제4호의 업무는 진흥원에 위탁할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제2호' → '제2호, 제2호의2'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'제2호'에 '제2호의2'가 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제51조의2①2의2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2의2. 어린이집에 임면되는 보육교직원의 제16조ㆍ제20조에 따른 결격사유ㆍ결격기간에 관한 정보(보육교직원의 제46조ㆍ제47조에 따른 자격정지, 제48조에 따른 자격취소ㆍ자격재교부금지기간 및 제23조의3에 따른 교육명령에 관한 정보를 포함한다)의 관리 지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "어린이집에 임면되는 보육교직원의 결격사유와 결격기간에 관한 정보를 관리 지원해야 합니다. 이 정보에는 보육교직원의 자격정지, 자격취소 및 자격재교부금지기간, 교육명령에 관한 정보가 포함됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조①",
+            "change_type": "개정",
+            "old_text": "① 보육서비스의 질 향상을 도모하고 보육정책을 체계적으로 지원하기 위하여 한국보육진흥원(이하 “진흥원”이라 한다)을 설립한다.",
+            "new_text": "① 영유아 보육ㆍ교육 서비스의 질 향상을 도모하고 영유아 중심의 보육ㆍ교육 정책을 체계적으로 지원하기 위하여 한국영유아보육ㆍ교육진흥원(이하 “진흥원”이라 한다)을 설립한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'보육서비스의 질 향상을 도모하고 보육정책을 체계적으로 지원하기 위하여 한국보육진흥원(이하' → '영유아 보육ㆍ교육 서비스의 질 향상을 도모하고 영유아 중심의 보육ㆍ교육 정책을 체계적으로 지원하기 위하여 한국영유아보육ㆍ교육진흥원(이하'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "영유아 보육ㆍ교육 서비스의 질 향상을 도모하고 영유아 중심의 보육ㆍ교육 정책을 체계적으로 지원하기 위하여 한국영유아보육ㆍ교육진흥원이 새로 지정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②1.",
+            "change_type": "개정",
+            "old_text": "1. 보육정책 및 보육사업에 관한 조사ㆍ연구 및 정책분석",
+            "new_text": "1. 영유아의 보육ㆍ교육 정책 및 사업에 관한 조사ㆍ연구ㆍ분석",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'보육정책 및 보육사업에 관한 조사ㆍ연구 및 정책분석' → '영유아의 보육ㆍ교육 정책 및 사업에 관한 조사ㆍ연구ㆍ분석'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'영유아의 보육ㆍ교육 정책 및 사업에 관한 조사ㆍ연구ㆍ분석'으로 개정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②2.",
+            "change_type": "개정",
+            "old_text": "2. 원활한 어린이집 운영 및 보육서비스 제공을 위한 지원",
+            "new_text": "2. 어린이집, 「유아교육법」 제2조에 따른 유치원의 원활한 운영 및 보육ㆍ교육 서비스 제공을 위한 지원",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'원활한 어린이집 운영 및 보육서비스' → '어린이집, 「유아교육법」 제2조에 따른 유치원의 원활한 운영 및 보육ㆍ교육 서비스'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "어린이집과 「유아교육법」 제2조에 따른 유치원의 원활한 운영 및 보육ㆍ교육 서비스로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②3.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 보육교직원 및 유치원 교원의 전문성 향상을 위한 통합연수체계 마련ㆍ운영에 관한 업무",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보육교직원 및 유치원 교원의 전문성 향상을 위해 통합연수체계를 마련하고 운영하는 업무가 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②4.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "4. 보육교직원 및 유치원 교원의 정서ㆍ심리 지원 및 역량 강화 등에 관한 업무",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보육교직원 및 유치원 교원의 정서와 심리 지원 및 역량 강화를 위한 업무가 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②5.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "5. 영유아의 신체ㆍ건강ㆍ정서ㆍ심리ㆍ보건 등 안전에 관한 업무",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "영유아의 신체, 건강, 정서, 심리, 보건 등 안전에 관한 업무가 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②6.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "6. 보육교직원의 보육 활동 보호에 관한 업무",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보육교직원의 보육 활동 보호에 관한 업무가 새롭게 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②7.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "7. 영유아의 인권 보호에 관한 업무",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "영유아의 인권 보호에 관한 업무가 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②8.",
+            "change_type": "이동후개정",
+            "old_text": "9. 가정양육 지원에 관한 업무",
+            "new_text": "8. 영유아의 가정양육 지원에 관한 업무",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "②9.",
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'9.' → '8. 영유아의'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "영유아의 항목이 ②9. 에서 ②8. 로 이동하였습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②9.",
+            "change_type": "이동후개정",
+            "old_text": "8. 영유아 보육 관련 교육 및 홍보에 관한 업무",
+            "new_text": "9. 영유아 보육ㆍ교육 관련 교육 및 홍보에 관한 업무",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "②8.",
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'8. 영유아 보육' → '9. 영유아 보육ㆍ교육'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "영유아 보육에 관한 항목의 제목이 '영유아 보육'에서 '영유아 보육ㆍ교육'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②10.",
+            "change_type": "이동",
+            "old_text": "10. 그 밖에 이 법 또는 다른 법령 등에 따라 교육부장관, 국가 또는 지방자치단체로부터 위탁받은 업무",
+            "new_text": "10. 제22조제1항에 따른 보육교직원의 자격 검정 및 자격증 교부 등 지원",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "②3.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ②3.에서 제8조②10.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②11.",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "11. 제23조 및 제23조의2에 따라 실시하는 보수교육의 총괄 관리 및 지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "②4.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ②4.에서 제8조②11.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②12.",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "12. 보육서비스 품질 관리를 위하여 제25조의2에 따른 부모모니터링단 운영의 지원, 제30조에 따른 어린이집 평가의 지원 및 제30조의2에 따른 공공형어린이집의 지정을 위한 지원과 제41조에 따른 지도와 명령 및 제42조에 따른 보고와 검사에 대한 사전준비 또는 사후관리 지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "②5.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ②5.에서 제8조②12.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②13.",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "13. 제26조에 따라 실시하는 취약보육 관련 사업의 지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "②6.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ②6.에서 제8조②13.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②14.",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "14. 제26조의2에 따라 제공하는 시간제보육 서비스 관련 사업의 지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "②7.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ②7.에서 제8조②14.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조②15.",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "15. 그 밖에 이 법 또는 다른 법령 등에 따라 교육부장관 및 교육감, 국가 또는 지방자치단체로부터 위탁받은 업무",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "②10.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ②10.에서 제8조②15.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조⑤",
+            "change_type": "개정",
+            "old_text": "⑤ 교육부장관은 진흥원의 운영에 필요한 경비를 예산의 범위에서 지원할 수 있다.",
+            "new_text": "⑤ 국가 및 지방자치단체는 진흥원의 운영에 필요한 경비를 예산의 범위에서 지원할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'교육부장관은' → '국가 및 지방자치단체는'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관의 역할이 국가 및 지방자치단체로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000191",
+            "law_name": "영유아보육법",
+            "location_label": "제8조⑥",
+            "change_type": "개정",
+            "old_text": "⑥ 진흥원은 제2항제8호의 업무를 관련 전문기관 등에 위탁할 수 있다.",
+            "new_text": "⑥ 진흥원은 제2항제9호의 업무를 관련 전문기관 등에 위탁할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제2항제8호의' → '제2항제9호의'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'제2항제8호의'가 '제2항제9호의'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제16조",
+          "mappings": [
+            {
+              "old_position": "5.",
+              "new_position": "5.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "6.",
+              "new_position": "6.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "8.",
+              "new_position": "8.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제20조",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "4.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제48조",
+          "mappings": [
+            {
+              "old_position": "②2.",
+              "new_position": "②2.",
+              "relation": "개정",
+              "basis": "LLM판정",
+              "note": "사라진 항목의 핵심 내용이 새 항목에 포함됨."
+            },
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목에서는 대응되는 내용이 없음."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제51조의2",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①2의2.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목이 없다."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제8조",
+          "mappings": [
+            {
+              "old_position": "②3.",
+              "new_position": "②10.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "②4.",
+              "new_position": "②11.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "②5.",
+              "new_position": "②12.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "②6.",
+              "new_position": "②13.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "②7.",
+              "new_position": "②14.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "②9.",
+              "new_position": "②8.",
+              "relation": "이동후개정",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "②1.",
+              "new_position": "②1.",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "②2.",
+              "new_position": "②2.",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "⑤",
+              "new_position": "⑤",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "⑥",
+              "new_position": "⑥",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "②8.",
+              "new_position": "②9.",
+              "relation": "이동",
+              "basis": "LLM판정",
+              "note": "영유아 보육 관련 교육 및 홍보에 관한 업무는 새 조문에서 영유아 보육ㆍ교육 관련 교육 및 홍보에 관한 업무로 명칭이 바뀌고 현행에 맞게 다듬어졌습니다."
+            },
+            {
+              "old_position": "②10.",
+              "new_position": "②15.",
+              "relation": "이동",
+              "basis": "LLM판정",
+              "note": "사라진 항목의 내용이 교육부장관 및 교육감, 국가 또는 지방자치단체로부터 위탁받은 업무로 이동하였습니다."
+            },
+            {
+              "old_position": null,
+              "new_position": "②3.",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②4.",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②5.",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②6.",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②7.",
+              "relation": "신설",
+              "basis": "소거법",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [
+    {
+      "law_id": "000191",
+      "law_name": "영유아보육법",
+      "new_serial_no": "286057",
+      "reason": "0건실패",
+      "detail": "본문검색: '「아동복지법」 제3조제7호의2에 따른 아동학…'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=286057&type=HTML",
+      "guards_tried": [
+        "본문검색: '「아동복지법」 제3조제7호의2에 따른 아동학…'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    },
+    {
+      "law_id": "000191",
+      "law_name": "영유아보육법",
+      "new_serial_no": "286057",
+      "reason": "0건실패",
+      "detail": "본문검색: '「아동복지법」 제3조제7호의2에 따른 아동학…'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=286057&type=HTML",
+      "guards_tried": [
+        "본문검색: '「아동복지법」 제3조제7호의2에 따른 아동학…'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    }
+  ],
+  "no_comparison": []
+}

@@ -1,0 +1,1086 @@
+{
+  "source_file": "weekly_contract_2026-07-31.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "010213",
+      "law_name": "대·중소기업 상생협력 촉진에 관한 법률 시행령",
+      "law_type": "시행령",
+      "enforce_date": "2026-07-01",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=287277&type=HTML",
+      "new_serial_no": "287277",
+      "headline": "지방자치단체 종류에 통합특별시 신설 및 부시장 권한 정비",
+      "body": "이번 개정은 지방자치법 개정에 따라 새로운 지방자치단체 형태인 통합특별시를 반영하고, 통합특별시 부시장의 권한 및 역할을 명확히 하여 행정 효율성을 높이기 위한 것입니다. 이러한 변경은 지방자치단체의 조직과 운영에 본질적인 변화를 가져오며, 주민 서비스 향상에 기여할 것으로 기대됩니다.\n\n○ 조문별 변경 내용\n- 제27조 (개정): '특별시장ㆍ광역시장ㆍ특별자치시장ㆍ도지사' 대신 '특별시장ㆍ통합특별시장ㆍ광역시장ㆍ특별자치시장ㆍ도지사'로 변경되었습니다.",
+      "overview": "이번 개정은 지방자치법 개정에 따라 새로운 지방자치단체 형태인 통합특별시를 반영하고, 통합특별시 부시장의 권한 및 역할을 명확히 하여 행정 효율성을 높이기 위한 것입니다. 이러한 변경은 지방자치단체의 조직과 운영에 본질적인 변화를 가져오며, 주민 서비스 향상에 기여할 것으로 기대됩니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "010213",
+            "law_name": "대·중소기업 상생협력 촉진에 관한 법률 시행령",
+            "location_label": "제27조①",
+            "change_type": "개정",
+            "old_text": "①중소벤처기업부장관은 법 제38조제2항에 따라 업종의 특성상 사업활동의 효과가 일정한 지역에 한정된다고 인정되어 고시하는 업종에 대하여 다음 각 호의 권한을 특별시장ㆍ광역시장ㆍ특별자치시장ㆍ도지사 또는 특별자치도지사(이하 이 조에서 “시ㆍ도지사”라 한다)에게 위임한다.",
+            "new_text": "①중소벤처기업부장관은 법 제38조제2항에 따라 업종의 특성상 사업활동의 효과가 일정한 지역에 한정된다고 인정되어 고시하는 업종에 대하여 다음 각 호의 권한을 특별시장ㆍ통합특별시장ㆍ광역시장ㆍ특별자치시장ㆍ도지사 또는 특별자치도지사(이하 이 조에서 “시ㆍ도지사”라 한다)에게 위임한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'특별시장ㆍ광역시장ㆍ특별자치시장ㆍ도지사' → '특별시장ㆍ통합특별시장ㆍ광역시장ㆍ특별자치시장ㆍ도지사'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'특별시장ㆍ광역시장ㆍ특별자치시장ㆍ도지사' 대신 '특별시장ㆍ통합특별시장ㆍ광역시장ㆍ특별자치시장ㆍ도지사'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제27조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "2001150",
+      "law_name": "공공기관의 데이터베이스 표준화 지침",
+      "law_type": "행정규칙",
+      "enforce_date": "2025-02-24",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000255382&type=HTML",
+      "new_serial_no": "2100000255382",
+      "headline": "데이터베이스 표준화를 위한 메타데이터 관리항목 조정 및 기관 역할 명확화",
+      "body": "이번 개정은 공공기관의 데이터베이스 표준화를 지원하기 위해 메타데이터 관리항목을 조정하고 관련 기관의 역할을 명확히 하며, 표준관리 용어의 통일성을 강화하는 데 중점을 두었습니다. 이를 통해 데이터 관리의 효율성을 높이고, 기관 간 일관된 데이터 처리 절차를 확립하고자 합니다.\n\n○ 조문별 변경 내용\n- 제10조 (개정): 표준시스템은 '공통업무시스템'이라 합니다.\n- 제12조 (개정): '공통표준용어'라는 표현이 '공통표준'으로 변경되었습니다.\n- 제13조 (개정): '표준관리'가 '품질ㆍ표준관리'로 변경되었습니다.\n- 제16조\n    · ③1. (신설): 정보시스템 관리정보인 정보시스템유형 및 정보시스템운영구분 등을 정보자원관리시스템에 등록하고 관리하여야 합니다.\n    · ③2. (이동): 내용 변경 없이 ③1.에서 제16조③2.(으)로 번호만 이동했습니다.\n    · ③3. (이동): 내용 변경 없이 ③2.에서 제16조③3.(으)로 번호만 이동했습니다.\n    · ③4. (이동): 내용 변경 없이 ③3.에서 제16조③4.(으)로 번호만 이동했습니다.\n    · ④ (신설): 공통업무시스템을 구축 및 배포한 공공기관은 메타데이터를 등록하고 관리하여야 합니다.\n    · ⑤ (이동): 내용 변경 없이 ④에서 제16조⑤(으)로 번호만 이동했습니다.\n    · ⑥ (이동): 내용 변경 없이 ⑤에서 제16조⑥(으)로 번호만 이동했습니다.\n- 제20조 (개정): 행정안전부장관은 이 고시에 대하여 2025년 1월 1일 기준으로 매 3년이 되는 시점마다 그 타당성을 검토하여 개선 등의 조치를 하여야 합니다. 3년째의 시점은 12월 31일까지로 변경되었습니다.\n- 제2조 (신설): \"행정표준코드\"는 「행정기관의 코드표준화 추진지침」에 따라 각급기관의 행정업무에 필요한 행정코드를 표준화하여 정해진 절차에 따라 제정하고 고시한 행정코드를 의미합니다.\n- 제3조 (개정): 이 지침은 공공데이터베이스 구축ㆍ운영, 메타데이터 등록ㆍ관리 등의 표준화 업무에 적용하며, 공공데이터베이스 표준화와 관련된 사항이 「공공데이터법」 제23조제1항 단서에 따라 한국산업표준으로 제정되어 있는 경우에는 적용되지 않습니다.\n- 제4조\n    · ①4. (개정): '공통표준용어의' 표현이 '공통표준의'로 변경되었습니다.\n    · ①8. (개정): '표준관리'라는 용어가 '품질ㆍ표준관리'로 변경되었습니다.\n- 제5조\n    · ①2. (개정): 공통표준용어의 표기 방법이 공통표준의 표기 방법으로 변경되었습니다.\n    · ② (개정): '소관기관의'라는 표현이 삭제되었습니다.\n    · ③2. (개정): 표준 적용 및 점검 개선에서 메타데이터 관리, 표준 점검, 데이터 요청처리 등 기관 메타데이터 관리시스템을 통한 관리 및 현행화로 바뀌었습니다.\n    · ③4. (개정): 산출물의 작성 및 관리가 정보화사업 추진 시 소관 공공데이터베이스 표준 적용 관리로 바뀌었습니다.\n    · ③6. (개정): 표준관리 통합시스템을 통한 공공데이터베이스 표준관리 및 현행화가 그 밖에 이 지침에서 정하는 공공데이터베이스 표준화의 지원에 관한 사항으로 바뀌었습니다.\n- 제6조\n    · ①4. (개정): '표준관리'가 '품질ㆍ표준관리'로 변경되었습니다.\n    · ①6. (개정): '공통표준용어'가 '공통표준'으로 변경되었습니다.\n- 제8조\n    · ① (개정): '코드, 용어 및 도메인 표준'이 '기관표준과 DB표준'으로 변경되었습니다.\n    · ③ (개정): 기관표준과 DB표준이 품질ㆍ표준관리를 포함하도록 개정되었습니다.\n    · ④ (개정): '표준관리'가 '품질ㆍ표준관리'로 변경되었습니다.",
+      "overview": "이번 개정은 공공기관의 데이터베이스 표준화를 지원하기 위해 메타데이터 관리항목을 조정하고 관련 기관의 역할을 명확히 하며, 표준관리 용어의 통일성을 강화하는 데 중점을 두었습니다. 이를 통해 데이터 관리의 효율성을 높이고, 기관 간 일관된 데이터 처리 절차를 확립하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제10조⑥",
+            "change_type": "개정",
+            "old_text": "⑥ 특정 공공기관이 구축ㆍ배포하여 다수 기관이 공통적으로 사용하는 표준시스템은 근거 법령에 따라 해당 시스템의 구축ㆍ운영의 책임이 있는 공공기관의 장이 해당 공공데이터베이스의 표준을 수립하여 적용하여야 한다. 다만, 구체적인 근거 법령이 부재한 경우 해당 정보시스템의 구축ㆍ운영을 전담하는 공공기관의 장이 해당 공공데이터베이스의 표준을 수립하여 적용하여야 한다.",
+            "new_text": "⑥ 특정 공공기관이 구축ㆍ배포하여 다수 기관이 공통적으로 사용하는 표준시스템(이하 ‘공통업무시스템’이라 한다)은 근거 법령에 따라 해당 시스템의 구축ㆍ운영의 책임이 있는 공공기관의 장이 해당 공공데이터베이스의 표준을 수립하여 적용하여야 한다. 다만, 구체적인 근거 법령이 부재한 경우 해당 정보시스템의 구축ㆍ운영을 전담하는 공공기관의 장이 해당 공공데이터베이스의 표준을 수립하여 적용하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'표준시스템은' → '표준시스템(이하 ‘공통업무시스템’이라 한다)은'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "표준시스템은 '공통업무시스템'이라 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제12조③",
+            "change_type": "개정",
+            "old_text": "③ 공통표준용어, 공통표준단어, 공통표준도메인의 관리항목은 별표 제3호의 공통표준용어 관리항목에 따른다.",
+            "new_text": "③ 공통표준용어, 공통표준단어, 공통표준도메인의 관리항목은 별표 제3호의 공통표준 관리항목에 따른다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공통표준용어' → '공통표준'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'공통표준용어'라는 표현이 '공통표준'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제13조③",
+            "change_type": "개정",
+            "old_text": "③ 행정안전부장관은 공공기관의 장이 공공데이터베이스에 적용하는 등 공동으로 활용할 수 있도록 제정된 공통표준용어, 공통표준단어, 공통표준도메인 목록을 표준관리 통합시스템과 공공데이터 포털에 등록하여야 한다.",
+            "new_text": "③ 행정안전부장관은 공공기관의 장이 공공데이터베이스에 적용하는 등 공동으로 활용할 수 있도록 제정된 공통표준용어, 공통표준단어, 공통표준도메인 목록을 품질ㆍ표준관리 통합시스템과 공공데이터 포털에 등록하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'표준관리' → '품질ㆍ표준관리'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'표준관리'가 '품질ㆍ표준관리'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제16조③1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 정보시스템 관리정보(정보시스템유형, 정보시스템운영구분 등)를 정보자원관리시스템에 등록ㆍ관리",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보시스템 관리정보인 정보시스템유형 및 정보시스템운영구분 등을 정보자원관리시스템에 등록하고 관리하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제16조③2.",
+            "change_type": "이동",
+            "old_text": "2. 메타데이터 변경사항(신규, 수정, 삭제) 발생 시 최신 정보로 현행화",
+            "new_text": "2. 메타데이터 표준 관리항목을 기관 메타데이터 관리시스템에 등록",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "③1.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ③1.에서 제16조③2.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제16조③3.",
+            "change_type": "이동",
+            "old_text": "3. 메타데이터의 표준 관리항목 준수 여부 점검 및 개선 조치",
+            "new_text": "3. 메타데이터 변경사항(신규, 수정, 삭제) 발생 시 최신 정보로 현행화",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "③2.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ③2.에서 제16조③3.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제16조③4.",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "4. 메타데이터의 표준 관리항목 준수 여부 점검 및 개선 조치",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "③3.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ③3.에서 제16조③4.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제16조④",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "④ 공통업무시스템은 해당 시스템을 구축ㆍ배포한 공공기관이 메타데이터를 등록ㆍ관리하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공통업무시스템을 구축 및 배포한 공공기관은 메타데이터를 등록하고 관리하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제16조⑤",
+            "change_type": "이동",
+            "old_text": "⑤ 중앙 메타데이터 관리시스템은 활용지원센터에서 운영ㆍ관리하며, 행정안전부장관은 운영ㆍ관리에 필요한 경비를 예산의 범위에서 지원할 수 있다.",
+            "new_text": "⑤ 행정안전부장관은 중앙 메타데이터 관리시스템의 구축ㆍ운영을 위해 공공기관의 장에게 기관의 메타데이터 관리시스템과 연계 등의 협력을 요청할 수 있고, 요청받은 공공기관의 장은 특별한 사유가 없는 한 이에 따라야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": "④",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ④에서 제16조⑤(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제16조⑥",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "⑥ 중앙 메타데이터 관리시스템은 활용지원센터에서 운영ㆍ관리하며, 행정안전부장관은 운영ㆍ관리에 필요한 경비를 예산의 범위에서 지원할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "⑤",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ⑤에서 제16조⑥(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제20조",
+            "change_type": "개정",
+            "old_text": "행정안전부장관은 「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 이 고시에 대하여 2023년 7월 1일 기준으로 매 3년이 되는 시점(매 3년째의 6월 30일까지를 말한다)마다 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+            "new_text": "행정안전부장관은 「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 이 고시에 대하여 2025년 1월 1일 기준으로 매 3년이 되는 시점(매 3년째의 12월 31일까지를 말한다)마다 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "행정안전부장관은 이 고시에 대하여 2025년 1월 1일 기준으로 매 3년이 되는 시점마다 그 타당성을 검토하여 개선 등의 조치를 하여야 합니다. 3년째의 시점은 12월 31일까지로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제2조23.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "23. “행정표준코드”란 「행정기관의 코드표준화 추진지침」에 따라 각급기관의 행정업무에 필요한 행정코드를 표준화하여 정해진 절차에 따라 제정, 고시한 행정코드를 말한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "\"행정표준코드\"는 「행정기관의 코드표준화 추진지침」에 따라 각급기관의 행정업무에 필요한 행정코드를 표준화하여 정해진 절차에 따라 제정하고 고시한 행정코드를 의미합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제3조",
+            "change_type": "개정",
+            "old_text": "이 지침은 공공데이터베이스 구축ㆍ운영, 메타데이터 등록ㆍ관리 등의 표준화 업무에 적용한다. 다만, 공공데이터베이스 표준화와 관련된 사항이 「공공데이터법」 제23조제1항에 따라 한국산업표준으로 제정되어 있는 경우에는 그러하지 아니한다.",
+            "new_text": "이 지침은 공공데이터베이스 구축ㆍ운영, 메타데이터 등록ㆍ관리 등의 표준화 업무에 적용한다. 다만, 공공데이터베이스 표준화와 관련된 사항이 「공공데이터법」 제23조제1항 단서에 따라 한국산업표준으로 제정되어 있는 경우에는 그러하지 아니한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "이 지침은 공공데이터베이스 구축ㆍ운영, 메타데이터 등록ㆍ관리 등의 표준화 업무에 적용하며, 공공데이터베이스 표준화와 관련된 사항이 「공공데이터법」 제23조제1항 단서에 따라 한국산업표준으로 제정되어 있는 경우에는 적용되지 않습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제4조①4.",
+            "change_type": "개정",
+            "old_text": "4. 공통표준용어의 제ㆍ개정 관리",
+            "new_text": "4. 공통표준의 제ㆍ개정 관리",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공통표준용어의' → '공통표준의'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'공통표준용어의' 표현이 '공통표준의'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제4조①8.",
+            "change_type": "개정",
+            "old_text": "8. 표준관리 통합시스템 구축 및 운영",
+            "new_text": "8. 품질ㆍ표준관리 통합시스템 구축 및 운영",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'표준관리' → '품질ㆍ표준관리'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'표준관리'라는 용어가 '품질ㆍ표준관리'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제5조①2.",
+            "change_type": "개정",
+            "old_text": "2. 공통표준용어의 준수 관리",
+            "new_text": "2. 공통표준의 준수 관리",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공통표준용어의' → '공통표준의'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "공통표준용어의 표기 방법이 공통표준의 표기 방법으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제5조②",
+            "change_type": "개정",
+            "old_text": "② 「공공데이터법」 제12조에 따른 공공데이터제공책임관 및 실무담당자는 소관기관의 제1항 각 호에 따른 공공데이터베이스 표준화 업무를 총괄하여 수행하여야 한다.",
+            "new_text": "② 「공공데이터법」 제12조에 따른 공공데이터제공책임관 및 실무담당자는 제1항 각 호에 따른 공공데이터베이스 표준화 업무를 총괄하여 수행하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 소관기관의' 삭제"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'소관기관의'라는 표현이 삭제되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제5조③2.",
+            "change_type": "개정",
+            "old_text": "2. 코드, 단어, 용어 및 도메인 등 표준 적용 및 점검 개선",
+            "new_text": "2. 메타데이터 관리, 표준 점검, 데이터 요청처리 등 기관 메타데이터 관리시스템을 통한 관리 및 현행화",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": true,
+            "no_change": false
+          },
+          "summary": "표준 적용 및 점검 개선에서 메타데이터 관리, 표준 점검, 데이터 요청처리 등 기관 메타데이터 관리시스템을 통한 관리 및 현행화로 바뀌었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제5조③4.",
+            "change_type": "개정",
+            "old_text": "4. 산출물의 작성 및 관리",
+            "new_text": "4. 정보화사업 추진 시 소관 공공데이터베이스 표준 적용 관리",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": true,
+            "no_change": false
+          },
+          "summary": "산출물의 작성 및 관리가 정보화사업 추진 시 소관 공공데이터베이스 표준 적용 관리로 바뀌었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제5조③6.",
+            "change_type": "개정",
+            "old_text": "6. 표준관리 통합시스템을 통한 공공데이터베이스 표준관리 및 현행화",
+            "new_text": "6. 그 밖에 이 지침에서 정하는 공공데이터베이스 표준화의 지원에 관한 사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": true,
+            "no_change": false
+          },
+          "summary": "표준관리 통합시스템을 통한 공공데이터베이스 표준관리 및 현행화가 그 밖에 이 지침에서 정하는 공공데이터베이스 표준화의 지원에 관한 사항으로 바뀌었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제6조①4.",
+            "change_type": "개정",
+            "old_text": "4. 중앙 메타데이터 관리시스템, 표준관리 통합시스템 등의 운영 및 관리 지원",
+            "new_text": "4. 중앙 메타데이터 관리시스템, 품질ㆍ표준관리 통합시스템 등의 운영 및 관리 지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'표준관리' → '품질ㆍ표준관리'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'표준관리'가 '품질ㆍ표준관리'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제6조①6.",
+            "change_type": "개정",
+            "old_text": "6. 공통표준용어 후보군 발굴 등 공통표준용어 표준안 수립의 지원",
+            "new_text": "6. 공통표준용어 후보군 발굴 등 공통표준 표준안 수립의 지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'공통표준용어' → '공통표준'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'공통표준용어'가 '공통표준'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제8조①",
+            "change_type": "개정",
+            "old_text": "① 공공기관의 장은 코드, 용어 및 도메인 표준 수립을 위해 다음 각 호의 항목을 별표 제1호에 따라 데이터 표준사전으로 작성하여야 하고 최신성을 유지하여야 한다.",
+            "new_text": "① 공공기관의 장은 기관표준과 DB표준 수립을 위해 다음 각 호의 항목을 별표 제1호에 따라 데이터 표준사전으로 작성하여야 하고 최신성을 유지하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'코드, 용어 및 도메인 표준' → '기관표준과 DB표준'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'코드, 용어 및 도메인 표준'이 '기관표준과 DB표준'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제8조③",
+            "change_type": "개정",
+            "old_text": "③ 공공기관의 장은 기관표준이 새롭게 생성되거나 변경될 경우 표준관리 통합시스템에 등록하여야 하며, 등록된 정보는 최신성을 유지하여야 한다.",
+            "new_text": "③ 공공기관의 장은 기관표준과 DB표준이 새롭게 생성되거나 변경될 경우 품질ㆍ표준관리 통합시스템에 등록하여야 하며, 등록된 정보는 최신성을 유지하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기관표준이' → '기관표준과 DB표준이'",
+              "'표준관리' → '품질ㆍ표준관리'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관표준과 DB표준이 품질ㆍ표준관리를 포함하도록 개정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "2001150",
+            "law_name": "공공기관의 데이터베이스 표준화 지침",
+            "location_label": "제8조④",
+            "change_type": "개정",
+            "old_text": "④ 공공기관의 장은 제3항에 따라 추가된 기관표준용어의 공동활용이 필요하다고 판단되는 경우 공통표준용어로 제정될 수 있도록 표준관리 통합시스템을 통해 행정안전부장관에게 신청할 수 있다.",
+            "new_text": "④ 공공기관의 장은 제3항에 따라 추가된 기관표준용어의 공동활용이 필요하다고 판단되는 경우 공통표준용어로 제정될 수 있도록 품질ㆍ표준관리 통합시스템을 통해 행정안전부장관에게 신청할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'표준관리' → '품질ㆍ표준관리'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'표준관리'가 '품질ㆍ표준관리'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제10조",
+          "mappings": [
+            {
+              "old_position": "⑥",
+              "new_position": "⑥",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제12조",
+          "mappings": [
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제13조",
+          "mappings": [
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제16조",
+          "mappings": [
+            {
+              "old_position": "③1.",
+              "new_position": "③2.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "③2.",
+              "new_position": "③3.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "③3.",
+              "new_position": "③4.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "④",
+              "new_position": "⑤",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": "⑤",
+              "new_position": "⑥",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③1.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목이 없으므로 신규 규정으로 추가된 항목으로 판단됨."
+            },
+            {
+              "old_position": null,
+              "new_position": "④",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목이 없으므로 신규 규정으로 추가된 항목으로 판단됨."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제20조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제2조",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "23.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제3조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제4조",
+          "mappings": [
+            {
+              "old_position": "①4.",
+              "new_position": "①4.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "①8.",
+              "new_position": "①8.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제5조",
+          "mappings": [
+            {
+              "old_position": "①2.",
+              "new_position": "①2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③2.",
+              "new_position": "③2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③4.",
+              "new_position": "③4.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③6.",
+              "new_position": "③6.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제6조",
+          "mappings": [
+            {
+              "old_position": "①4.",
+              "new_position": "①4.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "①6.",
+              "new_position": "①6.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제8조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "④",
+              "new_position": "④",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "73485",
+      "law_name": "개인정보 영향평가에 관한 고시",
+      "law_type": "행정규칙",
+      "enforce_date": "2025-09-05",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000263712&type=HTML",
+      "new_serial_no": "2100000263712",
+      "headline": "인공지능(AI) 평가분야 신설 및 개인정보 영향평가 기준 정비",
+      "body": "이번 개정은 공공기관의 인공지능 활용 증가에 따른 개인정보 침해위험에 대응하기 위해 새로운 평가 항목을 추가하고 기준을 정비하는 데 초점을 두고 있습니다. 또한 용어의 명확화를 통해 평가 과정의 이해도를 높이고자 하였습니다.\n\n○ 조문별 변경 내용\n- 제2조 (개정): 이 고시에서 사용하는 용어의 정의가 뜻으로 변경되었습니다.\n- 제3조 (개정): 보호위원회는 평가기관 지정신청을 받은 경우 지정기준의 적합여부를 심의하기 위하여 구성ㆍ운영하던 개인정보 영향평가위원회가, 이제는 신청기관의 지정기준 충족여부를 심의하도록 바뀌었습니다.",
+      "overview": "이번 개정은 공공기관의 인공지능 활용 증가에 따른 개인정보 침해위험에 대응하기 위해 새로운 평가 항목을 추가하고 기준을 정비하는 데 초점을 두고 있습니다. 또한 용어의 명확화를 통해 평가 과정의 이해도를 높이고자 하였습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "73485",
+            "law_name": "개인정보 영향평가에 관한 고시",
+            "location_label": "제2조",
+            "change_type": "개정",
+            "old_text": "이 고시에서 사용하는 용어의 정의는 다음 각 호와 같다.",
+            "new_text": "이 고시에서 사용하는 용어의 뜻은 다음과 같다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "이 고시에서 사용하는 용어의 정의가 뜻으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "73485",
+            "law_name": "개인정보 영향평가에 관한 고시",
+            "location_label": "제3조④",
+            "change_type": "개정",
+            "old_text": "④ 보호위원회는 제3항에 따른 평가기관 지정신청을 받은 경우 지정기준의 적합여부를 심의하기 위하여 개인정보 영향평가위원회(이하 “영향평가위원회”라 한다)를 구성ㆍ운영한다.",
+            "new_text": "④ 제4조에 따른 개인정보 영향평가위원회(이하 “영향평가위원회”라 한다)는 신청기관의 지정기준 충족여부를 심의한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": true,
+            "no_change": false
+          },
+          "summary": "보호위원회는 평가기관 지정신청을 받은 경우 지정기준의 적합여부를 심의하기 위하여 구성ㆍ운영하던 개인정보 영향평가위원회가, 이제는 신청기관의 지정기준 충족여부를 심의하도록 바뀌었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제2조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제3조",
+          "mappings": [
+            {
+              "old_position": "④",
+              "new_position": "④",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [
+    {
+      "law_id": "2001150",
+      "law_name": "공공기관의 데이터베이스 표준화 지침",
+      "new_serial_no": "2100000255382",
+      "reason": "0건실패",
+      "detail": "본문검색: '라. 품질ㆍ표준관리 통합시스템을 통한 공공데…'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000255382&type=HTML",
+      "guards_tried": [
+        "본문검색: '라. 품질ㆍ표준관리 통합시스템을 통한 공공데…'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    },
+    {
+      "law_id": "2001150",
+      "law_name": "공공기관의 데이터베이스 표준화 지침",
+      "new_serial_no": "2100000255382",
+      "reason": "중복실패",
+      "detail": "본문검색: '공공데이터베이스 산출물의 작성 및 관리'; 중복 2건 → 번호결합 재검색: '3. 공공데이터베이스 산출물의 작성 및 관리…'; 번호결합 재검색이 0건으로 악화 → 원 중복 상태로 실패 처리",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000255382&type=HTML",
+      "guards_tried": [
+        "본문검색: '공공데이터베이스 산출물의 작성 및 관리'",
+        "중복 2건 → 번호결합 재검색: '3. 공공데이터베이스 산출물의 작성 및 관리…'",
+        "번호결합 재검색이 0건으로 악화 → 원 중복 상태로 실패 처리"
+      ]
+    },
+    {
+      "law_id": "2001150",
+      "law_name": "공공기관의 데이터베이스 표준화 지침",
+      "new_serial_no": "2100000255382",
+      "reason": "중복실패",
+      "detail": "본문검색: '품질ㆍ표준관리 통합시스템을 통한 공공데이터베…'; 중복 2건 → 번호결합 재검색: '5. 품질ㆍ표준관리 통합시스템을 통한 공공데…'; 번호결합 재검색이 0건으로 악화 → 원 중복 상태로 실패 처리",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000255382&type=HTML",
+      "guards_tried": [
+        "본문검색: '품질ㆍ표준관리 통합시스템을 통한 공공데이터베…'",
+        "중복 2건 → 번호결합 재검색: '5. 품질ㆍ표준관리 통합시스템을 통한 공공데…'",
+        "번호결합 재검색이 0건으로 악화 → 원 중복 상태로 실패 처리"
+      ]
+    }
+  ],
+  "no_comparison": [
+    {
+      "law_id": "35080",
+      "law_name": "하도급거래공정화 지침",
+      "new_serial_no": "2100000251404",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000251404&type=HTML"
+    },
+    {
+      "law_id": "37812",
+      "law_name": "중소기업자간 경쟁제품 직접생산 확인기준",
+      "new_serial_no": "2100000268206",
+      "reason": "폐지제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000268206&type=HTML"
+    },
+    {
+      "law_id": "33891",
+      "law_name": "정보보호시스템 평가·인증 등에 관한 고시",
+      "new_serial_no": "2100000215508",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000215508&type=HTML"
+    },
+    {
+      "law_id": "006295",
+      "law_name": "공공기관의 정보공개에 관한 법률 시행규칙",
+      "new_serial_no": "273809",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=273809&type=HTML"
+    },
+    {
+      "law_id": "008113",
+      "law_name": "지능정보화 기본법 시행규칙",
+      "new_serial_no": "267147",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=267147&type=HTML"
+    },
+    {
+      "law_id": "014862",
+      "law_name": "가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률",
+      "new_serial_no": "270215",
+      "reason": "제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270215&type=HTML"
+    },
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    },
+    {
+      "law_id": "2054105",
+      "law_name": "중소 소프트웨어사업자의 사업 참여 지원에 관한 지침",
+      "new_serial_no": "2100000274532",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000274532&type=HTML"
+    },
+    {
+      "law_id": "42430",
+      "law_name": "행정업무용 표준 관리규정",
+      "new_serial_no": "2100000254490",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000254490&type=HTML"
+    }
+  ]
+}

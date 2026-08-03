@@ -1,0 +1,598 @@
+{
+  "source_file": "weekly_contract_2026-07-31_r5.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "23559",
+      "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+      "law_type": "행정규칙",
+      "enforce_date": "2024-07-24",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000244750&type=HTML",
+      "new_serial_no": "2100000244750",
+      "headline": "정보보호 및 개인정보보호 관리체계 인증 특례 수수료 감면 및 심사 기준 완화",
+      "body": "이번 개정은 정보통신망 이용촉진 및 정보보호 관련 법률의 개정에 따라 정보보호 및 개인정보보호 관리체계 인증의 특례를 신청하는 자에 대해 수수료를 감면하고, 인증심사 기준을 완화하여 보다 많은 기관이 인증을 받을 수 있도록 하기 위한 것입니다. 이를 통해 정보보호 관리체계의 효율성을 높이고, 인증 신청을 장려하는 데 중점을 두고 있습니다.\n\n○ 조문별 변경 내용\n- 제11조\n    · ①4. (개정): 개인정보보호법이 「개인정보보호법」로 변경되는 등 기관명·인용 법령명이 정비되었습니다.\n    · ①5. (개정): 개인정보보호법이 「개인정보보호법으로, 시행령이 시행령」로 변경되는 등 기관명·인용 법령명이 정비되었습니다.\n    · ② (개정): '정보통신망법 시행령'의 정의를 명확히 하기 위해 '시행령(이하 “정보통신망법 시행령”이라 한다) 제54조에'에서 '시행령'(이하 “정보통신망법 시행령”이라 한다) 제54조에'로 변경되었습니다.\n- 제20조\n    · ① (개정): 신청인이 정보보호 관리체계 인증을 받을 수 있는 조건이 제18조제1항 각 호의 어느 하나에 해당하는 인증으로 변경되었습니다.\n    · ② (개정): '정보보호 관리체계'가 삭제되었습니다.\n    · ②1. (개정): 인증의 범위에 제18조 제1항 각 호의 어느 하나에 해당하는 내용을 포함할 수 있으며, 정보보호 관리체계 인증의 범위는 이에 포함될 수 있습니다.\n    · ②2. (개정): '정보보호 관리체계'라는 표현이 '제18조제1항 각 호의 어느 하나에 해당하는'으로 변경되었습니다.\n    · ③ (개정): 이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.\n- 제21조\n    · ③4. (신설): 정보통신망법 제47조의7제1항 각 호의 어느 하나에 해당하는 자는 제23조제3항 및 제4항에 따른 인증심사 기준을 적용받아야 합니다.\n    · ③5. (이동): 내용 변경 없이 ③4.에서 제21조③5.(으)로 번호만 이동했습니다.\n- 제23조 (신설, 6개 항·호·목): 제1항에도 불구하고 정보통신망법 제47조의7제1항제1호 및 같은 법 시행령 제49조의2제1항제1호에 해당하는 자에게는 각 호의 인증의 구분에 따라 인증기준이 적용됩니다.\n- 제25조 (개정): 인증기준은 별표 7에서 제23조에 따른 인증심사 기준으로 변경되었습니다.\n- 제2조 (개정): 이 고시에서 사용하는 용어의 정의가 뜻으로 변경되었습니다.",
+      "overview": "이번 개정은 정보통신망 이용촉진 및 정보보호 관련 법률의 개정에 따라 정보보호 및 개인정보보호 관리체계 인증의 특례를 신청하는 자에 대해 수수료를 감면하고, 인증심사 기준을 완화하여 보다 많은 기관이 인증을 받을 수 있도록 하기 위한 것입니다. 이를 통해 정보보호 관리체계의 효율성을 높이고, 인증 신청을 장려하는 데 중점을 두고 있습니다.",
+      "caveats": [
+        "감수: 요약이 원문과 다른 부분 발견 — 제11조②: 요약이 인용한 '시행령(이하 “정보통신망법 시행령”이라 한다) 제54조에'가 원문에 없음(환각 가능)"
+      ],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제11조①4.",
+            "change_type": "개정",
+            "old_text": "4. 정보통신망법 제47조제11항 및 개인정보보호법 제32조의2제5항을 위반하여 인증 또는 인증심사를 한 경우",
+            "new_text": "4. 정보통신망법 제47조제11항 및 「개인정보보호법」 제32조의2제5항을 위반하여 인증 또는 인증심사를 한 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'개인정보보호법' → '「개인정보보호법」'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "개인정보보호법이 「개인정보보호법」로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제11조①5.",
+            "change_type": "개정",
+            "old_text": "5. 정보통신망법 제47조제12항 및 개인정보보호법 시행령 제34조의6제1항제2호에 따른 지정기준에 적합하지 아니하게 된 경우",
+            "new_text": "5. 정보통신망법 제47조제12항 및 「개인정보보호법 시행령」 제34조의6제1항제2호에 따른 지정기준에 적합하지 아니하게 된 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'개인정보보호법 시행령' → '「개인정보보호법 시행령」'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "개인정보보호법이 「개인정보보호법으로, 시행령이 시행령」로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제11조②",
+            "change_type": "개정",
+            "old_text": "② 지정취소 및 업무정지에 대해서는 「정보통신망 이용촉진 및 정보보호 등에 관한 법률 시행령(이하 “정보통신망법 시행령”이라 한다)」제54조에 따른 지정취소 및 업무정지에 관한 행정처분의 기준을 따른다.",
+            "new_text": "② 지정취소 및 업무정지에 대해서는 「정보통신망 이용촉진 및 정보보호 등에 관한 법률 시행령」(이하 “정보통신망법 시행령”이라 한다) 제54조에 따른 지정취소 및 업무정지에 관한 행정처분의 기준을 따른다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'시행령(이하 “정보통신망법 시행령”이라 한다)」제54조에' → '시행령」(이하 “정보통신망법 시행령”이라 한다) 제54조에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'정보통신망법 시행령'의 정의를 명확히 하기 위해 '시행령(이하 “정보통신망법 시행령”이라 한다) 제54조에'에서 '시행령'(이하 “정보통신망법 시행령”이라 한다) 제54조에'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제20조①",
+            "change_type": "개정",
+            "old_text": "① 신청인이 제18조제1항제2호의 정보보호 관리체계 인증을 신청한 자가 다음 각 호의 어느 하나에 해당하는 인증을 받거나 정보보호 조치를 취한 경우 별표 5의 인증심사 일부 생략의 범위 내에서 인증심사의 일부를 생략할 수 있다.",
+            "new_text": "① 제18조제1항 각 호의 어느 하나에 해당하는인증을 신청한 자가 다음 각 호의 어느 하나에 해당하는 인증을 받거나 정보보호 조치를 취한 경우 별표 5의 인증심사 일부 생략의 범위 내에서 인증심사의 일부를 생략할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'신청인이 제18조제1항제2호의 정보보호 관리체계 인증을' → '제18조제1항 각 호의 어느 하나에 해당하는인증을'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "신청인이 정보보호 관리체계 인증을 받을 수 있는 조건이 제18조제1항 각 호의 어느 하나에 해당하는 인증으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제20조②",
+            "change_type": "개정",
+            "old_text": "② 제1항에 따라 정보보호 관리체계 인증심사의 일부를 생략하려는 경우에는 다음 각 호의 요건을 모두 충족하여야 한다.",
+            "new_text": "② 제1항에 따라 인증심사의 일부를 생략하려는 경우에는 다음 각 호의 요건을 모두 충족하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 정보보호 관리체계' 삭제"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'정보보호 관리체계'가 삭제되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제20조②1.",
+            "change_type": "개정",
+            "old_text": "1. 해당 국제표준 정보보호 인증 또는 정보보호 조치의 범위가 정보보호 관리체계 인증의 범위와 일치할 것",
+            "new_text": "1. 제18조제1항 각 호의 어느 하나에 해당하는 인증의 범위에 해당 국제표준 정보보호 인증 또는 정보보호 조치의 범위가 포함될 것",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 제18조제1항 각 호의 어느 하나에 해당하는 인증의 범위에' 추가",
+              "'정보보호 관리체계 인증의 범위와 일치할' → '포함될'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "인증의 범위에 제18조 제1항 각 호의 어느 하나에 해당하는 내용을 포함할 수 있으며, 정보보호 관리체계 인증의 범위는 이에 포함될 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제20조②2.",
+            "change_type": "개정",
+            "old_text": "2. 정보보호 관리체계 인증 신청 및 심사 시에 해당 국제표준 정보보호 인증이나 정보보호 조치가 유효하게 유지되고 있을 것",
+            "new_text": "2. 제18조제1항 각 호의 어느 하나에 해당하는 인증 신청 및 심사 시에 해당 국제표준 정보보호 인증이나 정보보호 조치가 유효하게 유지되고 있을 것",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'정보보호 관리체계' → '제18조제1항 각 호의 어느 하나에 해당하는'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'정보보호 관리체계'라는 표현이 '제18조제1항 각 호의 어느 하나에 해당하는'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제20조③",
+            "change_type": "개정",
+            "old_text": "③ 제1항에 따른 인증심사 일부 생략을 신청하고자하는 자는 별지 제10호서식의 인증심사 일부 생략 신청서를 심사수행기관에 제출하여야 한다.",
+            "new_text": "③ 제1항에 따른 인증심사 일부 생략을 신청하고자 하는 자는 별지 제10호서식의 인증심사 일부 생략 신청서를 심사수행기관에 제출하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": true
+          },
+          "summary": "이 항목은 이번 개정에서 내용이 바뀌지 않았습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제21조③4.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "4. 정보통신망법 제47조의7제1항 각 호의 어느 하나에 해당하는 자로서 제23조제3항 및 제4항에 따른 인증심사 기준을 적용받는 경우",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보통신망법 제47조의7제1항 각 호의 어느 하나에 해당하는 자는 제23조제3항 및 제4항에 따른 인증심사 기준을 적용받아야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제21조③5.",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "5. 그 밖에 신청인과 협의하여 수수료 조정이 필요하다고 판단되는 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "③4.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ③4.에서 제21조③5.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 제1항에도 불구하고 정보통신망법 제47조의7제1항제1호 및 같은 법 시행령 제49조의2제1항제1호에 해당하는 자에 대해서는 다음 각 호의 인증의 구분에 따라 인증기준을 적용한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제1항에도 불구하고 정보통신망법 제47조의7제1항제1호 및 같은 법 시행령 제49조의2제1항제1호에 해당하는 자에게는 각 호의 인증의 구분에 따라 인증기준이 적용됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조③1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 정보보호 및 개인정보보호 관리체계 인증 : 별표 7의2 가목부터 다목",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보보호 및 개인정보보호 관리체계 인증에 관한 사항이 별표 7의2 가목부터 다목에 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조③2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 정보보호 관리체계 인증 : 별표 7의2 가목(1.1.2. 항목 제외) 및 나목",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보보호 관리체계 인증이 신설되었으며, 이는 별표 7의2 가목(1.1.2. 항목 제외) 및 나목에 따라 시행됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조④",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "④ 정보통신망법 시행령 제49조의2제1항제2호에 해당하는 자에 대해서는 다음 각 호의 인증의 구분에 따라 인증기준을 적용한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보통신망법 시행령 제49조의2제1항제2호에 해당하는 자에게는 다음 각 호의 인증의 구분에 따라 인증기준이 적용됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조④1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 정보보호 및 개인정보보호 관리체계 인증 : 별표 7의3 가목부터 다목",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보보호 및 개인정보보호 관리체계 인증에 관한 규정이 새로 생겼으며, 이는 별표 7의3 가목부터 다목의 내용을 포함합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제23조④2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 정보보호 관리체계 인증 : 별표 7의3 가목 및 나목",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "정보보호 관리체계 인증에 관한 사항이 별표 7의3 가목 및 나목에 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제25조②",
+            "change_type": "개정",
+            "old_text": "② 서면심사는 별표 7의 인증기준에 적합한지에 대하여 정보보호 및 개인정보보호 관리체계 구축ㆍ운영 관련 정책, 지침, 절차 및 이행의 증거자료 검토, 정보보호대책 및 개인정보 처리단계별 요구사항 적용 여부 확인 등의 방법으로 관리적 요소를 심사한다.",
+            "new_text": "② 서면심사는 제23조에 따른 인증심사 기준에 적합한지에 대하여 정보보호 및 개인정보보호 관리체계 구축ㆍ운영 관련 정책, 지침, 절차 및 이행의 증거자료 검토, 정보보호대책 및 개인정보 처리단계별 요구사항 적용 여부 확인 등의 방법으로 관리적 요소를 심사한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'별표 7의 인증기준에' → '제23조에 따른 인증심사 기준에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "인증기준은 별표 7에서 제23조에 따른 인증심사 기준으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "23559",
+            "law_name": "정보보호 및 개인정보보호 관리체계 인증 등에 관한 고시",
+            "location_label": "제2조",
+            "change_type": "개정",
+            "old_text": "이 고시에서 사용하는 용어의 정의는 다음 각 호와 같다.",
+            "new_text": "이 고시에서 사용하는 용어의 뜻은 다음 각 호와 같다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "이 고시에서 사용하는 용어의 정의가 뜻으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제11조",
+          "mappings": [
+            {
+              "old_position": "①4.",
+              "new_position": "①4.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "①5.",
+              "new_position": "①5.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제20조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②1.",
+              "new_position": "②1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②2.",
+              "new_position": "②2.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제21조",
+          "mappings": [
+            {
+              "old_position": "③4.",
+              "new_position": "③5.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③4.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목이 없으며, 새롭게 추가된 내용입니다."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제23조",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제25조",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제2조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [
+        {
+          "severity": "high",
+          "where": "제11조②",
+          "problem": "요약이 인용한 '시행령(이하 “정보통신망법 시행령”이라 한다) 제54조에'가 원문에 없음(환각 가능)"
+        }
+      ],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

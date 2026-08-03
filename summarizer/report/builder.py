@@ -157,15 +157,12 @@ class _Report:
         if law.overview:
             self.p(law.overview, self.st.body, self.st.p_body)
 
-        for caveat in law.caveats:
-            self.p(f"※ {caveat}", self.st.note, self.st.p_body)
-        for issue in law.verifier_issues:
-            if issue.severity == "high":
-                self.p(
-                    f"⚠ 감수 지적({issue.where}): {issue.problem} — 원문 확인 필요",
-                    self.st.warn,
-                    self.st.p_body,
-                )
+        # ★★★ 설계(2026-07-31, 사용자 최종 결정): caveats/verifier_issues를
+        # "※"·"⚠" 문구로 문서에 노출하던 걸 그만둔다 — webapp에서 "확인이
+        # 필요한 항목" 박스를 완전히 없앤 것과 같은 결정을 HWPX에도
+        # 적용한다. 데이터 자체(law.caveats/verifier_issues, DB)는 계속
+        # 남아 있으니 필요하면 내부적으로 다시 조회할 수 있다 — 다만
+        # 최종 산출물에 경고 문구로 새어나가는 마지막 경로를 끊는다.
 
         self.article_table(law.article_summaries)
 

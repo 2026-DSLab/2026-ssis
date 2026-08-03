@@ -1,0 +1,94 @@
+{
+  "source_file": "weekly_contract_2026-07-31_w5.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "000204",
+      "law_name": "사회보장기본법",
+      "law_type": "법률",
+      "enforce_date": "2025-10-01",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=276663&type=HTML",
+      "new_serial_no": "276663",
+      "headline": "사회보장기본법 개정으로 정부 조직 개편 및 성평등 정책 강화",
+      "body": "이번 개정은 정부 조직 체계를 재설계하고 특정 부처에 집중된 권한을 분산하여 업무의 전문성을 강화하기 위한 것입니다. 또한, 기후위기와 인공지능 대전환 시대에 효과적으로 대응하기 위해 관련 부처의 기능을 조정하고 성평등 정책을 적극적으로 추진할 수 있는 기반을 마련하고자 합니다.\n\n○ 조문별 변경 내용\n- 제21조\n    · ① (개정): '여성가족부장관'에서 '성평등가족부장관'으로 명칭이 변경되었습니다.\n    · ② (개정): 교육부장관, 보건복지부장관 및 기획예산처장관이 관련 업무를 수행하게 됩니다.",
+      "overview": "이번 개정은 정부 조직 체계를 재설계하고 특정 부처에 집중된 권한을 분산하여 업무의 전문성을 강화하기 위한 것입니다. 또한, 기후위기와 인공지능 대전환 시대에 효과적으로 대응하기 위해 관련 부처의 기능을 조정하고 성평등 정책을 적극적으로 추진할 수 있는 기반을 마련하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "000204",
+            "law_name": "사회보장기본법",
+            "location_label": "제21조①",
+            "change_type": "개정",
+            "old_text": "① 위원회는 위원장 1명, 부위원장 3명과 행정안전부장관, 고용노동부장관, 여성가족부장관, 국토교통부장관을 포함한 30명 이내의 위원으로 구성한다.",
+            "new_text": "① 위원회는 위원장 1명, 부위원장 3명과 행정안전부장관, 고용노동부장관, 성평등가족부장관, 국토교통부장관을 포함한 30명 이내의 위원으로 구성한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'여성가족부장관,' → '성평등가족부장관,'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'여성가족부장관'에서 '성평등가족부장관'으로 명칭이 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000204",
+            "law_name": "사회보장기본법",
+            "location_label": "제21조②",
+            "change_type": "개정",
+            "old_text": "② 위원장은 국무총리가 되고 부위원장은 기획재정부장관, 교육부장관 및 보건복지부장관이 된다.",
+            "new_text": "② 위원장은 국무총리가 되고 부위원장은 교육부장관, 보건복지부장관 및 기획예산처장관이 된다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기획재정부장관, 교육부장관 및 보건복지부장관이' → '교육부장관, 보건복지부장관 및 기획예산처장관이'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관, 보건복지부장관 및 기획예산처장관이 관련 업무를 수행하게 됩니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제21조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

@@ -1,0 +1,483 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-08-03",
+  "period": {
+    "from_date": "2000-01-01",
+    "to_date": "2026-08-03"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "single-2001150-2100000255382",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "2001150"
+      ],
+      "laws": [
+        {
+          "law_id": "2001150",
+          "law_type": "행정규칙",
+          "law_name": "공공기관의 데이터베이스 표준화 지침",
+          "internal_name": "공공기관의 데이터베이스 표준화 지침",
+          "dept_codes": [],
+          "old_serial_no": "2100000255382",
+          "new_serial_no": "2100000255382",
+          "enforce_date": "2025-02-24",
+          "revision_type": "일부개정",
+          "revision_reason": "◇ 제ㆍ개정 이유 ○ 지침 내 세부 내용을 보완 및 현실화하고, 메타데이터 표준 관리항목을 조정하는 등 기관의 효율적 데이터 표준화를 지원하고자 함 ◇ 주요내용 가. 시스템 변경사항 반영 및 관리항목 정비 (제4조1항 등, 별표 제1호, 3호, 4호) - ‘품질ㆍ표준관리 통합시스템’신규, ‘정보자원관리시스템’변경 명칭 반영, 공통표준(별표1, 3), 메타데이터 관리항목(별표4) 개정 나. 표준관리 대상 명확화 (제4조1항4호 등, 제8조1항, 3항) - 표준관리 용어를 통일적으로 규정하고 각 기관에서 관리해야 하는 표준업무를 명확화 다. 메타시스템 관리를 위한 기관의 역할 추가 (제16조3항1호, 4항) - 메타정보 관리를 위한 사전 프로세스(정보자원관리시스템 등록) 및 공통업무시스템 소관기관 명확화 라. ‘행정표준코드’, ‘공통업무시스템’의 정의를 추가하고, 조항 내 유사 문구 등 수정ㆍ삭제",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000255382&type=HTML",
+          "articles": [
+            {
+              "article_label": "제10조",
+              "clause_no": "⑥",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "⑥ 특정 공공기관이 구축ㆍ배포하여 다수 기관이 공통적으로 사용하는 표준시스템은 근거 법령에 따라 해당 시스템의 구축ㆍ운영의 책임이 있는 공공기관의 장이 해당 공공데이터베이스의 표준을 수립하여 적용하여야 한다. 다만, 구체적인 근거 법령이 부재한 경우 해당 정보시스템의 구축ㆍ운영을 전담하는 공공기관의 장이 해당 공공데이터베이스의 표준을 수립하여 적용하여야 한다.",
+              "new_text": "⑥ 특정 공공기관이 구축ㆍ배포하여 다수 기관이 공통적으로 사용하는 표준시스템(이하 ‘공통업무시스템’이라 한다)은 근거 법령에 따라 해당 시스템의 구축ㆍ운영의 책임이 있는 공공기관의 장이 해당 공공데이터베이스의 표준을 수립하여 적용하여야 한다. 다만, 구체적인 근거 법령이 부재한 경우 해당 정보시스템의 구축ㆍ운영을 전담하는 공공기관의 장이 해당 공공데이터베이스의 표준을 수립하여 적용하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제12조",
+              "clause_no": "③",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "③ 공통표준용어, 공통표준단어, 공통표준도메인의 관리항목은 별표 제3호의 공통표준용어 관리항목에 따른다.",
+              "new_text": "③ 공통표준용어, 공통표준단어, 공통표준도메인의 관리항목은 별표 제3호의 공통표준 관리항목에 따른다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제13조",
+              "clause_no": "③",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "③ 행정안전부장관은 공공기관의 장이 공공데이터베이스에 적용하는 등 공동으로 활용할 수 있도록 제정된 공통표준용어, 공통표준단어, 공통표준도메인 목록을 표준관리 통합시스템과 공공데이터 포털에 등록하여야 한다.",
+              "new_text": "③ 행정안전부장관은 공공기관의 장이 공공데이터베이스에 적용하는 등 공동으로 활용할 수 있도록 제정된 공통표준용어, 공통표준단어, 공통표준도메인 목록을 품질ㆍ표준관리 통합시스템과 공공데이터 포털에 등록하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제16조",
+              "clause_no": "③",
+              "item_label": "1.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "1. 메타데이터 표준 관리항목을 기관 메타데이터 관리시스템에 등록",
+              "new_text": "1. 정보시스템 관리정보(정보시스템유형, 정보시스템운영구분 등)를 정보자원관리시스템에 등록ㆍ관리",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제16조",
+              "clause_no": "③",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "2. 메타데이터 변경사항(신규, 수정, 삭제) 발생 시 최신 정보로 현행화",
+              "new_text": "2. 메타데이터 표준 관리항목을 기관 메타데이터 관리시스템에 등록",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제16조",
+              "clause_no": "③",
+              "item_label": "3.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "3. 메타데이터의 표준 관리항목 준수 여부 점검 및 개선 조치",
+              "new_text": "3. 메타데이터 변경사항(신규, 수정, 삭제) 발생 시 최신 정보로 현행화",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제16조",
+              "clause_no": "③",
+              "item_label": "4.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "4. 메타데이터의 표준 관리항목 준수 여부 점검 및 개선 조치",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제16조",
+              "clause_no": "④",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "④ 행정안전부장관은 중앙 메타데이터 관리시스템의 구축ㆍ운영을 위해 공공기관의 장에게 기관의 메타데이터 관리시스템과 연계 등의 협력을 요청할 수 있고, 요청받은 공공기관의 장은 특별한 사유가 없는 한 이에 따라야 한다.",
+              "new_text": "④ 공통업무시스템은 해당 시스템을 구축ㆍ배포한 공공기관이 메타데이터를 등록ㆍ관리하여야 한다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제16조",
+              "clause_no": "⑤",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "⑤ 중앙 메타데이터 관리시스템은 활용지원센터에서 운영ㆍ관리하며, 행정안전부장관은 운영ㆍ관리에 필요한 경비를 예산의 범위에서 지원할 수 있다.",
+              "new_text": "⑤ 행정안전부장관은 중앙 메타데이터 관리시스템의 구축ㆍ운영을 위해 공공기관의 장에게 기관의 메타데이터 관리시스템과 연계 등의 협력을 요청할 수 있고, 요청받은 공공기관의 장은 특별한 사유가 없는 한 이에 따라야 한다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제16조",
+              "clause_no": "⑥",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "⑥ 중앙 메타데이터 관리시스템은 활용지원센터에서 운영ㆍ관리하며, 행정안전부장관은 운영ㆍ관리에 필요한 경비를 예산의 범위에서 지원할 수 있다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제20조",
+              "clause_no": "",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "행정안전부장관은 「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 이 고시에 대하여 2023년 7월 1일 기준으로 매 3년이 되는 시점(매 3년째의 6월 30일까지를 말한다)마다 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+              "new_text": "행정안전부장관은 「훈령ㆍ예규 등의 발령 및 관리에 관한 규정」에 따라 이 고시에 대하여 2025년 1월 1일 기준으로 매 3년이 되는 시점(매 3년째의 12월 31일까지를 말한다)마다 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제2조",
+              "clause_no": "",
+              "item_label": "23.",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "23. “행정표준코드”란 「행정기관의 코드표준화 추진지침」에 따라 각급기관의 행정업무에 필요한 행정코드를 표준화하여 정해진 절차에 따라 제정, 고시한 행정코드를 말한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제3조",
+              "clause_no": "",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "이 지침은 공공데이터베이스 구축ㆍ운영, 메타데이터 등록ㆍ관리 등의 표준화 업무에 적용한다. 다만, 공공데이터베이스 표준화와 관련된 사항이 「공공데이터법」 제23조제1항에 따라 한국산업표준으로 제정되어 있는 경우에는 그러하지 아니한다.",
+              "new_text": "이 지침은 공공데이터베이스 구축ㆍ운영, 메타데이터 등록ㆍ관리 등의 표준화 업무에 적용한다. 다만, 공공데이터베이스 표준화와 관련된 사항이 「공공데이터법」 제23조제1항 단서에 따라 한국산업표준으로 제정되어 있는 경우에는 그러하지 아니한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제4조",
+              "clause_no": "①",
+              "item_label": "4.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "4. 공통표준용어의 제ㆍ개정 관리",
+              "new_text": "4. 공통표준의 제ㆍ개정 관리",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제4조",
+              "clause_no": "①",
+              "item_label": "8.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "8. 표준관리 통합시스템 구축 및 운영",
+              "new_text": "8. 품질ㆍ표준관리 통합시스템 구축 및 운영",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "①",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "2. 공통표준용어의 준수 관리",
+              "new_text": "2. 공통표준의 준수 관리",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "② 「공공데이터법」 제12조에 따른 공공데이터제공책임관 및 실무담당자는 소관기관의 제1항 각 호에 따른 공공데이터베이스 표준화 업무를 총괄하여 수행하여야 한다.",
+              "new_text": "② 「공공데이터법」 제12조에 따른 공공데이터제공책임관 및 실무담당자는 제1항 각 호에 따른 공공데이터베이스 표준화 업무를 총괄하여 수행하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "③",
+              "item_label": "2.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "2. 코드, 단어, 용어 및 도메인 등 표준 적용 및 점검 개선",
+              "new_text": "2. 메타데이터 관리, 표준 점검, 데이터 요청처리 등 기관 메타데이터 관리시스템을 통한 관리 및 현행화",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "③",
+              "item_label": "4.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "4. 산출물의 작성 및 관리",
+              "new_text": "4. 정보화사업 추진 시 소관 공공데이터베이스 표준 적용 관리",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제5조",
+              "clause_no": "③",
+              "item_label": "6.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "6. 표준관리 통합시스템을 통한 공공데이터베이스 표준관리 및 현행화",
+              "new_text": "6. 그 밖에 이 지침에서 정하는 공공데이터베이스 표준화의 지원에 관한 사항",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제6조",
+              "clause_no": "①",
+              "item_label": "4.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "4. 중앙 메타데이터 관리시스템, 표준관리 통합시스템 등의 운영 및 관리 지원",
+              "new_text": "4. 중앙 메타데이터 관리시스템, 품질ㆍ표준관리 통합시스템 등의 운영 및 관리 지원",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제6조",
+              "clause_no": "①",
+              "item_label": "6.",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "6. 공통표준용어 후보군 발굴 등 공통표준용어 표준안 수립의 지원",
+              "new_text": "6. 공통표준용어 후보군 발굴 등 공통표준 표준안 수립의 지원",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제8조",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "① 공공기관의 장은 코드, 용어 및 도메인 표준 수립을 위해 다음 각 호의 항목을 별표 제1호에 따라 데이터 표준사전으로 작성하여야 하고 최신성을 유지하여야 한다.",
+              "new_text": "① 공공기관의 장은 기관표준과 DB표준 수립을 위해 다음 각 호의 항목을 별표 제1호에 따라 데이터 표준사전으로 작성하여야 하고 최신성을 유지하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제8조",
+              "clause_no": "③",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "③ 공공기관의 장은 기관표준이 새롭게 생성되거나 변경될 경우 표준관리 통합시스템에 등록하여야 하며, 등록된 정보는 최신성을 유지하여야 한다.",
+              "new_text": "③ 공공기관의 장은 기관표준과 DB표준이 새롭게 생성되거나 변경될 경우 품질ㆍ표준관리 통합시스템에 등록하여야 하며, 등록된 정보는 최신성을 유지하여야 한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제8조",
+              "clause_no": "④",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "④ 공공기관의 장은 제3항에 따라 추가된 기관표준용어의 공동활용이 필요하다고 판단되는 경우 공통표준용어로 제정될 수 있도록 표준관리 통합시스템을 통해 행정안전부장관에게 신청할 수 있다.",
+              "new_text": "④ 공공기관의 장은 제3항에 따라 추가된 기관표준용어의 공동활용이 필요하다고 판단되는 경우 공통표준용어로 제정될 수 있도록 품질ㆍ표준관리 통합시스템을 통해 행정안전부장관에게 신청할 수 있다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {
+            "제2조": [
+              "1.",
+              "2.",
+              "3.",
+              "4.",
+              "5.",
+              "6.",
+              "7.",
+              "8.",
+              "9.",
+              "10.",
+              "11.",
+              "12.",
+              "13.",
+              "14.",
+              "15.",
+              "16.",
+              "17.",
+              "18.",
+              "19.",
+              "20.",
+              "21.",
+              "22."
+            ],
+            "제4조": [
+              "①1.",
+              "①2.",
+              "①3.",
+              "①5.",
+              "①6.",
+              "①7.",
+              "①9.",
+              "②"
+            ],
+            "제5조": [
+              "①3.",
+              "①4.",
+              "①5.",
+              "①6.",
+              "③1."
+            ],
+            "제6조": [
+              "①1.",
+              "①2.",
+              "①3.",
+              "①5.",
+              "①7.",
+              "①8.",
+              "②"
+            ],
+            "제8조": [
+              "①1.",
+              "①2.",
+              "①3.",
+              "①4.",
+              "①5.",
+              "②",
+              "⑤"
+            ],
+            "제10조": [
+              "①",
+              "②",
+              "③",
+              "④",
+              "⑤"
+            ],
+            "제12조": [
+              "①",
+              "②"
+            ],
+            "제13조": [
+              "①",
+              "②",
+              "④",
+              "⑤"
+            ],
+            "제16조": [
+              "①",
+              "②"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "law_id": "2001150",
+      "law_name": "공공기관의 데이터베이스 표준화 지침",
+      "new_serial_no": "2100000255382",
+      "reason": "0건실패",
+      "detail": "본문검색: '라. 품질ㆍ표준관리 통합시스템을 통한 공공데…'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000255382&type=HTML",
+      "guards_tried": [
+        "본문검색: '라. 품질ㆍ표준관리 통합시스템을 통한 공공데…'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    },
+    {
+      "law_id": "2001150",
+      "law_name": "공공기관의 데이터베이스 표준화 지침",
+      "new_serial_no": "2100000255382",
+      "reason": "중복실패",
+      "detail": "본문검색: '공공데이터베이스 산출물의 작성 및 관리'; 중복 2건 → 번호결합 재검색: '3. 공공데이터베이스 산출물의 작성 및 관리…'; 번호결합 재검색이 0건으로 악화 → 원 중복 상태로 실패 처리",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000255382&type=HTML",
+      "guards_tried": [
+        "본문검색: '공공데이터베이스 산출물의 작성 및 관리'",
+        "중복 2건 → 번호결합 재검색: '3. 공공데이터베이스 산출물의 작성 및 관리…'",
+        "번호결합 재검색이 0건으로 악화 → 원 중복 상태로 실패 처리"
+      ]
+    },
+    {
+      "law_id": "2001150",
+      "law_name": "공공기관의 데이터베이스 표준화 지침",
+      "new_serial_no": "2100000255382",
+      "reason": "중복실패",
+      "detail": "본문검색: '품질ㆍ표준관리 통합시스템을 통한 공공데이터베…'; 중복 2건 → 번호결합 재검색: '5. 품질ㆍ표준관리 통합시스템을 통한 공공데…'; 번호결합 재검색이 0건으로 악화 → 원 중복 상태로 실패 처리",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000255382&type=HTML",
+      "guards_tried": [
+        "본문검색: '품질ㆍ표준관리 통합시스템을 통한 공공데이터베…'",
+        "중복 2건 → 번호결합 재검색: '5. 품질ㆍ표준관리 통합시스템을 통한 공공데…'",
+        "번호결합 재검색이 0건으로 악화 → 원 중복 상태로 실패 처리"
+      ]
+    }
+  ],
+  "no_comparison": [
+    {
+      "law_id": "35080",
+      "law_name": "하도급거래공정화 지침",
+      "new_serial_no": "2100000251404",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000251404&type=HTML"
+    },
+    {
+      "law_id": "37812",
+      "law_name": "중소기업자간 경쟁제품 직접생산 확인기준",
+      "new_serial_no": "2100000268206",
+      "reason": "폐지제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000268206&type=HTML"
+    },
+    {
+      "law_id": "33891",
+      "law_name": "정보보호시스템 평가·인증 등에 관한 고시",
+      "new_serial_no": "2100000215508",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000215508&type=HTML"
+    },
+    {
+      "law_id": "006295",
+      "law_name": "공공기관의 정보공개에 관한 법률 시행규칙",
+      "new_serial_no": "273809",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=273809&type=HTML"
+    },
+    {
+      "law_id": "008113",
+      "law_name": "지능정보화 기본법 시행규칙",
+      "new_serial_no": "267147",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=267147&type=HTML"
+    },
+    {
+      "law_id": "014862",
+      "law_name": "가족돌봄 등 위기아동ㆍ청년 지원에 관한 법률",
+      "new_serial_no": "270215",
+      "reason": "제정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=270215&type=HTML"
+    },
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    },
+    {
+      "law_id": "2054105",
+      "law_name": "중소 소프트웨어사업자의 사업 참여 지원에 관한 지침",
+      "new_serial_no": "2100000274532",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000274532&type=HTML"
+    },
+    {
+      "law_id": "42430",
+      "law_name": "행정업무용 표준 관리규정",
+      "new_serial_no": "2100000254490",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000254490&type=HTML"
+    }
+  ]
+}

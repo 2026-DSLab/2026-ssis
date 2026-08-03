@@ -67,6 +67,7 @@ class AnthropicClient:
     def __init__(self, settings: LLMSettings):
         try:
             import anthropic
+            import httpx
         except ImportError as exc:  # pragma: no cover
             raise LLMError(
                 "anthropic 패키지가 없습니다. `pip install anthropic` 를 실행하세요."
@@ -77,6 +78,9 @@ class AnthropicClient:
             api_key=settings.api_key,
             timeout=settings.timeout,
             max_retries=settings.max_retries,
+            # ★ OpenAIClient와 같은 이유(2026-07-30 실측) — lawtrack.api.client.
+            # LawApiClient가 이미 내린 것과 같은 결정.
+            http_client=httpx.Client(verify=False),
         )
 
     def _base_kwargs(self, *, max_tokens: int, thinking: bool) -> dict[str, Any]:
@@ -172,6 +176,7 @@ class OpenAIClient:
 
     def __init__(self, settings: LLMSettings):
         try:
+            import httpx
             import openai
         except ImportError as exc:  # pragma: no cover
             raise LLMError(
@@ -183,10 +188,26 @@ class OpenAIClient:
             "api_key": settings.api_key,
             "timeout": settings.timeout,
             "max_retries": settings.max_retries,
+            # ★ lawtrack.api.client.LawApiClient 와 동일한 이유(2026-07-30
+            # 실측): 개발 환경 네트워크가 HTTPS 를 중간에서 검사하며 자체
+            # 인증서로 재서명해, 표준 CA 저장소로는 검증에 실패한다(구글·
+            # OpenAI·법제처 API 등 목적지 무관하게 전부 동일 증상 확인).
+            # 이 환경에서는 verify=True 로 두면 모든 LLM 호출이 그냥
+            # 실패한다 — 기존 LawApiClient 가 이미 내린 것과 같은 결정을
+            # 여기서도 따른다.
+            "http_client": httpx.Client(verify=False),
         }
         if settings.base_url:
             # OpenRouter 등 OpenAI 호환 중계 서비스용
             kwargs["base_url"] = settings.base_url
+        if settings.provider == "openrouter":
+            # 필수는 아니지만 OpenRouter 가 요청 출처를 식별하는 데 쓰는
+            # 표준 헤더 — https://openrouter.ai/docs 권장사항. 없어도
+            # 호출은 되지만, 순위 집계 등에서 "unknown"으로 잡힌다.
+            kwargs["default_headers"] = {
+                "HTTP-Referer": "https://github.com/2026-DSLab/2026-ssis",
+                "X-Title": "2026-ssis lawtrack summarizer",
+            }
         self._client = openai.OpenAI(**kwargs)
         self._token_param = "max_completion_tokens"
         self._json_mode: str | None = None
@@ -368,7 +389,9 @@ def build_client(settings: LLMSettings, *, dry_run: bool = False, echo: bool = F
     """
     if dry_run:
         return DryRunClient(echo=echo)
-    if settings.provider == "openai":
+    if settings.provider in ("openai", "openrouter"):
+        # openrouter 는 OpenAI 호환 API 를 그대로 쓴다 — 다른 건 base_url뿐이고
+        # 그건 config.load_settings() 가 이미 채워 넣었다.
         return OpenAIClient(settings)
     if settings.provider == "anthropic":
         return AnthropicClient(settings)

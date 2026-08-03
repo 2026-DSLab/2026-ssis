@@ -1,0 +1,70 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-07-31",
+  "period": {
+    "from_date": "2025-04-22",
+    "to_date": "2026-08-01"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "single-000751-265845",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "000751"
+      ],
+      "laws": [
+        {
+          "law_id": "000751",
+          "law_type": "법률",
+          "law_name": "소프트웨어 진흥법",
+          "internal_name": "소프트웨어산업 진흥법",
+          "dept_codes": [],
+          "old_serial_no": "265845",
+          "new_serial_no": "265845",
+          "enforce_date": "2025-04-23",
+          "revision_type": "일부개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 과도한 형벌 규정으로 인한 민간 경제활동의 어려움을 경감하기 위하여 소프트웨어 품질인증 또는 소프트웨어프로세스 품질인증을 받지 아니하고 인증 표시 또는 이와 유사한 표시를 한 자에 대하여 종전에는 500만원 이하의 벌금에 처하였으나, 앞으로는 1천만원 이하의 과태료를 부과함. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=265845&type=HTML",
+          "articles": [
+            {
+              "article_label": "제77조",
+              "clause_no": "",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "① 제76조를 위반한 자는 3년 이하의 징역 또는 3천만원 이하의 벌금에 처한다.② 제20조제3항 또는 제21조제3항에 따른 인증을 받지 아니하고 인증 표시 또는 이와 유사한 표시를 한 자는 500만원 이하의 벌금에 처한다.",
+              "new_text": "제76조를 위반한 자는 3년 이하의 징역 또는 3천만원 이하의 벌금에 처한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제79조",
+              "clause_no": "①",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "① 제20조제3항 또는 제21조제3항에 따른 인증을 받지 아니하고 인증 표시 또는 이와 유사한 표시를 한 자에게는 1천만원 이하의 과태료를 부과한다.",
+              "match_status": "성공"
+            },
+            {
+              "article_label": "제79조",
+              "clause_no": "②",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "② 제1항에 따른 과태료는 대통령령으로 정하는 바에 따라 과학기술정보통신부장관이 부과ㆍ징수한다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {}
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}
