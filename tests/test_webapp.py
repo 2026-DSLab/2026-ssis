@@ -66,7 +66,7 @@ def test_index_shows_empty_state_when_no_batch():
     app = create_app(repo=_FakeRepo(batch_date=None))
     client = app.test_client()
 
-    resp = client.get("/")
+    resp = client.get("/summary")
 
     assert resp.status_code == 200
     assert "아직 생성된 주간 요약이 없습니다" in resp.get_data(as_text=True)
@@ -86,7 +86,7 @@ def test_index_renders_headline_and_article_row():
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
     client = app.test_client()
 
-    resp = client.get("/")
+    resp = client.get("/summary")
     html = resp.get_data(as_text=True)
 
     assert resp.status_code == 200
@@ -111,7 +111,7 @@ def test_index_shows_enforce_date_small_above_location():
         }
     ])]
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
+    html = app.test_client().get("/summary").get_data(as_text=True)
 
     assert '<div class="item-enforce-date">시행일 2026-07-10</div>' in html
 
@@ -124,7 +124,7 @@ def test_index_omits_enforce_date_line_when_missing():
         }
     ])]
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
+    html = app.test_client().get("/summary").get_data(as_text=True)
 
     assert "item-enforce-date" not in html
 
@@ -174,7 +174,7 @@ def test_index_bolds_only_changed_words_in_fulltext():
         }
     ])]
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
+    html = app.test_client().get("/summary").get_data(as_text=True)
 
     assert '<mark class="diff-changed">기획재정부</mark>' in html
     assert '<mark class="diff-changed">기획예산처</mark>' in html
@@ -207,7 +207,7 @@ def test_index_diff_bolds_leading_marker_matching_readable_text():
         }
     ])]
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
+    html = app.test_client().get("/summary").get_data(as_text=True)
 
     assert "<strong>5.</strong>" in html
     assert '<mark class="diff-changed">5년</mark>' in html
@@ -233,7 +233,7 @@ def test_index_no_diff_highlight_when_old_text_is_context():
         }
     ])]
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
+    html = app.test_client().get("/summary").get_data(as_text=True)
 
     assert '<mark class="diff-changed">' not in html
     assert "완전히 다른 새 문장입니다" in html
@@ -260,7 +260,7 @@ def test_index_deletion_shows_old_text_without_diff_or_placeholder():
         }
     ])]
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
+    html = app.test_client().get("/summary").get_data(as_text=True)
 
     # readable_text 필터가 선행 항 기호("①")를 굵게 감싸므로(2026-08-03
     # 후속 요청) 원문이 토막 없이 그대로 이어붙진 않는다 — 기호와 본문이
@@ -325,7 +325,7 @@ def test_index_shows_no_change_kind_even_though_change_type_is_amend():
         }
     ])]
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
+    html = app.test_client().get("/summary").get_data(as_text=True)
 
     assert "변경없음" in html
 
@@ -349,7 +349,7 @@ def test_index_never_renders_highlight_box():
         ],
     )]
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
-    html = app.test_client().get("/").get_data(as_text=True)
+    html = app.test_client().get("/summary").get_data(as_text=True)
 
     assert 'class="highlight-box"' not in html
     assert "확인이 필요한 항목" not in html
@@ -405,7 +405,7 @@ def test_index_period_mode_calls_live_check_with_key():
         return _period_result(window_key=window_key)
 
     app = create_app(repo=_FakeRepo(batch_date=None), live_check=fake_live_check)
-    resp = app.test_client().get("/?period=2w")
+    resp = app.test_client().get("/summary?period=2w")
 
     assert resp.status_code == 200
     assert calls == ["2w"]
@@ -416,7 +416,7 @@ def test_index_rejects_unknown_period():
         raise AssertionError("알 수 없는 기간이면 live_check가 호출되면 안 된다")
 
     app = create_app(repo=_FakeRepo(batch_date=None), live_check=fail_if_called)
-    resp = app.test_client().get("/?period=bogus")
+    resp = app.test_client().get("/summary?period=bogus")
 
     assert resp.status_code == 400
 
@@ -430,7 +430,7 @@ def test_index_period_renders_period_laws_not_batch_repo():
         repo=_FakeRepo(batch_date=date(2020, 1, 1)),  # period 모드에선 쓰이지 않아야 함
         live_check=lambda window_key: result,
     )
-    html = app.test_client().get("/?period=5d").get_data(as_text=True)
+    html = app.test_client().get("/summary?period=5d").get_data(as_text=True)
 
     assert "기간조회법" in html
     assert "기간 내 발견된 개정" in html
@@ -439,7 +439,7 @@ def test_index_period_renders_period_laws_not_batch_repo():
 def test_index_period_shows_period_label_and_range():
     result = _period_result(window_key="1m", from_date=date(2026, 6, 1), to_date=date(2026, 7, 1))
     app = create_app(repo=_FakeRepo(batch_date=None), live_check=lambda k: result)
-    html = app.test_client().get("/?period=1m").get_data(as_text=True)
+    html = app.test_client().get("/summary?period=1m").get_data(as_text=True)
 
     assert "최근 1개월" in html
     assert "2026-06-01" in html and "2026-07-01" in html
@@ -448,7 +448,7 @@ def test_index_period_shows_period_label_and_range():
 def test_index_period_empty_shows_period_specific_message():
     result = _period_result(laws=[])
     app = create_app(repo=_FakeRepo(batch_date=None), live_check=lambda k: result)
-    html = app.test_client().get("/?period=2w").get_data(as_text=True)
+    html = app.test_client().get("/summary?period=2w").get_data(as_text=True)
 
     assert "동안 감지된 개정사항이 없습니다" in html
     # 배치 모드 전용 안내(run_weekly.py 실행법)는 기간 모드에서 안 보여야 한다.
@@ -458,14 +458,14 @@ def test_index_period_empty_shows_period_specific_message():
 def test_index_period_shows_partial_error_note():
     result = _period_result(errors=["전자정부법(009199): API 오류"])
     app = create_app(repo=_FakeRepo(batch_date=None), live_check=lambda k: result)
-    html = app.test_client().get("/?period=5d").get_data(as_text=True)
+    html = app.test_client().get("/summary?period=5d").get_data(as_text=True)
 
     assert "1건 확인에 실패했습니다" in html
 
 
 def test_index_batch_mode_shows_no_period_error_note():
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=[_law_row()]))
-    html = app.test_client().get("/").get_data(as_text=True)
+    html = app.test_client().get("/summary").get_data(as_text=True)
 
     assert "확인에 실패했습니다" not in html
 

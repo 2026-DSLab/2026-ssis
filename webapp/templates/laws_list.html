@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>감시 대상 전문 보기 — 법인사이트</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="{{ url_for('home') }}">
+        <img class="brand-mark" src="{{ url_for('static', filename='img/logo.png') }}" alt="법인사이트 로고">
+        <span class="brand-text">법인사이트</span>
+      </a>
+      <div class="period-nav">
+        <a class="period-link" href="{{ url_for('index') }}">개정 요약</a>
+        <a class="period-link is-active" href="{{ url_for('laws_list') }}">전문 보기</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-layout">
+  <main class="content-col">
+    <section class="hero">
+      <h1>감시 대상 <span class="hero-accent">전문 보기</span></h1>
+      <p class="hero-sub">사회보장정보원이 감시하는 법령·행정규칙 {{ entries|length }}건입니다. 클릭하면 개정 전/후 전문을 나란히 볼 수 있어요.</p>
+    </section>
+
+    <section class="toolbar">
+      <div class="search-wrap">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M11.5 11.5L15 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <input type="search" id="law-search" placeholder="법령명으로 검색..." autocomplete="off">
+      </div>
+      <nav class="kind-nav" id="kind-chips">
+        {% for kind in kinds %}
+        <button type="button" class="kind-nav-link" data-kind="{{ kind }}">{{ kind }}</button>
+        {% endfor %}
+      </nav>
+    </section>
+
+    <div class="law-list" id="law-list">
+      {% for e in entries %}
+      <a class="law-row" href="{{ url_for('law_detail', law_id=e.law_id) }}"
+         data-law-name="{{ e.official_name|lower }}" data-law-type="{{ e.law_type }}">
+        <span class="law-row-type">{{ e.law_type }}</span>
+        <span class="law-row-name">{{ e.official_name }}</span>
+        <span class="law-row-arrow">전문 보기 →</span>
+      </a>
+      {% else %}
+      <p class="empty-state">감시 대상이 없습니다.</p>
+      {% endfor %}
+    </div>
+  </main>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("law-search");
+    const rows = document.querySelectorAll(".law-row");
+    const chips = document.querySelectorAll("#kind-chips .kind-nav-link");
+    let activeKind = null;
+
+    function applyFilter() {
+      const q = (searchInput.value || "").trim().toLowerCase();
+      rows.forEach((row) => {
+        const matchesSearch = !q || row.dataset.lawName.includes(q);
+        const matchesKind = !activeKind || row.dataset.lawType === activeKind;
+        row.style.display = (matchesSearch && matchesKind) ? "" : "none";
+      });
+    }
+
+    searchInput?.addEventListener("input", applyFilter);
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const kind = chip.dataset.kind;
+        activeKind = activeKind === kind ? null : kind;
+        chips.forEach((c) => c.classList.toggle("is-active", c.dataset.kind === activeKind));
+        applyFilter();
+      });
+    });
+  </script>
+</body>
+</html>

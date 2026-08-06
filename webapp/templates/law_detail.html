@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ entry.official_name }} 전문 비교 — 법인사이트</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="{{ url_for('home') }}">
+        <img class="brand-mark" src="{{ url_for('static', filename='img/logo.png') }}" alt="법인사이트 로고">
+        <span class="brand-text">법인사이트</span>
+      </a>
+      <div class="period-nav">
+        <a class="period-link" href="{{ url_for('index') }}">개정 요약</a>
+        <a class="period-link is-active" href="{{ url_for('laws_list') }}">전문 보기</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-layout">
+  <main class="content-col">
+    <section class="hero">
+      <a class="back-link" href="{{ url_for('laws_list') }}">← 목록으로</a>
+      <h1>{{ entry.official_name }}</h1>
+      <p class="hero-sub">{{ entry.law_type }} · 현재 버전 {{ entry.last_serial_no }}</p>
+    </section>
+
+    {% if no_earlier_version %}
+      <div class="period-error-note">이 법의 가장 오래된 버전입니다 — 더 이전 버전이 없습니다.</div>
+    {% endif %}
+    {% if show_expand_button %}
+      <a class="download-btn compare-expand-btn" href="{{ url_for('law_detail', law_id=entry.law_id, depth=3) }}">
+        <span>전전 버전 보기 →</span>
+      </a>
+    {% endif %}
+
+    {% if columns|length >= 2 %}
+      <div class="diff-legend">
+        <span class="diff-legend-item"><span class="diff-legend-dot diff-legend-dot--old"></span>개정 전 — 바뀐 부분</span>
+        <span class="diff-legend-item"><span class="diff-legend-dot diff-legend-dot--new"></span>개정 후 — 바뀐 부분</span>
+        <span class="diff-legend-item"><span class="diff-legend-dot diff-legend-dot--added"></span>신설된 조문</span>
+        <span class="diff-legend-item"><span class="diff-legend-dot diff-legend-dot--removed"></span>삭제된 조문</span>
+      </div>
+    {% endif %}
+
+    <!-- 전문 통합 검색 — 개정 전/후(있으면 전전까지) 모든 열을 한 번에
+         뒤진다. 서버 왕복 없이 이미 그려진 DOM 안에서 클라이언트가
+         텍스트 노드만 찾아 <mark>로 감싼다(diff 강조용 태그는 그대로
+         두고 건드리지 않는다). -->
+    <div class="compare-search-bar">
+      <div class="search-wrap compare-search-input-wrap">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M11.5 11.5L15 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <input type="search" id="compare-search" placeholder="조문 내용 검색... (Enter: 다음, Shift+Enter: 이전)" autocomplete="off">
+      </div>
+      <span class="compare-search-count" id="compare-search-count"></span>
+      <button type="button" class="compare-search-nav" id="compare-search-prev" aria-label="이전 결과">↑</button>
+      <button type="button" class="compare-search-nav" id="compare-search-next" aria-label="다음 결과">↓</button>
+    </div>
+
+    <div class="compare-grid compare-grid--{{ columns|length }}">
+      {% for col in columns %}
+        <div class="compare-col {{ 'fulltext-col--' + col.diff_role if col.diff_role else '' }}">
+          <div class="compare-col-head {{ 'is-current' if col.is_current else '' }}">
+            <span class="compare-col-title">{{ col.label }}</span>
+            <span class="compare-serial" title="일련번호 {{ col.serial_no }}">{{ col.date_label }}</span>
+          </div>
+          <div class="compare-col-body">
+            {% for art in col.articles %}
+              <div class="compare-article">
+                <h3 class="compare-article-label">{{ art.article_label }}</h3>
+                {% for line in art.lines %}
+                  <p class="compare-line compare-line--{{ line.status }}">{{ line.html }}</p>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="compare-empty">전문 내용을 찾지 못했습니다.</p>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </main>
+  </div>
+
+  <script>
+    (function () {
+      const input = document.getElementById("compare-search");
+      if (!input) return;
+      const countEl = document.getElementById("compare-search-count");
+      let matches = [];
+      let activeIndex = -1;
+
+      function clearHighlights() {
+        document.querySelectorAll("mark.search-hit").forEach((mark) => {
+          const parent = mark.parentNode;
+          parent.replaceChild(document.createTextNode(mark.textContent), mark);
+          parent.normalize();
+        });
+      }
+
+      function highlightIn(root, query) {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+        const targets = [];
+        let node;
+        while ((node = walker.nextNode())) {
+          if (node.nodeValue && node.nodeValue.toLowerCase().includes(query)) targets.push(node);
+        }
+        targets.forEach((node) => {
+          const text = node.nodeValue;
+          const lower = text.toLowerCase();
+          const frag = document.createDocumentFragment();
+          let pos = 0, idx;
+          while ((idx = lower.indexOf(query, pos)) !== -1) {
+            if (idx > pos) frag.appendChild(document.createTextNode(text.slice(pos, idx)));
+            const mark = document.createElement("mark");
+            mark.className = "search-hit";
+            mark.textContent = text.slice(idx, idx + query.length);
+            frag.appendChild(mark);
+            pos = idx + query.length;
+          }
+          if (pos < text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
+          node.parentNode.replaceChild(frag, node);
+        });
+      }
+
+      function updateActive() {
+        matches.forEach((m, i) => m.classList.toggle("is-active", i === activeIndex));
+        if (activeIndex >= 0) matches[activeIndex].scrollIntoView({ block: "center", behavior: "smooth" });
+        countEl.textContent = matches.length ? `${activeIndex + 1}/${matches.length}` : (input.value ? "0건" : "");
+      }
+
+      function runSearch() {
+        clearHighlights();
+        const query = input.value.trim().toLowerCase();
+        if (!query) { matches = []; activeIndex = -1; updateActive(); return; }
+        document.querySelectorAll(".compare-line, .compare-article-label").forEach((el) => highlightIn(el, query));
+        matches = Array.from(document.querySelectorAll("mark.search-hit"));
+        activeIndex = matches.length ? 0 : -1;
+        updateActive();
+      }
+
+      function goTo(delta) {
+        if (!matches.length) return;
+        activeIndex = (activeIndex + delta + matches.length) % matches.length;
+        updateActive();
+      }
+
+      let debounceTimer;
+      input.addEventListener("input", () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(runSearch, 150);
+      });
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") { e.preventDefault(); goTo(e.shiftKey ? -1 : 1); }
+      });
+      document.getElementById("compare-search-prev")?.addEventListener("click", () => goTo(-1));
+      document.getElementById("compare-search-next")?.addEventListener("click", () => goTo(1));
+    })();
+  </script>
+</body>
+</html>

@@ -504,3 +504,18 @@ def changed_articles(articles: list[ArticleUnit]) -> list[ArticleUnit]:
     (세 가지 서로 다른 개정 유형에서 100% 일치 확인됨)
     """
     return [a for a in articles if a.changed]
+
+
+def searchable_units_for(kind: str, raw: dict) -> list[SearchUnit]:
+    """전문 JSON(raw) → SearchUnit 목록. kind에 따라 법령/행정규칙 파싱
+    경로가 다르다는 걸 호출부(webapp의 전문 비교 페이지 등)가 몰라도
+    되게 감싼다.
+
+    법령은 parse_articles()가 조/항/호/목을 구조화한 ArticleUnit을
+    돌려주므로 flatten_searchable()로 한 번 더 평탄화해야 하고,
+    행정규칙은 parse_admrul_units()가 이미 평탄화된 SearchUnit을 바로
+    돌려준다 — 이 비대칭을 여기서 흡수한다.
+    """
+    if kind == "admrul":
+        return parse_admrul_units(raw)
+    return flatten_searchable(parse_articles(raw))

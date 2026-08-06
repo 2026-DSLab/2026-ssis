@@ -1,0 +1,405 @@
+"""webapp/laws.py — 전문 비교 페이지(/laws, /laws/<law_id>) 라우트 테스트.
+
+실 DB/API 없이 돈다. watchlist_repo/version_repo/client_factory를
+create_app()에 주입하고, lawtrack.history의 fetch_* 함수는
+monkeypatch로 대체한다(test_history.py와 같은 방식).
+"""
+
+from __future__ import annotations
+
+from datetime import date
+
+import lawtrack.history as history
+from lawtrack.api.fulltext import FullTextResult
+from lawtrack.api.oldnew import OldNewResult, VersionInfo
+from lawtrack.db.repo import WatchlistEntry
+from webapp.app import create_app
+
+
+class _FakeWatchlistRepo:
+    def __init__(self, entries: list[WatchlistEntry]):
+        self._entries = {e.law_id: e for e in entries}
+
+    def active(self):
+        return [e for e in self._entries.values() if e.status == "현행"]
+
+    def get(self, law_id):
+        return self._entries.get(law_id)
+
+
+class _FakeVersionRepo:
+    def __init__(self):
+        self.store: dict[tuple[str, str, str], dict] = {}
+
+    def fetch(self, kind, doc_id, serial_no):
+        return self.store.get((kind, doc_id, serial_no))
+
+    def insert_law(self, doc_name, doc_id, serial_no, full_text):
+        self.store[("law", doc_id, serial_no)] = full_text
+
+    def insert_admrul(self, doc_name, doc_id, serial_no, full_text):
+        self.store[("admrul", doc_id, serial_no)] = full_text
+
+
+class _FakeClient:
+    closed = False
+
+    def close(self):
+        self.closed = True
+
+
+def _entry(**kw) -> WatchlistEntry:
+    base = dict(
+        law_id="009199", law_type="법률", official_name="전자정부법",
+        status="현행", last_serial_no="268103",
+    )
+    base.update(kw)
+    return WatchlistEntry(**base)
+
+
+def _law_raw(marker: str, *, article_no: str = "1") -> dict:
+    return {
+        "법령": {"조문": {"조문단위": [{
+            "조문번호": article_no, "조문가지번호": "",
+            "조문내용": f"제{article_no}조(목적) {marker}", "조문제목": "목적", "조문변경여부": "N",
+        }]}}
+    }
+
+
+def _version(serial_no: str) -> VersionInfo:
+    return VersionInfo(serial_no, "src", "이름", "20260101", "20251201", "1", "일부개정", False)
+
+
+def _app(entries, monkeypatch, *, oldnew_map=None, fulltext_by_serial=None):
+    oldnew_map = oldnew_map or {}
+    fulltext_by_serial = fulltext_by_serial or {}
+
+    def fake_oldnew(client, mst):
+        return oldnew_map[mst]
+
+    def fake_fulltext(client, mst):
+        raw = fulltext_by_serial[mst]
+        return FullTextResult(raw=raw, serial_no=mst, source_id="X", name="X", revision_reason="", revision_text="")
+
+    monkeypatch.setattr(history, "fetch_law_oldnew", fake_oldnew)
+    monkeypatch.setattr(history, "fetch_law_fulltext", fake_fulltext)
+
+    return create_app(
+        watchlist_repo=_FakeWatchlistRepo(entries),
+        version_repo=_FakeVersionRepo(),
+        law_api_client_factory=lambda: _FakeClient(),
+    )
+
+
+def test_laws_list_shows_all_active_entries():
+    app = create_app(
+        watchlist_repo=_FakeWatchlistRepo([_entry(law_id="009199", official_name="전자정부법")]),
+        version_repo=_FakeVersionRepo(),
+        law_api_client_factory=lambda: _FakeClient(),
+    )
+    resp = app.test_client().get("/laws")
+
+    assert resp.status_code == 200
+    assert "전자정부법" in resp.get_data(as_text=True)
+
+
+def test_laws_list_excludes_non_active_entries():
+    app = create_app(
+        watchlist_repo=_FakeWatchlistRepo([
+            _entry(law_id="1", official_name="현행법", status="현행"),
+            _entry(law_id="2", official_name="폐지법", status="폐지"),
+        ]),
+        version_repo=_FakeVersionRepo(),
+        law_api_client_factory=lambda: _FakeClient(),
+    )
+    html = app.test_client().get("/laws").get_data(as_text=True)
+
+    assert "현행법" in html
+    assert "폐지법" not in html
+
+
+def test_law_detail_404_for_unknown_law_id():
+    app = create_app(
+        watchlist_repo=_FakeWatchlistRepo([]),
+        version_repo=_FakeVersionRepo(),
+        law_api_client_factory=lambda: _FakeClient(),
+    )
+    resp = app.test_client().get("/laws/999999")
+
+    assert resp.status_code == 404
+
+
+def test_law_detail_shows_two_columns_by_default(monkeypatch):
+    """★ 옛날/새 문구를 같은 위치(제1조)에 둬서 강조 대상(어절 diff)이
+    되게 한다 — 바뀐 단어만 <mark>로 쪼개져도 "옛날"/"새"라는 단어
+    자체는 그대로 남으므로, 그 단어들로 존재를 확인한다("옛날 문구"
+    처럼 공백 포함 통짜로 찾으면 마크 태그가 중간에 끼어들어 실패한다)."""
+    app = _app(
+        [_entry()], monkeypatch,
+        oldnew_map={"268103": OldNewResult(True, "", _version("245293"), _version("268103"))},
+        fulltext_by_serial={
+            "245293": _law_raw("옛날문구"),
+            "268103": _law_raw("새문구"),
+        },
+    )
+    html = app.test_client().get("/laws/009199").get_data(as_text=True)
+
+    assert "옛날문구" in html
+    assert "새문구" in html
+    assert "전전 버전 보기" in html  # depth=2일 땐 더보기 버튼이 항상 보여야 함
+    assert "가장 오래된 버전" not in html
+
+
+def test_law_detail_depth_3_shows_three_columns(monkeypatch):
+    """세 버전을 서로 다른 조번호에 둬서(제1/2/3조) 강조 매칭 대상이
+    안 되게 한다 — 이 테스트의 관심사는 강조가 아니라 "3개 버전이 각자
+    받아온 내용 그대로 뜨는가"뿐이라, 어절 diff에 얽히지 않게 한다."""
+    app = _app(
+        [_entry()], monkeypatch,
+        oldnew_map={
+            "268103": OldNewResult(True, "", _version("245293"), _version("268103")),
+            "245293": OldNewResult(True, "", _version("239279"), _version("245293")),
+        },
+        fulltext_by_serial={
+            "239279": _law_raw("가나다라마", article_no="1"),
+            "245293": _law_raw("바사아자차", article_no="2"),
+            "268103": _law_raw("카타파하까", article_no="3"),
+        },
+    )
+    html = app.test_client().get("/laws/009199?depth=3").get_data(as_text=True)
+
+    assert "가나다라마" in html
+    assert "바사아자차" in html
+    assert "카타파하까" in html
+
+
+def test_law_detail_depth_3_shows_notice_when_no_earlier_version(monkeypatch):
+    """실측 확인된 체인의 끝(제정본) 케이스 — 오류가 아니라 안내문구여야 한다."""
+    app = _app(
+        [_entry()], monkeypatch,
+        oldnew_map={
+            "268103": OldNewResult(False, "no_comparison_field", VersionInfo("", "", "", "", "", "", "", False), _version("268103")),
+        },
+        fulltext_by_serial={"268103": _law_raw("유일한 버전")},
+    )
+    html = app.test_client().get("/laws/009199?depth=3").get_data(as_text=True)
+
+    assert "유일한 버전" in html
+    assert "더 이전 버전이 없습니다" in html
+
+
+def test_law_detail_caches_fetched_version_in_repo(monkeypatch):
+    """처음 방문 시 받아온 버전이 documents(가짜 repo)에 저장되는지."""
+    version_repo = _FakeVersionRepo()
+
+    def fake_oldnew(client, mst):
+        return OldNewResult(True, "", _version("245293"), _version("268103"))
+
+    def fake_fulltext(client, mst):
+        return FullTextResult(raw=_law_raw(mst), serial_no=mst, source_id="X", name="X", revision_reason="", revision_text="")
+
+    monkeypatch.setattr(history, "fetch_law_oldnew", fake_oldnew)
+    monkeypatch.setattr(history, "fetch_law_fulltext", fake_fulltext)
+
+    app = create_app(
+        watchlist_repo=_FakeWatchlistRepo([_entry()]),
+        version_repo=version_repo,
+        law_api_client_factory=lambda: _FakeClient(),
+    )
+    app.test_client().get("/laws/009199")
+
+    assert version_repo.fetch("law", "009199", "245293") is not None
+    assert version_repo.fetch("law", "009199", "268103") is not None
+
+
+def test_law_detail_admrul_kind_uses_admrul_oldnew(monkeypatch):
+    """watchlist.law_type='행정규칙'이면 admrul 전용 API 경로를 타야 한다
+    (실측: MST=/ID= 파라미터를 잘못 맞추면 엉뚱한 응답이 온다)."""
+    calls = []
+
+    def fail_if_law_oldnew_called(client, mst):
+        raise AssertionError("행정규칙인데 법령용 oldAndNew가 불렸다")
+
+    def fake_admrul_oldnew(client, sid):
+        calls.append(sid)
+        return OldNewResult(True, "", _version("2100000273620"), _version("2100000280340"))
+
+    def fake_admrul_fulltext(client, sid):
+        return FullTextResult(
+            raw={"AdmRulService": {"조문내용": [f"제1조(목적) {sid}"]}},
+            serial_no=sid, source_id="X", name="X", revision_reason="", revision_text="",
+        )
+
+    monkeypatch.setattr(history, "fetch_law_oldnew", fail_if_law_oldnew_called)
+    monkeypatch.setattr(history, "fetch_admrul_oldnew", fake_admrul_oldnew)
+    monkeypatch.setattr(history, "fetch_admrul_fulltext", fake_admrul_fulltext)
+
+    app = create_app(
+        watchlist_repo=_FakeWatchlistRepo([
+            _entry(law_id="34470", law_type="행정규칙", official_name="계약집행기준",
+                   last_serial_no="2100000280340"),
+        ]),
+        version_repo=_FakeVersionRepo(),
+        law_api_client_factory=lambda: _FakeClient(),
+    )
+    resp = app.test_client().get("/laws/34470")
+
+    assert resp.status_code == 200
+    assert calls == ["2100000280340"]
+
+
+def test_law_detail_404_when_no_serial_no_recorded():
+    app = create_app(
+        watchlist_repo=_FakeWatchlistRepo([_entry(last_serial_no=None)]),
+        version_repo=_FakeVersionRepo(),
+        law_api_client_factory=lambda: _FakeClient(),
+    )
+    resp = app.test_client().get("/laws/009199")
+
+    assert resp.status_code == 404
+
+
+def test_law_detail_closes_api_client_even_on_error(monkeypatch):
+    client = _FakeClient()
+
+    def raise_error(*a, **kw):
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(history, "fetch_law_oldnew", raise_error)
+
+    app = create_app(
+        watchlist_repo=_FakeWatchlistRepo([_entry()]),
+        version_repo=_FakeVersionRepo(),
+        law_api_client_factory=lambda: client,
+    )
+    app.test_client().get("/laws/009199")  # 500이 나든 말든, 관심사는 client.close() 호출 여부
+
+    assert client.closed is True
+
+
+def _law_raw_multi(articles: list[tuple[str, str]]) -> dict:
+    """[(조번호, marker), ...] -> 여러 조문을 담은 raw JSON."""
+    return {
+        "법령": {"조문": {"조문단위": [
+            {
+                "조문번호": no, "조문가지번호": "",
+                "조문내용": f"제{no}조(목적) {marker}", "조문제목": "목적", "조문변경여부": "N",
+            }
+            for no, marker in articles
+        ]}}
+    }
+
+
+class TestDiffHighlight:
+    """★ 사용자 요청(2026-08-05): 개정 요약 페이지("개정 전/개정 후"
+    색 강조)와 같은 방식으로, 전문 비교 페이지도 뭐가 바뀌었는지 색으로
+    보여달라는 요청. location_label이 같은데 텍스트만 다르면 어절 단위
+    강조(changed), 한쪽에만 있으면 그 줄 전체를 신설/삭제로 표시한다."""
+
+    def test_same_location_different_text_gets_word_level_marks(self, monkeypatch):
+        app = _app(
+            [_entry()], monkeypatch,
+            oldnew_map={"268103": OldNewResult(True, "", _version("245293"), _version("268103"))},
+            fulltext_by_serial={
+                "245293": _law_raw_multi([("1", "대한올림픽위원회 소관")]),
+                "268103": _law_raw_multi([("1", "대한체육회 소관")]),
+            },
+        )
+        html = app.test_client().get("/laws/009199").get_data(as_text=True)
+
+        assert 'class="diff-changed"' in html
+        assert "fulltext-col--old" in html
+        assert "fulltext-col--new" in html
+        assert "compare-line--removed" not in html
+        assert "compare-line--added" not in html
+
+    def test_new_only_location_marked_as_added(self, monkeypatch):
+        app = _app(
+            [_entry()], monkeypatch,
+            oldnew_map={"268103": OldNewResult(True, "", _version("245293"), _version("268103"))},
+            fulltext_by_serial={
+                "245293": _law_raw_multi([("1", "원래 있던 조문")]),
+                "268103": _law_raw_multi([("1", "원래 있던 조문"), ("2", "새로 생긴 조문")]),
+            },
+        )
+        html = app.test_client().get("/laws/009199").get_data(as_text=True)
+
+        assert 'compare-line--added' in html
+        assert "새로 생긴 조문" in html
+        # 안 바뀐 제1조는 강조가 없어야 한다("same" 상태 유지)
+        assert 'compare-line--same">원래 있던 조문' in html or 'compare-line--same">' in html
+
+    def test_old_only_location_marked_as_removed(self, monkeypatch):
+        app = _app(
+            [_entry()], monkeypatch,
+            oldnew_map={"268103": OldNewResult(True, "", _version("245293"), _version("268103"))},
+            fulltext_by_serial={
+                "245293": _law_raw_multi([("1", "남는 조문"), ("2", "없어질 조문")]),
+                "268103": _law_raw_multi([("1", "남는 조문")]),
+            },
+        )
+        html = app.test_client().get("/laws/009199").get_data(as_text=True)
+
+        assert "compare-line--removed" in html
+        assert "없어질 조문" in html
+
+    def test_oldest_column_in_depth_3_is_not_highlighted(self, monkeypatch):
+        """강조는 마지막 두 열(직전 버전 vs 현재)에만 적용한다 — 맨 왼쪽
+        (전전) 열은 비교 대상이 아니므로 added/removed/changed 상태가
+        전혀 없어야 한다(항상 same)."""
+        app = _app(
+            [_entry()], monkeypatch,
+            oldnew_map={
+                "268103": OldNewResult(True, "", _version("245293"), _version("268103")),
+                "245293": OldNewResult(True, "", _version("239279"), _version("245293")),
+            },
+            fulltext_by_serial={
+                "239279": _law_raw_multi([("1", "전전 내용만 있음")]),
+                "245293": _law_raw_multi([("1", "공통 내용")]),
+                "268103": _law_raw_multi([("1", "공통 내용")]),
+            },
+        )
+        html = app.test_client().get("/laws/009199?depth=3").get_data(as_text=True)
+
+        # 전전 열의 문장은 강조 클래스가 하나도 안 붙어야 한다.
+        assert 'compare-line--same">전전 내용만 있음' in html
+
+
+def test_law_detail_strips_amendment_annotations(monkeypatch):
+    """실측(2026-08-05, 사용자 리포트): "<개정 2003.12.31>" 같은 각주가
+    화면에 그대로 노출됐다. 기존 개정 요약 페이지(law_summary/article_diff
+    경로)는 저장 전에 strip_annotations를 이미 적용하므로(repo.py),
+    전문 비교 페이지도 같은 기준을 지켜야 한다."""
+    app = _app(
+        [_entry()], monkeypatch,
+        oldnew_map={"268103": OldNewResult(True, "", _version("245293"), _version("268103"))},
+        fulltext_by_serial={
+            "245293": _law_raw("과오납금 반환결정을 하여야 한다. <개정 2003.12.31>"),
+            "268103": _law_raw("과오납금 반환결정을 하여야 한다. <개정 2003.12.31>"),
+        },
+    )
+    html = app.test_client().get("/laws/009199").get_data(as_text=True)
+
+    assert "과오납금 반환결정을 하여야 한다" in html
+    assert "2003.12.31" not in html
+    assert "&lt;개정" not in html
+
+
+def test_law_detail_shows_enforce_date_instead_of_serial_no(monkeypatch):
+    """사용자 요청(2026-08-05): "2100000272436" 같은 일련번호 대신
+    시행일을 보여달라는 요청."""
+    app = _app(
+        [_entry()], monkeypatch,
+        oldnew_map={"268103": OldNewResult(
+            True, "",
+            VersionInfo("245293", "src", "이름", "20230516", "20230501", "1", "일부개정", False),
+            VersionInfo("268103", "src", "이름", "20250708", "20250701", "1", "일부개정", True),
+        )},
+        fulltext_by_serial={"245293": _law_raw("옛문구"), "268103": _law_raw("새문구")},
+    )
+    html = app.test_client().get("/laws/009199").get_data(as_text=True)
+
+    assert "2023-05-16" in html
+    assert "2025-07-08" in html
+    # 일련번호는 title 툴팁에만 남고(참고용), 화면에 보이는 본문 텍스트는 아니다.
+    assert 'title="일련번호 245293">2023-05-16<' in html

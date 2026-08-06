@@ -25,10 +25,10 @@
 
   <nav class="topbar">
     <div class="topbar-inner">
-      <div class="brand">
+      <a class="brand" href="{{ url_for('home') }}">
         <img class="brand-mark" src="{{ url_for('static', filename='img/logo.png') }}" alt="법인사이트 로고">
         <span class="brand-text">법인사이트</span>
-      </div>
+      </a>
       <!-- 기간 선택 — 5일/2주/1개월 프리셋(자유 날짜 선택 대신). 요청마다
            실 API+LLM 비용이 드는 즉석 조회라 몇 개로 고정했다(2026-08-03). -->
       <div class="period-nav">
@@ -36,6 +36,14 @@
         {% for key, label in period_windows.items() %}
           <a class="period-link {{ 'is-active' if period == key }}" href="{{ url_for('index', period=key) }}">{{ label }}</a>
         {% endfor %}
+        <!-- ★ 실측(2026-08-05, 사용자 지적): 전문 비교 페이지(/laws)로
+             가는 링크가 여기(메인 화면)엔 없어서, /laws 쪽에서만 뒤로
+             돌아올 수 있고 앞으로는 못 가는 외길 내비게이션이었다. 같은
+             자리(period-nav)에 나머지 페이지 하나만 더 추가한다 —
+             /laws 쪽 topbar도 이미 이 두 항목("개정 요약"/"전문 보기")을
+             같은 자리에 두고 있으므로, 어느 페이지에서 봐도 같은 위치에
+             같은 전환 링크가 있게 된다. -->
+        <a class="period-link period-link--section" href="{{ url_for('laws_list') }}">전문 보기</a>
       </div>
       {% if batch_date or period %}
         <div class="topbar-right">
@@ -71,10 +79,10 @@
     <section class="hero">
       {% if period %}
         <h1>{{ period_label }} <span class="hero-accent">개정 요약</span></h1>
-        <p class="hero-sub">{{ period_from }}부터 {{ period_to }}까지, 지금 이 순간 국가법령정보 API로 즉석 확인한 결과예요.</p>
+        <p class="hero-sub">{{ period_from }}부터 {{ period_to }}까지, 국가법령정보 API로 확인한 결과예요.</p>
       {% else %}
         <h1>이번 주 <span class="hero-accent">개정 요약</span></h1>
-        <p class="hero-sub">법령·행정규칙 개정을 매주 자동으로 감지해서, 월요일 아침에 확인하실 수 있게 보여드려요.</p>
+        <p class="hero-sub">법령·행정규칙 개정을 자동으로 감지해서 보여드려요.</p>
       {% endif %}
 
       <p class="hero-lede">

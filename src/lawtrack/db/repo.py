@@ -223,6 +223,22 @@ class VersionRepo:
             )
             return cur.fetchone() is not None
 
+    def fetch(self, kind: str, doc_id: str, serial_no: str) -> dict | None:
+        """저장된 특정 버전의 전문(JSON)을 그대로 돌려준다. 없으면 None.
+
+        전문 비교 페이지(webapp)가 "이미 저장된 버전인가"를 확인하고,
+        없으면 실 API로 받아와 insert_law/insert_admrul로 채운 뒤 다시
+        쓴다 — law_exists/admrul_exists(존재 여부만)와 달리 내용 자체가
+        필요할 때 쓴다.
+        """
+        with self._db.cursor() as (_, cur):
+            cur.execute(
+                "SELECT full_text FROM documents WHERE kind=%s AND doc_id=%s AND doc_serial_no=%s",
+                (kind, doc_id, serial_no),
+            )
+            row = cur.fetchone()
+            return row["full_text"] if row else None
+
     def insert_law(self, law_name: str, law_id: str, serial_no: str, full_text: dict) -> None:
         """새 버전 INSERT. 기존 load_full_text.py 의 UPDATE 와 달리, 매주
         배치에서는 행 자체가 없을 수 있으므로 INSERT 를 쓴다.

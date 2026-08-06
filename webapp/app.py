@@ -23,6 +23,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 from typing import Callable
@@ -31,12 +32,20 @@ from urllib.parse import quote
 from flask import Flask, Response, abort, jsonify, render_template, request
 from markupsafe import Markup, escape
 
+from lawtrack.api.client import LawApiClient
 from lawtrack.config import PROJECT_ROOT, load_settings
 from lawtrack.db.conn import Database
-from lawtrack.db.repo import LawSummaryRepo
+from lawtrack.db.repo import LawSummaryRepo, VersionRepo, WatchlistRepo
 from lawtrack.text.split import leading_marker, split_all
 from summarizer.textdiff import diff_segments
-from webapp.live import PERIOD_WINDOWS, PeriodResult, ensure_sweep_started, get_period_result, get_progress
+from webapp.live import (
+    PERIOD_WINDOWS,
+    PeriodResult,
+    _bundle_from_rows,
+    ensure_sweep_started,
+    get_period_result,
+    get_progress,
+)
 
 REPORTS_DIR = PROJECT_ROOT / "out" / "reports"
 
@@ -216,6 +225,42 @@ def _build_repo() -> LawSummaryRepo:
     return LawSummaryRepo(db)
 
 
+#: LAWTRACK_DEMO_MODE=1 로 서버를 켜면 5일/2주/1개월 버튼도 실 국가법령정보
+#: API를 부르지 않고 DB(law_summary)에 이미 있는 내용만으로 응답한다.
+#:
+#: ★ 왜 필요한가: scripts/seed_demo_data.py 로 심어 둔 시연용 데이터는
+#: batch_date/created_at을 "지금"으로 찍어 두므로 이번주 탭에는 항상
+#: 그대로 나오지만, 5일/2주/1개월 탭의 기본 동작(webapp/live.py의
+#: get_period_result)은 서버가 막 켜져 캐시가 비어 있으면 곧바로 실
+#: API(watchlist 전체)를 스윕한다 — 시연 컴퓨터에 API 키/네트워크가
+#: 없으면 그대로 실패하고, 있어도 그날 실제로 바뀐(우리가 고른 예시와
+#: 무관한) 법이 뜬다. _run_live_sweep()의 API 스윕 단계만 건너뛰고
+#: 나머지(DB 조회 -> HWPX 재생성)는 그대로 재사용한다.
+def _demo_live_check(window_key: str) -> PeriodResult:
+    import time
+    from datetime import date, timedelta
+
+    from lawtrack.config import PROJECT_ROOT
+
+    repo = _build_repo()
+    days = PERIOD_WINDOWS[window_key]
+    to_date = date.today()
+    from_date = to_date - timedelta(days=days)
+    laws = repo.fetch_by_period(from_date, to_date)
+    hwpx_path = None
+    if laws:
+        from summarizer.sinks import HwpxSink
+
+        report_dir = PROJECT_ROOT / "out" / "reports" / "live" / window_key
+        bundle = _bundle_from_rows(laws, window_key=window_key, to_date=to_date)
+        HwpxSink(report_dir).write([bundle])
+        hwpx_path = report_dir / f"{Path(bundle.source_file).stem}.hwpx"
+    return PeriodResult(
+        window_key=window_key, from_date=from_date, to_date=to_date, laws=laws,
+        hwpx_path=hwpx_path, computed_at=time.time(), newly_detected=0,
+    )
+
+
 def _kind_of(article_summary: dict) -> str:
     """"구분" 칸 — summarizer/report/builder.py의 _kind_of()와 동일한 규칙.
 
@@ -355,6 +400,9 @@ def create_app(
     enable_background_refresh: bool = False,
     sweep_starter: Callable[[str], bool] | None = None,
     progress_getter: Callable[[str], dict] | None = None,
+    watchlist_repo: WatchlistRepo | None = None,
+    version_repo: VersionRepo | None = None,
+    law_api_client_factory: Callable[[], LawApiClient] | None = None,
 ) -> Flask:
     """앱 팩토리. repo/live_check/sweep_starter/progress_getter를 주입할
     수 있어 테스트에서 진짜 DB나 실 API+LLM 없이 확인 가능하다.
@@ -384,6 +432,19 @@ def create_app(
 
         start_background_refresh(load_settings())
 
+    from webapp.laws import register_law_routes
+
+    # ★ watchlist_repo/version_repo/law_api_client_factory를 안 넘기면
+    # register_law_routes 내부에서 처음 /laws 요청이 올 때야 비로소 실
+    # Database/LawApiClient를 만든다(지연 생성) — _repo(위)와 달리 이
+    # 3개는 create_app() 호출 시점에 곧바로 연결을 열지 않는다. 기존
+    # 테스트 대부분이 이 새 기능과 무관한데도 create_app()을 부를 때마다
+    # 실 DB 커넥션 풀이 추가로 열리는 걸 막기 위해서다.
+    register_law_routes(
+        app, watchlist_repo=watchlist_repo, version_repo=version_repo,
+        client_factory=law_api_client_factory,
+    )
+
     def _validate_period(period: str | None) -> None:
         if period is not None and period not in PERIOD_WINDOWS:
             abort(400, f"알 수 없는 기간입니다: {period!r} (허용: {list(PERIOD_WINDOWS)})")
@@ -410,6 +471,22 @@ def create_app(
         })
 
     @app.get("/")
+    def home() -> str:
+        """세 기능(개정 요약/전문 보기/PDF 업로드) 중 하나를 고르는 허브.
+
+        ★ 설계(2026-08-05, 사용자 결정): 원래 "/"가 곧 개정 요약
+        화면(report.html)이었는데, 전문 비교(/laws)에 이어 PDF 업로드
+        기능까지 세 번째로 예정되면서 "메인에서 셋 중 하나를 고른다"는
+        구조로 바꾸기로 했다. 기존 "/"를 그대로 개정 요약에 물려 두면
+        허브가 들어설 자리가 없으므로, 개정 요약을 /summary로 옮기고
+        (endpoint 이름은 index로 그대로 둔다 — url_for('index')를 쓰는
+        기존 템플릿들이 안 바뀌어도 되게) "/"는 이 허브 전용으로 비운다.
+        PDF 업로드는 다른 담당자가 구현할 기능이라 여기서는 "준비중"
+        비활성 카드로만 자리를 잡아 둔다.
+        """
+        return render_template("home.html")
+
+    @app.get("/summary")
     def index() -> str:
         period = request.args.get("period")
         if period:
@@ -469,4 +546,10 @@ if __name__ == "__main__":
     # 쓰므로, 페이지 이동 요청 하나가 서버를 붙들고 있는 동안에도 그
     # 폴링 요청들이 동시에 처리돼야 한다 — 기본값(단일 스레드)이면 앞
     # 요청이 끝나야 다음 요청을 받아서, 폴링이 실제로 막힐 수 있다.
-    create_app(enable_background_refresh=True).run(debug=True, threaded=True)
+    _demo_mode = os.environ.get("LAWTRACK_DEMO_MODE") == "1"
+    if _demo_mode:
+        create_app(live_check=_demo_live_check, enable_background_refresh=False).run(
+            debug=True, threaded=True
+        )
+    else:
+        create_app(enable_background_refresh=True).run(debug=True, threaded=True)

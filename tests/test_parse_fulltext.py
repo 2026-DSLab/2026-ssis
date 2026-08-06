@@ -8,6 +8,7 @@ from lawtrack.parse.fulltext import (
     flatten_searchable,
     parse_admrul_units,
     parse_articles,
+    searchable_units_for,
 )
 
 
@@ -322,3 +323,44 @@ class TestSiblingMokRecoveredIntoItems:
         clause = articles[0].clauses[0]
         assert len(clause.items) == 1
         assert [s.text for s in clause.items[0].subitems] == ["가. 행정정보"]
+
+
+class TestSearchableUnitsFor:
+    """전문 비교 페이지(webapp/laws.py)가 쓰는 진입점 — kind에 따라
+    법령/행정규칙 파싱 경로를 자동으로 골라준다."""
+
+    def test_law_kind_uses_article_flattening_path(self):
+        raw = {
+            "법령": {"조문": {"조문단위": [{
+                "조문번호": "1", "조문가지번호": "",
+                "조문내용": "제1조(목적) 이 법은 목적을 정한다.",
+                "조문제목": "목적", "조문변경여부": "N",
+            }]}}
+        }
+        units = searchable_units_for("law", raw)
+        assert [u.article_label for u in units] == ["제1조"]
+        assert "목적을 정한다" in units[0].text
+
+    def test_admrul_kind_uses_flat_text_split_path(self):
+        raw = {
+            "AdmRulService": {
+                "조문내용": [
+                    "제1조(목적) 이 예규는 계약조건을 정함을 목적으로 한다.",
+                ]
+            }
+        }
+        units = searchable_units_for("admrul", raw)
+        assert [u.article_label for u in units] == ["제1조"]
+
+    def test_unknown_kind_falls_back_to_law_path(self):
+        """kind가 'law'가 아니면(예: 오타) 무조건 admrul로 잘못 보내는
+        대신, law 경로를 기본값으로 쓴다 — 법령이 훨씬 흔한 다수이므로
+        더 안전한 기본값이다."""
+        raw = {
+            "법령": {"조문": {"조문단위": [{
+                "조문번호": "1", "조문가지번호": "",
+                "조문내용": "제1조(목적) 이 법은 목적을 정한다.",
+                "조문제목": "목적", "조문변경여부": "N",
+            }]}}
+        }
+        assert searchable_units_for("law", raw) == searchable_units_for("something-else", raw)
