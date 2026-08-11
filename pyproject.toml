@@ -20,7 +20,7 @@ dependencies = [
 # 제공하면 openai 쪽만 있으면 된다(SUMMARY_BASE_URL 로 주소만 바꿈).
 openai = ["openai>=1.40"]
 anthropic = ["anthropic>=0.40"]
-web = ["flask>=3.0"]
+web = ["flask>=3.0", "pypdfium2>=5"]  # pypdfium2: PDF 업로드 매칭(doc_match)의 텍스트 추출
 dev = ["pytest>=8.0"]
 
 # ---------------------------------------------------------------------------
@@ -37,7 +37,7 @@ dev = ["pytest>=8.0"]
 # ---------------------------------------------------------------------------
 [tool.setuptools.packages.find]
 where = ["src", "."]
-include = ["lawtrack*", "summarizer*", "webapp*"]
+include = ["lawtrack*", "summarizer*", "webapp*", "doc_match*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

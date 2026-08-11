@@ -70,7 +70,7 @@ def _version(serial_no: str) -> VersionInfo:
     return VersionInfo(serial_no, "src", "이름", "20260101", "20251201", "1", "일부개정", False)
 
 
-def _app(entries, monkeypatch, *, oldnew_map=None, fulltext_by_serial=None):
+def _app(entries, monkeypatch, *, oldnew_map=None, fulltext_by_serial=None, revision_lookup=None):
     oldnew_map = oldnew_map or {}
     fulltext_by_serial = fulltext_by_serial or {}
 
@@ -88,6 +88,8 @@ def _app(entries, monkeypatch, *, oldnew_map=None, fulltext_by_serial=None):
         watchlist_repo=_FakeWatchlistRepo(entries),
         version_repo=_FakeVersionRepo(),
         law_api_client_factory=lambda: _FakeClient(),
+        # 실 DB 상태와 무관하게 결정론적으로 — 배지 테스트는 직접 주입한다
+        revision_lookup=revision_lookup or (lambda ids: {}),
     )
 
 
@@ -96,6 +98,8 @@ def test_laws_list_shows_all_active_entries():
         watchlist_repo=_FakeWatchlistRepo([_entry(law_id="009199", official_name="전자정부법")]),
         version_repo=_FakeVersionRepo(),
         law_api_client_factory=lambda: _FakeClient(),
+        revision_lookup=lambda ids: {},  # 실 DB 상태와 무관하게 결정론적으로
+
     )
     resp = app.test_client().get("/laws")
 
@@ -111,6 +115,8 @@ def test_laws_list_excludes_non_active_entries():
         ]),
         version_repo=_FakeVersionRepo(),
         law_api_client_factory=lambda: _FakeClient(),
+        revision_lookup=lambda ids: {},  # 실 DB 상태와 무관하게 결정론적으로
+
     )
     html = app.test_client().get("/laws").get_data(as_text=True)
 
@@ -123,6 +129,8 @@ def test_law_detail_404_for_unknown_law_id():
         watchlist_repo=_FakeWatchlistRepo([]),
         version_repo=_FakeVersionRepo(),
         law_api_client_factory=lambda: _FakeClient(),
+        revision_lookup=lambda ids: {},  # 실 DB 상태와 무관하게 결정론적으로
+
     )
     resp = app.test_client().get("/laws/999999")
 
@@ -148,6 +156,30 @@ def test_law_detail_shows_two_columns_by_default(monkeypatch):
     assert "새문구" in html
     assert "전전 버전 보기" in html  # depth=2일 땐 더보기 버튼이 항상 보여야 함
     assert "가장 오래된 버전" not in html
+
+
+def test_law_detail_current_column_shows_recent_revision_badge(monkeypatch):
+    """/pdf 결과의 배지를 눌러 넘어온 사용자가 같은 개정 정보를 현재 열
+    머리에서 다시 볼 수 있어야 한다(2026-08-11 사용자 요청). 배지 데이터
+    소스·90일 규칙은 pdfcheck 와 공유하므로 여기서는 배선만 본다."""
+    from datetime import date, timedelta
+
+    recent = date.today() - timedelta(days=10)
+    app = _app(
+        [_entry()], monkeypatch,
+        oldnew_map={"268103": OldNewResult(True, "", _version("245293"), _version("268103"))},
+        fulltext_by_serial={
+            "245293": _law_raw("옛날문구"),
+            "268103": _law_raw("새문구"),
+        },
+        revision_lookup=lambda ids: {
+            "009199": {"revision_type": "일부개정", "enforce_date": recent}},
+    )
+    html = app.test_client().get("/laws/009199").get_data(as_text=True)
+
+    assert f"최근 개정 · 일부개정 · 시행 {recent}" in html
+    # 배지는 현재 열에 1번만 — 개정 전 열에는 붙지 않는다
+    assert html.count("최근 개정 ·") == 1
 
 
 def test_law_detail_depth_3_shows_three_columns(monkeypatch):
@@ -205,6 +237,8 @@ def test_law_detail_caches_fetched_version_in_repo(monkeypatch):
         watchlist_repo=_FakeWatchlistRepo([_entry()]),
         version_repo=version_repo,
         law_api_client_factory=lambda: _FakeClient(),
+        revision_lookup=lambda ids: {},  # 실 DB 상태와 무관하게 결정론적으로
+
     )
     app.test_client().get("/laws/009199")
 
@@ -241,6 +275,8 @@ def test_law_detail_admrul_kind_uses_admrul_oldnew(monkeypatch):
         ]),
         version_repo=_FakeVersionRepo(),
         law_api_client_factory=lambda: _FakeClient(),
+        revision_lookup=lambda ids: {},  # 실 DB 상태와 무관하게 결정론적으로
+
     )
     resp = app.test_client().get("/laws/34470")
 
@@ -253,6 +289,8 @@ def test_law_detail_404_when_no_serial_no_recorded():
         watchlist_repo=_FakeWatchlistRepo([_entry(last_serial_no=None)]),
         version_repo=_FakeVersionRepo(),
         law_api_client_factory=lambda: _FakeClient(),
+        revision_lookup=lambda ids: {},  # 실 DB 상태와 무관하게 결정론적으로
+
     )
     resp = app.test_client().get("/laws/009199")
 
@@ -271,6 +309,7 @@ def test_law_detail_closes_api_client_even_on_error(monkeypatch):
         watchlist_repo=_FakeWatchlistRepo([_entry()]),
         version_repo=_FakeVersionRepo(),
         law_api_client_factory=lambda: client,
+        revision_lookup=lambda ids: {},
     )
     app.test_client().get("/laws/009199")  # 500이 나든 말든, 관심사는 client.close() 호출 여부
 

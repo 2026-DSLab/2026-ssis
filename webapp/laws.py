@@ -129,6 +129,7 @@ def register_law_routes(
     watchlist_repo: WatchlistRepo | None = None,
     version_repo: VersionRepo | None = None,
     client_factory: Callable[[], LawApiClient] | None = None,
+    revision_lookup: Callable[[list[str]], dict[str, dict]] | None = None,
 ) -> None:
     """라우트 2개를 등록한다. 세 의존성 모두 안 넘기면(기본값 None) 실
     Database/LawApiClient는 처음 /laws 요청이 올 때야 만든다(지연 생성)
@@ -137,6 +138,24 @@ def register_law_routes(
     치르지 않도록).
     """
     _lazy: dict[str, object] = {}
+
+    def _recent_revision(law_id: str) -> dict | None:
+        """현재 열 머리에 붙일 "최근 개정" 배지 데이터 — /pdf 결과의 배지와
+        같은 소스(change_log)·같은 90일 규칙을 쓴다(배지를 눌러 넘어온
+        사용자가 같은 정보를 다시 보게). 조회 실패 시 None(배지 없음)."""
+        from datetime import date, timedelta
+
+        from webapp.pdfcheck import RECENT_REVISION_DAYS, fetch_revision_info
+
+        lookup = revision_lookup or fetch_revision_info
+        try:
+            rev = lookup([law_id]).get(law_id) or {}
+        except Exception:
+            return None
+        enforce = rev.get("enforce_date")
+        if enforce is None or enforce < date.today() - timedelta(days=RECENT_REVISION_DAYS):
+            return None
+        return {"revision_type": rev.get("revision_type") or "개정", "enforce_date": enforce}
 
     def _get_watchlist_repo() -> WatchlistRepo:
         if watchlist_repo is not None:
@@ -235,4 +254,5 @@ def register_law_routes(
         return render_template(
             "law_detail.html", entry=entry, columns=columns, depth=depth,
             show_expand_button=show_expand_button, no_earlier_version=no_earlier_version,
+            recent_revision=_recent_revision(law_id),
         )

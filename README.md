@@ -66,7 +66,7 @@ python -m webapp.app
 ```bash
 pip install -e ".[openai]"          # 요약까지 (OpenRouter/원내 QWEN 도 OpenAI 호환이면 이것)
 pip install -e ".[anthropic]"       # Anthropic 을 쓸 경우
-pip install -e ".[openai,web,dev]"  # + 웹페이지(Flask) + pytest
+pip install -e ".[openai,web,dev]"  # + 웹페이지(Flask, PDF 확인용 pypdfium2 포함) + pytest
 ```
 
 **`pip install -r requirements.txt` 가 아니라 `pip install -e .` 를 쓴다.**
@@ -146,6 +146,13 @@ src/lawtrack/
     schema.py             Pydantic 모델 전체 (WeeklyContract 이하 전 스키마, 아래 "산출물 구조" 절이 이 파일을 설명함)
     export.py             DB 테이블들을 읽어 위 Pydantic 모델로 조립 (build_contract) — structural_expansions 그룹핑도 여기
 
+src/doc_match/        업로드 문서(PDF/HWPX) ↔ 워치리스트 매칭 — LLM 없이 순수 문자열 매칭 (웹의 "PDF 확인" 기능의 엔진)
+  extract.py            PDF(pypdfium2)/HWPX(zip+XML) → 페이지별 텍스트
+  normalize.py          법령명 표기 통일 (가운뎃점 6종·공백·인용부호·괄호접두 제거)
+  dictionary.py         seed_watchlist.sql 파싱 → official/internal 이원 키 사전 + 수동 약칭("국가계약법" 등)
+  match.py              매칭 엔진 — 긴 이름 우선(이중계상 방지), 원문 위치 보존(스니펫), 감시 대상 외 후보 수집
+  report.py             법령별 인용 횟수·페이지 집계 → dict(웹)/텍스트(CLI) 리포트
+
 summarizer/           계약 JSON → LLM 요약 → 검증 → HWPX 보고서 (3단계)
   config.py             .env 로딩 → Settings(llm, pipeline). lawtrack/config.py 와 같은 방식
   models.py              파이프라인 내부/출력 자료구조 (ArticleUnit, ArticleSummary, LawSummary 등)
@@ -170,10 +177,15 @@ summarizer/           계약 JSON → LLM 요약 → 검증 → HWPX 보고서 (
   sinks.py              저장처 — JsonSink / HwpxSink / DbSink (모두 같은 Sink 프로토콜)
   __main__.py           `python -m summarizer` 진입점
 
-webapp/               law_summary 를 읽어 브라우저에 보여주는 Flask 앱 (아래 "웹페이지" 절 참고)
-  app.py                 라우트(/, /download, /period-check, /period-status) + 렌더링 헬퍼(항/호/목 표기, diff 강조 등)
+webapp/               Flask 앱 (아래 "웹페이지" 절 참고)
+  app.py                 라우트(/, /summary, /download, /period-check, /period-status) + 렌더링 헬퍼(항/호/목 표기, diff 강조 등)
+  laws.py                전문 보기(/laws, /laws/<law_id>) — 개정 전/후 전문 나란히 비교
+  pdfcheck.py            PDF 확인(/pdf) — 업로드 문서에서 감시 대상 인용 찾기(src/doc_match 사용) + 최근 개정 배지·요약 한 줄
   live.py                "최근 5일/2주/1개월" 기간별 즉석 재조회 — 캐시·백그라운드 스윕·진행상태 트래킹
+  templates/home.html     허브(세 기능 중 선택)
   templates/report.html   법령별 요약 페이지(검색, 구분별 섹션, 원문 보기 패널, 스크롤 스파이 내비게이션)
+  templates/laws_list.html · law_detail.html   전문 보기 목록/상세
+  templates/pdf_upload.html · pdf_result.html  PDF 확인 업로드/결과
   static/style.css        페이지 스타일
   static/img/logo.png     로고
 
@@ -182,6 +194,7 @@ scripts/
   weekly.cmd          작업 스케줄러가 실행하는 래퍼 (UTF-8 설정, 로그 적재, 종료코드 전달). ASCII 전용
   register_task.ps1   작업 스케줄러 등록/해제 + 사전 환경 점검(-Verify)
   run_single_check.py 법령/행정규칙 1건만 디버깅용으로 상세 실행 (locate 가드별 로그까지 출력)
+  check_document.py   PDF/HWPX 1개를 CLI로 매칭 확인 (웹의 /pdf와 같은 엔진, 결과를 텍스트로 출력)
   load_watchlist.py   워치리스트 초기 적재 스크립트 (Windows psql CLI 한글 인코딩 문제 우회용, seed_watchlist.sql과 내용 동일)
   inspect_article.py  조문번호 필드(가지번호 포함, 예: 제6조의2)의 API 원본 JSON 구조를 그대로 출력해 파서 로직과 맞는지 확인하는 진단 스크립트
   test_live_comparison.py  실제 API를 호출해 locate 파이프라인을 눈으로 검증하는 수동 스크립트
@@ -469,10 +482,15 @@ python -m webapp.app     # http://127.0.0.1:5000
 
 | 라우트 | 하는 일 |
 |---|---|
-| `GET /` | 가장 최근 배치(`law_summary.batch_date` 최댓값)의 법령별 요약을 렌더링. `?period=5d\|2w\|1m` 쿼리파라미터가 있으면 기간별 즉석 조회 결과로 대체 |
+| `GET /` | 허브 — 세 기능(개정 요약/전문 보기/PDF 업로드) 중 하나를 고르는 첫 화면 |
+| `GET /summary` | 가장 최근 배치(`law_summary.batch_date` 최댓값)의 법령별 요약을 렌더링. `?period=5d\|2w\|1m` 쿼리파라미터가 있으면 기간별 즉석 조회 결과로 대체 |
 | `GET /download` | 같은 배치(또는 period)가 만든 HWPX 보고서 파일을 내려줌 |
 | `GET /period-check` | 기간 즉석 조회를 논블로킹으로 시작만 시킴 — 캐시가 신선하면 `{"ready": true}`, 아니면 백그라운드 스윕을 시작하고 `{"ready": false}` |
 | `GET /period-status` | 지금 스윕이 어느 단계인지(`{"stage":..., "done":...}`) — 로딩 화면이 폴링해서 진행 상황을 보여줌 |
+| `GET /laws` | 감시 대상 102건 목록(검색·종류 필터) — 클릭하면 전문 비교로 |
+| `GET /laws/<law_id>` | 전문 비교 — 개정 전/후 전문을 나란히, 조문 검색·전전 버전 보기. 최근 90일 내 시행 개정이 있으면 현재 열 머리에 배지(/pdf 결과의 배지와 같은 정보) |
+| `GET /pdf` | PDF/HWPX 업로드 폼 (파일 선택 또는 드래그앤드롭) |
+| `POST /pdf` | 업로드 문서에서 감시 대상 인용을 찾아 법령별 인용 횟수·페이지·스니펫 표시. 최근 90일 내 시행(또는 시행 예정) 개정이 있으면 배지, `law_summary`에 요약이 있으면 한 줄 요약을 함께 표시. 문서는 저장하지 않음(요청 처리 중 메모리에서 완결, DB는 배지·요약 조회에만 사용— 조회 실패 시 매칭 결과만 표시) |
 
 ### 기간별 즉석 조회 (`webapp/live.py`)
 
@@ -846,7 +864,7 @@ diff는 원천적으로 없으므로 `source_url`(원문 링크)만 제공한다
 ## 테스트
 
 ```bash
-pytest -q          # 373건
+pytest -q          # 430건 (2026-08-11 기준)
 ```
 
 `pyproject.toml`의 `[tool.pytest.ini_options]`가 `pythonpath`를 잡아 주므로
@@ -866,3 +884,6 @@ pytest -q          # 373건
 | `test_summary_db.py` | `db/repo.py`의 `LawSummaryRepo`, `summarizer/sinks.py`의 `DbSink` |
 | `test_summary_pipeline.py` | `summarizer/verifier.py`, `summarizer/report/`, `run_weekly.py` 배선 |
 | `test_webapp.py`, `test_webapp_live.py` | `webapp/app.py`, `webapp/live.py` |
+| `test_webapp_laws.py` | `webapp/laws.py` (전문 비교 페이지) |
+| `test_doc_match.py` | `src/doc_match/` 전체 — 골드셋(실측 PDF) 테스트는 `tests/fixtures/표준가이드요약본.pdf`가 있을 때만 실행(없으면 skip) |
+| `test_webapp_pdf.py` | `webapp/pdfcheck.py` (/pdf 라우트 — 검증 실패 경로·매칭·개정 배지·용량 상한) |

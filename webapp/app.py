@@ -403,6 +403,7 @@ def create_app(
     watchlist_repo: WatchlistRepo | None = None,
     version_repo: VersionRepo | None = None,
     law_api_client_factory: Callable[[], LawApiClient] | None = None,
+    revision_lookup: Callable[[list[str]], dict[str, dict]] | None = None,
 ) -> Flask:
     """앱 팩토리. repo/live_check/sweep_starter/progress_getter를 주입할
     수 있어 테스트에서 진짜 DB나 실 API+LLM 없이 확인 가능하다.
@@ -442,8 +443,16 @@ def create_app(
     # 실 DB 커넥션 풀이 추가로 열리는 걸 막기 위해서다.
     register_law_routes(
         app, watchlist_repo=watchlist_repo, version_repo=version_repo,
-        client_factory=law_api_client_factory,
+        client_factory=law_api_client_factory, revision_lookup=revision_lookup,
     )
+
+    # PDF/HWPX 업로드 → 감시 대상 인용 확인. 매칭 자체는 DB·API·LLM
+    # 미사용(사전은 seed 파일에서 지연 생성)이고, 개정 배지·요약 한 줄만
+    # DB에서 부가로 읽는다 — 조회 실패 시 배지 없이 매칭 결과만 낸다.
+    # revision_lookup 은 /laws 상세의 현재 열 배지와 공유한다(같은 정보).
+    from webapp.pdfcheck import register_pdf_routes
+
+    register_pdf_routes(app, revision_lookup=revision_lookup)
 
     def _validate_period(period: str | None) -> None:
         if period is not None and period not in PERIOD_WINDOWS:

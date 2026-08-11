@@ -69,7 +69,11 @@
       {% for col in columns %}
         <div class="compare-col {{ 'fulltext-col--' + col.diff_role if col.diff_role else '' }}">
           <div class="compare-col-head {{ 'is-current' if col.is_current else '' }}">
-            <span class="compare-col-title">{{ col.label }}</span>
+            <span class="compare-col-title">{{ col.label }}
+              {% if col.is_current and recent_revision %}
+              <span class="match-revision">최근 개정 · {{ recent_revision.revision_type }} · 시행 {{ recent_revision.enforce_date }}</span>
+              {% endif %}
+            </span>
             <span class="compare-serial" title="일련번호 {{ col.serial_no }}">{{ col.date_label }}</span>
           </div>
           <div class="compare-col-body">

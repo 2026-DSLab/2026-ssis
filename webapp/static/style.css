@@ -1231,3 +1231,144 @@ mark.diff-changed {
 @media (max-width: 760px) {
   .hub-grid { grid-template-columns: 1fr; }
 }
+
+/* ---------- PDF 인용 확인 (/pdf) ---------- */
+
+/* 허브 세 번째 카드 강조색 — c1 파랑, c2 보라에 이은 초록 계열.
+   구분 팔레트의 --k-new(초록)와 톤을 맞춰 색이 따로 놀지 않게 한다. */
+.hub-card--c3 { --hub-accent: var(--k-new); }
+.hub-card--c3 .hub-card-icon { background: var(--k-new-soft); color: var(--k-new); }
+
+.upload-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  max-width: 640px;
+}
+
+/* label 이 파일 입력 전체의 클릭 영역 — 기본 input[type=file] UI 는
+   숨기고, 선택된 파일명은 스크립트가 라벨 텍스트로 바꿔 보여준다. */
+.upload-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.upload-label:hover { color: var(--primary); }
+
+.upload-label input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.upload-label-text {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-submit {
+  flex-shrink: 0;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--primary);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.upload-submit:hover { background: var(--primary-dark); }
+
+.upload-note { font-size: 0.82rem; color: var(--muted); margin-top: 14px; }
+
+.upload-error {
+  max-width: 640px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--k-delete);
+  background: var(--k-delete-soft);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 0 0 18px;
+}
+
+/* 결과 목록 — 전문 보기의 .law-row 를 그대로 쓰되 인용 횟수·페이지만 추가 */
+.match-count {
+  flex-shrink: 0;
+  width: 52px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  text-align: right;
+}
+
+.match-pages {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.candidate-section { margin-top: 44px; }
+
+.candidate-title { font-size: 1.05rem; font-weight: 800; margin: 0 0 6px; }
+
+.candidate-desc { font-size: 0.85rem; color: var(--muted); margin: 0 0 6px; }
+
+/* 드롭 영역 위로 파일을 끌고 온 상태 — 카드가 "여기 놓으면 된다"로 응답 */
+.upload-card.is-dragover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+/* 페이지 번호 기준 안내 — 놓치면 안 되는 정보라 에러 배너(.upload-error)와
+   같은 박스 문법을 쓰되, 오류가 아니라 안내이므로 primary 계열로 칠한다.
+   (회색 일반 텍스트로 두었더니 눈에 안 띈다는 실사용 피드백, 2026-08-10) */
+.page-basis-note {
+  max-width: 640px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  background: var(--primary-soft);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 0 0 8px;
+}
+
+/* 매칭 행의 개정 정보 — 배지 색은 구분 팔레트의 "개정"(--k-amend)을 그대로
+   써서 개정 요약 페이지와 같은 색 언어를 유지한다. 요약 한 줄은 본문보다
+   낮은 위계의 부가 정보라 muted 처리. */
+.match-revision {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--k-amend);
+  background: var(--k-amend-soft);
+  border-radius: 999px;
+  padding: 2px 10px;
+  margin-left: 8px;
+  vertical-align: 1px;
+}
+
+.match-headline {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
