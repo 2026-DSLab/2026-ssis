@@ -29,10 +29,35 @@
 
     <section class="hero">
       <h1>{{ doc_name }}</h1>
+      {% if ref_date and matched %}
+      {# ★ 실측 수정(2026-08-18): 앞서는 어떤 경우에도 "N건이 개정됐어요"를
+         냈는데, (a) 인용이 0건이거나 (b) DB 장애로 하나도 확인 못 했을 때도
+         "0건이 개정됐어요"가 떠서 "확인해 봤더니 안 바뀌었다"로 읽혔다.
+         둘 다 사실이 아니고, 특히 (b)는 본문의 "확인 불가"와 정면으로
+         어긋난다 — 헤드라인이 본문보다 눈에 먼저 들어오므로 여기서
+         단언하지 않는 게 중요하다. #}
+      <p class="hero-sub">
+        {% if changed %}
+        <strong>{{ ref_date }}</strong> 이후로 이 문서가 인용한 법령 중
+        <strong>{{ changed|length }}건</strong>이 개정됐어요.
+        {% elif unchanged %}
+        <strong>{{ ref_date }}</strong> 이후로 개정된 법령은 없어요.
+        {% else %}
+        <strong>{{ ref_date }}</strong> 기준으로 개정 여부를 확인하지 못했어요.
+        {% endif %}
+        {# 일부만 확인 못 한 경우에만 덧붙인다 — 전부 확인 못 했으면 위
+           문장이 이미 그 말이라 두 번 반복된다. #}
+        {% if unknown and (changed or unchanged) %}
+        {{ unknown|length }}건은 확인하지 못했어요.
+        {% endif %}
+        (전체 {{ page_count }}페이지에서 {{ matched|length }}건 인용 확인)
+      </p>
+      {% else %}
       <p class="hero-sub">
         전체 {{ page_count }}페이지 — 감시 대상 {{ watchlist_total }}건 중
         <strong>{{ matched|length }}건</strong> 인용을 확인했어요.
       </p>
+      {% endif %}
       <!-- 페이지 번호 기준 명시(2026-08-10 사용자 발견): 표지·목차가 번호
            없이 앞에 붙는 문서는 "문서에 인쇄된 쪽 번호"가 물리 순서와
            어긋난다(실측: 예시 4개 문서 전부, 오프셋 3~18로 제각각).
@@ -46,26 +71,67 @@
     <p class="upload-error">이 문서에서 텍스트를 거의 읽지 못했어요 — 스캔(이미지)으로 만들어진 PDF일 수 있어요. 그 경우 인용을 찾을 수 없어요.</p>
     {% endif %}
 
-    <div class="law-list">
-      {% for m in matched %}
+    {# 행 하나를 그리는 매크로 — 기준일 유무에 따라 목록이 여러 덩어리로
+       나뉘는데, 행 생김새는 어느 덩어리에 있든 같아야 하므로 한 곳에만 둔다. #}
+    {% macro law_row(m, mode) %}
       <a class="law-row" href="{{ url_for('law_detail', law_id=m.law_id) }}">
         <span class="match-count">{{ m.count }}회</span>
         <span class="law-row-type">{{ m.law_type }}</span>
         <span class="law-row-name">{{ m.official_name }}
-          {% if m.recent_revision %}
+          {% if mode == 'changed' %}
+          <span class="match-revision match-revision--changed">이 문서 이후 개정 · {{ m.revision_type }} · 시행 {{ m.enforce_date }}</span>
+          {% elif mode == 'unknown' %}
+          <span class="match-revision match-revision--unknown">개정 여부 확인 불가</span>
+          {% elif m.recent_revision %}
           <span class="match-revision">최근 개정 · {{ m.recent_revision.revision_type }} · 시행 {{ m.recent_revision.enforce_date }}</span>
           {% endif %}
           <span class="match-pages">{{ m.pages_label }}</span>
-          {% if m.summary_headline %}
+          {% if m.summary_headline and mode != 'unchanged' %}
           <span class="match-headline">개정 요약: {{ m.summary_headline }}</span>
           {% endif %}
         </span>
         <span class="law-row-arrow">전문 보기 →</span>
       </a>
-      {% else %}
+    {% endmacro %}
+
+    {% if not matched %}
       <p class="empty-state">이 문서에서는 감시 대상 법령·행정규칙 인용을 찾지 못했어요.</p>
-      {% endfor %}
-    </div>
+
+    {% elif ref_date %}
+      {# 기준일이 있으면 "바뀐 것"을 앞에 세운다. 다만 안 바뀐 것/확인 못 한
+         것을 화면에서 지우지는 않는다 — 특히 '확인 불가'를 감추면 사용자는
+         그걸 '안 바뀜'으로 읽게 되고, 그게 이 기능에서 제일 위험한 오답이다. #}
+      {% if changed or unknown %}
+      {# 확인 못 한 건은 목록 뒤에 그대로 둔다 — 따로 경고 박스를 세우면
+         실사용에서 거의 뜨지 않는 것 때문에 화면이 요란해진다(사용자
+         요청 2026-08-18). 다만 "변동 없음"으로 옮기지는 않는다:
+         모르는 것을 안 바뀐 것으로 말하면 안 되기 때문이다. #}
+      <div class="law-list">
+        {% for m in changed %}{{ law_row(m, 'changed') }}{% endfor %}
+        {% for m in unknown %}{{ law_row(m, 'unknown') }}{% endfor %}
+      </div>
+      {% elif unchanged and not unknown %}
+      {# ★ 이 초록색 "이상 없음"은 인용한 법을 전부 확인했을 때만 낸다.
+         하나라도 확인 못 한 게 있으면(unknown) 안심시키면 안 된다 —
+         아래 주황색 "확인 불가" 섹션이 실제 상태를 알려 준다. #}
+      <p class="result-none">{{ ref_date }} 이후 개정된 법령은 없어요 — 이 문서가 인용한 법령은 그대로예요.</p>
+      {% endif %}
+
+      {% if unchanged %}
+      <details class="result-group">
+        <summary class="result-group-summary">{{ ref_date }} 이후 변동 없는 {{ unchanged|length }}건 보기</summary>
+        <p class="result-group-desc">이 문서를 만들 때 이미 지금 버전이 시행 중이었어요 — 그 뒤로 개정되지 않았습니다.</p>
+        <div class="law-list">
+          {% for m in unchanged %}{{ law_row(m, 'unchanged') }}{% endfor %}
+        </div>
+      </details>
+      {% endif %}
+
+    {% else %}
+      <div class="law-list">
+        {% for m in matched %}{{ law_row(m, 'all') }}{% endfor %}
+      </div>
+    {% endif %}
 
     {% if candidates %}
     <section class="candidate-section">

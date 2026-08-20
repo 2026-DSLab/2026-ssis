@@ -43,6 +43,17 @@
         <span class="upload-label-text" id="upload-filename">문서 선택 또는 여기로 끌어다 놓기 (.pdf / .hwpx)</span>
         <input type="file" id="document" name="document" accept=".pdf,.hwpx" required>
       </label>
+
+      <!-- 기준 시점(선택). 넣으면 "그 뒤로 바뀐 법"만 추려서 보여준다.
+           비워 두면 예전처럼 인용 목록 전체가 나온다 — 그래서 required 가
+           아니다(문서 작성일을 모르는 경우도 흔하다). -->
+      <div class="ref-date-field">
+        <label class="ref-date-label" for="doc_date">이 문서는 언제 만든 문서인가요? <span class="ref-date-optional">선택</span></label>
+        <input class="ref-date-input" type="date" id="doc_date" name="doc_date"
+               value="{{ doc_date or '' }}" max="{{ today }}">
+        <p class="ref-date-hint">날짜를 넣으면 <strong>그 뒤로 개정된 법령만</strong> 추려서 보여드려요. 비워 두면 인용된 것 전부를 보여드려요.</p>
+      </div>
+
       <button class="upload-submit" type="submit">인용 확인하기</button>
     </form>
 

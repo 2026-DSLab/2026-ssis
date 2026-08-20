@@ -110,6 +110,31 @@ class TestGetOrFetchFullText:
         assert result == {"법령": "새 전문"}
         assert repo.fetch("law", "009199", "245293") == {"법령": "새 전문"}  # 캐싱됨
 
+    def test_empty_cached_payload_is_refetched(self, monkeypatch):
+        """★ 실측 버그(2026-08-18, 전수검증): documents 에 full_text 가 {} 인
+        빈 껍데기 행이 있었다(초기 세팅 때 들어간 자리표시자). "행이 있으면
+        캐시 적중"으로만 보면 이 빈 값을 그대로 돌려줘서, 파서가 유닛을
+        0개 내고 전문 비교 화면이 빈 채로 남는다. 내용 없는 캐시는 캐시가
+        아니므로 다시 받아와야 한다."""
+        repo = _FakeRepo()
+        repo._store[("law", "001973", "281585")] = {}  # 빈 껍데기
+
+        def fake_fetch(client, mst):
+            return FullTextResult(raw={"법령": "제대로 받은 전문"}, serial_no=mst,
+                                  source_id="001973", name="국민기초생활보장법",
+                                  revision_reason="", revision_text="")
+
+        monkeypatch.setattr(history, "fetch_law_fulltext", fake_fetch)
+
+        result = history.get_or_fetch_full_text(
+            client=None, repo=repo, kind="law", doc_id="001973",
+            doc_name="국민기초생활보장법", serial_no="281585",
+        )
+
+        assert result == {"법령": "제대로 받은 전문"}
+        # 빈 행이 제대로 된 내용으로 덮어써져야 한다(_insert 는 upsert)
+        assert repo.fetch("law", "001973", "281585") == {"법령": "제대로 받은 전문"}
+
 
 class TestBuildVersionChain:
     def test_depth_2_returns_oldest_to_newest(self, monkeypatch):

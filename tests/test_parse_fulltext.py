@@ -1,5 +1,7 @@
 """parse/fulltext.py flatten_searchable 테스트. 케이스는 실측 사례 기반."""
 
+import re
+
 from lawtrack.parse.fulltext import (
     ArticleUnit,
     ClauseNode,
@@ -364,3 +366,69 @@ class TestSearchableUnitsFor:
             }]}}
         }
         assert searchable_units_for("law", raw) == searchable_units_for("something-else", raw)
+
+
+class TestAdmrulWithoutArticles:
+    """제N조 구조가 전혀 없는 행정규칙도 표시·비교 가능한 단위로 나온다.
+
+    ★ 실측 버그(2026-08-18, 전수검증 — 전문 비교 화면에 "전문 내용을
+    찾지 못했습니다"만 뜨는 행정규칙 3건): 조문내용이 "제N조"가 하나도
+    없는 평문 한 덩어리로 오는 문서들이 있다(하도급거래공정화 지침 Ⅰ/Ⅱ,
+    정보보호시스템 고시 제1장/1.1, 행정업무용 표준 관리규정 1./가.).
+    ArticleNo 를 못 찾은 줄을 전부 건너뛰던 탓에 유닛이 0개가 됐고,
+    화면이 비었을 뿐 아니라 본 파이프라인의 locate_all() 도 검색 대상이
+    없어 위치확정이 100% 실패했다.
+    """
+
+    def _raw(self, body: str) -> dict:
+        return {"AdmRulService": {"조문내용": body}}
+
+    def test_roman_numeral_sections_become_units(self):
+        units = parse_admrul_units(self._raw(
+            "Ⅰ. 목 적이 지침은 하도급거래의 공정화를 목적으로 한다."
+            " Ⅱ. 용어의 정의연간매출액이라 함은 매출액을 말한다."
+        ))
+        assert [u.article_label for u in units] == ["Ⅰ.", "Ⅱ."]
+        assert "목 적" in units[0].text
+        assert "용어의 정의" in units[1].text
+
+    def test_chapter_headings_become_units(self):
+        units = parse_admrul_units(self._raw(
+            "제1장 총칙이 고시는 평가인증에 관한 사항을 규정한다."
+            " 제2장 평가인증체계이 장에서는 기관의 역할을 정한다."
+        ))
+        assert [u.article_label for u in units] == ["제1장", "제2장"]
+
+    def test_text_without_any_heading_is_one_block(self):
+        # 쪼갤 근거가 없으면 통째로 한 덩어리 — 최소한 화면에는 보여야 한다
+        units = parse_admrul_units(self._raw(
+            "1. 목적 및 범위가. 목적행정업무용 표준 관리규정은 상호운용성을 위한 것이다."
+        ))
+        assert len(units) == 1
+        assert units[0].article_label == "본문"
+        assert "목적 및 범위" in units[0].text
+
+    def test_dates_and_numbers_are_not_mistaken_for_headings(self):
+        # ★ 실측: "2013. 7. 25.)" 의 7.25, 금액 "38.4" 가 절 머리로 잡혀
+        #   화면에 "38.4" 라는 절 제목이 뜨던 문제의 회귀 방지.
+        units = parse_admrul_units(self._raw(
+            "Ⅰ. 총칙심사지침 개정일은 2013. 7. 25.) 이며 매출액은 38.4억원, 41.9%이다."
+        ))
+        labels = [u.article_label for u in units]
+        assert labels == ["Ⅰ."]
+        assert "38.4" not in labels and "7.25" not in labels
+
+    def test_no_content_is_lost_when_splitting(self):
+        body = ("Ⅰ. 첫째 절첫 절의 내용이다."
+                " Ⅱ. 둘째 절둘째 절의 내용이다."
+                " Ⅲ. 셋째 절셋째 절의 내용이다.")
+        units = parse_admrul_units(self._raw(body))
+        joined = "".join(u.text for u in units)
+        assert re.sub(r"\s", "", joined) == re.sub(r"\s", "", body)
+
+    def test_normal_article_structure_is_untouched(self):
+        # 폴백은 "유닛이 하나도 안 나왔을 때만" 돈다 — 정상 문서는 그대로.
+        units = parse_admrul_units(self._raw(
+            "제1조(목적) 이 규정은 목적을 정한다."
+        ))
+        assert [u.article_label for u in units] == ["제1조"]

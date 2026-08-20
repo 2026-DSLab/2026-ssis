@@ -14,6 +14,7 @@ from lawtrack.api.fulltext import FullTextResult
 from lawtrack.api.oldnew import OldNewResult, VersionInfo
 from lawtrack.db.repo import WatchlistEntry
 from webapp.app import create_app
+from webapp.laws import _apply_diff_highlight
 
 
 class _FakeWatchlistRepo:
@@ -442,3 +443,72 @@ def test_law_detail_shows_enforce_date_instead_of_serial_no(monkeypatch):
     assert "2025-07-08" in html
     # 일련번호는 title 툴팁에만 남고(참고용), 화면에 보이는 본문 텍스트는 아니다.
     assert 'title="일련번호 245293">2023-05-16<' in html
+
+
+class TestLinePairingRobustness:
+    """짝짓기가 라벨 표기 차이·중복 라벨에 흔들리지 않는지.
+
+    ★ 실측 버그(2026-08-18, 사용자 리포트 — "이 부분은 변한 게 없는데
+    색깔 표시가 돼있어", 국가를 당사자로 하는 계약에 관한 법률 시행령):
+    두 가지가 겹쳐 있었다.
+      1) 같은 항목의 라벨이 버전마다 "1의2." / "1의2" 로 갈려 짝을 못 찾고
+         한쪽 '삭제' + 다른 쪽 '신설'로 표시됐다(그 법에서만 18줄).
+      2) location_label 이 고유하지 않은데 dict 키로 써서(같은 조에 장
+         제목 줄과 본문 줄이 같은 라벨을 갖는 경우가 있다) 뒤 줄이 앞 줄을
+         덮어써 비교가 통째로 누락됐다.
+    """
+
+    def _cols(self, old_lines, new_lines):
+        def col(pairs):
+            return {"articles": [{
+                "article_label": "제110조",
+                "lines": [{"location_label": loc, "text": t,
+                           "html": t, "status": "same"} for loc, t in pairs],
+            }]}
+        return col(old_lines), col(new_lines)
+
+    def test_trailing_dot_in_label_still_pairs(self):
+        # 라벨 끝점만 다르고 내용은 같다 => 아무 표시도 없어야 한다
+        old, new = self._cols(
+            [("제110조②1의2.", "기성부분에 대한 대가 지급과 관련된 사항")],
+            [("제110조②1의2", "기성부분에 대한 대가 지급과 관련된 사항")],
+        )
+        _apply_diff_highlight(old, new)
+        assert old["articles"][0]["lines"][0]["status"] == "same"
+        assert new["articles"][0]["lines"][0]["status"] == "same"
+
+    def test_trailing_dot_difference_still_detects_real_change(self):
+        # 끝점 차이를 무시하되, 내용이 진짜 다르면 변경으로 잡아야 한다
+        old, new = self._cols(
+            [("제110조②1의2.", "예전 문구")],
+            [("제110조②1의2", "새로운 문구")],
+        )
+        _apply_diff_highlight(old, new)
+        assert old["articles"][0]["lines"][0]["status"] == "changed"
+
+    def test_duplicate_labels_pair_in_order_not_overwritten(self):
+        # 같은 라벨이 두 줄 => 앞은 앞끼리, 뒤는 뒤끼리 짝지어야 한다.
+        # dict 로 덮어쓰면 첫 줄이 사라져 비교가 누락된다.
+        old, new = self._cols(
+            [("제1조", "제1장 총칙"), ("제1조", "이 영은 …을 규정함을 목적으로 한다")],
+            [("제1조", "제1장 총칙"), ("제1조", "이 영은 …을 규정함을 목적으로 한다")],
+        )
+        _apply_diff_highlight(old, new)
+        assert [ln["status"] for ln in old["articles"][0]["lines"]] == ["same", "same"]
+        assert [ln["status"] for ln in new["articles"][0]["lines"]] == ["same", "same"]
+
+    def test_duplicate_labels_detect_change_in_second_occurrence(self):
+        old, new = self._cols(
+            [("제1조", "제1장 총칙"), ("제1조", "예전 목적 조문")],
+            [("제1조", "제1장 총칙"), ("제1조", "바뀐 목적 조문")],
+        )
+        _apply_diff_highlight(old, new)
+        assert [ln["status"] for ln in old["articles"][0]["lines"]] == ["same", "changed"]
+
+    def test_extra_duplicate_line_is_added_not_silently_dropped(self):
+        old, new = self._cols(
+            [("제1조", "첫 줄")],
+            [("제1조", "첫 줄"), ("제1조", "새로 붙은 둘째 줄")],
+        )
+        _apply_diff_highlight(old, new)
+        assert [ln["status"] for ln in new["articles"][0]["lines"]] == ["same", "added"]

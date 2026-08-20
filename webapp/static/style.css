@@ -1239,8 +1239,12 @@ mark.diff-changed {
 .hub-card--c3 { --hub-accent: var(--k-new); }
 .hub-card--c3 .hub-card-icon { background: var(--k-new-soft); color: var(--k-new); }
 
+/* 파일 선택 + 제출 버튼이 한 줄, 기준 시점 칸이 그 아래 한 줄.
+   DOM 순서(label → 날짜칸 → 버튼)와 상관없이 자리를 정해야 해서
+   자동 배치 대신 행/열을 직접 지정한다. */
 .upload-card {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 16px;
   background: var(--card-bg);
@@ -1249,6 +1253,10 @@ mark.diff-changed {
   padding: 22px 24px;
   max-width: 640px;
 }
+
+.upload-card .upload-label { grid-column: 1; grid-row: 1; }
+.upload-card .upload-submit { grid-column: 2; grid-row: 1; }
+.upload-card .ref-date-field { grid-column: 1 / -1; grid-row: 2; }
 
 /* label 이 파일 입력 전체의 클릭 영역 — 기본 input[type=file] UI 는
    숨기고, 선택된 파일명은 스크립트가 라벨 텍스트로 바꿔 보여준다. */
@@ -1372,3 +1380,103 @@ mark.diff-changed {
   color: var(--ink-soft);
   margin-top: 2px;
 }
+
+/* ---------- PDF 확인: 기준 시점 입력 + 결과 구분 ---------- */
+
+/* 기준 시점은 선택 항목이다 — 파일 선택만큼 강하게 보이면 안 넣으면
+   안 되는 것처럼 읽히므로, 위쪽 얇은 구분선 아래 한 단 낮춰 배치한다. */
+.ref-date-field {
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.ref-date-label {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.ref-date-optional {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--k-nochange-soft);
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 4px;
+  vertical-align: 1px;
+}
+
+.ref-date-input {
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 12px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ref-date-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
+.ref-date-hint { font-size: 0.8rem; color: var(--muted); margin: 8px 0 0; }
+
+/* 결과 덩어리(확인 불가 / 변동 없음). 본 목록과 섞이지 않게 위쪽에
+   여백과 구분선을 크게 준다. */
+.result-group {
+  margin-top: 34px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.result-group-title { font-size: 1.05rem; font-weight: 800; margin: 0 0 6px; }
+
+.result-group-desc { font-size: 0.85rem; color: var(--muted); margin: 0 0 12px; }
+
+/* 변동 없는 것들은 접어 둔다 — 사용자가 요청한 "바뀐 것만 보여주기"는
+   지키되, 판단 근거가 궁금하면 펼쳐 볼 수 있게 남긴다. */
+.result-group-summary {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.result-group-summary:hover { color: var(--primary); }
+
+.result-none {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--k-new);
+  background: var(--k-new-soft);
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.match-revision--changed {
+  color: var(--k-delete);
+  background: var(--k-delete-soft);
+}
+
+/* 확인 불가는 경고색(주황) 대신 중립 회색 — 실사용에서 거의 안 뜨는
+   상태라 눈에 띄는 색을 주면 화면만 요란해진다(사용자 요청 2026-08-18).
+   그래도 목록에서 빼지는 않는다: 모르는 것을 안 바뀐 것으로 말할 수는 없다. */
+.match-revision--unknown {
+  color: var(--k-nochange);
+  background: var(--k-nochange-soft);
+}
+
+@media (max-width: 560px) {
+  .upload-card { grid-template-columns: 1fr; }
+  .upload-card .upload-submit { grid-column: 1; grid-row: 3; }
+  .upload-card .ref-date-field { grid-row: 2; }
+}
+

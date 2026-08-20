@@ -133,8 +133,15 @@ def register_pdf_routes(
             _lazy["d"] = load_from_seed(str(_seed))
         return _lazy["d"]
 
-    def _upload_page(error: str | None = None, status: int = 200):
-        return render_template("pdf_upload.html", error=error), status
+    def _upload_page(error: str | None = None, status: int = 200, doc_date: str = ""):
+        # doc_date 를 되돌려 주는 이유: 오류로 화면을 다시 그릴 때 사용자가
+        # 골라 둔 날짜까지 날아가면 처음부터 다시 입력해야 한다.
+        # today 는 날짜 칸의 max — 브라우저가 미래 날짜를 아예 못 고르게 한다
+        # (서버에서도 한 번 더 막지만, 고르기 전에 막는 편이 친절하다).
+        return render_template(
+            "pdf_upload.html", error=error, doc_date=doc_date,
+            today=date.today().isoformat(),
+        ), status
 
     @app.get("/pdf")
     def pdf_upload() -> tuple[str, int]:
@@ -143,8 +150,22 @@ def register_pdf_routes(
     @app.post("/pdf")
     def pdf_check() -> tuple[str, int]:
         file = request.files.get("document")
+        raw_date = (request.form.get("doc_date") or "").strip()
         if file is None or not file.filename:
-            return _upload_page("파일을 선택해 주세요.", 400)
+            return _upload_page("파일을 선택해 주세요.", 400, doc_date=raw_date)
+
+        # 기준 시점(선택). 넣으면 "그 뒤로 바뀐 법"만 추려 보여주고,
+        # 안 넣으면 예전처럼 인용 목록 전체를 그대로 보여준다.
+        ref_date: date | None = None
+        if raw_date:
+            try:
+                ref_date = date.fromisoformat(raw_date)
+            except ValueError:
+                return _upload_page(
+                    f"날짜 형식을 알아볼 수 없어요: {raw_date} — 연-월-일로 골라 주세요.", 400,
+                )
+            if ref_date > date.today():
+                return _upload_page("기준 시점이 미래예요 — 문서를 만든 날짜를 골라 주세요.", 400)
 
         # 브라우저가 주는 파일명은 NFD(macOS)일 수 있어 표시용으로 NFC 통일
         doc_name = unicodedata.normalize("NFC", file.filename)
@@ -152,18 +173,30 @@ def register_pdf_routes(
         if suffix not in ALLOWED_SUFFIXES:
             return _upload_page(
                 f"지원하지 않는 형식입니다: {suffix or '(확장자 없음)'} — PDF 또는 HWPX만 올릴 수 있어요.",
-                400,
+                400, doc_date=raw_date,
             )
 
-        # pypdfium2/zipfile 은 경로 입력을 받으므로 임시 파일로 내려서 처리
-        with tempfile.NamedTemporaryFile(suffix=suffix) as tmp:
-            file.save(tmp.name)
+        # pypdfium2/zipfile 은 경로 입력을 받으므로 임시 파일로 내려서 처리.
+        #
+        # ★ 실측 버그(2026-08-07, Windows 11): 원래 NamedTemporaryFile 을
+        #   연 채로 그 이름에 file.save(tmp.name) 을 했는데, Windows 는
+        #   NamedTemporaryFile 을 O_TEMPORARY 로 열어 핸들이 살아있는 동안
+        #   같은 경로를 다시 열 수 없다 — 업로드마다 PermissionError 로
+        #   500 이 났다(POSIX 에서는 재오픈이 되므로 macOS/Linux 에서는
+        #   증상이 안 나타난다). 디렉터리만 임시로 잡고 그 안에 우리가
+        #   직접 파일을 만들어, 열려 있는 핸들과 경로 재오픈이 겹치지
+        #   않게 한다. TemporaryDirectory 는 블록을 벗어날 때 통째로
+        #   지우므로 정리 보장은 그대로다.
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = str(Path(tmpdir) / f"upload{suffix}")
+            file.save(tmp_path)
             try:
-                pages = extract_text(tmp.name)
+                pages = extract_text(tmp_path)
             except Exception:
                 # 손상된 파일, 암호 걸린 PDF 등 — 원인 불문 "읽을 수 없음"으로
                 return _upload_page(
-                    "파일을 읽지 못했어요. 손상됐거나 암호가 걸린 문서일 수 있어요.", 400,
+                    "파일을 읽지 못했어요. 손상됐거나 암호가 걸린 문서일 수 있어요.",
+                    400, doc_date=raw_date,
                 )
 
         d = _dictionary()
@@ -181,6 +214,38 @@ def register_pdf_routes(
             revisions = {}
         cutoff = date.today() - timedelta(days=RECENT_REVISION_DAYS)
 
+        def _change_status(enforce: date | None) -> str:
+            """기준 시점 이후 이 법이 바뀌었는지 — "changed"/"unchanged"/"unknown".
+
+            ★ 여기서 쓰는 enforce 는 "지금 시행 중인 버전의 시행일"이다
+            (fetch_revision_info 가 change_log 에서 법마다 가장 최근 감지분
+            하나를 뽑아 준다). 그래서 이력 전체를 뒤지지 않아도 답이 나온다:
+
+              - 시행일 > 기준일  : 지금 버전이 문서를 쓴 뒤에 시행됐다
+                                   => 그 사이에 적어도 한 번 바뀌었다.
+              - 시행일 <= 기준일 : 문서를 쓸 때 이미 지금 버전이 시행 중이었고
+                                   그 뒤로 바뀐 게 없다(바뀌었다면 더 나중
+                                   시행일을 가진 새 버전이 현행이었을 것)
+                                   => 확실히 안 바뀌었다.
+
+            ★★ 실측으로 확인하고 설계를 바꾼 부분(2026-08-18): 처음엔
+            change_log 에 개정 이력이 쌓여 있는 줄 알고 "기준일 이후 개정
+            건수를 센다"로 잡았는데, 실제로는 1909행이 전부 법당 현재 버전
+            하나의 중복이었다(고유 (law_id,new_serial_no) 106개, 법당 1개).
+            이력이 없어도 위 논리로 예/아니오는 완전히 답할 수 있어서,
+            이력 백필 없이 이 방식으로 간다 — 다만 "몇 번, 무엇이" 까지는
+            알 수 없으므로 화면에서도 그 이상을 주장하지 않는다(자세한
+            내용은 /laws/<id> 전문 비교로 넘긴다).
+
+            DB 조회가 실패했거나 그 법 기록이 없으면 "unknown" — 모르는 것을
+            "안 바뀜"으로 뭉개면 안 된다(그게 제일 위험한 오답이다).
+            """
+            if ref_date is None:
+                return "n/a"
+            if enforce is None:
+                return "unknown"
+            return "changed" if enforce > ref_date else "unchanged"
+
         def _annotate(m: dict) -> dict:
             rev = revisions.get(m["law_id"]) or {}
             enforce = rev.get("enforce_date")
@@ -194,6 +259,9 @@ def register_pdf_routes(
                     if recent else None
                 ),
                 "summary_headline": rev.get("summary_headline"),
+                "enforce_date": enforce,
+                "revision_type": rev.get("revision_type") or "개정",
+                "change_status": _change_status(enforce),
             }
 
         matched = [_annotate(m) for m in summary["matched"]]
@@ -209,4 +277,8 @@ def register_pdf_routes(
             matched=matched,
             candidates=candidates,
             scan_warning=total_chars < SCAN_WARNING_CHARS,
+            ref_date=ref_date,
+            changed=[m for m in matched if m["change_status"] == "changed"],
+            unchanged=[m for m in matched if m["change_status"] == "unchanged"],
+            unknown=[m for m in matched if m["change_status"] == "unknown"],
         ), 200
