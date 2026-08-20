@@ -558,7 +558,9 @@ if __name__ == "__main__":
     _demo_mode = os.environ.get("LAWTRACK_DEMO_MODE") == "1"
     if _demo_mode:
         create_app(live_check=_demo_live_check, enable_background_refresh=False).run(
-            debug=True, threaded=True
+            debug=True, threaded=True, use_reloader=False
         )
     else:
-        create_app(enable_background_refresh=True).run(debug=True, threaded=True)
+        create_app(enable_background_refresh=True).run(
+            debug=True, threaded=True, use_reloader=False
+        )

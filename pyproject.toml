@@ -8,6 +8,7 @@ version = "1.0.0"
 description = "법령/행정규칙 개정 자동감지 → 조문 비교 → LLM 요약 → HWPX 보고서 파이프라인"
 requires-python = ">=3.11"
 dependencies = [
+    "httpx>=0.27",
     "requests>=2.31",
     "python-dotenv>=1.0",
     "psycopg2-binary>=2.9",

@@ -238,7 +238,22 @@ def _build_laws(
         expansions_by_key: dict[tuple[str, str], StructuralExpansion] = {}
         for d in diffs:
             if d["match_status"] in ("0건실패", "중복실패"):
-                detail = json.loads(d.get("match_detail") or "[]")
+                raw_detail = d.get("match_detail")
+                if isinstance(raw_detail, (str, bytes, bytearray)):
+                    parsed_detail = json.loads(raw_detail or "[]")
+                else:
+                    # PostgreSQL JSONB는 psycopg2가 이미 list/dict 등의
+                    # 파이썬 객체로 역직렬화해서 반환한다.
+                    parsed_detail = raw_detail
+
+                if parsed_detail is None:
+                    detail = []
+                elif isinstance(parsed_detail, list):
+                    detail = [str(item) for item in parsed_detail]
+                else:
+                    # 예전 데이터나 수동 입력값이 배열이 아니어도 기간 전체의
+                    # 계약/캐시 생성을 중단하지 않고 진단 내용으로 남긴다.
+                    detail = [str(parsed_detail)]
                 unresolved.append(
                     UnresolvedItem(
                         law_id=law_id, law_name=law_name, new_serial_no=serial_no,

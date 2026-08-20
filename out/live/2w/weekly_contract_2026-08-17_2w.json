@@ -1,0 +1,60 @@
+{
+  "contract_version": "1.0",
+  "batch_date": "2026-08-17",
+  "period": {
+    "from_date": "2026-08-03",
+    "to_date": "2026-08-17"
+  },
+  "amendment_groups": [
+    {
+      "group_id": "single-000190-285697",
+      "promulgation_no": "",
+      "promulgation_date": "",
+      "revision_type": "",
+      "affected_law_ids": [
+        "000190"
+      ],
+      "laws": [
+        {
+          "law_id": "000190",
+          "law_type": "법률",
+          "law_name": "아동복지법",
+          "internal_name": "아동복지법",
+          "dept_codes": [],
+          "old_serial_no": "281929",
+          "new_serial_no": "285697",
+          "enforce_date": "2026-08-04",
+          "revision_type": "일부개정",
+          "revision_reason": "[일부개정] ◇ 개정이유 및 주요내용 친권자 등이 모두 아동학대행위자 등이거나 교육 관계 법령에 따라 취학에 친권자 등의 동의가 필요하지 아니한 경우에는 시ㆍ도지사 또는 시장ㆍ군수ㆍ구청장이 친권자 등의 동의 없이 교육감 또는 교육장에게 피해아동 및 피해아동 가족의 취학을 요청하거나 학교의 장을 통해 요청할 수 있도록 하고, 해당 교육감 또는 교육장은 특별한 사유가 없으면 이에 따르도록 의무화함으로써 피해아동과 피해아동 가족의 학습권을 보장하려는 것임. <법제처 제공>",
+          "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=285697&type=HTML",
+          "articles": [
+            {
+              "article_label": "제29조",
+              "clause_no": "⑦",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "개정",
+              "old_text": "⑦ 제6항에 따른 취학에 필요한 사항은 대통령령으로 정한다.",
+              "new_text": "⑦ 제6항에 따라 피해아동 및 피해아동의 가족의 취학을 지원하려는 시ㆍ도지사 또는 시장ㆍ군수ㆍ구청장은 친권자, 후견인 및 그 밖의 법률에 따라 피해아동 및 피해아동의 가족을 부양할 의무가 있는 사람(이하 이 조에서 “친권자등”이라 한다)이 모두 아동학대행위자 또는 아동학대사례관리대상자인 경우로서 친권자등의 동의를 얻어 취학하는 것이 곤란하거나 「초ㆍ중등교육법」 등 교육 관계 법령에 따라 친권자등의 동의 없이 취학할 수 있는 경우에는 친권자등의 동의 없이 교육감 또는 교육장에게 피해아동 및 피해아동의 가족의 취학을 요청하거나 「초ㆍ중등교육법」 제2조에 따른 학교의 장으로 하여금 교육감 또는 교육장에게 피해아동 및 피해아동의 가족의 취학을 요청하도록 할 수 있다. 이 경우 취학 요청을 받은 교육감 또는 교육장은 특별한 사유가 없으면 이에 따라야 한다.",
+              "match_status": "위치재배치의심"
+            },
+            {
+              "article_label": "제29조",
+              "clause_no": "⑧",
+              "item_label": "",
+              "subitem_label": "",
+              "change_type": "신설",
+              "old_text": "",
+              "new_text": "⑧ 제6항 및 제7항에 따른 취학에 필요한 사항은 대통령령으로 정한다.",
+              "match_status": "성공"
+            }
+          ],
+          "structural_expansions": [],
+          "unchanged_clauses": {}
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

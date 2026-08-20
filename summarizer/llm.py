@@ -176,12 +176,23 @@ class OpenAIClient:
 
     def __init__(self, settings: LLMSettings):
         try:
-            import httpx
             import openai
         except ImportError as exc:  # pragma: no cover
             raise LLMError(
                 "openai 패키지가 없습니다. `pip install openai` 를 실행하세요."
             ) from exc
+
+        # openai 3.x부터 전송 계층이 httpx에서 httpx2로 바뀌었다. SDK가
+        # 요구하는 Client 타입과 정확히 맞춰야 하며, 1.x/2.x 설치 환경도
+        # 계속 지원한다.
+        try:
+            openai_major = int(openai.__version__.split(".", 1)[0])
+        except (AttributeError, ValueError):  # pragma: no cover - 비표준 SDK 빌드
+            openai_major = 2
+        if openai_major >= 3:
+            import httpx2 as openai_httpx
+        else:
+            import httpx as openai_httpx
 
         self._settings = settings
         kwargs = {
@@ -195,7 +206,7 @@ class OpenAIClient:
             # 이 환경에서는 verify=True 로 두면 모든 LLM 호출이 그냥
             # 실패한다 — 기존 LawApiClient 가 이미 내린 것과 같은 결정을
             # 여기서도 따른다.
-            "http_client": httpx.Client(verify=False),
+            "http_client": openai_httpx.Client(verify=False),
         }
         if settings.base_url:
             # OpenRouter 등 OpenAI 호환 중계 서비스용

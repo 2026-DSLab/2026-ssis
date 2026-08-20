@@ -170,6 +170,45 @@ class TestNoComparisonReporting:
         assert law.old_serial_no == ""
 
 
+class TestMatchDetailJsonbHandling:
+    """PostgreSQL JSONB는 문자열이 아니라 이미 역직렬화된 list를 반환한다."""
+
+    @staticmethod
+    def _failure_repo(match_detail):
+        repo = MagicMock()
+        repo.fetch_period.return_value = [
+            {
+                "law_id": "001357", "law_serial_no": "251019",
+                "article_code": "22", "article_label": "제22조",
+                "clause_no": "", "item_label": "", "subitem_label": "",
+                "change_type": "개정", "old_text": "구", "new_text": "신",
+                "match_status": "0건실패", "match_detail": match_detail,
+                "enforce_date": date(2023, 11, 17),
+            },
+        ]
+        return repo
+
+    def test_native_jsonb_list_is_not_parsed_twice(self):
+        contract = build_contract(
+            _watchlist_repo(), self._failure_repo(["정확일치", "공백정규화"]),
+            _change_log_repo(),
+            from_date=date(2020, 1, 1), to_date=date(2100, 1, 1),
+        )
+
+        item = contract.unresolved[0]
+        assert item.guards_tried == ["정확일치", "공백정규화"]
+        assert item.detail == "정확일치; 공백정규화"
+
+    def test_legacy_json_string_remains_supported(self):
+        contract = build_contract(
+            _watchlist_repo(), self._failure_repo('["정확일치", "공백정규화"]'),
+            _change_log_repo(),
+            from_date=date(2020, 1, 1), to_date=date(2100, 1, 1),
+        )
+
+        assert contract.unresolved[0].guards_tried == ["정확일치", "공백정규화"]
+
+
 class TestStructuralExpansionGrouping:
     """★ 설계(2026-07-19, LLM팀 산출물 리뷰): match_status="구조확장(구법미분리)"
     행들(구법엔 없던 호/목 구조가 신법에서 새로 생겨 old_text가 여러 행에
