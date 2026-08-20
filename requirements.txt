@@ -1,9 +1,13 @@
-requests>=2.31
-python-dotenv>=1.0
-mysql-connector-python>=8.3
-pydantic>=2.6
-openai>=2.0,<3
-truststore>=0.10,<1
-python-hwpx>=4.0,<5
-
-pytest>=8.0
+# 의존성의 원본은 pyproject.toml 이다. 이 파일은 `pip install -r` 습관을
+# 위해 남겨 둔 얇은 포인터일 뿐이며, 버전을 여기서 따로 관리하지 않는다
+# (두 곳에 적으면 반드시 어긋난다).
+#
+#   pip install -r requirements.txt      # 이 파일
+#   pip install -e ".[openai,dev]"       # 위와 같은 결과
+#
+# 프로바이더를 Anthropic 으로 쓸 경우: pip install -e ".[anthropic,dev]"
+#
+# ★ -e (editable) 로 설치해야 하는 이유: 패키지가 두 곳에 나뉘어 있어
+#   (src/lawtrack, summarizer) 설치하지 않으면 import 가 되지 않는다.
+#   특히 작업 스케줄러는 대화형 셸의 PYTHONPATH 를 물려받지 않는다.
+-e .[openai,dev]

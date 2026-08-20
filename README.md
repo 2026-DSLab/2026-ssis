@@ -1,84 +1,446 @@
 # 법령/행정규칙 개정 자동감지 파이프라인
 
 국가법령정보 Open API를 이용해 워치리스트에 등록된 법령/행정규칙의 개정 여부를
-매주 감지하고, 조/항/호/목 단위로 구조화된 diff를 만들어 LLM팀에게 JSON으로
-넘겨준다.
+매주 감지하고, 조/항/호/목 단위로 구조화된 diff를 만든 뒤, LLM 멀티에이전트로
+요약·검증해 웹페이지와 한글(HWPX) 보고서로 내보낸다.
+
+## 아키텍처 개요
+
+```
+ ① 감지        watchlist(감시 대상 목록)의 일련번호를 API로 대조 → 바뀐 것만 추림
+ ② 조문 비교    신구법 대비 파싱 → 6가드로 위치 확정 → article_diff 저장
+ ③ 계약 JSON   out/weekly_contract_<날짜>.json  (여기까지가 src/lawtrack)
+ ─────────────────────────────────────────────────────────────────
+ ④ LLM 요약    매핑 → 조문별 요약(병렬) → 법령 종합    (summarizer/)
+ ⑤ 검증        요약을 원문과 코드로 대조 (LLM 판단 없음)
+ ⑥ 보고서      HWPX 생성 → 다시 열어 누락 대조
+ ⑦ DB 적재     law_summary 테이블에 upsert
+ ─────────────────────────────────────────────────────────────────
+ ⑧ 웹페이지    law_summary를 읽어 브라우저에 렌더링 + HWPX 다운로드   (webapp/)
+```
+
+DB는 항상 하나의 진실의 원천이다 — 배치(`scripts/run_weekly.py`)가 채우고,
+웹페이지(`webapp/`)는 그 결과를 읽기만 한다. 웹페이지 자체는 API를 호출하거나
+LLM을 부르지 않는다(단, "기간별 즉석 조회" 기능은 예외 — 아래 [웹페이지](#웹페이지-webapp) 절 참고).
+
+## 빠른 시작
+
+전 단계를 한 번에 돌리려면:
+
+```bash
+python scripts/run_weekly.py --full
+```
+
+`--full` 없이 실행하면 ①~③(감지·비교)만 한다. ④부터는 호출 건당 LLM 비용이
+들기 때문에 기본값을 꺼 두었다 — 감지 결과만 확인하려고 돌린 실행에서
+조용히 과금되면 안 된다.
+
+| 플래그 | 하는 일 |
+|---|---|
+| (없음) | 감지 → 조문 비교 → 계약 JSON. 비용 없음 |
+| `--summarize` | + LLM 요약 JSON (`out/summaries/`) |
+| `--hwpx` | + HWPX 보고서 (`out/reports/`). `--summarize` 포함 |
+| `--summary-db` | + `law_summary` 테이블 적재. `--summarize` 포함 |
+| `--full` | 위 전부 |
+
+계약 JSON이 이미 있다면 요약 단계만 따로 돌릴 수도 있다:
+
+```bash
+python -m summarizer out/weekly_contract_2026-07-19.json --hwpx --db
+python -m summarizer out/weekly_contract_2026-07-19.json --dry-run --echo  # API 키 없이 프롬프트만 확인
+```
+
+웹페이지를 켜려면(DB에 이미 `law_summary` 데이터가 있어야 함):
+
+```bash
+python -m webapp.app
+```
 
 ## 요구사항
 
 - Python 3.11+ (conda 환경 권장)
-- MySQL 8.0+
+- PostgreSQL 14+
 - 국가법령정보 Open API 인증키(OC) — <https://open.law.go.kr>에서 발급
-- OpenRouter 또는 OpenAI API 키 — AI 요약을 사용할 때만 필요
+- LLM API 키 (요약 단계를 쓸 경우)
 
 ```bash
-pip install -r requirements.txt
+pip install -e ".[openai]"          # 요약까지 (OpenRouter/원내 QWEN 도 OpenAI 호환이면 이것)
+pip install -e ".[anthropic]"       # Anthropic 을 쓸 경우
+pip install -e ".[openai,web,dev]"  # + 웹페이지(Flask, PDF 확인용 pypdfium2 포함) + pytest
 ```
+
+**`pip install -r requirements.txt` 가 아니라 `pip install -e .` 를 쓴다.**
+이 프로젝트는 패키지가 세 곳에 나뉘어 있어(`src/lawtrack`, `summarizer`,
+`webapp`) 설치하지 않으면 `import lawtrack` 이 되지 않는다. 특히 작업
+스케줄러는 대화형 셸의 `PYTHONPATH` 를 물려받지 않으므로, 설치해 두는 것이
+자동 실행의 전제다.
 
 ## 환경변수 (`.env`)
 
 프로젝트 루트에 `.env` 파일을 만든다(코드 저장소에 커밋하지 말 것 — 인증키/DB
-비밀번호가 들어간다).
+비밀번호가 들어간다). `.env.example` 을 복사해 채우면 된다.
 
 ```env
-# 필수
+# --- 1~2단계: 감지·비교 (src/lawtrack) ---
 LAW_API_OC=발급받은_OC_인증키
-MYSQL_PASSWORD=MySQL_비밀번호
+POSTGRES_PASSWORD=PostgreSQL_비밀번호
+
+# --- 3단계: 요약 (summarizer) ---
+OPENAI_API_KEY=발급받은_API_키
+SUMMARY_PROVIDER=openai
+SUMMARY_MODEL=gpt-5.4-mini
+
+# OpenRouter(여러 모델을 한 키로 호출하는 중계 서비스)를 쓰는 경우, 위
+# 3줄 대신 이 3줄만 쓴다 — base_url(https://openrouter.ai/api/v1)은
+# 코드가 자동으로 채우므로 SUMMARY_BASE_URL을 따로 적을 필요 없다.
+# SUMMARY_PROVIDER=openrouter
+# OPENROUTER_API_KEY=발급받은_API_키
+# SUMMARY_MODEL=openai/gpt-4o-mini   # 형식: provider/model — openrouter.ai/models 참고
 
 # 선택 (기본값 있음)
-MYSQL_HOST=127.0.0.1
-MYSQL_PORT=3306
-MYSQL_USER=root
-MYSQL_DATABASE=law_tracking_db
+POSTGRES_HOST=127.0.0.1
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_DATABASE=law_tracking_db
 LOG_LEVEL=INFO
-
-# OpenRouter 요약(선택): 키를 넣으면 run_weekly.py에서 자동 활성화
-OPENAI_API_KEY=발급받은_OpenRouter_API_키
-OPENAI_BASE_URL=https://openrouter.ai/api/v1
-OPENAI_MODEL=openai/gpt-4o-mini
-OPENAI_SUMMARY_REQUIRED=false
-
-# 독립 요약 검증 에이전트
-OPENAI_VERIFY_ENABLED=true
-OPENAI_VERIFY_REQUIRED=true
-OPENAI_VERIFY_FAIL_CLOSED=true
-# 비우면 OPENAI_MODEL을 사용
-OPENAI_VERIFY_MODEL=
 ```
 
-OpenRouter에서는 `OPENAI_MODEL`을 `공급자/모델` 형식의 모델 ID로 적는다.
-예를 들어 GPT-4o mini는 `openai/gpt-4o-mini`이다. OpenAI API를 직접 쓸 때는
-`OPENAI_BASE_URL`을 비우거나 삭제하고 `OPENAI_MODEL=gpt-4o-mini`처럼 적으면 된다.
-`OPENAI_API_KEY`가 비어 있으면 API를 호출하지 않고 공식 개정이유와 조문 차이를
-규칙 기반으로 정리한다. 요약 실패도 배치를 계속 진행하는 것이 기본이며,
-요약 실패 시 전체 배치를 실패 처리하려면 `OPENAI_SUMMARY_REQUIRED=true`로 둔다.
-요약이 생성되면 독립 검증 에이전트가 법령별 원문 사실과 요약을 별도 호출로
-대조한다. `OPENAI_VERIFY_FAIL_CLOSED=true`이면 검증이 실패한 AI 요약은
-JSON/HWPX에서 제외되어 규칙 기반 보고서로 전환된다.
-`OPENAI_VERIFY_REQUIRED=true`이면 이 경우 배치 종료 코드도 1이 된다.
-전체 예시는 `.env.example`을 참고한다. API 키 값은 로그와 HWPX/JSON에 기록하지
-않는다.
+감지만 쓸 것이면 `LAW_API_OC` + `POSTGRES_PASSWORD` 만, 요약만 쓸 것이면
+API 키만 있어도 된다 — 쓰지 않는 단계의 설정은 요구하지 않는다. 웹페이지는
+DB 접속 정보만 있으면 된다(LLM 키 불필요 — 이미 요약된 결과만 읽으므로).
+
+## 폴더 구조
+
+```
+src/lawtrack/
+  config.py           .env 로딩 → Settings(api, db) — 다른 모든 모듈이 여길 통해 설정을 받음
+
+  api/                국가법령정보 Open API HTTP 레이어 (요청/응답 파싱까지, 비즈니스 로직은 없음)
+    client.py           공통 HTTP 클라이언트 (LawApiClient) — 인증키(OC) 부착, 재시도, LawApiError
+    search.py           목록조회 API — 워치리스트 항목의 최신 일련번호·시행상태 확인
+    fulltext.py          법령/행정규칙 "본문조회" API 호출 (전문 JSON 원본을 그대로 반환)
+    oldnew.py            "신구법 비교" API 호출 (법제처가 만든 개정 전/후 대비 원본)
+
+  parse/              api/ 가 받아온 원본 JSON을 구조화된 파이썬 객체로 변환 (여기까지는 파싱만, 위치확정 없음)
+    fulltext.py          전문 JSON → 조/항/호/목 트리 (parse_articles: 법령 / parse_admrul_units: 행정규칙)
+    oldnew.py            신구법 비교 API 응답 → (article_label, change_type, old_text, new_text) 레코드 목록
+    jsonutil.py           위 둘이 공유하는 JSON 순회/정규화 유틸
+
+  text/               순수 텍스트 로직 (외부 의존성 없음, 입출력이 전부 str/객체)
+    normalize.py          공백·특수문자·순화표기 등 비교 전 정규화
+    split.py              조문 원문을 항/호/목 단위 Fragment로 분리 (search_all/split_by_item/leading_marker)
+
+  locate/             6단계 가드 파이프라인 — old_text가 신법 본문 어디에 해당하는지 확정 (이 프로젝트의 핵심 로직)
+    locator.py            가드 1~6 순서대로 시도, 성공하면 위치 확정 / 전부 실패하면 unresolved로 보고
+
+  db/                 PostgreSQL 접근 계층 — 테이블별 Repo 클래스로 분리 (아래 "데이터베이스" 절 참고)
+    conn.py               커넥션 풀 + Database.cursor()/transaction() 컨텍스트매니저
+    repo.py               WatchlistRepo / VersionRepo / ChangeLogRepo / ArticleDiffRepo / LawSummaryRepo
+
+  link.py             연쇄개정 그룹핑 — 같은 공포번호로 같이 개정된 법들을 하나의 AmendmentGroup으로 묶음
+
+  detect.py           워치리스트 1건 처리 파이프라인의 지휘자
+                       (일련번호 변경 감지 → 본문/신구법 API 호출 → parse → locate → link → DB 저장)
+
+  contract/           DB → LLM팀에게 넘길 최종 JSON 산출 계층
+    schema.py             Pydantic 모델 전체 (WeeklyContract 이하 전 스키마, 아래 "산출물 구조" 절이 이 파일을 설명함)
+    export.py             DB 테이블들을 읽어 위 Pydantic 모델로 조립 (build_contract) — structural_expansions 그룹핑도 여기
+
+src/doc_match/        업로드 문서(PDF/HWPX) ↔ 워치리스트 매칭 — LLM 없이 순수 문자열 매칭 (웹의 "PDF 확인" 기능의 엔진)
+  extract.py            PDF(pypdfium2)/HWPX(zip+XML) → 페이지별 텍스트
+  normalize.py          법령명 표기 통일 (가운뎃점 6종·공백·인용부호·괄호접두 제거)
+  dictionary.py         seed_watchlist.sql 파싱 → official/internal 이원 키 사전 + 수동 약칭("국가계약법" 등)
+  match.py              매칭 엔진 — 긴 이름 우선(이중계상 방지), 원문 위치 보존(스니펫), 감시 대상 외 후보 수집
+  report.py             법령별 인용 횟수·페이지 집계 → dict(웹)/텍스트(CLI) 리포트
+
+summarizer/           계약 JSON → LLM 요약 → 검증 → HWPX 보고서 (3단계)
+  config.py             .env 로딩 → Settings(llm, pipeline). lawtrack/config.py 와 같은 방식
+  models.py              파이프라인 내부/출력 자료구조 (ArticleUnit, ArticleSummary, LawSummary 등)
+  llm.py                LLMClient 프로토콜 + OpenAI/Anthropic 구현 + DryRunClient (프로바이더 교체 지점)
+  loader.py             계약 JSON 로드 → 조문 단위(ArticleUnit)로 정규화, apply_mappings(). 전부 결정론적, LLM 미개입
+  matching.py           구↔신 위치 대응의 계산 가능한 부분 (완전일치·밀림 가능성 판정)
+  locfmt.py              위치 라벨(location_label) 조/위치 분리 + 항/호/목을 사람이 읽는 표기로 변환 (HWPX·규칙기반 문장이 공유)
+  textdiff.py           어절 단위 텍스트 비교(공백 보존 토큰화) — triage/렌더러가 공유하는 토대
+  triage.py             LLM 투입 전 결정론적 사전 선별 — 형식정비(기관명·인용법령명 일괄교체)는
+                        LLM 없이 규칙으로 분류해 비용·리포트 노이즈를 줄임 (ArticleAgent.run() 안에서 호출)
+  agents.py             MappingAgent / ArticleAgent / LawAgent (감수 에이전트는 없음 — 아래 verifier.py 참고)
+  prompts/              에이전트별 프롬프트 — 가장 자주 고치는 부분이라 로직과 분리
+  pipeline.py           오케스트레이션: 매핑 → 조문 팬아웃(병렬) → 법령 종합 → 검증
+  verifier.py           요약을 원문과 코드로 대조 (환각·방향오류만). LLM 을 판단자로 쓰지 않는 이유는 파일 상단 주석 참고
+  postprocess.py        LLM 출력 정리 (한자 오타 등)
+  render.py             조문별 변경 목록을 코드로 조립 — 구조 사실은 LLM 에 맡기지 않는다
+  report/               HWPX 보고서
+    builder.py            ContractSummary → HWPX (표지/개요/목록/조문별 변경표/미확정/비교불가)
+    layout.py             지면·표 배치 (폭, 열 너비, 칸 여백, 머리행)
+    verify.py             생성한 HWPX 를 다시 열어 요약 텍스트가 온전히 들어갔는지 대조(내용 완전성)
+    inspect.py            생성한 HWPX 를 다시 열어 표 너비·셀 정렬·빈 문단 비율 등 서식이 안 깨졌는지 검사(구조/레이아웃)
+  sinks.py              저장처 — JsonSink / HwpxSink / DbSink (모두 같은 Sink 프로토콜)
+  __main__.py           `python -m summarizer` 진입점
+
+webapp/               Flask 앱 (아래 "웹페이지" 절 참고)
+  app.py                 라우트(/, /summary, /download, /period-check, /period-status) + 렌더링 헬퍼(항/호/목 표기, diff 강조 등)
+  laws.py                전문 보기(/laws, /laws/<law_id>) — 개정 전/후 전문 나란히 비교
+  pdfcheck.py            PDF 확인(/pdf) — 업로드 문서에서 감시 대상 인용 찾기(src/doc_match 사용) + 최근 개정 배지·요약 한 줄
+  live.py                "최근 5일/2주/1개월" 기간별 즉석 재조회 — 캐시·백그라운드 스윕·진행상태 트래킹
+  templates/home.html     허브(세 기능 중 선택)
+  templates/report.html   법령별 요약 페이지(검색, 구분별 섹션, 원문 보기 패널, 스크롤 스파이 내비게이션)
+  templates/laws_list.html · law_detail.html   전문 보기 목록/상세
+  templates/pdf_upload.html · pdf_result.html  PDF 확인 업로드/결과
+  static/style.css        페이지 스타일
+  static/img/logo.png     로고
+
+scripts/
+  run_weekly.py       주간 배치 진입점 — 감지·비교(기본) + 요약·보고서·DB적재(--full)
+  weekly.cmd          작업 스케줄러가 실행하는 래퍼 (UTF-8 설정, 로그 적재, 종료코드 전달). ASCII 전용
+  register_task.ps1   작업 스케줄러 등록/해제 + 사전 환경 점검(-Verify)
+  run_single_check.py 법령/행정규칙 1건만 디버깅용으로 상세 실행 (locate 가드별 로그까지 출력)
+  check_document.py   PDF/HWPX 1개를 CLI로 매칭 확인 (웹의 /pdf와 같은 엔진, 결과를 텍스트로 출력)
+  load_watchlist.py   워치리스트 초기 적재 스크립트 (Windows psql CLI 한글 인코딩 문제 우회용, seed_watchlist.sql과 내용 동일)
+  inspect_article.py  조문번호 필드(가지번호 포함, 예: 제6조의2)의 API 원본 JSON 구조를 그대로 출력해 파서 로직과 맞는지 확인하는 진단 스크립트
+  test_live_comparison.py  실제 API를 호출해 locate 파이프라인을 눈으로 검증하는 수동 스크립트
+
+database/
+  schema.sql          전체 테이블 정의 (DDL) — 아래 "데이터베이스" 절 참고
+  seed_watchlist.sql  워치리스트 초기 데이터 (load_watchlist.py와 내용 동일한 데이터를 SQL로 표현)
+
+tests/        pytest, 실측 데이터(실제 API 응답을 고정시킨 fixture) 기반 회귀 테스트. 파일명이 대상 모듈과 1:1 대응
+              (예: test_split_jsonutil.py ↔ text/split.py + parse/jsonutil.py, test_export.py ↔ contract/export.py)
+```
+
+## 데이터베이스
+
+PostgreSQL 14+, `database/schema.sql` 기준. 테이블 5개. **명시적 FK 제약은 없다**
+— 관계는 애플리케이션 코드가 같은 값(law_id 등)으로 조인하는 논리적 관계다.
+이 프로젝트에서 "진실의 원천"은 항상 `documents`의 전문 JSON이고, 나머지
+테이블은 전부 거기서 파생되거나 그 처리 과정을 기록한 것이다.
+
+### ERD
+
+```mermaid
+erDiagram
+    watchlist ||--o{ change_log : "law_id"
+    watchlist ||--o{ documents : "law_id = doc_id"
+    change_log ||--o{ article_diff : "law_id + new_serial_no = law_serial_no"
+    change_log ||--o| law_summary : "law_id + new_serial_no"
+
+    watchlist {
+        varchar law_id PK
+        varchar law_type
+        varchar official_name
+        varchar internal_name
+        varchar dept_codes
+        varchar status
+        varchar successor_law_id
+        date scheduled_date
+        varchar last_serial_no
+        timestamp last_checked_at
+    }
+
+    documents {
+        varchar kind PK "law 또는 admrul"
+        varchar doc_id PK
+        varchar doc_serial_no PK
+        varchar doc_name
+        jsonb full_text
+        timestamp db_timestamp
+    }
+
+    change_log {
+        int id PK
+        varchar law_id
+        varchar old_serial_no
+        varchar new_serial_no
+        varchar promulgation_no
+        varchar revision_type
+        text revision_reason
+        jsonb unchanged_clauses
+        boolean comparison_available
+        date enforce_date
+        timestamp detected_at
+    }
+
+    article_diff {
+        varchar law_id PK
+        varchar law_serial_no PK
+        varchar article_code PK
+        varchar clause_no PK
+        varchar item_label PK
+        varchar subitem_label PK
+        date enforce_date PK
+        varchar article_label
+        varchar change_type
+        text old_text
+        text new_text
+        varchar match_status
+        jsonb match_detail
+        timestamp created_at
+    }
+
+    law_summary {
+        varchar law_id PK
+        varchar new_serial_no PK
+        varchar law_name
+        varchar law_type
+        date enforce_date
+        varchar revision_type
+        text source_url
+        text headline
+        text overview
+        text body
+        jsonb caveats
+        jsonb article_summaries
+        jsonb mappings
+        jsonb verifier_issues
+        varchar llm_provider
+        varchar llm_model
+        date batch_date
+        varchar source_file
+        text error
+        timestamp created_at
+        timestamp updated_at
+    }
+```
+
+### `documents` — 법령/행정규칙 전문 아카이브
+
+| 컬럼 | 타입 | 의미 |
+|---|---|---|
+| `kind` | VARCHAR(10) | `law` \| `admrul` — 법령/행정규칙 구분(PK 일부) |
+| `doc_id` | VARCHAR(50) | 법령 ID 또는 행정규칙 ID(불변 식별자, PK 일부) |
+| `doc_serial_no` | VARCHAR(50) | 일련번호(개정마다 바뀜, PK 일부) |
+| `doc_name` | VARCHAR(255) | 법령명/행정규칙명 |
+| `full_text` | JSONB | **법제처 API 원본 그대로** — 가공 없이 저장(진실의 원천, 재파싱 가능하도록 보존) |
+| `db_timestamp` | TIMESTAMP | 삽입/수정 시각 |
+
+- **PK**: `(kind, doc_id, doc_serial_no)` — 같은 법이라도 일련번호(버전)마다 별도 행.
+- 개정이 감지되면 새 일련번호로 새 행이 **추가**되며, 기존 행은 지우지
+  않는다 — 즉 매 버전이 그대로 쌓이는 이력 테이블이다.
+- **행 존재 여부 자체가 개정감지 신호다**: `VersionRepo.law_exists(law_id,
+  new_serial_no)`가 False면 "아직 안 본 버전"이라는 뜻이고, 이게 곧
+  "개정됨"으로 판정되는 기준이다. 그래서 최초 구축 시 이 테이블을 절대
+  미리 채우면 안 된다(아래 "DB 최초 구축 순서" 절 참고).
+- 법령/행정규칙은 원래 별도 테이블(`laws`/`administrative_rules`)이었는데,
+  컬럼 구성이 이름만 다를 뿐 완전히 같아 하나로 합쳤다. 조/항/호/목으로
+  미리 파싱해 캐시하던 컬럼(`*_articles_parsed`)은 어느 코드도 다시
+  읽지 않는 write-only 컬럼이라 제거했다 — 필요하면
+  `parse_articles(full_text)`로 언제든 그 자리에서 다시 만들 수 있다.
+
+### `watchlist` — 감시 대상 목록
+
+| 컬럼 | 타입 | 의미 |
+|---|---|---|
+| `law_id` | VARCHAR(50) | **PK.** 법령/행정규칙 ID |
+| `law_type` | VARCHAR(50) | 법률/시행령/시행규칙/행정규칙 |
+| `official_name` | VARCHAR(255) | 현재 정식 명칭 |
+| `internal_name` | VARCHAR(255) | 등록 당시 이름(제명변경 추적용, 산출물의 `internal_name`과 동일 개념) |
+| `dept_codes` | VARCHAR(255) | 소관부처 코드(콤마 구분, 행정규칙 동명이인 구분용) |
+| `status` | VARCHAR(50) | 현행/시행전 등 |
+| `successor_law_id` | VARCHAR(50) | 폐지·통합된 경우 후속 법령 ID |
+| `scheduled_date` | DATE | 시행예정일(아직 시행 안 된 경우) |
+| `last_serial_no` | VARCHAR(50) | 마지막으로 확인한 일련번호 |
+| `last_checked_at` | TIMESTAMP | 마지막 확인 일시 |
+
+한 번 등록되면 삭제되지 않는 **단순 목록 테이블**이다(버전 이력이 아니라
+"지금 감시 중인 항목이 무엇인가"만 담음). `run_weekly.py`가 매 배치마다
+이 테이블 전체를 순회하며 `detect.process_entry()`를 호출하는 시작점.
+
+### `change_log` — 개정 이벤트 로그
+
+| 컬럼 | 타입 | 의미 |
+|---|---|---|
+| `id` | INTEGER (IDENTITY) | PK |
+| `law_id` | VARCHAR(50) | 법령/행정규칙 ID |
+| `old_serial_no` / `new_serial_no` | VARCHAR(50) | 개정 전/후 일련번호 |
+| `promulgation_no` | VARCHAR(100) | 공포번호(`link.py`가 이 값으로 연쇄개정을 그룹핑) |
+| `revision_type` | VARCHAR(50) | 제개정구분(일부개정/전부개정/제정/폐지제정 등) |
+| `revision_reason` | TEXT | 법제처 공식 개정이유 원문 그대로(LLM팀이 추론할 필요 없게) |
+| `unchanged_clauses` | JSONB | `{"제34조": ["①","②"]}` 형태 — 이번에 안 바뀐 항(법령만, 항제개정유형 필드 기준) |
+| `comparison_available` | BOOLEAN | 신구법 대비 가능 여부. FALSE면 `article_diff`에 이 버전의 행이 하나도 없다는 뜻이지만, 그 부재만으로는 "애초에 대비 불가"와 "대비했는데 0건 변경"을 구분할 수 없어 별도 컬럼으로 명시(`no_comparison` 산출의 근거) |
+| `enforce_date` | DATE | 시행일자 |
+| `detected_at` | TIMESTAMP | 이 개정을 감지·기록한 시각 |
+
+한 개정 이벤트(일련번호 변경) = 한 행. `article_diff`의 각 행은 반드시
+`change_log`의 어떤 행(같은 `law_id`+`new_serial_no`)에 속한다 — 즉
+`change_log`가 "이 버전에 무슨 일이 있었는가"의 헤더이고, `article_diff`가
+그 개정의 조문별 세부 내역이다.
+
+### `article_diff` — 조문 단위 diff (파이프라인의 핵심 산출 테이블)
+
+| 컬럼 | 타입 | 의미 |
+|---|---|---|
+| `law_id`, `law_serial_no` | VARCHAR(50) | 어느 법의 어느 버전(개정 후)인지 |
+| `article_code` | VARCHAR(50) | 법제처 원본의 조문코드(내부 식별자) |
+| `article_label` | VARCHAR(100) | 사람이 읽는 조 라벨(`제26조의7` 등). 위치를 못 찾으면 `(위치미상#N-M)`, 삭제된 항목은 `(삭제됨 — 개정 전 …참고)` |
+| `clause_no` / `item_label` / `subitem_label` | VARCHAR(50) | 항/호/목 라벨(없으면 빈 문자열 `''`, NULL 아님 — UNIQUE KEY에 NULL이 섞이면 중복판정이 깨지기 때문) |
+| `enforce_date` | DATE | 시행일자 |
+| `change_type` | VARCHAR(50) | 개정/신설/삭제/미상 |
+| `old_text` / `new_text` | TEXT | 개정 전/후 문장 — `match_status`와 무관하게 항상 순수 원문 그대로 저장됨 |
+| `match_status` | VARCHAR(50) | 성공 / 삭제(위치탐색제외) / 구조확장(구법미분리) / 위치재배치의심 |
+| `match_detail` | JSONB | locate 6가드 중 어느 가드로 확정됐는지, 시도 로그 등 디버깅용 |
+| `created_at` | TIMESTAMP | 삽입 시각 |
+
+- **UNIQUE KEY** `(law_id, law_serial_no, article_code, clause_no, item_label,
+  subitem_label, enforce_date)` — 같은 버전의 같은 위치가 중복 삽입되는 것을
+  막는다. 재처리하면 해당 `(law_id, law_serial_no)` 범위를 통째로 지우고
+  다시 채운다(부분 갱신이 아니라 항상 전체 재계산).
+- `contract/export.py`의 `build_contract()`가 이 테이블을 읽어
+  `match_status`에 따라 `articles[]`(1:1)와 `structural_expansions[]`(1:N,
+  `match_status="구조확장(구법미분리)"` 행들을 `(article_label, old_text)`
+  기준으로 그룹핑)로 갈라 담는다 — 자세한 그룹핑 규칙은 아래 산출물 구조
+  절의 `structural_expansions[]` 설명 참고.
+
+### `law_summary` — LLM 요약 결과 (웹페이지가 실제로 읽는 유일한 테이블)
+
+| 컬럼 | 타입 | 의미 |
+|---|---|---|
+| `law_id`, `new_serial_no` | VARCHAR(50) | 어느 법의 어느 개정분에 대한 요약인지 (**PK**) |
+| `law_name` / `law_type` / `enforce_date` / `revision_type` / `source_url` | | 요약 시점의 법령 정보 사본 |
+| `headline` | TEXT | LLM이 쓴 한 줄 요약(목록 화면용) |
+| `overview` | TEXT | LLM이 쓴 개정 취지 문단. **이 컬럼만이 순수 LLM 생성물**이며 사실 검증의 대상 |
+| `body` | TEXT | `overview` + 코드가 붙인 조문별 변경 목록. 보고서 본문과 같은 내용 |
+| `caveats` | JSONB | 신뢰도 경고. 코드가 판정 상태에서 결정론적으로 만든 것 — LLM이 쓴 문장이 아니다(현재 웹페이지/HWPX엔 노출하지 않고 데이터로만 보관) |
+| `article_summaries` | JSONB | 조문별 요약 전체(원문 old/new 포함). 웹페이지·HWPX가 실제로 렌더링하는 값 |
+| `mappings` | JSONB | 조문별 구↔신 위치 대응 판정 — "①이 ②로 이동"이라 쓴 근거 |
+| `verifier_issues` | JSONB | 사실 대조 검증이 찾은 문제. `severity=high`는 요약이 원문과 다르다는 뜻 |
+| `llm_provider` / `llm_model` | VARCHAR | 어느 모델이 만든 요약인지 |
+| `batch_date` / `source_file` | | 어느 배치의 어느 계약 JSON에서 나왔는지(재현·추적용). `batch_date`가 NULL이면 "이번 주" 배치가 아니라 기간별 즉석 조회가 만든 요약 |
+| `error` | TEXT | LLM 호출 실패 사유. 실패한 요약도 행으로 남긴다 |
+| `created_at` / `updated_at` | TIMESTAMP | 최초 생성/마지막 수정 시각(트리거로 자동 갱신) |
+
+- **PK가 `(law_id, new_serial_no)`인 이유**: 요약의 정체성은 "어느 법의 어느
+  개정분에 대한 요약인가"이지 "언제 만들었나"가 아니다. 같은 개정분을 다시
+  요약하면 덮어쓴다 — 요약은 계약 JSON에서 언제든 다시 만들 수 있는
+  파생물이라 판본을 쌓아두면 "어느 게 맞는 요약인가"를 매번 따져야 하고,
+  실제로 참조되는 것은 항상 최신 1건이기 때문이다. `article_diff`가 재계산
+  시 해당 범위를 지우고 다시 채우는 것과 같은 원칙이다.
+- **주의(운영상 함정)**: 이 원칙 때문에 `article_diff`를 나중에 고쳐도(파서
+  버그 수정 등) 이미 만들어진 `law_summary` 행은 자동으로 갱신되지
+  않는다 — 재요약을 다시 돌리기 전까지는 옛 스냅샷이 그대로 남는다.
+  코드를 고친 뒤 이미 요약된 개정분의 결과가 이상하면, 먼저 스냅샷이
+  낡았는지 의심할 것.
 
 ## DB 최초 구축 순서
 
 **아래 순서를 반드시 지킨다.** `database/schema.sql`이 DB/테이블을 만들고,
-`database/seed_watchlist.sql`이 감시 대상 워치리스트(현재 102건: 법령 76건 +
-행정규칙 26건)를 등록한다. `laws`/`administrative_rules`(법령/행정규칙 전문
-아카이브)와 `article_diff`(조문별 diff)는 **반드시 비워둔 채로 시작해야 한다**
-— 이 두 테이블에 행이 있는지 없는지 자체가 "이 버전을 이미 처리했는가"를
-판단하는 개정감지의 핵심 신호이기 때문이다(`VersionRepo.law_exists`/
-`admrul_exists`). 미리 채워 넣으면(빈 값이든 실제 값이든) 그 항목은 영원히
-"이미 처리됨"으로 오판되어 개정감지가 동작하지 않는다 — 최초 백필은 반드시
-아래 3번 단계(`scripts/run_weekly.py`)로 한다.
+`database/seed_watchlist.sql`이 감시 대상 워치리스트를 등록한다. `documents`
+(법령/행정규칙 전문 아카이브)와 `article_diff`(조문별 diff)는 **반드시
+비워둔 채로 시작해야 한다** — 이 두 테이블에 행이 있는지 없는지 자체가
+"이 버전을 이미 처리했는가"를 판단하는 개정감지의 핵심 신호이기 때문이다
+(`VersionRepo.law_exists`/`admrul_exists`). 미리 채워 넣으면(빈 값이든 실제
+값이든) 그 항목은 영원히 "이미 처리됨"으로 오판되어 개정감지가 동작하지
+않는다 — 최초 백필은 반드시 아래 3번 단계(`scripts/run_weekly.py`)로 한다.
 
-1. **스키마 생성**
+1. **데이터베이스 생성 + 스키마 적용** — Postgres는 `CREATE DATABASE`에
+   `IF NOT EXISTS`가 없고 같은 스크립트 안에서 새 DB로 접속을 옮길 수도
+   없어(MySQL의 `USE` 같은 게 없다), DB 생성과 스키마 적용을 분리한다.
 
    ```bash
-   mysql -u root -p < database/schema.sql
+   createdb -U postgres -E UTF8 law_tracking_db
+   psql -U postgres -d law_tracking_db -f database/schema.sql
    ```
 
 2. **워치리스트 등록** — 아래 둘 중 하나만 실행(둘 다 같은 데이터,
-   Windows에서 `mysql` CLI로 한글 SQL 파일을 실행하면 코드페이지 문제로
+   Windows에서 `psql` CLI로 한글 SQL 파일을 실행하면 코드페이지 문제로
    깨질 수 있어 Python 스크립트를 권장한다):
 
    ```bash
@@ -86,61 +448,119 @@ JSON/HWPX에서 제외되어 규칙 기반 보고서로 전환된다.
    python scripts/load_watchlist.py
 
    # 또는
-   mysql -u root -p law_tracking_db < database/seed_watchlist.sql
+   psql -U postgres -d law_tracking_db -f database/seed_watchlist.sql
    ```
 
-3. **최초 전체 수집(백필)** — `laws`/`administrative_rules`/`article_diff`가
-   비어있으므로, 워치리스트의 모든 항목이 첫 실행 시 "개정 감지됨"으로
-   판정되어 각 법령/행정규칙의 현재 전문과 (있다면) 최근 개정분 diff가
-   전부 채워진다. API 호출량이 커서(102건 × 여러 API 콜) 몇 분 정도
-   걸릴 수 있다.
+3. **최초 전체 수집(백필)** — `documents`/`article_diff`가 비어있으므로,
+   워치리스트의 모든 항목이 첫 실행 시 "개정 감지됨"으로 판정되어 각
+   법령/행정규칙의 현재 전문과 (있다면) 최근 개정분 diff가 전부 채워진다.
+   API 호출량이 커서 몇 분 정도 걸릴 수 있다.
 
    ```bash
    python scripts/run_weekly.py
    ```
 
-4. 이후로는 `python scripts/run_weekly.py`를 주기적으로(원래 설계는 주간
-   1회) 실행하면 된다 — 실제 스케줄러(cron, Windows 작업 스케줄러 등)에
-   등록하는 것은 이 프로젝트의 범위 밖이며, 인프라 담당이 별도로 구성해야
-   한다. 산출물은 `out/weekly_contract_<날짜>.json`과
-   `out/weekly_law_report_<날짜>.hwpx`에 쌓인다.
+4. 이후로는 `python scripts/run_weekly.py --full`을 주 1회 실행하면 된다.
+   산출물은 `out/weekly_contract_<날짜>.json`에 쌓인다. 자동 실행 등록은
+   아래 "주간 자동 실행" 절 참고.
 
-## 기존 DB 스키마 갱신
+   > 이미 운영 중인 DB에 요약 기능을 추가하는 경우: `schema.sql`은 전부
+   > `CREATE TABLE IF NOT EXISTS`라 그대로 다시 실행해도 기존 데이터는
+   > 건드리지 않는다. `law_summary` 테이블만 새로 생긴다.
 
-이미 운영 중인 DB에는 `schema.sql`을 다시 실행해도 새 컬럼이 추가되지 않는다
-(`CREATE TABLE IF NOT EXISTS`는 기존 테이블을 변경하지 않음). 코드를 갱신한
-뒤 주간 배치를 실행하기 전에 아래 명령을 한 번 실행한다. 누락된 컬럼과 확정된
-워치리스트 교정값만 반영하며, 이미 적용된 DB에서 다시 실행해도 안전하다.
+## 웹페이지 (`webapp/`)
 
-```bash
-python scripts/migrate_db.py
-```
-
-## 주간 HWPX 보고서 생성
-
-`run_weekly.py` 한 번으로 `법령 조사 → DB 반영 → JSON 조립 → 원본 무결성
-검사 → LLM 요약(키가 있을 때) → 독립 요약 검증 → HWPX 생성`을 순서대로
-수행한다. 즉 HWPX만 따로 만드는
-배치가 아니라, 그 주에 실제 조사한 최종 JSON을 보고서의 입력으로 사용한다.
-기존 JSON만 다시 문서로 만들 때는 다음 명령을 쓴다.
+법령별 요약을 브라우저로 보고, HWPX 보고서를 다운로드하는 Flask 앱. DB만
+읽으며(요약 생성은 하지 않음), 외부 API/LLM 호출은 아래 "기간별 즉석
+조회"에서만 예외적으로 발생한다.
 
 ```bash
-python scripts/build_weekly_hwpx.py out/weekly_contract_2026-07-19_d.json
+python -m webapp.app     # http://127.0.0.1:5000
 ```
 
-출력 기본 경로는 `out/weekly_law_report_<batch_date>.hwpx`이다. 앞부분은
-핵심 요약·현황·법령 목록만 간결하게 두고, 법령별 상세는 별도 페이지에서
-AI 업무 요약과 개정 전·후 문장을 세로형 전폭 표로 표시한다. 긴 원문을
-여러 열에 압축하지 않아 한글 문장이 지나치게 좁아지는 문제를 피했다.
-구조확장·위치 미확정·신구법 비교불가 항목과 생성 모델도 문서에 표시한다.
-JSON에 없는 개정일이나 법적 의미는 임의로 추론하지 않고 `-` 또는 원문 검토
-필요로 표시한다.
-작성자·부서·검토자는 필요할 때 옵션으로 지정할 수 있다.
+### 라우트
 
-```bash
-python scripts/build_weekly_hwpx.py input.json \
-  --author "김용현" --department "법인사이트팀" --manager "검토자"
+| 라우트 | 하는 일 |
+|---|---|
+| `GET /` | 허브 — 세 기능(개정 요약/전문 보기/PDF 업로드) 중 하나를 고르는 첫 화면 |
+| `GET /summary` | 가장 최근 배치(`law_summary.batch_date` 최댓값)의 법령별 요약을 렌더링. `?period=5d\|2w\|1m` 쿼리파라미터가 있으면 기간별 즉석 조회 결과로 대체 |
+| `GET /download` | 같은 배치(또는 period)가 만든 HWPX 보고서 파일을 내려줌 |
+| `GET /period-check` | 기간 즉석 조회를 논블로킹으로 시작만 시킴 — 캐시가 신선하면 `{"ready": true}`, 아니면 백그라운드 스윕을 시작하고 `{"ready": false}` |
+| `GET /period-status` | 지금 스윕이 어느 단계인지(`{"stage":..., "done":...}`) — 로딩 화면이 폴링해서 진행 상황을 보여줌 |
+| `GET /laws` | 감시 대상 102건 목록(검색·종류 필터) — 클릭하면 전문 비교로 |
+| `GET /laws/<law_id>` | 전문 비교 — 개정 전/후 전문을 나란히, 조문 검색·전전 버전 보기. 최근 90일 내 시행 개정이 있으면 현재 열 머리에 배지(/pdf 결과의 배지와 같은 정보) |
+| `GET /pdf` | PDF/HWPX 업로드 폼 (파일 선택 또는 드래그앤드롭) |
+| `POST /pdf` | 업로드 문서에서 감시 대상 인용을 찾아 법령별 인용 횟수·페이지·스니펫 표시. 최근 90일 내 시행(또는 시행 예정) 개정이 있으면 배지, `law_summary`에 요약이 있으면 한 줄 요약을 함께 표시. 문서는 저장하지 않음(요청 처리 중 메모리에서 완결, DB는 배지·요약 조회에만 사용— 조회 실패 시 매칭 결과만 표시) |
+
+### 기간별 즉석 조회 (`webapp/live.py`)
+
+"최근 5일/2주/1개월" 탭은 미리 계산해 둔 값이 아니라, 클릭 시점에 워치리스트를
+다시 훑어 실제로 감지를 재실행한다("이번 주" 탭과 다름 — 그건 이미 만들어진
+최신 배치를 그대로 보여줌). 이미 요약된 개정분은 LLM을 다시 부르지 않고
+DB에서 그대로 재사용하며(비용 낭비 방지), 새로 감지된 것만 그 자리에서
+요약한다.
+
+| 설정 | 값 | 의미 |
+|---|---|---|
+| `PERIOD_WINDOWS` | `{"5d": 5, "2w": 14, "1m": 30}` | 탭별 조회 기간(일) |
+| `CACHE_TTL_SECONDS` | 15분 | 한 번 계산한 결과를 재사용하는 시간 |
+| `SWEEP_CONCURRENCY` | 20 | 국가법령정보 API 동시 조회 수 |
+| `BACKGROUND_REFRESH_INTERVAL_SECONDS` | 10분 | 서버가 백그라운드로 미리 캐시를 데워두는 주기 |
+
+### 배포 시 반드시 바꿔야 하는 것
+
+**지금 상태는 개발 서버 그대로다.** `webapp/app.py`의 `if __name__ ==
+"__main__"` 블록이 `app.run(debug=True, ...)`로 켜져 있는데, Flask 디버그
+모드는 에러 발생 시 브라우저에서 서버 코드를 임의 실행할 수 있는 디버거를
+노출한다 — localhost에서만 접속 가능한 지금은 위험이 낮지만, 사내망이든
+어디든 다른 PC에서 접속 가능하게 여는 순간 **반드시** 꺼야 한다. 그 외에
+실제 배포 전 확인할 것:
+
+- **WSGI 서버 교체**: Flask 내장 서버(`app.run()`)는 실서비스용이 아니다.
+  Windows 환경이면 `waitress`(gunicorn은 Windows 미지원)가 자연스러운 선택.
+- **프로세스를 서비스로 등록**: 지금은 터미널에서 직접 띄우는 구조라, PC가
+  재부팅되면 다시 켜지지 않는다. NSSM 등으로 Windows 서비스 등록 또는 Task
+  Scheduler 사용.
+- **주간 배치 자동 실행**: 아래 "주간 자동 실행" 절 참고 — 웹페이지와는
+  별개로 반드시 등록해야 매주 자동으로 새 배치가 쌓인다.
+- **시크릿 관리**: `.env`의 `POSTGRES_PASSWORD`/API 키들이 평문으로 있다.
+  파일 권한을 최소화하거나 조직 시크릿 매니저로 옮기는 것을 검토.
+- **DB 백업**: 정기 백업 체계 확인.
+
+## 주간 자동 실행 (Windows 작업 스케줄러)
+
+```powershell
+# 1) 등록해도 돌아갈 환경인지 먼저 점검 (아무것도 바꾸지 않음)
+powershell -ExecutionPolicy Bypass -File scripts\register_task.ps1 -Verify
+
+# 2) 매주 월요일 06:00 등록
+powershell -ExecutionPolicy Bypass -File scripts\register_task.ps1
+
+# 요일·시각 지정
+powershell -ExecutionPolicy Bypass -File scripts\register_task.ps1 -DayOfWeek Friday -Time 18:30
+
+# 해제
+powershell -ExecutionPolicy Bypass -File scripts\register_task.ps1 -Remove
 ```
+
+관리자 권한은 필요 없다. 등록되는 작업은 `scripts\weekly.cmd`를 실행하고,
+이 파일이 `run_weekly.py --full`을 돌린 뒤 결과를
+`out\logs\weekly_<yyyyMMdd>.log`에 남긴다. 배치가 실패하면 종료 코드가
+0이 아니게 되어 작업 스케줄러 기록에 실패로 뜬다.
+
+**등록 전에 `-Verify`를 먼저 돌릴 것.** 스케줄러 등록의 흔한 실패는 등록
+자체가 아니라 등록 후 첫 실행에서 나는데(python을 못 찾음, `.env` 없음,
+패키지 미설치), 그때는 아무도 보고 있지 않아 로그를 열기 전까지 모른다.
+`-Verify`는 그 조건들을 등록 전에 점검한다.
+
+주의할 점 두 가지:
+
+- **python 경로.** 작업 스케줄러는 대화형 셸의 PATH를 물려받지 않는다.
+  `conda activate`로만 python이 잡히는 환경이면 무인 실행에서 실패한다.
+  프로젝트 루트에 `.venv`를 만들어 두면 `weekly.cmd`가 그것을 우선 쓴다.
+- **로그인 상태.** 기본 등록은 "로그인한 사용자로 실행"이라 해당 계정이
+  로그오프면 작업이 미뤄진다. 서버 무인 운영은 `-RunWhetherLoggedOn`
+  (계정 비밀번호를 저장한다)이나 전용 서비스 계정을 쓴다.
 
 ## 산출물(`out/*.json`) 구조
 
@@ -149,47 +569,6 @@ python scripts/build_weekly_hwpx.py input.json \
 스키마는 `src/lawtrack/contract/schema.py`에 Pydantic 모델로 정의돼 있고,
 여기 문서는 그 필드를 실제 값 예시와 함께 설명한다(예시는 전부
 `build_contract()`가 실제로 만들어낸 값을 그대로 옮긴 것).
-
-LLM 요약이 활성화된 실행에서는 같은 JSON 최상위에 `llm_summary`가 추가된다.
-여기에는 사용 모델, 생성 시각, 주간 종합 요약, 법령별 제목·요약·핵심 변경·
-업무 영향·검토 포인트가 들어가며 HWPX가 이 값을 그대로 사용한다. 요약을
-사용하지 않은 실행에서는 `llm_summary`가 `null`이고 HWPX는 규칙 기반 문구로
-대체한다.
-
-모든 실행은 최상위 `verification`에 검증 상태를 기록하고,
-`out/verification_report_<batch_date>.json`도 별도로 저장한다.
-`source_integrity`는 감지기가 확정한 `(law_id, 일련번호)` 집합과 계약 JSON,
-조문 구조, 법제처 원문 URL 및 인증정보 노출 여부를 Python 코드로 검사한
-결과다. `summary_grounding`은 작성 호출과 분리된 LLM 검증 에이전트가
-법령명·날짜·조문·변경 유형·업무 영향의 원문 근거를 대조한 결과다.
-상태는 `PASS`, `WARN`, `FAIL`, 실행하지 않은 경우 `NOT_RUN`을 사용한다.
-
-> 지금 `out/`에 있는 파일들은 실제 `run_weekly.py`를 그대로 돌린 결과가
-> 아니라, LLM팀에게 스키마를 예시로 보여주기 위해 워치리스트 중 일부만
-> **실제로 라이브 API를 다시 호출해**(기존 `laws`/`administrative_rules`
-> 행을 지우고 `process_entry()`를 실제 실행 — 즉 국가법령정보 API를 그때마다
-> 진짜로 호출했다) 재처리한 뒤, 그 대상만 남긴 축소판 `WeeklyContract`들이다.
-> 필드 구성은 실제 배치 파일과 100% 동일(전부 Pydantic 재검증 통과)하고,
-> 실제 `run_weekly.py`를 그대로 실행하면 이런 축소 없이 **그 실행에서 새
-> 버전으로 감지된 전체 개정분**이 하나의 파일로 나온다. `period`는 주간
-> 보고 주기를 표시하는 메타데이터이고, 법령 시행일을 거르는 조건이 아니다.
->
-> | 파일 | 구성 | 비고 |
-> |---|---|---|
-> | `weekly_contract_2026-07-19.json` | 법령 2 + 행정규칙 1 | 국민체육진흥법에 `unresolved` 1건, (계약예규) 공동계약운용요령이 `no_comparison`으로 등장 |
-> | `weekly_contract_2026-07-19_b.json` | 법령 2 + 행정규칙 1 | 전자정부법·전자정부법 시행령·장애인·고령자 등의 정보 접근... 고시 |
-> | `weekly_contract_2026-07-19_c.json` | 법령 2 + 행정규칙 1 | 범죄피해자 보호법·장애인연금법·(계약예규) 예정가격작성기준, `unresolved` 1건 포함 |
-> | `weekly_contract_2026-07-19_d.json` | 법령 2 + 행정규칙 1 | 고독사 예방 및 관리에 관한 법·사회서비스 지원...·조달청 내자구매업무 처리규정 |
-> | `weekly_contract_2026-07-19_e.json` | 법령 2 + 행정규칙 1 | 기초연금법·개인정보 보호법 시행령·전자정부 웹사이트 품질관리 지침 |
-> | `single_law_1_009513.json` | 법령 1건만 | 암관리법, 조문변경 1건 |
-> | `single_law_2_013242.json` | 법령 1건만 | 재외국민보호를 위한 영사조력법, 조문변경 1건("지불"→"지급" 순화) |
-> | `single_admrul_1_27947.json` | 행정규칙 1건만 | (계약예규) 물품구매(제조)계약일반조건, 조문변경 2건(`위치재배치의심` 포함) |
-> | `single_admrul_2_43010.json` | 행정규칙 1건만 | 전자정부사업관리 위탁용역계약 특수조건, 조문변경 1건 |
->
-> `weekly_contract_*`는 `amendment_groups`/`unresolved`/`no_comparison`
-> 세 배열을 골고루 보여주는 "법령+행정규칙 섞인 소규모 위클리" 예시고,
-> `single_*`는 조문변경이 5건 이하인 것만 골라 법령 또는 행정규칙 딱
-> 1건만 담은 최소 단위 예시다.
 
 ### 전체 구조 한눈에 보기 (트리)
 
@@ -250,7 +629,7 @@ WeeklyContract (최상위)
 |---|---|
 | `contract_version` | 스키마 버전(현재 고정값 "1.0") — LLM팀이 파싱 전 호환성 확인용 |
 | `batch_date` | 이 배치가 실행된 날짜(오늘) |
-| `period` | 주간 보고 주기 표시. 감지된 법령의 `enforce_date` 필터로 사용하지 않음 |
+| `period` | 이번에 조회한 시행일(`enforce_date`) 구간. `run_weekly.py`는 기본 최근 7일 |
 | `amendment_groups` | **실제로 위치까지 확정된 개정 내용.** 아래 참고 |
 | `unresolved` | 개정은 감지됐지만 본문에서 정확한 위치를 못 찾은 조각들. 절대 빠지지 않음 |
 | `no_comparison` | 개정은 감지됐지만 신구법 대비 자체가 불가능한 건(제정/폐지제정 등) |
@@ -339,7 +718,8 @@ WeeklyContract (최상위)
 - `article_label`/`clause_no`/`item_label`/`subitem_label`: 위치(조/항/호/목).
   전부 합치면 `제26조의7④5.`처럼 사람이 읽는 위치 표기가 된다. 위치를 못 찾은
   경우(드묾, 대부분은 `unresolved`로 빠짐) `article_label`이
-  `(위치미상#N-M)` 형태로 나올 수 있다.
+  `(위치미상#N-M)` 형태로 나올 수 있고, 삭제된 항목은 `(삭제됨 — 개정 전
+  제N조⑥항 참고)`처럼 알 수 있는 범위까지의 원래 위치를 안내문 형태로 담는다.
 - `change_type`: `개정` \| `신설` \| `삭제` \| `미상`.
 - `old_text`/`new_text`: 개정 전/후 문장. `신설`이면 `old_text`는 항상 빈
   문자열(개정 전엔 존재하지 않았으므로). `old_text`/`new_text` 둘 다 이
@@ -400,7 +780,7 @@ WeeklyContract (최상위)
 > 잘못 짝지어졌을 수 있는 경우)은 이렇게 분리하지 않고 `articles[]`에
 > 그대로 남아있다 — "구법에 이 위치가 있었는가"와 달리 "이 old가 정말
 > 이 new의 개정 전 내용인가"는 문장을 읽어야 아는 의미 판단이라 코드가
-> 확정할 수 없기 때문이다(자세한 내용은 아래 `match_status` 설명 참고).
+> 확정할 수 없기 때문이다(자세한 내용은 위 `match_status` 설명 참고).
 
 ```json
 {
@@ -481,181 +861,29 @@ WeeklyContract (최상위)
 diff는 원천적으로 없으므로 `source_url`(원문 링크)만 제공한다 — LLM팀이
 필요하면 원문을 직접 봐야 한다.
 
-### 파일 크기 참고
-
-전체 워치리스트(102건) 기준 실측(2026-07-20, old_text 호 단위 정밀매칭
-반영 후 재검증): 74개 그룹, 법 93건, 조문변경(articles) 887건, 구조확장그룹
-22건(추가로 97건이 여기 담김), 미확정 18건, 비교불가 9건 → 약 940KB.
-`run_weekly.py`의 실제 운영 모드는 이번 실행에서 새 버전으로 감지된 법령만
-담으므로 평소엔 이보다 훨씬 작다(신규 감지가 없는 주는
-`amendment_groups: []`로 사실상 빈 파일). 지금 `out/`에 있는 축소판들은
-`weekly_contract_*`(법령 2+행정규칙 1, 3건)가 각 20~56KB, `single_*`
-(법령 또는 행정규칙 1건, 조문변경 5건 이하)가 각 2~3KB 수준이다.
-
-## 저장소 구조
-
-```
-src/lawtrack/
-  config.py           .env 로딩 → Settings(api, db) — 다른 모든 모듈이 여길 통해 설정을 받음
-
-  api/                국가법령정보 Open API HTTP 레이어 (요청/응답 파싱까지, 비즈니스 로직은 없음)
-    client.py           공통 HTTP 클라이언트 (LawApiClient) — 인증키(OC) 부착, 재시도, LawApiError
-    search.py           목록조회 API — 워치리스트 항목의 최신 일련번호·시행상태 확인
-    fulltext.py          법령/행정규칙 "본문조회" API 호출 (전문 JSON 원본을 그대로 반환)
-    oldnew.py            "신구법 비교" API 호출 (法제처가 만든 개정 전/후 대비 원본)
-
-  parse/              api/ 가 받아온 원본 JSON을 구조화된 파이썬 객체로 변환 (여기까지는 파싱만, 위치확정 없음)
-    fulltext.py          전문 JSON → 조/항/호/목 트리 (parse_articles: 법령 / parse_admrul_units: 행정규칙)
-    oldnew.py            신구법 비교 API 응답 → (article_label, change_type, old_text, new_text) 레코드 목록
-    jsonutil.py           위 둘이 공유하는 JSON 순회/정규화 유틸
-
-  text/               순수 텍스트 로직 (외부 의존성 없음, 입출력이 전부 str/객체)
-    normalize.py          공백·특수문자·순화표기 등 비교 전 정규화
-    split.py              조문 원문을 항/호/목 단위 Fragment로 분리 (마커 손실 버그 수정한 파일 — split_all/split_by_item)
-
-  locate/             6단계 가드 파이프라인 — old_text가 신법 본문 어디에 해당하는지 확정 (이 프로젝트의 핵심 로직)
-    locator.py            가드 1~6 순서대로 시도, 성공하면 위치 확정 / 전부 실패하면 unresolved로 보고
-
-  db/                 MySQL 접근 계층 — 테이블별 Repo 클래스로 분리 (아래 "테이블 구조" 절 참고)
-    conn.py               커넥션 풀 + Database.transaction() 컨텍스트매니저
-    repo.py               WatchlistRepo / VersionRepo / ChangeLogRepo / ArticleDiffRepo
-
-  link.py             연쇄개정 그룹핑 — 같은 공포번호로 같이 개정된 법들을 하나의 AmendmentGroup으로 묶음
-
-  detect.py           워치리스트 1건 처리 파이프라인의 지휘자
-                       (일련번호 변경 감지 → 본문/신구법 API 호출 → parse → locate → link → DB 저장)
-
-  contract/           DB → LLM팀에게 넘길 최종 JSON 산출 계층
-    schema.py             Pydantic 모델 전체 (WeeklyContract 이하 전 스키마, 위 "산출물 구조" 절이 이 파일을 설명함)
-    export.py             DB 테이블들을 읽어 위 Pydantic 모델로 조립 (build_contract) — structural_expansions 그룹핑도 여기
-
-  llm/
-    openai_summary.py     OpenAI 호환 Responses API 구조화 출력 → JSON의 llm_summary 보강
-    verifier.py           작성 호출과 분리된 LLM 검증 에이전트 → 원문 근거·누락·과장 판정
-
-  verify/
-    source.py             감지 버전↔계약, 조문 구조, 원문 URL·비밀값을 코드로 강제 검증
-
-  report/
-    hwpx.py               최종 JSON → 세로형 개정 전·후 비교 HWPX 주간보고서
-
-scripts/
-  run_weekly.py       주간 배치 진입점 — 워치리스트 전체를 detect.process_entry()로 돌리고 build_contract()로 JSON 산출
-  build_weekly_hwpx.py WeeklyContract JSON을 주간 법령개정 HWPX 보고서로 변환
-  migrate_db.py       기존 DB에 누락된 컬럼·확정된 워치리스트 교정값을 조건부 반영(재실행 가능)
-  run_single_check.py 법령/행정규칙 1건만 디버깅용으로 상세 실행 (locate 가드별 로그까지 출력)
-  load_watchlist.py   워치리스트 초기 적재 스크립트 (Windows mysql CLI 한글 인코딩 문제 우회용, seed_watchlist.sql과 내용 동일)
-  inspect_article.py  조문번호 필드(가지번호 포함, 예: 제6조의2)의 API 원본 JSON 구조를 그대로 출력해 파서 로직과 맞는지 확인하는 진단 스크립트
-  test_live_comparison.py  실제 API를 호출해 locate 파이프라인을 눈으로 검증하는 수동 스크립트
-
-database/
-  schema.sql          전체 테이블 정의 (DDL) — 아래 "테이블 구조" 절 참고
-  seed_watchlist.sql  워치리스트 초기 데이터 (법령 76건 + 행정규칙 26건, load_watchlist.py와 내용 동일한 데이터를 SQL로 표현)
-
-tests/        pytest, 실측 데이터(실제 API 응답을 고정시킨 fixture) 기반 회귀 테스트. 파일명이 대상 모듈과 1:1 대응
-              (예: test_split_jsonutil.py ↔ text/split.py + parse/jsonutil.py, test_export.py ↔ contract/export.py)
-```
-
-## 테이블 구조
-
-MySQL 8.0, `database/schema.sql` 기준. 테이블 5개 — 이 프로젝트에서 "진실의
-원천"은 항상 `laws`/`administrative_rules`의 전문 JSON이고, 나머지 테이블은
-전부 거기서 파생되거나 그 처리 과정을 기록한 것이다.
-
-### `laws` — 법령 전문 아카이브
-
-| 컬럼 | 타입 | 의미 |
-|---|---|---|
-| `law_id` | VARCHAR(50) | 법령 ID(불변 식별자, PK 일부) |
-| `law_serial_no` | VARCHAR(50) | 법령 일련번호(개정마다 바뀜, PK 일부) |
-| `law_name` | VARCHAR(255) | 법령명 |
-| `law_full_text` | JSON | **법제처 API 원본 그대로** — 가공 없이 저장(진실의 원천, 재파싱 가능하도록 보존) |
-| `law_articles_parsed` | JSON | `law_full_text`를 `parse_articles()`로 조/항/호/목 트리로 파싱한 캐시(조회 편의용, 파생값) |
-| `db_timestamp` | TIMESTAMP | 삽입/수정 시각 |
-
-- **PK**: `(law_id, law_serial_no)` — 같은 법이라도 일련번호(버전)마다 별도 행.
-- 개정이 감지되면 새 일련번호로 새 행이 **추가**되며, 기존 행은 지우지
-  않는다 — 즉 매 버전이 그대로 쌓이는 이력 테이블이다.
-- **행 존재 여부 자체가 개정감지 신호다**: `VersionRepo.law_exists(law_id,
-  new_serial_no)`가 False면 "아직 안 본 버전"이라는 뜻이고, 이게 곧
-  "개정됨"으로 판정되는 기준이다. 그래서 최초 구축 시 이 테이블을 절대
-  미리 채우면 안 된다(위 "DB 최초 구축 순서" 절 참고).
-
-### `administrative_rules` — 행정규칙 전문 아카이브
-
-`laws`와 완전히 동일한 구조(컬럼명만 `administrative_rule_*` 접두어), 행정규칙
-전용. `administrative_rule_articles_parsed`만 파서가 다르다
-(`parse_admrul_units` — 행정규칙 원문은 법령과 달리 마크업이 없는 평문이라,
-조/항/호/목 트리가 아니라 "위치 라벨 + 텍스트"의 평평한 목록 형태로 파싱됨).
-
-- **PK**: `(administrative_rule_id, administrative_rule_serial_no)`.
-
-### `watchlist` — 감시 대상 목록 (법령 76건 + 행정규칙 26건)
-
-| 컬럼 | 타입 | 의미 |
-|---|---|---|
-| `law_id` | VARCHAR(50) | **PK.** 법령/행정규칙 ID |
-| `law_type` | VARCHAR(50) | 법률/시행령/시행규칙/행정규칙 |
-| `official_name` | VARCHAR(255) | 현재 정식 명칭 |
-| `internal_name` | VARCHAR(255) | 등록 당시 이름(제명변경 추적용, 산출물의 `internal_name`과 동일 개념) |
-| `previous_names` | JSON | 제명변경 이력 배열 |
-| `dept_codes` | VARCHAR(255) | 소관부처 코드(콤마 구분, 행정규칙 동명이인 구분용) |
-| `status` | VARCHAR(50) | 현행/시행전 등 |
-| `successor_law_id` | VARCHAR(50) | 폐지·통합된 경우 후속 법령 ID |
-| `scheduled_date` | DATE | 시행예정일(아직 시행 안 된 경우) |
-| `last_serial_no` | VARCHAR(50) | 마지막으로 확인한 일련번호 |
-| `last_checked_at` | DATETIME | 마지막 확인 일시 |
-
-한 번 등록되면 삭제되지 않는 **단순 목록 테이블**이다(버전 이력이 아니라
-"지금 감시 중인 항목이 무엇인가"만 담음). `run_weekly.py`가 매 배치마다
-이 테이블 전체를 순회하며 `detect.process_entry()`를 호출하는 시작점.
-
-### `change_log` — 개정 이벤트 로그
-
-| 컬럼 | 타입 | 의미 |
-|---|---|---|
-| `id` | INT AUTO_INCREMENT | PK |
-| `law_id` | VARCHAR(50) | 법령/행정규칙 ID |
-| `old_serial_no` / `new_serial_no` | VARCHAR(50) | 개정 전/후 일련번호 |
-| `promulgation_no` | VARCHAR(100) | 공포번호(`link.py`가 이 값으로 연쇄개정을 그룹핑) |
-| `revision_type` | VARCHAR(50) | 제개정구분(일부개정/전부개정/제정/폐지제정 등) |
-| `revision_reason` | TEXT | 법제처 공식 개정이유 원문 그대로(LLM팀이 추론할 필요 없게) |
-| `unchanged_clauses` | JSON | `{"제34조": ["①","②"]}` 형태 — 이번에 안 바뀐 항(법령만, 항제개정유형 필드 기준) |
-| `comparison_available` | BOOLEAN | 신구법 대비 가능 여부. FALSE면 `article_diff`에 이 버전의 행이 하나도 없다는 뜻이지만, 그 부재만으로는 "애초에 대비 불가"와 "대비했는데 0건 변경"을 구분할 수 없어 별도 컬럼으로 명시(`no_comparison` 산출의 근거) |
-| `enforce_date` | DATE | 시행일자 |
-| `detected_at` | DATETIME | 이 개정을 감지·기록한 시각 |
-
-한 개정 이벤트(일련번호 변경) = 한 행. `article_diff`의 각 행은 반드시
-`change_log`의 어떤 행(같은 `law_id`+`new_serial_no`)에 속한다 — 즉
-`change_log`가 "이 버전에 무슨 일이 있었는가"의 헤더이고, `article_diff`가
-그 개정의 조문별 세부 내역이다.
-
-### `article_diff` — 조문 단위 diff (파이프라인의 핵심 산출 테이블)
-
-| 컬럼 | 타입 | 의미 |
-|---|---|---|
-| `law_id`, `law_serial_no` | VARCHAR(50) | 어느 법의 어느 버전(개정 후)인지 |
-| `article_code` | VARCHAR(50) | 법제처 원본의 조문코드(내부 식별자) |
-| `article_label` | VARCHAR(100) | 사람이 읽는 조 라벨(`제26조의7` 등). 위치를 못 찾으면 `(위치미상#N-M)` |
-| `clause_no` / `item_label` / `subitem_label` | VARCHAR(50) | 항/호/목 라벨(없으면 빈 문자열 `''`, NULL 아님 — UNIQUE KEY에 NULL이 섞이면 중복판정이 깨지기 때문) |
-| `enforce_date` | DATE | 시행일자 |
-| `change_type` | VARCHAR(50) | 개정/신설/삭제/미상 |
-| `old_text` / `new_text` | TEXT | 개정 전/후 문장 — `match_status`와 무관하게 항상 순수 원문 그대로 저장됨 |
-| `match_status` | VARCHAR(50) | 성공 / 삭제(위치탐색제외) / 구조확장(구법미분리) / 위치재배치의심 |
-| `match_detail` | JSON | locate 6가드 중 어느 가드로 확정됐는지, 시도 로그 등 디버깅용 |
-| `created_at` | DATETIME | 삽입 시각 |
-
-- **UNIQUE KEY** `(law_id, law_serial_no, article_code, clause_no, item_label,
-  subitem_label, enforce_date)` — 같은 버전의 같은 위치가 중복 삽입되는 것을
-  막는다(재처리를 여러 번 돌려도 같은 위치는 갱신되지 않고 최초 1행만 유지).
-- `contract/export.py`의 `build_contract()`가 이 테이블을 읽어
-  `match_status`에 따라 `articles[]`(1:1)와 `structural_expansions[]`(1:N,
-  `match_status="구조확장(구법미분리)"` 행들을 `(article_label, old_text)`
-  기준으로 그룹핑)로 갈라 담는다 — 자세한 그룹핑 규칙은 위 산출물 구조
-  절의 `structural_expansions[]` 설명 참고.
-
 ## 테스트
 
 ```bash
-pytest -q
+pytest -q          # 430건 (2026-08-11 기준)
 ```
+
+`pyproject.toml`의 `[tool.pytest.ini_options]`가 `pythonpath`를 잡아 주므로
+설치 없이도 저장소에서 바로 돌아간다.
+
+테스트는 실제 API·DB·LLM을 부르지 않는다. 실측 데이터를 고정시킨 fixture와
+가짜 커넥션을 쓴다 — 테스트가 네트워크와 과금에 의존하면 아무도 돌리지 않게
+되기 때문이다. 파일명이 대상 모듈과 1:1 대응한다:
+
+| 파일 | 대상 |
+|---|---|
+| `test_split_jsonutil.py`, `test_text_split.py` | `text/split.py`, `parse/jsonutil.py` |
+| `test_locator.py` | `locate/locator.py` (6가드) |
+| `test_version_repo.py`, `test_repo.py` | `db/repo.py` |
+| `test_export.py` | `contract/export.py` |
+| `test_locfmt.py` | `summarizer/locfmt.py` |
+| `test_summary_db.py` | `db/repo.py`의 `LawSummaryRepo`, `summarizer/sinks.py`의 `DbSink` |
+| `test_summary_pipeline.py` | `summarizer/verifier.py`, `summarizer/report/`, `run_weekly.py` 배선 |
+| `test_webapp.py`, `test_webapp_live.py` | `webapp/app.py`, `webapp/live.py` |
+| `test_webapp_laws.py` | `webapp/laws.py` (전문 비교 페이지) |
+| `test_doc_match.py` | `src/doc_match/` 전체 — 골드셋(실측 PDF) 테스트는 `tests/fixtures/표준가이드요약본.pdf`가 있을 때만 실행(없으면 skip) |
+| `test_webapp_pdf.py` | `webapp/pdfcheck.py` (/pdf 라우트 — 검증 실패 경로·매칭·개정 배지·용량 상한) |

@@ -16,20 +16,17 @@ from __future__ import annotations
 
 import logging
 import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-
-from lawtrack.config import configure_utf8_console, load_settings, setup_logging  # noqa: E402
-from lawtrack.api.client import LawApiClient, LawApiError  # noqa: E402
-from lawtrack.db.conn import Database  # noqa: E402
-from lawtrack.db.repo import (  # noqa: E402
+from lawtrack.config import load_settings, setup_logging
+from lawtrack.api.client import LawApiClient, LawApiError
+from lawtrack.db.conn import Database
+from lawtrack.db.repo import (
     ArticleDiffRepo,
     ChangeLogRepo,
     VersionRepo,
     WatchlistRepo,
 )
-from lawtrack.detect import DetectStatus, process_entry  # noqa: E402
+from lawtrack.detect import DetectStatus, process_entry
 
 log = logging.getLogger("run_single_check")
 
@@ -61,7 +58,6 @@ def _extract_word_changes(old_text: str, new_text: str) -> list[tuple[str, str]]
 
 
 def main() -> int:
-    configure_utf8_console()
     settings = load_settings()
     setup_logging(settings.log_level)
 
@@ -76,7 +72,7 @@ def main() -> int:
         db = Database(settings.db)
     except ConnectionError as exc:
         print(f"\n❌ DB 연결 실패: {exc}")
-        print("   .env 의 MYSQL_* 값을 확인하세요.")
+        print("   .env 의 POSTGRES_* 값을 확인하세요.")
         return 1
 
     if not db.ping():

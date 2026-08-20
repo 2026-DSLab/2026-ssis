@@ -1,5 +1,7 @@
 """parse/fulltext.py flatten_searchable 테스트. 케이스는 실측 사례 기반."""
 
+import re
+
 from lawtrack.parse.fulltext import (
     ArticleUnit,
     ClauseNode,
@@ -7,6 +9,8 @@ from lawtrack.parse.fulltext import (
     SubItemNode,
     flatten_searchable,
     parse_admrul_units,
+    parse_articles,
+    searchable_units_for,
 )
 
 
@@ -230,3 +234,201 @@ class TestParseAdmrulUnits:
 
         subs = {u.subitem_label for u in units if u.clause_no == "④" and u.item_label == "1."}
         assert subs == {"", "가.", "나.", "다."}  # "" 는 "공사" 전제문
+
+
+def _raw_article_with_sibling_mok(extra_item: dict | None = None) -> dict:
+    """실측(2026-07-31, 국가를 당사자로 하는 계약에 관한 법률 시행령
+    제26조①) 구조의 축소 재현: 목이 각 호 안에 있지 않고, 항의 형제로
+    호 개수만큼의 목 그룹이 하나의 배열에 통째로 붙는다. 목번호가 '가.'
+    로 리셋되는 지점이 새 호의 시작이다(실측에서는 호 5개·목 40개)."""
+    hos = [
+        {"호번호": "1.", "호내용": "1. 첫째 사유"},
+        {"호번호": "2.", "호내용": "2. 둘째 사유"},
+    ]
+    if extra_item:
+        hos.append(extra_item)
+    return {
+        "법령": {
+            "조문": {
+                "조문단위": [
+                    {
+                        "조문번호": "26",
+                        "조문가지번호": "",
+                        "조문내용": "제26조(수의계약에 의할 수 있는 경우)",
+                        "조문제목": "수의계약에 의할 수 있는 경우",
+                        "조문변경여부": "N",
+                        "항": [
+                            {
+                                "항번호": "①",
+                                "항내용": "① 법 제7조제1항 단서에 따라 수의계약을 할 수 있는 "
+                                "경우는 다음 각 호와 같다.",
+                                "호": hos,
+                                "목": [
+                                    {"목번호": "가.", "목내용": "가. 첫째의 가목"},
+                                    {"목번호": "나.", "목내용": "나. 첫째의 나목"},
+                                    {"목번호": "가.", "목내용": "가. 둘째의 가목"},
+                                ],
+                            }
+                        ],
+                    }
+                ]
+            }
+        }
+    }
+
+
+class TestSiblingMokRecoveredIntoItems:
+    """실측(2026-07-31, 국가를 당사자로 하는 계약에 관한 법률 시행령
+    제26조①, redo5.py 3번째 재처리 케이스): 목이 호 안이 아니라 항의
+    형제로 통째로(호 5개분 목 40개가 배열 하나에) 붙어 나오는 문서가
+    있었다 — 각 호 객체엔 "목" 키 자체가 없었다. 그 결과 "지정받은 제품"
+    같은 실제 개정 문구가 검색 유닛(units)에 전혀 안 잡혀 위치확정이
+    100% 실패(0건실패)했다. 목번호가 '가.'로 리셋되는 지점을 호 경계로
+    보고 순서대로 이어붙이면 복구된다."""
+
+    def test_sibling_mok_split_and_attached_to_matching_item(self):
+        articles = parse_articles(_raw_article_with_sibling_mok())
+        assert len(articles) == 1
+        clause = articles[0].clauses[0]
+        assert len(clause.items) == 2
+        item1, item2 = clause.items
+        assert [s.text for s in item1.subitems] == ["가. 첫째의 가목", "나. 첫째의 나목"]
+        assert [s.text for s in item2.subitems] == ["가. 둘째의 가목"]
+
+    def test_sibling_mok_not_attached_when_group_count_mismatches_item_count(self):
+        """그룹 수와 호 개수가 안 맞아 모호하면 잘못된 호에 붙이지 않고
+        그대로 둔다 — 조용한 오귀속보다 0건실패가 낫다는 이 프로젝트의
+        원칙 그대로다."""
+        raw = _raw_article_with_sibling_mok(extra_item={"호번호": "3.", "호내용": "3. 셋째 사유"})
+        articles = parse_articles(raw)
+        clause = articles[0].clauses[0]
+        assert len(clause.items) == 3
+        assert all(len(it.subitems) == 0 for it in clause.items)
+
+    def test_normal_nested_mok_unaffected(self):
+        """목이 정상적으로 각 호 안에 이미 있는 경우(원래 동작)는 그대로
+        보존된다 — 회귀 방지."""
+        raw = {
+            "법령": {"조문": {"조문단위": [{
+                "조문번호": "2", "조문가지번호": "",
+                "조문내용": "제2조(정의)", "조문제목": "정의", "조문변경여부": "N",
+                "항": [{
+                    "항번호": "", "항내용": "",
+                    "호": [{
+                        "호번호": "11.", "호내용": "11. 정보자원",
+                        "목": [{"목번호": "가.", "목내용": "가. 행정정보"}],
+                    }],
+                }],
+            }]}}
+        }
+        articles = parse_articles(raw)
+        clause = articles[0].clauses[0]
+        assert len(clause.items) == 1
+        assert [s.text for s in clause.items[0].subitems] == ["가. 행정정보"]
+
+
+class TestSearchableUnitsFor:
+    """전문 비교 페이지(webapp/laws.py)가 쓰는 진입점 — kind에 따라
+    법령/행정규칙 파싱 경로를 자동으로 골라준다."""
+
+    def test_law_kind_uses_article_flattening_path(self):
+        raw = {
+            "법령": {"조문": {"조문단위": [{
+                "조문번호": "1", "조문가지번호": "",
+                "조문내용": "제1조(목적) 이 법은 목적을 정한다.",
+                "조문제목": "목적", "조문변경여부": "N",
+            }]}}
+        }
+        units = searchable_units_for("law", raw)
+        assert [u.article_label for u in units] == ["제1조"]
+        assert "목적을 정한다" in units[0].text
+
+    def test_admrul_kind_uses_flat_text_split_path(self):
+        raw = {
+            "AdmRulService": {
+                "조문내용": [
+                    "제1조(목적) 이 예규는 계약조건을 정함을 목적으로 한다.",
+                ]
+            }
+        }
+        units = searchable_units_for("admrul", raw)
+        assert [u.article_label for u in units] == ["제1조"]
+
+    def test_unknown_kind_falls_back_to_law_path(self):
+        """kind가 'law'가 아니면(예: 오타) 무조건 admrul로 잘못 보내는
+        대신, law 경로를 기본값으로 쓴다 — 법령이 훨씬 흔한 다수이므로
+        더 안전한 기본값이다."""
+        raw = {
+            "법령": {"조문": {"조문단위": [{
+                "조문번호": "1", "조문가지번호": "",
+                "조문내용": "제1조(목적) 이 법은 목적을 정한다.",
+                "조문제목": "목적", "조문변경여부": "N",
+            }]}}
+        }
+        assert searchable_units_for("law", raw) == searchable_units_for("something-else", raw)
+
+
+class TestAdmrulWithoutArticles:
+    """제N조 구조가 전혀 없는 행정규칙도 표시·비교 가능한 단위로 나온다.
+
+    ★ 실측 버그(2026-08-18, 전수검증 — 전문 비교 화면에 "전문 내용을
+    찾지 못했습니다"만 뜨는 행정규칙 3건): 조문내용이 "제N조"가 하나도
+    없는 평문 한 덩어리로 오는 문서들이 있다(하도급거래공정화 지침 Ⅰ/Ⅱ,
+    정보보호시스템 고시 제1장/1.1, 행정업무용 표준 관리규정 1./가.).
+    ArticleNo 를 못 찾은 줄을 전부 건너뛰던 탓에 유닛이 0개가 됐고,
+    화면이 비었을 뿐 아니라 본 파이프라인의 locate_all() 도 검색 대상이
+    없어 위치확정이 100% 실패했다.
+    """
+
+    def _raw(self, body: str) -> dict:
+        return {"AdmRulService": {"조문내용": body}}
+
+    def test_roman_numeral_sections_become_units(self):
+        units = parse_admrul_units(self._raw(
+            "Ⅰ. 목 적이 지침은 하도급거래의 공정화를 목적으로 한다."
+            " Ⅱ. 용어의 정의연간매출액이라 함은 매출액을 말한다."
+        ))
+        assert [u.article_label for u in units] == ["Ⅰ.", "Ⅱ."]
+        assert "목 적" in units[0].text
+        assert "용어의 정의" in units[1].text
+
+    def test_chapter_headings_become_units(self):
+        units = parse_admrul_units(self._raw(
+            "제1장 총칙이 고시는 평가인증에 관한 사항을 규정한다."
+            " 제2장 평가인증체계이 장에서는 기관의 역할을 정한다."
+        ))
+        assert [u.article_label for u in units] == ["제1장", "제2장"]
+
+    def test_text_without_any_heading_is_one_block(self):
+        # 쪼갤 근거가 없으면 통째로 한 덩어리 — 최소한 화면에는 보여야 한다
+        units = parse_admrul_units(self._raw(
+            "1. 목적 및 범위가. 목적행정업무용 표준 관리규정은 상호운용성을 위한 것이다."
+        ))
+        assert len(units) == 1
+        assert units[0].article_label == "본문"
+        assert "목적 및 범위" in units[0].text
+
+    def test_dates_and_numbers_are_not_mistaken_for_headings(self):
+        # ★ 실측: "2013. 7. 25.)" 의 7.25, 금액 "38.4" 가 절 머리로 잡혀
+        #   화면에 "38.4" 라는 절 제목이 뜨던 문제의 회귀 방지.
+        units = parse_admrul_units(self._raw(
+            "Ⅰ. 총칙심사지침 개정일은 2013. 7. 25.) 이며 매출액은 38.4억원, 41.9%이다."
+        ))
+        labels = [u.article_label for u in units]
+        assert labels == ["Ⅰ."]
+        assert "38.4" not in labels and "7.25" not in labels
+
+    def test_no_content_is_lost_when_splitting(self):
+        body = ("Ⅰ. 첫째 절첫 절의 내용이다."
+                " Ⅱ. 둘째 절둘째 절의 내용이다."
+                " Ⅲ. 셋째 절셋째 절의 내용이다.")
+        units = parse_admrul_units(self._raw(body))
+        joined = "".join(u.text for u in units)
+        assert re.sub(r"\s", "", joined) == re.sub(r"\s", "", body)
+
+    def test_normal_article_structure_is_untouched(self):
+        # 폴백은 "유닛이 하나도 안 나왔을 때만" 돈다 — 정상 문서는 그대로.
+        units = parse_admrul_units(self._raw(
+            "제1조(목적) 이 규정은 목적을 정한다."
+        ))
+        assert [u.article_label for u in units] == ["제1조"]

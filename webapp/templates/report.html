@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>법인사이트 — 법령·행정규칙 개정 대시보드</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <!-- 기간 즉석 조회 로딩 화면 — 기간 버튼은 그 자리에서 실 API(+필요하면
+       LLM) 스윕을 도는데, 캐시가 식어있으면 1~4분씩 걸릴 수 있다. 그냥
+       스피너만 보여주지 않고, /period-check로 스윕을 논블로킹으로 시작한
+       뒤 /period-status를 폴링해 실제 진행 단계("국가법령정보 API 확인
+       중 42/102건" 등)를 그대로 보여준다(webapp/live.py의 _set_progress). -->
+  <div class="loading-overlay" id="loading-overlay" hidden>
+    <div class="loading-box">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <p class="loading-title"><span class="loading-period-accent" id="loading-period-accent">조회</span><span id="loading-title-suffix"> 중이에요</span></p>
+      <p class="loading-stage" id="loading-stage">국가법령정보 API로 실시간 확인하고 있어요</p>
+      <span class="loading-hint">처음이면 1~4분 정도 걸릴 수 있어요</span>
+    </div>
+  </div>
+
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="{{ url_for('home') }}">
+        <img class="brand-mark" src="{{ url_for('static', filename='img/logo.png') }}" alt="법인사이트 로고">
+        <span class="brand-text">법인사이트</span>
+      </a>
+      <!-- 기간 선택 — 5일/2주/1개월 프리셋(자유 날짜 선택 대신). 요청마다
+           실 API+LLM 비용이 드는 즉석 조회라 몇 개로 고정했다(2026-08-03). -->
+      <div class="period-nav">
+        <a class="period-link {{ 'is-active' if not period }}" href="{{ url_for('index') }}">이번 주</a>
+        {% for key, label in period_windows.items() %}
+          <a class="period-link {{ 'is-active' if period == key }}" href="{{ url_for('index', period=key) }}">{{ label }}</a>
+        {% endfor %}
+        <!-- ★ 실측(2026-08-05, 사용자 지적): 전문 비교 페이지(/laws)로
+             가는 링크가 여기(메인 화면)엔 없어서, /laws 쪽에서만 뒤로
+             돌아올 수 있고 앞으로는 못 가는 외길 내비게이션이었다. 같은
+             자리(period-nav)에 나머지 페이지 하나만 더 추가한다 —
+             /laws 쪽 topbar도 이미 이 두 항목("개정 요약"/"전문 보기")을
+             같은 자리에 두고 있으므로, 어느 페이지에서 봐도 같은 위치에
+             같은 전환 링크가 있게 된다. -->
+        <a class="period-link period-link--section" href="{{ url_for('laws_list') }}">전문 보기</a>
+      </div>
+      {% if batch_date or period %}
+        <div class="topbar-right">
+          {% if period %}
+            <span class="batch-pill">{{ period_from }} ~ {{ period_to }}</span>
+          {% else %}
+            <span class="batch-pill">{{ batch_date }} 기준</span>
+          {% endif %}
+          <a class="download-btn" href="{{ url_for('download', period=period) }}">
+            <span>HWPX 다운로드</span>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </nav>
+
+  <div class="page-layout">
+  <main class="content-col">
+  {% if period_errors %}
+    <div class="period-error-note">⚠️ 조회 중 {{ period_errors|length }}건 확인에 실패했습니다 — 다음 조회 때 다시 시도됩니다.</div>
+  {% endif %}
+  {% if not laws %}
+    <div class="empty-state">
+      <p class="empty-icon">📭</p>
+      {% if period %}
+        <p>{{ period_label }}({{ period_from }} ~ {{ period_to }}) 동안 감지된 개정사항이 없습니다.</p>
+      {% else %}
+        <p>아직 생성된 주간 요약이 없습니다.</p>
+        <code>python scripts/run_weekly.py --full</code>
+      {% endif %}
+    </div>
+  {% else %}
+    <section class="hero">
+      {% if period %}
+        <h1>{{ period_label }} <span class="hero-accent">개정 요약</span></h1>
+        <p class="hero-sub">{{ period_from }}부터 {{ period_to }}까지, 국가법령정보 API로 확인한 결과예요.</p>
+      {% else %}
+        <h1>이번 주 <span class="hero-accent">개정 요약</span></h1>
+        <p class="hero-sub">법령·행정규칙 개정을 자동으로 감지해서 보여드려요.</p>
+      {% endif %}
+
+      <p class="hero-lede">
+        {% if period %}이 기간{% else %}이번 주{% endif %} 개정 법령은 <strong class="lede-num" data-count="{{ stats.total_laws }}">0</strong>개,
+        변경 조문은 <strong class="lede-num" data-count="{{ stats.total_articles }}">0</strong>건입니다.
+      </p>
+
+      <p class="hero-breakdown">
+        이 중
+        {% for kind, count in stats.breakdown %}
+        <span class="breakdown-item breakdown-item--{{ kind_css_for_label(kind) }}">{{ kind }} <strong data-count="{{ count }}">0</strong>건</span>{% if not loop.last %},{% endif %}
+        {% endfor %}
+        입니다.
+      </p>
+    </section>
+
+    <section class="toolbar">
+      <div class="search-wrap">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M11.5 11.5L15 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <input type="search" id="law-search" placeholder="법령명으로 검색..." autocomplete="off">
+      </div>
+      <nav class="kind-nav" id="kind-chips">
+        {% for section in sections %}
+        <button class="kind-nav-link kind-nav-link--{{ section.css }}" data-target="kind-{{ loop.index0 }}"><span class="kind-nav-dot" aria-hidden="true"></span>{{ section.kind }} <span class="kind-nav-count">{{ section.entries|length }}</span></button>
+        {% endfor %}
+      </nav>
+    </section>
+
+    <!-- 법령별 개요 — 구분(신설/개정/...) 대신 법령 단위로 "무슨 법이
+         왜 바뀌었는지" 한 줄 맥락을 훑어보는 목차. 아래 본문은 구분이
+         1차 축이라 이 맥락이 여러 섹션에 흩어지는데, 여기서 법령
+         단위로 한 번에 모아 보여준다. -->
+    <section class="overview-list" id="law-overview">
+      <h2 class="section-label">법령별 개요</h2>
+      {% for law in laws %}
+        <div class="overview-row" data-law-name="{{ law.law_name|lower }}">
+          <span class="overview-dot overview-dot--{{ kind_css_for_label(law_dominant_kind(law)) }}" aria-hidden="true"></span>
+          <span class="overview-type">{{ law.law_type or "-" }}</span>
+          <span class="overview-name">{{ law.law_name }}</span>
+          <span class="overview-headline">{{ law.headline or law.overview or "" }}</span>
+        </div>
+      {% endfor %}
+    </section>
+
+    <div class="kind-sections" id="kind-sections">
+      {% for section in sections %}
+        <section class="kind-section" id="kind-{{ loop.index0 }}">
+          <h2 class="kind-section-title kind-section-title--{{ section.css }}">
+            <span class="kind-dot"></span>{{ section.kind }}
+            <span class="kind-count">{{ section.entries|length }}건</span>
+          </h2>
+          <div class="item-list">
+            {% for item in section.entries %}
+              {% set a = item.article %}
+              <div class="item-row" data-law-name="{{ item.law_name|lower }}" style="--i: {{ loop.index0 }}">
+                {% if item.enforce_date %}
+                  <div class="item-enforce-date">시행일 {{ item.enforce_date }}</div>
+                {% endif %}
+                <div class="item-row-head">
+                  <span class="item-law">{{ item.law_type }} · {{ item.law_name }}</span>
+                  <span class="item-loc">{{ format_location(a.unit.location_label) }}</span>
+                </div>
+                <div class="item-row-body">
+                  {% if a.error %}
+                    <span class="error">요약 생성 실패 — 원문 확인 필요 ({{ a.error }})</span>
+                  {% else %}
+                    <p>{{ a.summary or "[내용 없음]" }}</p>
+                  {% endif %}
+                  {% if a.unit.moved_from %}
+                    <p class="note">※ 이동 전 위치: <span class="item-loc">{{ format_location(a.unit.moved_from) }}</span></p>
+                  {% endif %}
+
+                  <!-- 상세 패널 제목용 — "원문 보기"/"법제처 원문 보기" 둘 다
+                       같은 항목 제목을 쓰므로 행마다 하나만 만들어 공유한다.
+                       바깥 목록과 같은 format_location() 규칙(항/호/목 회색
+                       접미사)을 그대로 재사용한다. -->
+                  <span class="detail-title-html" hidden>{{ item.law_type }} · {{ item.law_name }} · {{ format_location(a.unit.location_label) }}</span>
+
+                  {% if a.unit.old_text or a.unit.new_text %}
+                    {#  ★ 실측(2026-08-03, 사용자 리포트): change_type="삭제"는
+                        old_text_is_context=True로 저장되지만(loader.py의
+                        "match_status != 성공"이면 무조건 context 취급하는
+                        일괄 규칙 — 구조확장처럼 old_text가 이 위치의 정확한
+                        내용이 아닐 수 있는 경우를 가리려는 것), 삭제는 의미가
+                        정반대다: old_text는 애매한 공유 맥락이 아니라 "삭제된
+                        바로 그 문장"이다. 그래서 old_text_is_context 규칙을
+                        그대로 따르면 정작 사용자가 보고 싶어하는 개정 전
+                        문장이 통째로 숨겨진다 — 삭제는 old_text_is_context와
+                        무관하게 old_text를 보여준다(강조 없이 — 비교할
+                        new_text 자체가 실제 내용이 아니라 "<삭  제>"라는
+                        합성 표시일 뿐이라 diff가 의미가 없음).
+                        ★★ 실측 후속(2026-08-03, "개정후에도 삭제되었다고
+                        보여줘"): new_text 칸을 아예 안 내면 "이 항목이 어떻게
+                        됐는지"가 반쪽만 보인다 — 합성 표시("<삭  제>") 대신
+                        "삭제되었습니다"라는 사람이 읽는 문구로 채워서 계속
+                        보여준다. #}
+                    {% set is_deleted = a.unit.change_type == "삭제" %}
+                    {% set can_diff = not a.unit.old_text_is_context and not is_deleted and a.unit.old_text and a.unit.new_text %}
+                    <button type="button" class="fulltext-trigger">원문 보기 →</button>
+                    <div class="fulltext-source" hidden>
+                      <div class="fulltext-body">
+                        {% if is_deleted or not a.unit.old_text_is_context %}
+                          <div class="fulltext-col fulltext-col--old">
+                            <div class="fulltext-label">개정 전</div>
+                            <div class="fulltext-text">{% if a.unit.old_text %}{% if can_diff %}{{ diff_old_html(a.unit.old_text, a.unit.new_text) }}{% else %}{{ a.unit.old_text|readable_text }}{% endif %}{% else %}<span class="fulltext-empty">신설되어 개정 전 내용 없음</span>{% endif %}</div>
+                          </div>
+                        {% endif %}
+                        {% if a.unit.new_text %}
+                          <div class="fulltext-col fulltext-col--new">
+                            <div class="fulltext-label">개정 후</div>
+                            <div class="fulltext-text">{% if is_deleted %}<span class="fulltext-empty">삭제되었습니다</span>{% elif can_diff %}{{ diff_new_html(a.unit.old_text, a.unit.new_text) }}{% else %}{{ a.unit.new_text|readable_text }}{% endif %}</div>
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+
+                  <p class="item-source">
+                    <button type="button" class="source-trigger" data-url="{{ public_law_url(item.law_type, item.law_name) }}">법제처 원문 보기 →</button>
+                  </p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+      {% endfor %}
+    </div>
+  {% endif %}
+  </main>
+
+  {% if laws %}
+    <!-- 오른쪽 상세 패널 — "원문 보기"/"법제처 원문 보기"를 누르면 왼쪽
+         목록 안에 접혀 있던(hidden) 내용을 여기로 옮겨 크게 보여준다.
+         평소엔 자리를 차지하지 않는 오버레이라 본문이 화면 전체 폭을
+         쓰고, 열었을 때만 오른쪽에서 슬라이드로 나타난다. -->
+    <div class="detail-backdrop" id="detail-backdrop"></div>
+    <aside class="detail-col" id="detail-panel">
+      <div class="detail-header">
+        <span class="detail-header-title" id="detail-title">원문 보기</span>
+        <button type="button" class="detail-close" id="detail-close" aria-label="닫기">✕</button>
+      </div>
+      <div class="detail-empty" id="detail-empty">
+        <p>왼쪽 목록에서 "원문 보기" 또는 "법제처 원문 보기"를 누르면<br>여기에 크게 표시됩니다.</p>
+      </div>
+      <div class="detail-body" id="detail-body" hidden></div>
+    </aside>
+  {% endif %}
+  </div>
+
+  <script>
+    // 검색 — 법령명으로 "법령별 개요" 행과 구분별 섹션의 항목 행을 함께
+    // 거른다. 항목이 하나도 안 남은 섹션은 통째로 숨겨서 빈 "○○ (0건)"
+    // 제목만 남는 걸 막는다.
+    const search = document.getElementById("law-search");
+    const overviewRows = document.querySelectorAll(".overview-row");
+    const kindSections = document.querySelectorAll(".kind-section");
+
+    function applyFilters() {
+      const q = (search?.value || "").trim().toLowerCase();
+      overviewRows.forEach((row) => {
+        row.style.display = !q || row.dataset.lawName.includes(q) ? "" : "none";
+      });
+      kindSections.forEach((section) => {
+        let visible = 0;
+        section.querySelectorAll(".item-row").forEach((row) => {
+          const match = !q || row.dataset.lawName.includes(q);
+          row.style.display = match ? "" : "none";
+          if (match) visible += 1;
+        });
+        section.style.display = visible > 0 ? "" : "none";
+      });
+    }
+
+    search?.addEventListener("input", applyFilters);
+
+    // 필터 칩 — 이제 걸러내지 않고, 해당 구분 섹션으로 부드럽게
+    // 스크롤만 이동한다(본문이 이미 구분별로 나뉘어 있어 "숨기기"가
+    // 필요 없다 — 대신 "바로 그 자리로 가기"가 더 유용하다).
+    const kindNavLinks = document.querySelectorAll("#kind-chips .kind-nav-link");
+    kindNavLinks.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        document.getElementById(chip.dataset.target)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    // 스크롤 스파이 — 사용자 요청(2026-08-03): "스크롤을 내리면 신설/
+    // 삭제/이동 구간이 바뀌는데, 위 내비게이션에서 지금 어디를 보는지
+    // 강조되면 좋겠다". 지금 뷰포트 위쪽(고정 툴바 바로 아래)에 걸려
+    // 있는 섹션을 찾아 그 kind의 nav 링크에 .is-active를 준다. 짧은
+    // 섹션 여러 개가 동시에 화면에 걸칠 수 있어, 뷰포트 맨 위에 가장
+    // 가까운(top이 가장 작은) 섹션 하나만 "지금 보는 곳"으로 삼는다.
+    if (kindNavLinks.length && "IntersectionObserver" in window) {
+      const setActiveKindLink = (id) => {
+        kindNavLinks.forEach((link) => link.classList.toggle("is-active", link.dataset.target === id));
+      };
+      const kindSpy = new IntersectionObserver(
+        (entries) => {
+          const visible = entries.filter((e) => e.isIntersecting);
+          if (visible.length === 0) return;
+          visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          setActiveKindLink(visible[0].target.id);
+        },
+        { rootMargin: "-140px 0px -70% 0px", threshold: 0 }
+      );
+      kindSections.forEach((section) => kindSpy.observe(section));
+    }
+
+    // 오른쪽 상세 패널 — "원문 보기"는 같은 행 안에 hidden으로 숨겨둔
+    // 내용(fulltext-source)을 그대로 옮겨 보여준다(서버가 이미 렌더링해
+    // 둔 마크업을 재사용하므로 diff 강조 등이 그대로 유지된다).
+    // "법제처 원문 보기"는 외부 URL이라 iframe으로 시도하되, law.go.kr이
+    // 프레임 삽입을 막을 수 있어 새 탭 링크를 항상 함께 보여준다.
+    const detailPanel = document.getElementById("detail-panel");
+    const detailBackdrop = document.getElementById("detail-backdrop");
+    const detailTitle = document.getElementById("detail-title");
+    const detailEmpty = document.getElementById("detail-empty");
+    const detailBody = document.getElementById("detail-body");
+    const detailClose = document.getElementById("detail-close");
+
+    function openDetail(titleHtml, { docked = false } = {}) {
+      if (detailTitle) detailTitle.innerHTML = titleHtml || "원문 보기";
+      if (detailEmpty) detailEmpty.hidden = true;
+      if (detailBody) detailBody.hidden = false;
+      detailPanel?.classList.toggle("detail-col--docked", docked);
+      detailPanel?.classList.add("is-open");
+      detailBackdrop?.classList.add("is-open");
+      document.querySelectorAll(".item-row.is-active").forEach((r) => r.classList.remove("is-active"));
+    }
+
+    function closeDetail() {
+      detailPanel?.classList.remove("is-open");
+      detailBackdrop?.classList.remove("is-open");
+      if (detailBody) { detailBody.hidden = true; detailBody.innerHTML = ""; }
+      if (detailEmpty) detailEmpty.hidden = false;
+      if (detailTitle) detailTitle.textContent = "원문 보기";
+      document.querySelectorAll(".item-row.is-active").forEach((r) => r.classList.remove("is-active"));
+    }
+
+    document.querySelectorAll(".fulltext-trigger").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const source = btn.nextElementSibling;
+        if (!detailBody || !source) return;
+        detailBody.innerHTML = source.innerHTML;
+        const titleEl = btn.closest(".item-row")?.querySelector(".detail-title-html");
+        openDetail(titleEl ? titleEl.innerHTML : "", { docked: true });
+        btn.closest(".item-row")?.classList.add("is-active");
+      });
+    });
+
+    document.querySelectorAll(".source-trigger").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (!detailBody) return;
+        const url = btn.dataset.url;
+        let hostname = url;
+        try { hostname = new URL(url).hostname; } catch (e) { /* 상대/잘못된 URL이면 원문 그대로 표시 */ }
+        detailBody.replaceChildren();
+
+        // 실제 웹페이지를 iframe으로 보여준다는 걸 한눈에 알 수 있게
+        // 브라우저 주소창을 흉내낸 바를 iframe 위에 붙인다. "새 탭에서
+        // 열기"는 이제 별도 문단이 아니라 이 바의 아이콘 버튼 하나로.
+        const chrome = document.createElement("div");
+        chrome.className = "browser-chrome";
+
+        const dots = document.createElement("div");
+        dots.className = "browser-chrome-dots";
+        for (let i = 0; i < 3; i += 1) dots.appendChild(document.createElement("span"));
+
+        const addressBar = document.createElement("div");
+        addressBar.className = "browser-chrome-url";
+        const lock = document.createElement("span");
+        lock.className = "browser-chrome-lock";
+        lock.textContent = "🔒";
+        addressBar.append(lock, document.createTextNode(hostname));
+
+        const openLink = document.createElement("a");
+        openLink.className = "browser-chrome-open";
+        openLink.href = url;
+        openLink.target = "_blank";
+        openLink.rel = "noopener";
+        openLink.title = "새 탭에서 열기";
+        openLink.textContent = "↗";
+
+        chrome.append(dots, addressBar, openLink);
+
+        const iframe = document.createElement("iframe");
+        iframe.className = "detail-iframe";
+        iframe.loading = "lazy";
+        iframe.src = url;
+
+        detailBody.append(chrome, iframe);
+        const titleEl = btn.closest(".item-row")?.querySelector(".detail-title-html");
+        openDetail(titleEl ? titleEl.innerHTML : "");
+        btn.closest(".item-row")?.classList.add("is-active");
+      });
+    });
+
+    detailClose?.addEventListener("click", closeDetail);
+    detailBackdrop?.addEventListener("click", closeDetail);
+
+    // 헤더 숫자(개정 법령/변경 조문/구분별 통계)를 0에서 목표값까지
+    // 애니메이션으로 세어 올린다 — 정적인 숫자 나열 대신 페이지가
+    // 살아있다는 느낌을 준다. prefers-reduced-motion이면 바로 최종값.
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.querySelectorAll("[data-count]").forEach((el) => {
+      const target = parseInt(el.dataset.count, 10) || 0;
+      if (reduceMotion || target === 0) {
+        el.textContent = target;
+        return;
+      }
+      const duration = 700;
+      const start = performance.now();
+      function tick(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * target);
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+
+    // 기간 즉석 조회 로딩 화면 — 기간 버튼을 누르면 곧바로 페이지를
+    // 이동시키지 않고, /period-check로 스윕을 논블로킹으로 시작한 뒤
+    // /period-status를 폴링해 실제 진행 단계를 보여주다가, 다 되면 그때
+    // 실제 페이지로 이동한다(그 시점엔 캐시가 이미 채워져 있어 즉시
+    // 뜬다). fetch가 막힌 환경이면 그냥 원래 링크로 바로 이동한다
+    // (진행 단계를 못 보여줄 뿐 기능 자체는 그대로 동작 — 점진적 개선).
+    const loadingOverlay = document.getElementById("loading-overlay");
+    const loadingPeriodAccent = document.getElementById("loading-period-accent");
+    const loadingTitleSuffix = document.getElementById("loading-title-suffix");
+    const loadingStage = document.getElementById("loading-stage");
+    const POLL_INTERVAL_MS = 1500;
+
+    function showLoadingOverlay(labelText, suffix) {
+      if (!loadingOverlay) return;
+      if (loadingPeriodAccent && labelText) loadingPeriodAccent.textContent = labelText;
+      if (loadingTitleSuffix) loadingTitleSuffix.textContent = " " + (suffix || "조회 중이에요");
+      if (loadingStage) loadingStage.textContent = "국가법령정보 API로 실시간 확인하고 있어요";
+      loadingOverlay.hidden = false;
+    }
+
+    function setLoadingStage(stage, detail) {
+      if (!loadingStage || !stage) return;
+      loadingStage.textContent = detail ? `${stage} (${detail})` : stage;
+    }
+
+    function pollPeriodStatus(period, onDone) {
+      fetch(`/period-status?period=${encodeURIComponent(period)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          setLoadingStage(data.stage, data.detail);
+          if (data.done) onDone();
+          else setTimeout(() => pollPeriodStatus(period, onDone), POLL_INTERVAL_MS);
+        })
+        .catch(onDone);  // 폴링 자체가 실패하면 더 기다리지 않고 바로 진행
+    }
+
+    function runPeriodFlow(period, onDone) {
+      fetch(`/period-check?period=${encodeURIComponent(period)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.ready) onDone();
+          else pollPeriodStatus(period, onDone);
+        })
+        .catch(onDone);
+    }
+
+    document.querySelectorAll(".period-nav .period-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        if (link.classList.contains("is-active")) return;  // 이미 보고 있는 기간이면 아무것도 안 함
+        const period = new URL(link.href, window.location.origin).searchParams.get("period");
+        if (!period) return;  // "이번 주"는 즉석 조회가 아니라 그냥 원래대로 이동
+        e.preventDefault();
+        showLoadingOverlay(link.textContent.trim(), "조회 중이에요");
+        runPeriodFlow(period, () => { window.location.href = link.href; });
+      });
+    });
+
+    // "최근 N일" 모드일 때의 HWPX 다운로드도 같은 즉석 조회 경로를 탄다
+    // (캐시가 식어있으면 같은 대기가 생길 수 있음). 다운로드는 페이지
+    // 이동이 아니라 파일 저장으로 끝나므로, 완료 후 잠시 뒤 오버레이만
+    // 닫는다.
+    {% if period %}
+    const periodDownloadBtn = document.querySelector(".download-btn");
+    periodDownloadBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      showLoadingOverlay("{{ period_label }}", "보고서 준비 중이에요");
+      runPeriodFlow("{{ period }}", () => {
+        window.location.href = periodDownloadBtn.href;
+        setTimeout(() => { loadingOverlay.hidden = true; }, 1200);
+      });
+    });
+    {% endif %}
+  </script>
+</body>
+</html>

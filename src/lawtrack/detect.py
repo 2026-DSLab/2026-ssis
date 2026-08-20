@@ -14,13 +14,13 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import date
 from enum import Enum
 
 from lawtrack.api.client import LawApiClient, LawApiError
-from lawtrack.api.fulltext import FullTextResult, fetch_admrul_fulltext, fetch_law_fulltext
-from lawtrack.api.oldnew import OldNewResult, fetch_admrul_oldnew, fetch_law_oldnew
+from lawtrack.api.fulltext import fetch_admrul_fulltext, fetch_law_fulltext
+from lawtrack.api.oldnew import fetch_admrul_oldnew, fetch_law_oldnew
 from lawtrack.api.search import resolve_admrul, resolve_law
 from lawtrack.db.repo import (
     ArticleDiffRepo,
@@ -32,8 +32,6 @@ from lawtrack.db.repo import (
 from lawtrack.locate.locator import locate_all
 from lawtrack.parse.fulltext import flatten_searchable, parse_admrul_units, parse_articles
 from lawtrack.parse.oldnew import extract_admrul_unchanged, extract_changes
-from lawtrack.text.normalize import names_match
-from lawtrack.text.split import strip_annotations
 
 log = logging.getLogger(__name__)
 
@@ -98,20 +96,10 @@ def detect_law(client: LawApiClient, version_repo: VersionRepo, entry: Watchlist
         )
         return DetectResult(entry, DetectStatus.AMBIGUOUS)
 
-    candidate = outcome.candidates[0]
-    identity_error = _search_identity_error(
-        entry,
-        source_id=candidate.law_id,
-        source_name=candidate.law_name,
-    )
-    if identity_error:
-        log.error("법령 검색결과 식별자 불일치: %s", identity_error)
-        return DetectResult(entry, DetectStatus.ERROR, detail=identity_error)
-
-    current = candidate.serial_no
+    current = outcome.candidates[0].serial_no
     if version_repo.law_exists(entry.law_id, current):
-        return DetectResult(entry, DetectStatus.UNCHANGED, current, search_result=candidate)
-    return DetectResult(entry, DetectStatus.CHANGED, current, search_result=candidate)
+        return DetectResult(entry, DetectStatus.UNCHANGED, current, search_result=outcome.candidates[0])
+    return DetectResult(entry, DetectStatus.CHANGED, current, search_result=outcome.candidates[0])
 
 
 def detect_admrul(client: LawApiClient, version_repo: VersionRepo, entry: WatchlistEntry) -> DetectResult:
@@ -142,20 +130,10 @@ def detect_admrul(client: LawApiClient, version_repo: VersionRepo, entry: Watchl
     if outcome.status == "ambiguous":
         return DetectResult(entry, DetectStatus.AMBIGUOUS)
 
-    candidate = outcome.candidates[0]
-    identity_error = _search_identity_error(
-        entry,
-        source_id=candidate.rule_id,
-        source_name=candidate.rule_name,
-    )
-    if identity_error:
-        log.error("행정규칙 검색결과 식별자 불일치: %s", identity_error)
-        return DetectResult(entry, DetectStatus.ERROR, detail=identity_error)
-
-    current = candidate.serial_no
+    current = outcome.candidates[0].serial_no
     if version_repo.admrul_exists(entry.law_id, current):
-        return DetectResult(entry, DetectStatus.UNCHANGED, current, search_result=candidate)
-    return DetectResult(entry, DetectStatus.CHANGED, current, search_result=candidate)
+        return DetectResult(entry, DetectStatus.UNCHANGED, current, search_result=outcome.candidates[0])
+    return DetectResult(entry, DetectStatus.CHANGED, current, search_result=outcome.candidates[0])
 
 
 # ---------------------------------------------------------------------------
@@ -168,75 +146,6 @@ class ProcessOutcome:
     diff_count: int = 0
     located_success: int = 0
     located_failed: int = 0
-
-
-def _same_source_id(expected: str, actual: str) -> bool:
-    """법제처가 일부 법령 ID의 선행 0을 생략하는 경우까지 동일 ID로 본다."""
-    expected = (expected or "").strip()
-    actual = (actual or "").strip()
-    if expected.isdigit() and actual.isdigit():
-        return int(expected) == int(actual)
-    return expected == actual
-
-
-def _search_identity_error(
-    entry: WatchlistEntry,
-    *,
-    source_id: str,
-    source_name: str,
-) -> str:
-    """목록/본문 응답이 워치리스트의 바로 그 법령인지 확인한다."""
-    if not (source_id or "").strip():
-        return f"{entry.official_name}: API 응답의 법령 ID가 비어 있습니다."
-    if not _same_source_id(entry.law_id, source_id):
-        return (
-            f"{entry.official_name}: 워치리스트 ID {entry.law_id}와 "
-            f"API 응답 ID {source_id}가 다릅니다."
-        )
-    if not (source_name or "").strip():
-        return f"{entry.official_name}: API 응답의 법령명이 비어 있습니다."
-    if not names_match(entry.official_name, source_name):
-        return (
-            f"{entry.official_name}: 워치리스트 법령명과 API 응답 법령명 "
-            f"{source_name!r}이 다릅니다."
-        )
-    return ""
-
-
-def _fulltext_identity_error(
-    entry: WatchlistEntry,
-    fulltext: FullTextResult,
-    *,
-    oldnew: OldNewResult | None = None,
-) -> str:
-    """본문과 신구법 응답의 ID·이름·신법 일련번호를 저장 전에 대조한다."""
-    error = _search_identity_error(
-        entry,
-        source_id=fulltext.source_id,
-        source_name=fulltext.name,
-    )
-    if error:
-        return "본문조회 검증 실패 — " + error
-    if oldnew is None or not oldnew.available:
-        return ""
-
-    current = oldnew.new_version
-    if current.serial_no and current.serial_no != fulltext.serial_no:
-        return (
-            "신구법조회 검증 실패 — 신법 일련번호 "
-            f"{current.serial_no}가 본문 일련번호 {fulltext.serial_no}와 다릅니다."
-        )
-    if current.source_id and not _same_source_id(entry.law_id, current.source_id):
-        return (
-            "신구법조회 검증 실패 — 신법 ID "
-            f"{current.source_id}가 워치리스트 ID {entry.law_id}와 다릅니다."
-        )
-    if current.name and not names_match(entry.official_name, current.name):
-        return (
-            "신구법조회 검증 실패 — 신법명이 "
-            f"{current.name!r}으로 워치리스트 법령명과 다릅니다."
-        )
-    return ""
 
 
 def process_law_entry(
@@ -271,18 +180,7 @@ def process_law_entry(
             entry.official_name, entry.law_id, oldnew.reason,
         )
         fulltext = fetch_law_fulltext(client, new_serial)
-        identity_error = _fulltext_identity_error(entry, fulltext)
-        if identity_error:
-            return ProcessOutcome(DetectResult(
-                entry,
-                DetectStatus.ERROR,
-                new_serial,
-                detail=identity_error,
-            ))
-        version_repo.insert_law(
-            entry.official_name, entry.law_id, new_serial, fulltext.raw,
-            parsed_articles=_serialize_articles(parse_articles(fulltext.raw)),
-        )
+        version_repo.insert_law(entry.official_name, entry.law_id, new_serial, fulltext.raw)
         # ★ 실측 발견(2026-07-18): enforce_date를 None으로 그냥 두면(sr이 없는
         # 경우) contract/export.py의 fetch_no_comparison_in_period가 이 행을
         # 기간(BETWEEN) 조회로 영원히 못 찾는다 — 다른 브랜치처럼 오늘 날짜로
@@ -291,7 +189,6 @@ def process_law_entry(
             law_id=entry.law_id, new_serial_no=new_serial,
             old_serial_no=entry.last_serial_no,
             promulgation_no=sr.promulgation_no if sr else "",
-            promulgation_date=_parse_date(sr.promulgation_date) if sr else None,
             revision_type=sr.revision_type if sr else "",
             revision_reason=fulltext.revision_reason,
             enforce_date=(_parse_date(sr.enforce_date) if sr else None) or date.today(),
@@ -301,19 +198,8 @@ def process_law_entry(
         return ProcessOutcome(DetectResult(entry, DetectStatus.NO_COMPARISON, new_serial))
 
     fulltext = fetch_law_fulltext(client, new_serial)
-    identity_error = _fulltext_identity_error(entry, fulltext, oldnew=oldnew)
-    if identity_error:
-        return ProcessOutcome(DetectResult(
-            entry,
-            DetectStatus.ERROR,
-            new_serial,
-            detail=identity_error,
-        ))
     articles = parse_articles(fulltext.raw)
-    version_repo.insert_law(
-        entry.official_name, entry.law_id, new_serial, fulltext.raw,
-        parsed_articles=_serialize_articles(articles),
-    )
+    version_repo.insert_law(entry.official_name, entry.law_id, new_serial, fulltext.raw)
 
     units = flatten_searchable(articles)
 
@@ -329,13 +215,8 @@ def process_law_entry(
 
     change_log_repo.insert(
         law_id=entry.law_id, new_serial_no=new_serial,
-        # 강제 재처리에서는 watchlist.last_serial_no가 이미 현재 버전일 수
-        # 있으므로, 신구법 API가 알려주는 실제 이전 버전을 우선한다.
-        old_serial_no=oldnew.old_version.serial_no or entry.last_serial_no,
+        old_serial_no=entry.last_serial_no or oldnew.old_version.serial_no,
         promulgation_no=(sr.promulgation_no if sr else "") or oldnew.new_version.promulgation_no,
-        promulgation_date=_parse_date(
-            (sr.promulgation_date if sr else "") or oldnew.new_version.promulgation_date
-        ),
         revision_type=(sr.revision_type if sr else "") or oldnew.new_version.revision_type,
         revision_reason=fulltext.revision_reason,
         enforce_date=enforce_date,
@@ -396,23 +277,11 @@ def process_admrul_entry(
             entry.official_name, entry.law_id, oldnew.reason,
         )
         fulltext = fetch_admrul_fulltext(client, new_serial)
-        identity_error = _fulltext_identity_error(entry, fulltext)
-        if identity_error:
-            return ProcessOutcome(DetectResult(
-                entry,
-                DetectStatus.ERROR,
-                new_serial,
-                detail=identity_error,
-            ))
-        version_repo.insert_admrul(
-            entry.official_name, entry.law_id, new_serial, fulltext.raw,
-            parsed_units=_serialize_units(parse_admrul_units(fulltext.raw)),
-        )
+        version_repo.insert_admrul(entry.official_name, entry.law_id, new_serial, fulltext.raw)
         change_log_repo.insert(
             law_id=entry.law_id, new_serial_no=new_serial,
             old_serial_no=entry.last_serial_no,
             promulgation_no=sr.promulgation_no if sr else "",
-            promulgation_date=_parse_date(sr.promulgation_date) if sr else None,
             revision_type=sr.revision_type if sr else "",
             revision_reason=fulltext.revision_reason,
             enforce_date=(_parse_date(sr.promulgation_date) if sr else None) or date.today(),
@@ -422,23 +291,12 @@ def process_admrul_entry(
         return ProcessOutcome(DetectResult(entry, DetectStatus.NO_COMPARISON, new_serial))
 
     fulltext = fetch_admrul_fulltext(client, new_serial)
-    identity_error = _fulltext_identity_error(entry, fulltext, oldnew=oldnew)
-    if identity_error:
-        return ProcessOutcome(DetectResult(
-            entry,
-            DetectStatus.ERROR,
-            new_serial,
-            detail=identity_error,
-        ))
     # ★ 실측(2026-07-16): 행정규칙은 법령과 본문 구조가 전혀 달라(조문/항/호가
     # JSON 트리로 안 쪼개져 있고 평문 한 줄에 통째로 이어붙어 있음)
     # parse_articles+flatten_searchable(법령 전용)를 그대로 쓰면 조문을 0건
     # 찾아 모든 위치확정이 100% 실패한다. 전용 파서를 쓴다.
     units = parse_admrul_units(fulltext.raw)
-    version_repo.insert_admrul(
-        entry.official_name, entry.law_id, new_serial, fulltext.raw,
-        parsed_units=_serialize_units(units),
-    )
+    version_repo.insert_admrul(entry.official_name, entry.law_id, new_serial, fulltext.raw)
 
     changes = extract_changes(oldnew.old_texts, oldnew.new_texts)
     located = locate_all(changes, units)
@@ -453,11 +311,8 @@ def process_admrul_entry(
 
     change_log_repo.insert(
         law_id=entry.law_id, new_serial_no=new_serial,
-        old_serial_no=oldnew.old_version.serial_no or entry.last_serial_no,
+        old_serial_no=entry.last_serial_no or oldnew.old_version.serial_no,
         promulgation_no=(sr.promulgation_no if sr else "") or oldnew.new_version.promulgation_no,
-        promulgation_date=_parse_date(
-            (sr.promulgation_date if sr else "") or oldnew.new_version.promulgation_date
-        ),
         revision_type=(sr.revision_type if sr else "") or oldnew.new_version.revision_type,
         revision_reason=fulltext.revision_reason,
         enforce_date=enforce_date,
@@ -492,53 +347,6 @@ def process_entry(
     """
     fn = process_admrul_entry if entry.law_type == ADMRUL_LAW_TYPE else process_law_entry
     return fn(client, version_repo, watchlist_repo, change_log_repo, article_diff_repo, entry)
-
-
-def _strip_text_fields(obj):
-    """★★ 실측 발견(2026-07-18, 전자정부법 제5조③): parse_articles()가
-    만드는 ClauseNode.text/ItemNode.text/SubItemNode.text/ArticleUnit.content
-    는 lawService 원문 그대로라 "<개정 2020.6.9>" 같은 각주가 그대로 섞여
-    있다. article_diff.old_text에서 이미 한 번 같은 문제를 고쳤는데
-    (strip_annotations 누락), 오늘 새로 추가한 law_articles_parsed/
-    administrative_rule_articles_parsed 캐시 컬럼에서 똑같은 문제가
-    재발했다 — 이번엔 다른 경로(parse_articles 자체 출력)라 그때 고친
-    코드가 적용되지 않는 지점이었다. "text"/"content" 키만 대상으로
-    재귀적으로 strip_annotations를 적용한다(라벨/마커/날짜 필드는 원래
-    각주가 낄 일이 없으므로 건드리지 않는다).
-    """
-    if isinstance(obj, dict):
-        out = {}
-        for k, v in obj.items():
-            if k in ("text", "content") and isinstance(v, str):
-                out[k] = strip_annotations(v).strip()
-            else:
-                out[k] = _strip_text_fields(v)
-        return out
-    if isinstance(obj, (list, tuple)):
-        # ★ 실측 발견(2026-07-18): dataclasses.asdict()는 tuple 필드를
-        # list가 아니라 tuple 그대로 남긴다(ClauseNode.items 등) —
-        # list만 검사하면 이 중첩 tuple 안의 text/content가 하나도 안
-        # 지워지는 채로 새어나간다. list/tuple 둘 다 처리한다.
-        return [_strip_text_fields(x) for x in obj]
-    return obj
-
-
-def _serialize_articles(articles: list) -> list[dict]:
-    """parse_articles() 결과(ArticleUnit 트리)를 DB 저장용 JSON-호환 dict로.
-
-    ★ 요구사항("파싱된 것도 DB에 담아달라")에 따라 law_full_text(원본)와
-    별도로 저장하는 캐시용. dataclasses.asdict()는 중첩된 ClauseNode/
-    ItemNode/SubItemNode까지 재귀적으로 dict로 풀어준다. locate/매칭에
-    쓰는 원본 ArticleUnit 객체는 건드리지 않고(주석 유지가 매칭 로직에
-    영향 없다는 게 이미 검증돼 있음), DB에 쓸 딕셔너리로 변환한 *이후*에만
-    각주를 제거한다.
-    """
-    return [_strip_text_fields(asdict(art)) for art in articles]
-
-
-def _serialize_units(units: list) -> list[dict]:
-    """parse_admrul_units() 결과(SearchUnit 평평한 목록)를 DB 저장용으로."""
-    return [_strip_text_fields(asdict(u)) for u in units]
 
 
 def _unchanged_clauses(

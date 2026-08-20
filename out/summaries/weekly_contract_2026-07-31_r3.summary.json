@@ -1,0 +1,38 @@
+{
+  "source_file": "weekly_contract_2026-07-31_r3.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "002652",
+      "law_name": "국가를 당사자로 하는 계약에 관한 법률 시행령",
+      "law_type": "시행령",
+      "enforce_date": "2026-06-03",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=285893&type=HTML",
+      "new_serial_no": "285893",
+      "headline": "신기술 및 신제품에 대한 인증 용어를 지정으로 변경",
+      "body": "이번 개정은 신기술 및 신제품의 인증 제도를 지정 제도로 전환하는 데 중점을 두고 있습니다. 이는 관련 법률의 개정에 따른 용어 변경으로, 제도의 일관성을 높이고 관련 규정을 명확히 하기 위한 것입니다.",
+      "overview": "이번 개정은 신기술 및 신제품의 인증 제도를 지정 제도로 전환하는 데 중점을 두고 있습니다. 이는 관련 법률의 개정에 따른 용어 변경으로, 제도의 일관성을 높이고 관련 규정을 명확히 하기 위한 것입니다.",
+      "caveats": [],
+      "article_summaries": [],
+      "mappings": [],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [
+    {
+      "law_id": "002652",
+      "law_name": "국가를 당사자로 하는 계약에 관한 법률 시행령",
+      "new_serial_no": "285893",
+      "reason": "0건실패",
+      "detail": "본문검색: '라. 「산업기술혁신 촉진법」 제16조에 따라…'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=285893&type=HTML",
+      "guards_tried": [
+        "본문검색: '라. 「산업기술혁신 촉진법」 제16조에 따라…'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    }
+  ],
+  "no_comparison": []
+}

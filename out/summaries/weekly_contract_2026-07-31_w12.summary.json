@@ -1,0 +1,64 @@
+{
+  "source_file": "weekly_contract_2026-07-31_w12.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "001973",
+      "law_name": "국민기초생활보장법",
+      "law_type": "법률",
+      "enforce_date": "2025-10-01",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=276653&type=HTML",
+      "new_serial_no": "276653",
+      "headline": "통계청의 국가데이터처 승격 및 정부 기능 강화를 위한 기구 개편",
+      "body": "이번 개정은 정부 조직 체계를 재설계하여 특정 부처에 집중된 기능과 권한을 분산하고, 각 부처의 전문성을 강화하는 것을 목표로 하고 있습니다. 또한, 기후위기와 인공지능 대전환에 효과적으로 대응하기 위해 행정환경을 개선하고, 성평등 및 산업안전보건 정책을 강화하는 변화가 포함되어 있습니다.\n\n○ 조문별 변경 내용\n- 제6조의2 (개정): 통계청이 국가데이터처로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+      "overview": "이번 개정은 정부 조직 체계를 재설계하여 특정 부처에 집중된 기능과 권한을 분산하고, 각 부처의 전문성을 강화하는 것을 목표로 하고 있습니다. 또한, 기후위기와 인공지능 대전환에 효과적으로 대응하기 위해 행정환경을 개선하고, 성평등 및 산업안전보건 정책을 강화하는 변화가 포함되어 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "001973",
+            "law_name": "국민기초생활보장법",
+            "location_label": "제6조의2①",
+            "change_type": "개정",
+            "old_text": "① 기준 중위소득은 「통계법」 제27조에 따라 통계청이 공표하는 통계자료의 가구 경상소득(근로소득, 사업소득, 재산소득, 이전소득을 합산한 소득을 말한다)의 중간값에 최근 가구소득 평균 증가율, 가구규모에 따른 소득수준의 차이 등을 반영하여 가구규모별로 산정한다.",
+            "new_text": "① 기준 중위소득은 「통계법」 제27조에 따라 국가데이터처가 공표하는 통계자료의 가구 경상소득(근로소득, 사업소득, 재산소득, 이전소득을 합산한 소득을 말한다)의 중간값에 최근 가구소득 평균 증가율, 가구규모에 따른 소득수준의 차이 등을 반영하여 가구규모별로 산정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'통계청이' → '국가데이터처가'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "통계청이 국가데이터처로 변경되는 등 기관명·인용 법령명이 정비되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제6조의2",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

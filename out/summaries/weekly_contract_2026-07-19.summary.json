@@ -1,0 +1,1052 @@
+{
+  "source_file": "weekly_contract_2026-07-19.json",
+  "batch_date": "2026-07-20",
+  "laws": [
+    {
+      "law_id": "000171",
+      "law_name": "환경개선비용 부담법",
+      "law_type": "법률",
+      "enforce_date": "2025-10-01",
+      "revision_type": "타법개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=276819&type=HTML",
+      "new_serial_no": "276819",
+      "headline": "환경부 기능을 기후에너지환경부로 이관 및 명칭 변경",
+      "body": "이번 개정은 환경부의 기능을 기후 변화와 에너지 정책을 통합적으로 추진하기 위해 기후에너지환경부로 이관하고, 관련 기관명 및 법령 인용을 정비하는 데 중점을 두고 있습니다. 이를 통해 기후위기 대응 및 에너지 관련 정책의 전문성을 강화하고 효율성을 높이려는 목적을 가지고 있습니다.\n\n○ 조문별 변경 내용\n- 제20조\n    · ① (개정): 기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').\n    · ③ (개정): 기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').\n- 제21조\n    · ① (개정): 기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').\n    · ② (개정): 기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').\n- 제22조 (개정): 기관명·인용 법령명 정비입니다('환경부장관의' → '기후에너지환경부장관의').\n- 제9조\n    · ① (개정): 기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').\n    · ④ (개정): 기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').\n    · ⑤ (개정): 기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').\n    · ⑥ (개정): 기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').\n    · ⑦ (개정): 기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').\n    · ⑧ (개정): 기후에너지가 추가되었습니다.",
+      "overview": "이번 개정은 환경부의 기능을 기후 변화와 에너지 정책을 통합적으로 추진하기 위해 기후에너지환경부로 이관하고, 관련 기관명 및 법령 인용을 정비하는 데 중점을 두고 있습니다. 이를 통해 기후위기 대응 및 에너지 관련 정책의 전문성을 강화하고 효율성을 높이려는 목적을 가지고 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제20조①",
+            "change_type": "개정",
+            "old_text": "① 환경부장관은 개선부담금을 내야 할 자가 납부기한까지 그 부담금을 내지 아니하면 10일 이상의 기간을 정하여 독촉하여야 한다. 이 경우 체납된 부담금에 대하여는 100분의 3에 해당하는 가산금을 부과하여야 한다. 다만, 국가와 지방자치단체에 대하여는 그러하지 아니하다.",
+            "new_text": "① 기후에너지환경부장관은 개선부담금을 내야 할 자가 납부기한까지 그 부담금을 내지 아니하면 10일 이상의 기간을 정하여 독촉하여야 한다. 이 경우 체납된 부담금에 대하여는 100분의 3에 해당하는 가산금을 부과하여야 한다. 다만, 국가와 지방자치단체에 대하여는 그러하지 아니하다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기후에너지' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제20조③",
+            "change_type": "개정",
+            "old_text": "③ 환경부장관은 개선부담금의 부과ㆍ징수를 위하여 필요한 경우에는 관계 중앙행정기관의 장 또는 지방자치단체의 장에게 필요한 자료의 제출을 요청할 수 있다. 이 경우 자료의 제출을 요청받은 관계 중앙행정기관의 장 또는 지방자치단체의 장은 특별한 사유가 없으면 요청받은 자료를 제출하여야 한다.",
+            "new_text": "③ 기후에너지환경부장관은 개선부담금의 부과ㆍ징수를 위하여 필요한 경우에는 관계 중앙행정기관의 장 또는 지방자치단체의 장에게 필요한 자료의 제출을 요청할 수 있다. 이 경우 자료의 제출을 요청받은 관계 중앙행정기관의 장 또는 지방자치단체의 장은 특별한 사유가 없으면 요청받은 자료를 제출하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기후에너지' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제21조①",
+            "change_type": "개정",
+            "old_text": "① 환경부장관은 개선부담금을 체납한 자에게 다음 각 호의 어느 하나에 해당하는 사유가 있는 경우에는 결손처분을 할 수 있다.",
+            "new_text": "① 기후에너지환경부장관은 개선부담금을 체납한 자에게 다음 각 호의 어느 하나에 해당하는 사유가 있는 경우에는 결손처분을 할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기후에너지' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제21조②",
+            "change_type": "개정",
+            "old_text": "② 환경부장관은 제1항에 따라 결손처분을 한 후 압류할 수 있는 다른 재산을 발견하면 지체 없이 그 처분을 취소하고 체납처분을 하여야 한다. 다만, 제1항제2호에 해당하는 경우에는 그러하지 아니하다.",
+            "new_text": "② 기후에너지환경부장관은 제1항에 따라 결손처분을 한 후 압류할 수 있는 다른 재산을 발견하면 지체 없이 그 처분을 취소하고 체납처분을 하여야 한다. 다만, 제1항제2호에 해당하는 경우에는 그러하지 아니하다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기후에너지' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제22조",
+            "change_type": "개정",
+            "old_text": "이 법에 따른 환경부장관의 권한은 대통령령으로 정하는 바에 따라 그 일부를 시ㆍ도지사 또는 특례시의 장에게 위임할 수 있다.",
+            "new_text": "이 법에 따른 기후에너지환경부장관의 권한은 대통령령으로 정하는 바에 따라 그 일부를 시ㆍ도지사 또는 특례시의 장에게 위임할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관명·인용 법령명 정비입니다('환경부장관의' → '기후에너지환경부장관의').",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제9조①",
+            "change_type": "개정",
+            "old_text": "① 환경부장관은 경유를 연료로 사용하는 자동차의 소유자로부터 환경개선부담금(이하 “개선부담금”이라 한다)을 부과ㆍ징수한다.",
+            "new_text": "① 기후에너지환경부장관은 경유를 연료로 사용하는 자동차의 소유자로부터 환경개선부담금(이하 “개선부담금”이라 한다)을 부과ㆍ징수한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기후에너지' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제9조④",
+            "change_type": "개정",
+            "old_text": "④ 환경부장관은 개선부담금을 반기별로 산정하여 부과하며, 부과기준일, 부과기간 및 납부기간은 별표와 같다. 다만, 개선부담금 부과 대상 자동차의 등록이 말소되는 등 대통령령으로 정하는 경우에는 부과 대상자의 신청 또는 직권으로 개선부담금을 수시로 부과할 수 있다.",
+            "new_text": "④ 기후에너지환경부장관은 개선부담금을 반기별로 산정하여 부과하며, 부과기준일, 부과기간 및 납부기간은 별표와 같다. 다만, 개선부담금 부과 대상 자동차의 등록이 말소되는 등 대통령령으로 정하는 경우에는 부과 대상자의 신청 또는 직권으로 개선부담금을 수시로 부과할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기후에너지' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제9조⑤",
+            "change_type": "개정",
+            "old_text": "⑤ 환경부장관은 제22조에 따라 특별시장ㆍ광역시장ㆍ특별자치시장ㆍ도지사ㆍ특별자치도지사(이하 “시ㆍ도지사”라 한다) 또는 「지방자치법」 제198조제2항제1호에 따른 인구 100만 이상의 대도시(이하 “특례시”라 한다)의 장에게 그 관할구역의 개선부담금 징수에 관한 권한을 위임한 경우에는 징수된 금액 중 일부를 대통령령으로 정하는 바에 따라 징수 비용으로 지급할 수 있다.",
+            "new_text": "⑤ 기후에너지환경부장관은 제22조에 따라 특별시장ㆍ광역시장ㆍ특별자치시장ㆍ도지사ㆍ특별자치도지사(이하 “시ㆍ도지사”라 한다) 또는 「지방자치법」 제198조제2항제1호에 따른 인구 100만 이상의 대도시(이하 “특례시”라 한다)의 장에게 그 관할구역의 개선부담금 징수에 관한 권한을 위임한 경우에는 징수된 금액 중 일부를 대통령령으로 정하는 바에 따라 징수 비용으로 지급할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기후에너지' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제9조⑥",
+            "change_type": "개정",
+            "old_text": "⑥ 환경부장관은 대통령령으로 정하는 바에 따라 개선부담금을 분할납부하게 할 수 있다.",
+            "new_text": "⑥ 기후에너지환경부장관은 대통령령으로 정하는 바에 따라 개선부담금을 분할납부하게 할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기후에너지' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제9조⑦",
+            "change_type": "개정",
+            "old_text": "⑦ 환경부장관은 제1항에 따라 개선부담금을 납부하여야 하는 자가 다음 각 호의 구분에 따른 기간 중에 별표에 따른 전년도 하반기 개선부담금과 해당 연도 상반기 개선부담금을 한꺼번에 신고하여 납부하려는 경우에는 다음 각 호의 구분에 따른 개선부담금 금액의 100분의 10을 감면할 수 있다.",
+            "new_text": "⑦ 기후에너지환경부장관은 제1항에 따라 개선부담금을 납부하여야 하는 자가 다음 각 호의 구분에 따른 기간 중에 별표에 따른 전년도 하반기 개선부담금과 해당 연도 상반기 개선부담금을 한꺼번에 신고하여 납부하려는 경우에는 다음 각 호의 구분에 따른 개선부담금 금액의 100분의 10을 감면할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기후에너지' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기관명·인용 법령명 정비입니다('환경부장관은' → '기후에너지환경부장관은').",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000171",
+            "law_name": "환경개선비용 부담법",
+            "location_label": "제9조⑧",
+            "change_type": "개정",
+            "old_text": "⑧ 개선부담금 납부 의무의 승계 및 제2차 납부 의무에 관하여는 「국세기본법」 제23조, 제24조 및 제38조부터 제41조까지의 규정을 준용하고, 개선부담금 연대 납부 의무에 관하여는 「국세기본법」 제25조, 「민법」 제413조부터 제416조까지, 제419조, 제421조, 제423조 및 제425조부터 제427조까지의 규정을 준용한다. 이 경우 “국세”는 “개선부담금”으로, “세무서장”은 “환경부장관”으로, “납세”는 “납부”로 본다.",
+            "new_text": "⑧ 개선부담금 납부 의무의 승계 및 제2차 납부 의무에 관하여는 「국세기본법」 제23조, 제24조 및 제38조부터 제41조까지의 규정을 준용하고, 개선부담금 연대 납부 의무에 관하여는 「국세기본법」 제25조, 「민법」 제413조부터 제416조까지, 제419조, 제421조, 제423조 및 제425조부터 제427조까지의 규정을 준용한다. 이 경우 “국세”는 “개선부담금”으로, “세무서장”은 “기후에너지환경부장관”으로, “납세”는 “납부”로 본다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'기후에너지' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기후에너지가 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제20조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제21조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제22조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제9조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "④",
+              "new_position": "④",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "⑤",
+              "new_position": "⑤",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "⑥",
+              "new_position": "⑥",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "⑦",
+              "new_position": "⑦",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "⑧",
+              "new_position": "⑧",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    },
+    {
+      "law_id": "001605",
+      "law_name": "국민체육진흥법",
+      "law_type": "법률",
+      "enforce_date": "2026-06-02",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=286627&type=HTML",
+      "new_serial_no": "286627",
+      "headline": "장애인올림픽대회 명칭 변경 및 대학스포츠협의회 설립 규정 마련",
+      "body": "이번 개정은 장애인올림픽대회의 명칭을 국제적으로 통용되는 패럴림픽대회로 정비하고, 대학스포츠 진흥을 위한 한국대학스포츠협의회 설립 규정을 명확히 함으로써 체육 관련 제도의 정비 및 효율성을 도모하기 위해 시행됩니다. 이를 통해 대학스포츠의 발전과 체육 진흥을 위한 기반을 강화하고자 합니다.\n\n○ 조문별 변경 내용\n- 제18조 (개정): 한국대학스포츠협의회가 추가되었습니다.\n- 제21조\n    · ① (개정): '올림픽위원'이 '체육'으로 변경되었습니다.\n    · ② (개정): '올림픽위원'이 '체육'으로 변경되었습니다.\n    · ④ (신설): 대한체육회는 국제경기대회 출전 준비를 위해 필요한 경우, 사용 승인을 받은 자가 공급하는 지식재산권을 활용한 물품과 용역을 문화체육관광부장관과 협의하여 수의계약으로 구매할 수 있게 됩니다. 수의계약의 조건과 범위, 기준 등은 대통령령으로 정해집니다.\n- 제22조\n    · ①8. (개정): '장애인올'이 '패럴'로 변경되었습니다.\n    · ①10. (개정): 한국대학스포츠협의회가 추가되었습니다.\n- 제36조\n    · ① (개정): 림픽대회 및 제8회 서울패럴이 추가되었습니다.\n    · ①1. (개정): 제8회 서울패럴림픽대회가 추가되었습니다.\n    · ④ (개정): 림픽대회와 제8회 서울패럴이 추가되었습니다.\n- 제37조의2 (신설, 9개 항·호·목): 대학스포츠와 관련된 사업 및 활동을 위해 문화체육관광부장관의 인가를 받아 한국대학스포츠협의회를 설립하는 내용이 새로 추가되었습니다.\n- 제42조 (개정): 대학스포츠협의회가 명칭 사용 제한의 범위에 추가되었으며, 한국대학스포츠협의회도 명칭 사용 금지 대상에 포함되었습니다.\n- 제43조 (개정): ' 및'가 ','로 변경되었고, '은'이 ' 및 대학스포츠협의회는'으로 변경되었습니다.",
+      "overview": "이번 개정은 장애인올림픽대회의 명칭을 국제적으로 통용되는 패럴림픽대회로 정비하고, 대학스포츠 진흥을 위한 한국대학스포츠협의회 설립 규정을 명확히 함으로써 체육 관련 제도의 정비 및 효율성을 도모하기 위해 시행됩니다. 이를 통해 대학스포츠의 발전과 체육 진흥을 위한 기반을 강화하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제18조②",
+            "change_type": "개정",
+            "old_text": "② 국가와 지방자치단체는 대한체육회, 지방체육회, 대한장애인체육회, 지방장애인체육회, 한국도핑방지위원회, 서울올림픽기념국민체육진흥공단, 스포츠윤리센터, 그 밖의 체육단체와 체육 과학 연구기관에 대하여 필요한 경비나 연구비의 일부를 보조한다.",
+            "new_text": "② 국가와 지방자치단체는 대한체육회, 지방체육회, 대한장애인체육회, 지방장애인체육회, 한국도핑방지위원회, 서울올림픽기념국민체육진흥공단, 스포츠윤리센터, 한국대학스포츠협의회 및 그 밖의 체육단체와 체육 과학 연구기관에 대하여 필요한 경비나 연구비의 일부를 보조한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'한국대학스포츠협의회 및 ' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "한국대학스포츠협의회가 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제21조①",
+            "change_type": "개정",
+            "old_text": "①올림픽을 상징하는 오륜(五輪)과 오륜을 포함하고 있는 모든 표지ㆍ도안ㆍ표어 또는 이와 비슷한 것을 영리를 목적으로 사용하려는 자는 대한올림픽위원회의 승인을 받아야 한다.",
+            "new_text": "①올림픽을 상징하는 오륜(五輪)과 오륜을 포함하고 있는 모든 표지ㆍ도안ㆍ표어 또는 이와 비슷한 것을 영리를 목적으로 사용하려는 자는 대한체육회의 승인을 받아야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'올림픽위원' → '체육'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'올림픽위원'이 '체육'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제21조②",
+            "change_type": "개정",
+            "old_text": "②대한올림픽위원회는 제1항의 승인에 관한 권한을 서울올림픽기념국민체육진흥공단으로 하여금 대행하게 할 수 있다.",
+            "new_text": "②대한체육회는 제1항의 승인에 관한 권한을 서울올림픽기념국민체육진흥공단으로 하여금 대행하게 할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'올림픽위원' → '체육'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'올림픽위원'이 '체육'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제21조④",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "④ 대한체육회는 국제경기대회 출전 준비 등을 위하여 필요한 경우, 제1항에 따른 사용 승인을 받은 자가 공급하는 지식재산권(상표권, 휘장 사용에 관한 권리 등을 말한다)을 활용한 물품, 용역 등을 문화체육관광부장관과 협의하여 수의계약으로 구매할 수 있다. 이 경우 수의계약의 조건과 범위, 기준 등은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대한체육회는 국제경기대회 출전 준비를 위해 필요한 경우, 사용 승인을 받은 자가 공급하는 지식재산권을 활용한 물품과 용역을 문화체육관광부장관과 협의하여 수의계약으로 구매할 수 있게 됩니다. 수의계약의 조건과 범위, 기준 등은 대통령령으로 정해집니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제22조①8.",
+            "change_type": "개정",
+            "old_text": "8. 제24회 서울올림픽대회와 제8회 서울장애인올림픽대회를 기념하기 위한 사업",
+            "new_text": "8. 제24회 서울올림픽대회와 제8회 서울패럴림픽대회를 기념하기 위한 사업",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'장애인올' → '패럴'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'장애인올'이 '패럴'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제22조①10.",
+            "change_type": "개정",
+            "old_text": "10. 대한체육회, 지방체육회, 대한장애인체육회, 지방장애인체육회, 한국도핑방지위원회, 생활체육 관련 체육단체와 체육 과학 연구기관, 스포츠윤리센터 및 체육인재육성 관련 단체의 운영ㆍ지원",
+            "new_text": "10. 대한체육회, 지방체육회, 대한장애인체육회, 지방장애인체육회, 한국도핑방지위원회, 생활체육 관련 체육단체와 체육 과학 연구기관, 스포츠윤리센터, 한국대학스포츠협의회 및 체육인재육성 관련 단체의 운영ㆍ지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "', 한국대학스포츠협의회' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "한국대학스포츠협의회가 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제36조①",
+            "change_type": "개정",
+            "old_text": "①제24회 서울올림픽대회를 기념하고 국민체육 진흥을 위한 다음의 사업을 하게 하기 위하여 문화체육관광부장관의 인가를 받아 서울올림픽기념국민체육진흥공단(이하 “진흥공단”이라 한다)을 설립한다.",
+            "new_text": "①제24회 서울올림픽대회 및 제8회 서울패럴림픽대회를 기념하고 국민체육 진흥을 위한 다음의 사업을 하게 하기 위하여 문화체육관광부장관의 인가를 받아 서울올림픽기념국민체육진흥공단(이하 “진흥공단”이라 한다)을 설립한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'림픽대회 및 제8회 서울패럴' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "림픽대회 및 제8회 서울패럴이 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제36조①1.",
+            "change_type": "개정",
+            "old_text": "1. 제24회 서울올림픽대회 기념사업",
+            "new_text": "1. 제24회 서울올림픽대회 및 제8회 서울패럴림픽대회 기념사업",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'및 제8회 서울패럴림픽대회 ' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제8회 서울패럴림픽대회가 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제36조④",
+            "change_type": "개정",
+            "old_text": "④진흥공단은 제1항제3호에 따른 체육시설 중 제24회 서울올림픽대회를 위하여 설치된 체육시설의 유지ㆍ관리에 드는 경비를 충당하기 위하여 그 체육시설에 입장하는 자로부터 입장료를 받을 수 있다.",
+            "new_text": "④진흥공단은 제1항제3호에 따른 체육시설 중 제24회 서울올림픽대회 및 제8회 서울패럴림픽대회를 위하여 설치된 체육시설의 유지ㆍ관리에 드는 경비를 충당하기 위하여 그 체육시설에 입장하는 자로부터 입장료를 받을 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'림픽대회 및 제8회 서울패럴' 추가"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "림픽대회와 제8회 서울패럴이 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제37조의2①",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "① 「고등교육법」 제2조에 따른 학교 관련 체육(이하 “대학스포츠”라 한다)에 관한 다음 각 호의 사업과 활동을 하기 위하여 문화체육관광부장관의 인가를 받아 한국대학스포츠협의회(이하 “대학스포츠협의회”라 한다)를 설립한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대학스포츠와 관련된 사업 및 활동을 위해 문화체육관광부장관의 인가를 받아 한국대학스포츠협의회를 설립하는 내용이 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제37조의2①1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 대학생 선수의 경기력 향상 및 학습권 보장 지원 사업",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대학생 선수의 경기력 향상과 학습권 보장을 지원하는 사업이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제37조의2①2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 대학생의 스포츠 참여 확대 및 스포츠 시설의 저변 확대 사업",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대학생의 스포츠 참여 확대와 스포츠 시설의 저변 확대를 위한 사업이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제37조의2①3.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 체육특기자 선발제도의 조사 및 연구",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "체육특기자 선발제도의 조사 및 연구에 대한 규정이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제37조의2①4.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "4. 국내외 대학스포츠 대회 개최 및 교류 사업",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국내외 대학스포츠 대회 개최 및 교류 사업에 대한 조항이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제37조의2①5.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "5. 그 밖에 대학스포츠 진흥을 위하여 필요한 사업",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대학스포츠 진흥을 위한 필요한 사업이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제37조의2②",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "② 대학스포츠협의회는 법인으로 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대학스포츠협의회가 법인으로 새로 설립됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제37조의2③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 대학스포츠협의회는 정관으로 정하는 바에 따라 임원과 필요한 직원을 둔다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대학스포츠협의회는 정관에 따라 임원과 필요한 직원을 둘 수 있도록 규정이 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제37조의2④",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "④ 대학스포츠협의회에 관하여 이 법에서 정한 것 외에는 「민법」 중 사단법인에 관한 규정을 준용한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대학스포츠협의회에 대해서는 이 법에서 정한 사항 외에 민법의 사단법인 규정을 적용합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제42조",
+            "change_type": "개정",
+            "old_text": "체육회, 지방체육회, 장애인체육회, 지방장애인체육회, 도핑방지위원회나 진흥공단이 아닌 자는 대한체육회, 지방체육회, 대한장애인체육회, 지방장애인체육회, 한국도핑방지위원회나 서울올림픽기념국민체육진흥공단 또는 이와 비슷한 명칭을 사용하지 못한다.",
+            "new_text": "체육회, 지방체육회, 장애인체육회, 지방장애인체육회, 도핑방지위원회, 진흥공단이나 대학스포츠협의회가 아닌 자는 대한체육회, 지방체육회, 대한장애인체육회, 지방장애인체육회, 한국도핑방지위원회, 서울올림픽기념국민체육진흥공단이나 한국대학스포츠협의회 또는 이와 비슷한 명칭을 사용하지 못한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대학스포츠협의회가 명칭 사용 제한의 범위에 추가되었으며, 한국대학스포츠협의회도 명칭 사용 금지 대상에 포함되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "001605",
+            "law_name": "국민체육진흥법",
+            "location_label": "제43조①",
+            "change_type": "개정",
+            "old_text": "① 체육회, 장애인체육회, 도핑방지위원회 및 진흥공단은 문화체육관광부장관이 감독한다.",
+            "new_text": "① 체육회, 장애인체육회, 도핑방지위원회, 진흥공단 및 대학스포츠협의회는 문화체육관광부장관이 감독한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "' 및' → ','",
+              "'은' → ' 및 대학스포츠협의회는'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "' 및'가 ','로 변경되었고, '은'이 ' 및 대학스포츠협의회는'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제18조",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제21조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목이 없기 때문에 신설로 판별됨."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제22조",
+          "mappings": [
+            {
+              "old_position": "①8.",
+              "new_position": "①8.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "①10.",
+              "new_position": "①10.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제36조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "①1.",
+              "new_position": "①1.",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "④",
+              "new_position": "④",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제37조의2",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "①",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①3.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①4.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①5.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제42조",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제43조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [
+    {
+      "law_id": "001605",
+      "law_name": "국민체육진흥법",
+      "new_serial_no": "286627",
+      "reason": "0건실패",
+      "detail": "본문검색: ''; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=286627&type=HTML",
+      "guards_tried": [
+        "본문검색: ''",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    }
+  ],
+  "no_comparison": [
+    {
+      "law_id": "27945",
+      "law_name": "(계약예규) 공동계약운용요령",
+      "new_serial_no": "2100000275812",
+      "reason": "일부개정",
+      "note": "신구법 대비표 없음 — 원문 링크 참조",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000275812&type=HTML"
+    }
+  ]
+}

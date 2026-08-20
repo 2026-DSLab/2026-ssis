@@ -27,7 +27,8 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+import re
+from dataclasses import dataclass, field, replace
 
 from lawtrack.parse.jsonutil import as_list, dig, find_key, text_of
 from lawtrack.text.split import (
@@ -209,16 +210,51 @@ def parse_articles(raw: dict) -> list[ArticleUnit]:
     return units
 
 
+def _split_mok_groups(mok_list: list) -> list[list]:
+    """항의 형제로 붙은 평탄화된 목 배열을, 목번호가 '가'로 리셋되는
+    지점마다 끊어 원래의 호별 그룹으로 되돌린다.
+
+    ✅ 실측(2026-07-31, 국가를 당사자로 하는 계약에 관한 법률 시행령
+    제26조①): 호가 5개고 각각 목을 갖는 항인데, API가 목을 각 호 안에
+    넣지 않고 항의 형제로 통째로(호 5개의 목 40개를 배열 하나에) 내려줬다
+    — 각 호 객체엔 "목" 키 자체가 없었다. 목번호가 "가."로 되돌아가는
+    지점이 곧 새 호의 목록 시작이므로, 그 경계로 그룹을 복원한다.
+    """
+    groups: list[list] = []
+    for raw_sub in mok_list:
+        label = text_of(raw_sub.get("목번호") or raw_sub.get("목가지번호")) if isinstance(raw_sub, dict) else ""
+        if not groups or label.startswith("가"):
+            groups.append([])
+        groups[-1].append(raw_sub)
+    return groups
+
+
 def _parse_clause(raw_clause: dict) -> ClauseNode:
     if not isinstance(raw_clause, dict):
         raw_clause = {}
-    items = tuple(_parse_item(i) for i in as_list(raw_clause.get("호")))
+    items = [_parse_item(i) for i in as_list(raw_clause.get("호"))]
+
+    # 위 _split_mok_groups 독스트링 참고: 정상 경로로 목을 하나도 못 찾았고
+    # (모든 호의 subitems가 비어있고) 항의 형제로 목 배열이 붙어있으면,
+    # 그걸 호 개수만큼 그룹으로 쪼개 순서대로 이어붙인다. 그룹 수가 호
+    # 개수와 정확히 같을 때만 적용한다 — 안 맞으면 잘못된 호에 붙일
+    # 위험이 있으니 차라리 기존처럼 목 없이 둔다(회귀 없음, 조용한
+    # 오귀속보다 "0건실패"가 낫다).
+    sibling_mok = as_list(raw_clause.get("목"))
+    if sibling_mok and items and not any(it.subitems for it in items):
+        groups = _split_mok_groups(sibling_mok)
+        if len(groups) == len(items):
+            items = [
+                replace(it, subitems=tuple(_parse_subitem(s) for s in g))
+                for it, g in zip(items, groups)
+            ]
+
     return ClauseNode(
         no=text_of(raw_clause.get("항번호")),
         text=text_of(raw_clause.get("항내용")),
         change_type=text_of(raw_clause.get("항제개정유형")),
         change_dates=text_of(raw_clause.get("항제개정일자문자열")),
-        items=items,
+        items=tuple(items),
     )
 
 
@@ -459,6 +495,86 @@ def parse_admrul_units(raw: dict) -> list[SearchUnit]:
                             text=sub.text, changed=True,
                         )
                     )
+
+    if not units:
+        units = _units_without_articles(lines)
+    return units
+
+
+#: 제N조가 없는 행정규칙에서 절(節) 머리로 쓰이는 표기 중, **다른 것과
+#: 헷갈릴 수 없는 것만** 담는다.
+#:
+#: ★ 실측(2026-08-18): 처음엔 "1.1", "1." 같은 번호 체계도 절 머리로
+#:   잡으려 했는데, 본문의 날짜·수치가 그대로 걸려들었다.
+#:       "2013. 7. 25.)" -> 7.25 를 절 머리로 오인
+#:       "38.4", "41.9"  -> 금액·비율을 절 머리로 오인
+#:   화면에 "38.4" 라는 절 제목이 뜨면 그 자체가 버그로 보인다. 애매한
+#:   패턴은 아예 빼고, 못 쪼개면 통째로 한 덩어리로 두는 편이 낫다 —
+#:   어차피 _readable_text() 가 항/호/목 경계에서 줄을 나눠 주므로
+#:   한 덩어리여도 읽는 데는 지장이 없다.
+_SECTION_HEAD_RE = re.compile(
+    r"(?:(?<=^)|(?<=[\s　]))("
+    r"[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ]+\s*\.(?=\s*[가-힣])"   # Ⅰ. 목적  (하도급거래공정화 지침)
+    r"|제\s*\d{1,2}\s*장(?=\s*[가-힣])"        # 제1장 총칙 (정보보호시스템 고시)
+    r")"
+)
+
+
+def _units_without_articles(lines: list) -> list[SearchUnit]:
+    """제N조 구조가 전혀 없는 행정규칙을 표시·비교 가능한 단위로 쪼갠다.
+
+    ★ 실측 발견(2026-08-18, 전수검증 — 전문 비교 화면에서 "전문 내용을
+    찾지 못했습니다"만 뜨는 행정규칙 3건): 아래 문서들은 조문내용이
+    "제N조"가 하나도 없는 평문 한 덩어리(4천~2만8천자)로 온다.
+
+        하도급거래공정화 지침            Ⅰ. 목 적 / Ⅱ. 용어의 정의
+        정보보호시스템 평가·인증 고시     제1장 총칙 / 1.1 목적 / 1.2 …
+        행정업무용 표준 관리규정          1. 목적 및 범위 / 가. 목적
+
+    parse_admrul_units 의 본 경로는 ArticleNo.from_text() 가 조문번호를
+    못 찾은 줄을 "제1장 총칙 같은 장 제목"으로 보고 건너뛴다 — 이 문서들은
+    모든 줄이 거기 걸려 유닛이 0개가 됐다. 그 결과 전문 비교 화면에는
+    아무것도 안 나오고, 본 파이프라인의 locate_all() 도 검색 대상이 없어
+    위치확정이 100% 실패한다(2026-07-16에 고친 것과 같은 종류의 실패가
+    다른 원인으로 재발한 셈이다).
+
+    조문 구조가 없으니 조/항/호 라벨을 지어낼 수는 없다. 대신 문서가
+    실제로 쓰는 절 머리(Ⅰ., 1.1, 제N장)로 끊어 그 머리를 라벨로 삼고,
+    그것마저 없으면 전체를 한 덩어리로 낸다 — 최소한 화면에 보이고
+    어절 단위 비교가 되는 상태를 보장한다.
+
+    ※ 본 경로가 유닛을 하나라도 만들면 이 함수는 호출되지 않는다. 즉
+      지금까지 정상 동작하던 행정규칙의 결과는 하나도 바뀌지 않는다.
+    """
+    units: list[SearchUnit] = []
+    for raw_line in lines:
+        text = strip_annotations(text_of(raw_line) or "").strip()
+        if not text:
+            continue
+        heads = list(_SECTION_HEAD_RE.finditer(text))
+        if not heads:
+            units.append(SearchUnit(
+                article_code="", article_label="본문", clause_no="",
+                item_label="", subitem_label="", text=text, changed=True,
+            ))
+            continue
+        # 첫 절 머리 앞의 도입부가 있으면 그것도 버리지 않고 담는다
+        if heads[0].start() > 0:
+            lead = text[:heads[0].start()].strip()
+            if lead:
+                units.append(SearchUnit(
+                    article_code="", article_label="본문", clause_no="",
+                    item_label="", subitem_label="", text=lead, changed=True,
+                ))
+        for i, m in enumerate(heads):
+            end = heads[i + 1].start() if i + 1 < len(heads) else len(text)
+            body = text[m.start():end].strip()
+            if body:
+                label = m.group(1).strip()
+                units.append(SearchUnit(
+                    article_code=label, article_label=label, clause_no="",
+                    item_label="", subitem_label="", text=body, changed=True,
+                ))
     return units
 
 
@@ -469,3 +585,18 @@ def changed_articles(articles: list[ArticleUnit]) -> list[ArticleUnit]:
     (세 가지 서로 다른 개정 유형에서 100% 일치 확인됨)
     """
     return [a for a in articles if a.changed]
+
+
+def searchable_units_for(kind: str, raw: dict) -> list[SearchUnit]:
+    """전문 JSON(raw) → SearchUnit 목록. kind에 따라 법령/행정규칙 파싱
+    경로가 다르다는 걸 호출부(webapp의 전문 비교 페이지 등)가 몰라도
+    되게 감싼다.
+
+    법령은 parse_articles()가 조/항/호/목을 구조화한 ArticleUnit을
+    돌려주므로 flatten_searchable()로 한 번 더 평탄화해야 하고,
+    행정규칙은 parse_admrul_units()가 이미 평탄화된 SearchUnit을 바로
+    돌려준다 — 이 비대칭을 여기서 흡수한다.
+    """
+    if kind == "admrul":
+        return parse_admrul_units(raw)
+    return flatten_searchable(parse_articles(raw))

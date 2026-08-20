@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>법인사이트</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="{{ url_for('home') }}">
+        <img class="brand-mark" src="{{ url_for('static', filename='img/logo.png') }}" alt="법인사이트 로고">
+        <span class="brand-text">법인사이트</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="hub-page">
+  <main class="hub-page-content">
+    <section class="hero hub-hero">
+      <span class="hub-eyebrow">사회보장정보원 법령·행정규칙 개정 확인</span>
+      <h1>무엇을 <span class="hero-accent">확인</span>하시겠어요?</h1>
+      <p class="hero-sub">아래 세 가지 방법 중 하나를 골라 시작하세요.</p>
+    </section>
+
+    <div class="hub-grid">
+      <a class="hub-card hub-card--c1" style="--i: 0" href="{{ url_for('index') }}">
+        <span class="hub-card-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 4.5h11l3 3V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M8 10h8M8 13.5h8M8 17h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <h2 class="hub-card-title">개정 요약</h2>
+        <p class="hub-card-desc">감시 대상 법령·행정규칙의 개정을 매주 자동으로 감지해서 보여드려요. 최근 5일/2주/1개월도 바로 조회할 수 있어요.</p>
+        <span class="hub-card-go">바로가기 <span class="hub-card-go-arrow">→</span></span>
+      </a>
+
+      <a class="hub-card hub-card--c2" style="--i: 1" href="{{ url_for('laws_list') }}">
+        <span class="hub-card-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5v-13Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <h2 class="hub-card-title">전문 보기</h2>
+        <p class="hub-card-desc">감시 대상 법령·행정규칙의 전문을 개정 전/후로 나란히 비교해서 볼 수 있어요.</p>
+        <span class="hub-card-go">바로가기 <span class="hub-card-go-arrow">→</span></span>
+      </a>
+
+      <a class="hub-card hub-card--c3" style="--i: 2" href="{{ url_for('pdf_upload') }}">
+        <span class="hub-card-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 3.5h7l4 4V19a1.2 1.2 0 0 1-1.2 1.2H7A1.2 1.2 0 0 1 5.8 19V4.7A1.2 1.2 0 0 1 7 3.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M14 3.5V8h4" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <h2 class="hub-card-title">PDF 업로드</h2>
+        <p class="hub-card-desc">PDF나 HWPX를 올리면 그 안에 인용된 감시 대상 법령·행정규칙을 찾아서 보여드려요.</p>
+        <span class="hub-card-go">바로가기 <span class="hub-card-go-arrow">→</span></span>
+      </a>
+    </div>
+  </main>
+  </div>
+</body>
+</html>

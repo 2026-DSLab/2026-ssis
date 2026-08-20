@@ -1,0 +1,95 @@
+{
+  "source_file": "weekly_contract_2026-07-31_promptcheck.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "000695",
+      "law_name": "국가를 당사자로 하는 계약에 관한 법률",
+      "law_type": "법률",
+      "enforce_date": "2026-06-11",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=283877&type=HTML",
+      "new_serial_no": "283877",
+      "headline": "계약 이행 완료 및 이의신청 기간 연장으로 국민 권리 보호 강화",
+      "body": "이번 개정은 계약 이행 완료 기간과 이의신청 가능 기간을 연장하여 국민의 권리를 보호하는 데 중점을 두고 있습니다. 이를 통해 이의신청 제도의 실효성을 높이고, 행정기본법과의 일치성을 확보하고자 합니다.\n\n○ 조문별 변경 내용\n- 제28조\n    · ② (개정): 당사자가 계약 이행을 완료해야 하는 기간이 '20일'에서 '30일'로 연장되었으며, 계약체결 후 이의신청을 할 수 있는 기간이 '15일'에서 '25일'로 늘어났습니다.\n    · ④ (개정): 기간이 '20일'에서 '30일'로 변경되었습니다.",
+      "overview": "이번 개정은 계약 이행 완료 기간과 이의신청 가능 기간을 연장하여 국민의 권리를 보호하는 데 중점을 두고 있습니다. 이를 통해 이의신청 제도의 실효성을 높이고, 행정기본법과의 일치성을 확보하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "000695",
+            "law_name": "국가를 당사자로 하는 계약에 관한 법률",
+            "location_label": "제28조②",
+            "change_type": "개정",
+            "old_text": "② 이의신청은 이의신청의 원인이 되는 행위가 있었던 날부터 20일 이내 또는 그 행위가 있음을 안 날부터 15일 이내에 해당 중앙관서의 장에게 하여야 한다.",
+            "new_text": "② 이의신청은 이의신청의 원인이 되는 행위가 있었던 날부터 30일 이내 또는 그 행위가 있음을 안 날부터 25일 이내에 해당 중앙관서의 장에게 하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'20일' → '30일'",
+              "'15일' → '25일'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "당사자가 계약 이행을 완료해야 하는 기간이 '20일'에서 '30일'로 연장되었으며, 계약체결 후 이의신청을 할 수 있는 기간이 '15일'에서 '25일'로 늘어났습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000695",
+            "law_name": "국가를 당사자로 하는 계약에 관한 법률",
+            "location_label": "제28조④",
+            "change_type": "개정",
+            "old_text": "④ 제3항에 따른 조치에 이의가 있는 자는 통지를 받은 날부터 20일 이내에 제29조에 따른 국가계약분쟁조정위원회에 조정(調停)을 위한 재심(再審)을 청구할 수 있다.",
+            "new_text": "④ 제3항에 따른 조치에 이의가 있는 자는 통지를 받은 날부터 30일 이내에 제29조에 따른 국가계약분쟁조정위원회에 조정(調停)을 위한 재심(再審)을 청구할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'20일' → '30일'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "기간이 '20일'에서 '30일'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제28조",
+          "mappings": [
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": "④",
+              "new_position": "④",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

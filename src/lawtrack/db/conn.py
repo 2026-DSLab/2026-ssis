@@ -1,4 +1,4 @@
-"""MySQL 커넥션 관리.
+"""PostgreSQL 커넥션 관리.
 
 repo.py 는 이 모듈을 통해서만 DB에 접근한다. 커넥션 풀링과 트랜잭션
 경계(commit/rollback)를 여기 한 곳에 모아, 호출부마다 각자 commit/
@@ -8,6 +8,15 @@ rollback을 챙기다 빠뜨리는 실수를 막는다.
 호출했는데, 이러면 배치 중간에 실패해도 이미 커밋된 행은 되돌릴 수
 없다. 여기서는 "의미있는 작업 단위"를 트랜잭션으로 묶을 수 있게
 transaction() 컨텍스트 매니저를 제공한다.
+
+★ MySQL → PostgreSQL 전환(2026-08-03): psycopg2 커넥션은 기본적으로
+autocommit=False라, SELECT 하나만 실행해도 트랜잭션이 열린 채로 남는다.
+mysql.connector 시절엔 cursor()(읽기 전용 경로)가 커밋/롤백 없이 그냥
+커넥션을 풀에 반환해도 문제가 없었지만, psycopg2 로 그대로 옮기면 풀에
+반환된 커넥션이 "idle in transaction" 상태로 남아 다음 대여자가 그
+열린 트랜잭션을 그대로 물려받는다. cursor() 는 autocommit=True로,
+transaction() 은 autocommit=False로 매 대여마다 명시적으로 모드를
+맞춰 이 문제를 막는다.
 """
 
 from __future__ import annotations
@@ -16,8 +25,9 @@ import logging
 from contextlib import contextmanager
 from typing import Iterator
 
-import mysql.connector
-from mysql.connector.pooling import MySQLConnectionPool
+import psycopg2
+import psycopg2.extras
+from psycopg2.pool import ThreadedConnectionPool
 
 from lawtrack.config import DbSettings
 
@@ -25,32 +35,32 @@ log = logging.getLogger(__name__)
 
 
 class Database:
-    """MySQL 커넥션 풀 래퍼."""
+    """PostgreSQL 커넥션 풀 래퍼."""
 
     def __init__(self, settings: DbSettings, *, pool_size: int = 5):
         self._settings = settings
         try:
-            self._pool = MySQLConnectionPool(
-                pool_name="lawtrack",
-                pool_size=pool_size,
-                **settings.as_connect_kwargs(),
+            self._pool = ThreadedConnectionPool(
+                1, pool_size, **settings.as_connect_kwargs(),
             )
-        except mysql.connector.Error as exc:
-            raise ConnectionError(f"MySQL 연결 풀 생성 실패: {exc}") from exc
+        except psycopg2.Error as exc:
+            raise ConnectionError(f"PostgreSQL 연결 풀 생성 실패: {exc}") from exc
 
     @contextmanager
-    def connection(self) -> Iterator["mysql.connector.MySQLConnection"]:
-        conn = self._pool.get_connection()
+    def connection(self) -> Iterator["psycopg2.extensions.connection"]:
+        conn = self._pool.getconn()
         try:
             yield conn
         finally:
-            conn.close()  # 풀에 반환됨 (실제 연결 종료 아님)
+            self._pool.putconn(conn)  # 풀에 반환됨 (실제 연결 종료 아님)
 
     @contextmanager
     def cursor(self, *, dictionary: bool = True) -> Iterator[tuple]:
         """읽기 전용 커서. 자동 commit 하지 않는다 (SELECT 용)."""
         with self.connection() as conn:
-            cur = conn.cursor(dictionary=dictionary)
+            conn.autocommit = True
+            cur_factory = psycopg2.extras.RealDictCursor if dictionary else None
+            cur = conn.cursor(cursor_factory=cur_factory)
             try:
                 yield conn, cur
             finally:
@@ -68,7 +78,9 @@ class Database:
             # 둘 중 하나라도 예외가 나면 둘 다 rollback 됨.
         """
         with self.connection() as conn:
-            cur = conn.cursor(dictionary=dictionary)
+            conn.autocommit = False
+            cur_factory = psycopg2.extras.RealDictCursor if dictionary else None
+            cur = conn.cursor(cursor_factory=cur_factory)
             try:
                 yield conn, cur
                 conn.commit()
@@ -81,13 +93,11 @@ class Database:
 
     def ping(self) -> bool:
         try:
-            with self.connection() as conn:
-                conn.ping(reconnect=True, attempts=1, delay=0)
+            with self.cursor(dictionary=False) as (_, cur):
+                cur.execute("SELECT 1")
             return True
-        except mysql.connector.Error:
+        except psycopg2.Error:
             return False
 
     def close(self) -> None:
-        # MySQLConnectionPool 자체를 닫는 공식 API는 없다.
-        # 개별 연결은 각 컨텍스트 매니저가 반환 시점에 풀로 돌려놓는다.
-        pass
+        self._pool.closeall()

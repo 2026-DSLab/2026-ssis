@@ -1,0 +1,1056 @@
+{
+  "source_file": "weekly_contract_2026-07-31_w9.json",
+  "batch_date": "2026-07-31",
+  "laws": [
+    {
+      "law_id": "000900",
+      "law_name": "초ㆍ중등교육법",
+      "law_type": "법률",
+      "enforce_date": "2026-10-29",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=285599&type=HTML",
+      "new_serial_no": "285599",
+      "headline": "부모 지원을 위한 시책 마련 및 학교민원 처리 체계 개선",
+      "body": "이번 개정은 보호자의 교육 참여와 권리를 강화하고, 학교생활기록의 상업적 이용을 금지함으로써 학생들의 권리와 개인정보를 보호하는 데 중점을 두고 있습니다. 또한 장애인 학생과 교원을 위한 교과용 도서의 적시 제작 및 보급을 의무화하고, 학교민원에 대한 체계적인 대응 기구를 설치하여 교육 환경을 개선하고자 합니다.\n\n○ 조문별 변경 내용\n- 제18조의7 (신설, 4개 항·호·목): 국가와 지방자치단체는 부모 등 보호자가 자녀 또는 아동을 교육하고 학교교육활동에 협력할 권리와 책임을 이행할 수 있도록 보호자의 역량 함양, 교육정책 이해 및 소통 등을 지원하기 위한 시책을 수립하고 시행해야 합니다. 이 시책의 수립 절차, 시행 방법 및 그 밖에 필요한 사항은 대통령령으로 정합니다.\n- 제18조의8 (신설, 7개 항·호·목): 교육부장관은 제18조의7에 따른 시책의 수립 및 시행을 지원하기 위하여 전국학부모지원센터를 설치하거나 지정하여 운영할 수 있으며, 교육감은 지역학부모지원센터를 설치·운영하거나 지정하여 해당 업무를 위탁할 수 있습니다.\n- 제25조의2 (신설): 제25조제1항에 따른 자료를 취득한 자는 이를 영업 목적으로 거래하거나 이용하여서는 아니 됩니다.\n- 제29조\n    · ④ (신설): 교육부장관 및 교육감은 장애인 학생 및 장애인 교원을 위한 교과용 도서가 점자 등 접근 가능한 방식으로 학기 시작 전 적시에 제작되고 보급되도록 해야 합니다.\n    · ⑤ (신설): 교육부장관은 제4항에서 규정한 업무를 수행하기 위하여 교과용 도서를 발행 또는 제작한 자에게 교과용 도서의 디지털 파일을 제출하도록 요청할 수 있으며, 요청을 받은 자는 대통령령으로 정하는 정당한 사유가 없으면 요청받은 날부터 30일 이내에 디지털 파일을 제출하여야 합니다.\n    · ⑥ (이동·개정): 사정(査定)에는 제5항에 따른 디지털 파일의 제출 형식 및 절차가 포함됩니다. 또한, 이 사항은 ④에서 ⑥으로 옮겨왔습니다.\n- 제60조의2 (개정): 제25조까지와 제26조가 포함됩니다.\n- 제60조의3 (개정): '제24조부터 제26조까지,'의 표현이 '제24조, 제25조, 제26조,'로 수정되었습니다.\n- 제35조 (신설, 7개 항·호·목): 이 법에서 \"학교민원\"은 학생 또는 보호자 등이 학교에 대하여 특정 행위를 하는 것을 의미합니다.\n- 제36조 (신설, 10개 항·호·목): 교육부장관은 학교의 장이 학교민원을 공정하고 적법하게 처리할 수 있도록 학교민원 처리 계획을 수립하고 시행하여야 하며, 이 계획에는 다음 각 호의 사항이 포함되어야 합니다.\n- 제37조 (신설, 4개 항·호·목): 학교민원의 접수와 처리를 위해 학교에는 민원대응팀을 두고, 관할청에는 학교민원대응지원팀 등 학교민원대응기구를 둡니다.\n- 제67조\n    · ① (신설): 다음 각 호의 어느 하나에 해당하는 자는 5년 이하의 징역 또는 5천만원 이하의 벌금에 처해집니다.\n    · ①1. (신설): 제25조의2를 위반하여 제25조제1항에 따른 자료를 취득하고 이를 영업 목적으로 거래하거나 이용한 자에 대한 규정이 새로 신설되었습니다.\n    · ①2. (개정): 제60조의7제5항을 위반하여 금융정보 등을 이 법에서 정한 목적 외의 다른 용도로 사용하거나 다른 사람 또는 기관에 제공하거나 누설한 자에 대한 규정이 개정되었습니다.",
+      "overview": "이번 개정은 보호자의 교육 참여와 권리를 강화하고, 학교생활기록의 상업적 이용을 금지함으로써 학생들의 권리와 개인정보를 보호하는 데 중점을 두고 있습니다. 또한 장애인 학생과 교원을 위한 교과용 도서의 적시 제작 및 보급을 의무화하고, 학교민원에 대한 체계적인 대응 기구를 설치하여 교육 환경을 개선하고자 합니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의7①",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "① 국가와 지방자치단체는 제18조의6과 「교육기본법」 제17조의4에 따라 부모 등 보호자가 보호하는 자녀 또는 아동을 교육하고 학교교육활동에 협력할 권리와 책임을 이행할 수 있도록 보호자의 역량 함양, 교육정책 이해 및 소통 등을 지원하기 위한 시책을 수립ㆍ시행하여야 한다. 이 경우 시책 수립 절차, 시행 방법 및 그 밖에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국가와 지방자치단체는 부모 등 보호자가 자녀 또는 아동을 교육하고 학교교육활동에 협력할 권리와 책임을 이행할 수 있도록 보호자의 역량 함양, 교육정책 이해 및 소통 등을 지원하기 위한 시책을 수립하고 시행해야 합니다. 이 시책의 수립 절차, 시행 방법 및 그 밖에 필요한 사항은 대통령령으로 정합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의7②",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "② 교육부장관은 제1항에 따른 시책을 수립ㆍ시행하기 위하여 필요한 경우 실태조사를 실시할 수 있으며, 실태조사의 내용과 방법 등에 관한 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관은 시책을 수립하고 시행하기 위해 필요한 경우 실태조사를 실시할 수 있으며, 실태조사의 내용과 방법 등에 관한 사항은 대통령령으로 정합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의7③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 지방자치단체는 제1항에 따른 시책의 수립ㆍ시행 및 제2항에 따른 실태조사의 시행에 필요한 사항을 대통령령으로 정하는 바에 따라 시ㆍ도의 조례로 정할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "지방자치단체는 시책의 수립 및 시행과 실태조사의 시행에 필요한 사항을 대통령령으로 정하는 바에 따라 시ㆍ도의 조례로 정할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의7④",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "④ 국가와 지방자치단체는 제1항에 따른 시책 및 제2항에 따른 실태조사를 시행하기 위하여 필요한 행정적ㆍ재정적 지원을 할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국가와 지방자치단체는 시책 및 실태조사를 시행하기 위하여 필요한 행정적 및 재정적 지원을 할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의8①",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "① 제18조의7에 따른 시책의 수립ㆍ시행을 지원하기 위하여 교육부장관은 전국학부모지원센터를, 교육감은 지역학부모지원센터를 설치ㆍ운영하거나 지정하여 그 업무를 위탁할 수 있다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관은 제18조의7에 따른 시책의 수립 및 시행을 지원하기 위하여 전국학부모지원센터를 설치하거나 지정하여 운영할 수 있으며, 교육감은 지역학부모지원센터를 설치·운영하거나 지정하여 해당 업무를 위탁할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의8②",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "② 전국학부모지원센터는 다음 각 호의 업무를 수행하고, 지역학부모지원센터가 수행하는 업무는 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "전국학부모지원센터는 다음 각 호의 업무를 수행하며, 지역학부모지원센터가 수행하는 업무는 대통령령으로 정합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의8②1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 보호자의 역량 함양 지원을 위한 정보 제공",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보호자의 역량 함양 지원을 위해 정보가 제공됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의8②2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 보호자와 관련된 교육정책의 이해 및 소통 지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보호자와 관련된 교육정책의 이해 및 소통 지원이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의8②3.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 지역학부모지원센터와의 상호 협력 및 운영 지원",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "지역학부모지원센터와의 상호 협력 및 운영 지원이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의8②4.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "4. 그 밖에 대통령령으로 정하는 사항",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "그 밖에 대통령령으로 정하는 사항이 새롭게 포함되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제18조의8③",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "③ 전국학부모지원센터와 지역학부모지원센터의 설치ㆍ운영 및 지정에 관한 구체적인 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "전국학부모지원센터와 지역학부모지원센터의 설치, 운영 및 지정에 관한 구체적인 사항은 대통령령으로 정합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제25조의2",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "제25조제1항에 따른 자료를 취득하여 이를 영업 목적으로 거래하거나 이용하여서는 아니 된다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제25조제1항에 따른 자료를 취득한 자는 이를 영업 목적으로 거래하거나 이용하여서는 아니 됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제29조④",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "④ 교육부장관 및 교육감은 장애인 학생 및 장애인 교원을 위한 교과용 도서가 점자 등 접근 가능한 방식으로 학기 시작 전 적시에 제작ㆍ보급될 수 있도록 하여야 한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관 및 교육감은 장애인 학생 및 장애인 교원을 위한 교과용 도서가 점자 등 접근 가능한 방식으로 학기 시작 전 적시에 제작되고 보급되도록 해야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제29조⑤",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "⑤ 교육부장관은 제4항에서 규정한 업무를 수행하기 위하여 필요한 경우 교과용 도서를 발행 또는 제작한 자에게 교과용 도서의 디지털 파일을 제출하도록 요청할 수 있다. 이 경우 요청을 받은 자는 대통령령으로 정하는 정당한 사유가 없으면 요청받은 날부터 30일 이내에 디지털 파일을 제출하여야 한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관은 제4항에서 규정한 업무를 수행하기 위하여 교과용 도서를 발행 또는 제작한 자에게 교과용 도서의 디지털 파일을 제출하도록 요청할 수 있으며, 요청을 받은 자는 대통령령으로 정하는 정당한 사유가 없으면 요청받은 날부터 30일 이내에 디지털 파일을 제출하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제29조⑥",
+            "change_type": "이동후개정",
+            "old_text": "④ 교과용 도서의 저작ㆍ검정ㆍ인정ㆍ발행ㆍ공급ㆍ선정 및 가격 사정(査定) 등에 필요한 사항은 대통령령으로 정한다.",
+            "new_text": "⑥ 교과용 도서의 저작ㆍ검정ㆍ인정ㆍ발행ㆍ공급ㆍ선정 및 가격 사정(査定), 제5항에 따른 디지털 파일의 제출 형식 및 절차 등에 필요한 사항은 대통령령으로 정한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "④",
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'④' → '⑥'",
+              "'사정(査定)' → '사정(査定), 제5항에 따른 디지털 파일의 제출 형식 및 절차'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "사정(査定)에는 제5항에 따른 디지털 파일의 제출 형식 및 절차가 포함됩니다. 또한, 이 사항은 ④에서 ⑥으로 옮겨왔습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제60조의2①",
+            "change_type": "개정",
+            "old_text": "① 외국에서 일정기간 거주하고 귀국한 내국인 중 대통령령으로 정하는 사람, 「국적법」 제4조에 따라 국적을 취득한 사람의 자녀 중 해당 학교의 장이 대통령령으로 정하는 기준과 절차에 따라 학업을 지속하기 어렵다고 판단한 사람, 외국인의 자녀를 교육하기 위하여 설립된 학교로서 각종학교에 해당하는 학교(이하 “외국인학교”라 한다)에 대하여는 제7조, 제9조, 제11조, 제11조의2, 제12조부터 제16조까지, 제21조, 제23조부터 제26조까지, 제28조, 제29조, 제30조의2, 제30조의3, 제31조, 제31조의2, 제32조부터 제34조까지 및 제34조의2를 적용하지 아니한다.",
+            "new_text": "① 외국에서 일정기간 거주하고 귀국한 내국인 중 대통령령으로 정하는 사람, 「국적법」 제4조에 따라 국적을 취득한 사람의 자녀 중 해당 학교의 장이 대통령령으로 정하는 기준과 절차에 따라 학업을 지속하기 어렵다고 판단한 사람, 외국인의 자녀를 교육하기 위하여 설립된 학교로서 각종학교에 해당하는 학교(이하 “외국인학교”라 한다)에 대하여는 제7조, 제9조, 제11조, 제11조의2, 제12조부터 제16조까지, 제21조, 제23조부터 제25조까지, 제26조, 제28조, 제29조, 제30조의2, 제30조의3, 제31조, 제31조의2, 제32조부터 제34조까지 및 제34조의2를 적용하지 아니한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제26조까지,' → '제25조까지, 제26조,'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제25조까지와 제26조가 포함됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제60조의3①",
+            "change_type": "개정",
+            "old_text": "① 학업을 중단하거나 개인적 특성에 맞는 교육을 받으려는 학생을 대상으로 현장 실습 등 체험 위주의 교육, 인성 위주의 교육 또는 개인의 소질ㆍ적성 개발 위주의 교육 등 다양한 교육을 하는 학교로서 각종학교에 해당하는 학교(이하 “대안학교”라 한다)에 대하여는 제21조제1항, 제23조제2항ㆍ제3항, 제24조부터 제26조까지, 제29조, 제30조의4, 제30조의5 및 제30조의7을 적용하지 아니한다.",
+            "new_text": "① 학업을 중단하거나 개인적 특성에 맞는 교육을 받으려는 학생을 대상으로 현장 실습 등 체험 위주의 교육, 인성 위주의 교육 또는 개인의 소질ㆍ적성 개발 위주의 교육 등 다양한 교육을 하는 학교로서 각종학교에 해당하는 학교(이하 “대안학교”라 한다)에 대하여는 제21조제1항, 제23조제2항ㆍ제3항, 제24조, 제25조, 제26조, 제29조, 제30조의4, 제30조의5 및 제30조의7을 적용하지 아니한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'제24조부터 제26조까지,' → '제24조, 제25조, 제26조,'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'제24조부터 제26조까지,'의 표현이 '제24조, 제25조, 제26조,'로 수정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제35조①",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "① 이 법에서 “학교민원”이란 학생 또는 보호자 등이 학교에 대하여 다음 각 호의 어느 하나에 해당하는 행위를 하는 것을 말한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "이 법에서 \"학교민원\"은 학생 또는 보호자 등이 학교에 대하여 특정 행위를 하는 것을 의미합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제35조①1.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "1. 제18조의5에 따른 학생의 정서ㆍ행동 지원에 관련된 요구",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학생의 정서와 행동 지원에 관한 요구가 제18조의5에 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제35조①2.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "2. 제20조의2에 따른 학생생활지도에 관련된 요구",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학생생활지도와 관련된 요구가 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제35조①3.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "3. 「학교안전사고 예방 및 보상에 관한 법률」 제2조제4호의 교육활동에 관련된 요구",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교는 교육활동에 관련된 요구를 「학교안전사고 예방 및 보상에 관한 법률」 제2조제4호에 따라 이행하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제35조①4.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "4. 그 밖에 학교의 운영에 관련된 요구",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교의 운영에 관련된 요구가 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제35조②",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "② 학교민원을 제기하는 자는 「교육기본법」 제12조제3항 및 제13조제3항을 준수하여야 하며 「교원의 지위 향상 및 교육활동 보호를 위한 특별법」 제19조에서 정한 교육활동 침해행위 또는 직원에 대한 「형법」 제314조에 따른 업무방해행위를 하여서는 아니 된다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교민원을 제기하는 자는 교육기본법과 교원의 지위 향상 및 교육활동 보호를 위한 특별법에서 정한 규정을 준수하여야 하며, 해당 법에서 정한 교육활동 침해행위 또는 형법에 따른 업무방해행위를 해서는 안 됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제35조③",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "③ 학교의 장은 제2항에도 불구하고 학생 또는 보호자 등이 학교민원 제기 과정에서 제2항에 따른 교육활동 침해행위 또는 업무방해행위를 할 우려가 있다고 인정하는 경우 대통령령으로 정하는 절차에 따라 퇴거요청 등 필요한 조치를 하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교의 장은 학생 또는 보호자가 학교민원 제기 과정에서 교육활동 침해행위나 업무방해행위를 할 우려가 있다고 인정하는 경우, 대통령령으로 정하는 절차에 따라 퇴거요청 등 필요한 조치를 하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제36조①",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "① 교육부장관은 학교의 장이 학교민원을 공정하고 적법하게 처리할 수 있도록 다음 각 호의 사항을 포함한 학교민원 처리 계획을 수립ㆍ시행하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관은 학교의 장이 학교민원을 공정하고 적법하게 처리할 수 있도록 학교민원 처리 계획을 수립하고 시행하여야 하며, 이 계획에는 다음 각 호의 사항이 포함되어야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제36조①1.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "1. 학교 현장의 실정과 특성에 맞춘 학교민원 처리의 방법 및 절차",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교 현장의 실정과 특성에 맞춘 학교민원 처리의 방법 및 절차가 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제36조①2.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "2. 학교민원을 전자적으로 처리하기 위한 정보시스템 구축",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교민원을 전자적으로 처리하기 위한 정보시스템이 새로 구축됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제36조①3.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "3. 학교민원 처리를 위한 행정적ㆍ재정적 지원 방안",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교민원 처리를 위한 행정적 및 재정적 지원 방안이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제36조①4.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "4. 그 밖에 학교민원 처리를 위하여 필요하다고 교육부장관이 인정한 사항",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교민원 처리를 위하여 교육부장관이 필요하다고 인정한 사항이 새로 생겼습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제36조②",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "② 교육감은 제1항에 따른 학교민원 처리 계획의 내용과 지역의 실정을 고려하여 다음 각 호의 사항을 포함한 학교민원 처리 지원계획을 수립ㆍ시행하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육감은 학교민원 처리 계획의 내용과 지역의 실정을 고려하여 학교민원 처리 지원계획을 수립하고 시행하여야 하며, 이 지원계획에는 다음 각 호의 사항이 포함되어야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제36조②1.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "1. 학교민원을 처리하는 교직원 등에 대한 보호 방안",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교민원을 처리하는 교직원 등에 대한 보호 방안이 새롭게 마련되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제36조②2.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "2. 학교민원 처리를 위한 행정적ㆍ재정적 세부지원 방안",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교민원 처리를 위한 행정적 및 재정적 세부지원 방안이 새로 생깁니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제36조②3.",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "3. 그 밖에 학교민원 처리를 위하여 필요하다고 교육감이 인정한 사항",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교민원 처리를 위하여 교육감이 필요하다고 인정한 사항이 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제36조③",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "③ 학교의 장은 학교민원 처리의 방법 및 절차에 관한 사항을 학생 및 보호자에게 정기적으로 안내하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교의 장은 학교민원 처리의 방법 및 절차에 관한 사항을 학생 및 보호자에게 정기적으로 안내하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제37조①",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "① 학교민원의 접수ㆍ처리를 위하여 학교에 민원대응팀을 두며, 학교민원의 접수ㆍ분류와 처리를 위하여 관할청에는 학교민원대응지원팀 등 학교민원대응기구를 둔다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교민원의 접수와 처리를 위해 학교에는 민원대응팀을 두고, 관할청에는 학교민원대응지원팀 등 학교민원대응기구를 둡니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제37조②",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "② 교육부장관과 교육감은 학교민원의 접수와 처리 또는 그 지원을 위하여 필요한 조직과 인력을 확보하기 위한 노력을 하여야 한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "교육부장관과 교육감은 학교민원의 접수와 처리 또는 그 지원을 위해 필요한 조직과 인력을 확보하기 위한 노력을 하여야 합니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제37조③",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "③ 학교의 장은 학교민원 처리를 위하여 필요한 경우 관할청에 학교민원의 처리 지원 또는 직접 처리를 요청할 수 있다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교의 장은 학교민원 처리를 위하여 필요한 경우 관할청에 학교민원의 처리 지원 또는 직접 처리를 요청할 수 있습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제37조④",
+            "change_type": "신설",
+            "old_text": "삭제",
+            "new_text": "④ 제1항 및 제3항에 따른 학교민원의 처리 절차 및 방법 등에 필요한 사항은 교육감이 정한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "학교민원의 처리 절차 및 방법 등에 필요한 사항은 교육감이 정하게 됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제67조①",
+            "change_type": "신설",
+            "old_text": "① 제60조의7제5항을 위반하여 금융정보등을 이 법에서 정한 목적 외의 다른 용도로 사용하거나 다른 사람 또는 기관에 제공하거나 누설한 자는 5년 이하의 징역 또는 5천만원 이하의 벌금에 처한다.",
+            "new_text": "① 다음 각 호의 어느 하나에 해당하는 자는 5년 이하의 징역 또는 5천만원 이하의 벌금에 처한다.",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "다음 각 호의 어느 하나에 해당하는 자는 5년 이하의 징역 또는 5천만원 이하의 벌금에 처해집니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제67조①1.",
+            "change_type": "신설",
+            "old_text": "① 제60조의7제5항을 위반하여 금융정보등을 이 법에서 정한 목적 외의 다른 용도로 사용하거나 다른 사람 또는 기관에 제공하거나 누설한 자는 5년 이하의 징역 또는 5천만원 이하의 벌금에 처한다.",
+            "new_text": "1. 제25조의2를 위반하여 제25조제1항에 따른 자료를 취득하여 이를 영업 목적으로 거래하거나 이용한 자",
+            "match_status": "구조확장(구법미분리)",
+            "old_text_is_context": true,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제25조의2를 위반하여 제25조제1항에 따른 자료를 취득하고 이를 영업 목적으로 거래하거나 이용한 자에 대한 규정이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "000900",
+            "law_name": "초ㆍ중등교육법",
+            "location_label": "제67조①2.",
+            "change_type": "개정",
+            "old_text": "제60조의7제5항을 위반하여 금융정보등을 이 법에서 정한 목적 외의 다른 용도로 사용하거나 다른 사람 또는 기관에 제공하거나 누설한 자",
+            "new_text": "2. 제60조의7제5항을 위반하여 금융정보등을 이 법에서 정한 목적 외의 다른 용도로 사용하거나 다른 사람 또는 기관에 제공하거나 누설한 자",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "제60조의7제5항을 위반하여 금융정보 등을 이 법에서 정한 목적 외의 다른 용도로 사용하거나 다른 사람 또는 기관에 제공하거나 누설한 자에 대한 규정이 개정되었습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제18조의7",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "①",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "④",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제18조의8",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "①",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②1.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②2.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②3.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "②4.",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "③",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제25조의2",
+          "mappings": [
+            {
+              "old_position": null,
+              "new_position": "",
+              "relation": "신설",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제29조",
+          "mappings": [
+            {
+              "old_position": "④",
+              "new_position": "⑥",
+              "relation": "이동",
+              "basis": "LLM판정",
+              "note": "교과용 도서의 저작ㆍ검정ㆍ인정ㆍ발행ㆍ공급ㆍ선정 및 가격 사정에 관한 사항이 제6항에서 다루어짐."
+            },
+            {
+              "old_position": null,
+              "new_position": "④",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "장애인 학생 및 장애인 교원을 위한 교과용 도서에 대한 새로운 의무가 제정됨."
+            },
+            {
+              "old_position": null,
+              "new_position": "⑤",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "교과용 도서의 디지털 파일 제출 요청에 관한 규정이 새로 추가됨."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제60조의2",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제60조의3",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

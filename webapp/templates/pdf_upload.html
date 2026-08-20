@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDF 인용 확인 — 법인사이트</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="{{ url_for('home') }}">
+        <img class="brand-mark" src="{{ url_for('static', filename='img/logo.png') }}" alt="법인사이트 로고">
+        <span class="brand-text">법인사이트</span>
+      </a>
+      <div class="period-nav">
+        <a class="period-link" href="{{ url_for('index') }}">개정 요약</a>
+        <a class="period-link" href="{{ url_for('laws_list') }}">전문 보기</a>
+        <a class="period-link is-active" href="{{ url_for('pdf_upload') }}">PDF 확인</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-layout">
+  <main class="content-col">
+    <section class="hero">
+      <h1>PDF <span class="hero-accent">인용 확인</span></h1>
+      <p class="hero-sub">문서를 올리면 사회보장정보원이 감시하는 법령·행정규칙 102건 중 어떤 것이 어디에 인용됐는지 찾아드려요. PDF와 HWPX를 지원해요.</p>
+    </section>
+
+    {% if error %}
+    <p class="upload-error">{{ error }}</p>
+    {% endif %}
+
+    <form class="upload-card" id="upload-card" method="post" action="{{ url_for('pdf_check') }}" enctype="multipart/form-data">
+      <label class="upload-label" for="document">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 3.5h7l4 4V19a1.2 1.2 0 0 1-1.2 1.2H7A1.2 1.2 0 0 1 5.8 19V4.7A1.2 1.2 0 0 1 7 3.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <path d="M14 3.5V8h4" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        </svg>
+        <span class="upload-label-text" id="upload-filename">문서 선택 또는 여기로 끌어다 놓기 (.pdf / .hwpx)</span>
+        <input type="file" id="document" name="document" accept=".pdf,.hwpx" required>
+      </label>
+
+      <!-- 기준 시점(선택). 넣으면 "그 뒤로 바뀐 법"만 추려서 보여준다.
+           비워 두면 예전처럼 인용 목록 전체가 나온다 — 그래서 required 가
+           아니다(문서 작성일을 모르는 경우도 흔하다). -->
+      <div class="ref-date-field">
+        <label class="ref-date-label" for="doc_date">이 문서는 언제 만든 문서인가요? <span class="ref-date-optional">선택</span></label>
+        <input class="ref-date-input" type="date" id="doc_date" name="doc_date"
+               value="{{ doc_date or '' }}" max="{{ today }}">
+        <p class="ref-date-hint">날짜를 넣으면 <strong>그 뒤로 개정된 법령만</strong> 추려서 보여드려요. 비워 두면 인용된 것 전부를 보여드려요.</p>
+      </div>
+
+      <button class="upload-submit" type="submit">인용 확인하기</button>
+    </form>
+
+    <p class="upload-note">문서는 저장되지 않아요 — 확인이 끝나면 바로 지워져요. 스캔(이미지) PDF는 텍스트를 읽을 수 없어 확인이 안 돼요.</p>
+  </main>
+  </div>
+
+  <script>
+    const input = document.getElementById("document");
+    const label = document.getElementById("upload-filename");
+    const card = document.getElementById("upload-card");
+
+    function showName() {
+      if (input.files.length) label.textContent = input.files[0].name;
+    }
+    input?.addEventListener("change", showName);
+
+    // 드래그앤드롭 — 카드 전체가 드롭 영역. 브라우저 기본 동작(파일을
+    // 새 탭으로 여는 것)을 막고, 떨어뜨린 파일을 file input 에 넣는다.
+    ["dragenter", "dragover"].forEach((ev) =>
+      card?.addEventListener(ev, (e) => {
+        e.preventDefault();
+        card.classList.add("is-dragover");
+      })
+    );
+    ["dragleave", "drop"].forEach((ev) =>
+      card?.addEventListener(ev, (e) => {
+        e.preventDefault();
+        card.classList.remove("is-dragover");
+      })
+    );
+    card?.addEventListener("drop", (e) => {
+      const files = e.dataTransfer && e.dataTransfer.files;
+      if (files && files.length) {
+        input.files = files;   // 여러 개 떨어뜨려도 첫 파일만 전송됨(input 이 단일 선택)
+        showName();
+      }
+    });
+    // 카드 밖에 떨어뜨리면 브라우저가 파일을 열어버리는 것 방지
+    ["dragover", "drop"].forEach((ev) =>
+      window.addEventListener(ev, (e) => e.preventDefault())
+    );
+  </script>
+</body>
+</html>

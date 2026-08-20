@@ -1,0 +1,90 @@
+{
+  "source_file": "single_admrul_1_27947.json",
+  "batch_date": "2026-07-20",
+  "laws": [
+    {
+      "law_id": "27947",
+      "law_name": "(계약예규) 물품구매(제조)계약일반조건",
+      "law_type": "행정규칙",
+      "enforce_date": "2026-04-01",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=admrul&ID=2100000276692&type=HTML",
+      "new_serial_no": "2100000276692",
+      "headline": "계약담당공무원의 계약해지 가능 사유 확대 및 선금사용내역서 확인 방안 신설",
+      "body": "이번 개정은 선금 제도의 합리화를 위한 후속조치로, 계약 수행 중 발생할 수 있는 문제를 사전에 방지하고 계약의 이행을 원활하게 하기 위한 것입니다. 특히, 계약이행에 지장을 초래할 수 있는 경우를 명확히 함으로써 계약담당자의 권한을 강화하려는 목적이 있습니다.\n\n○ 조문별 변경 내용\n- 제26조\n    · ①7. (신설): 계약 이행에 상당한 지장을 초래할 것이 명백한 경우, 정부입찰ㆍ계약 집행기준에 따른 선금사용내역서를 확인할 수 있는 내용이 새로 추가되었습니다.\n    · ①8. (이동): 내용 변경 없이 ①7.에서 제26조①8.(으)로 번호만 이동했습니다.",
+      "overview": "이번 개정은 선금 제도의 합리화를 위한 후속조치로, 계약 수행 중 발생할 수 있는 문제를 사전에 방지하고 계약의 이행을 원활하게 하기 위한 것입니다. 특히, 계약이행에 지장을 초래할 수 있는 경우를 명확히 함으로써 계약담당자의 권한을 강화하려는 목적이 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "27947",
+            "law_name": "(계약예규) 물품구매(제조)계약일반조건",
+            "location_label": "제26조①7.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "7. 「정부입찰ㆍ계약 집행기준」 제36조제2항에 따른 선금사용내역서를 확인한 결과, 선금의 반복적인 목적 외 사용으로 계약 이행에 상당한 지장을 초래할 것이 명백한 경우",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": true,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "계약 이행에 상당한 지장을 초래할 것이 명백한 경우, 정부입찰ㆍ계약 집행기준에 따른 선금사용내역서를 확인할 수 있는 내용이 새로 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "27947",
+            "law_name": "(계약예규) 물품구매(제조)계약일반조건",
+            "location_label": "제26조①8.",
+            "change_type": "이동",
+            "old_text": "",
+            "new_text": "8. 기타 계약조건을 위반하고 그 위반으로 인하여 계약의 목적을 달성할 수 없다고 인정될 경우",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": "①7.",
+            "label_corrected": true,
+            "move_is_identical": true,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "내용 변경 없이 ①7.에서 제26조①8.(으)로 번호만 이동했습니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제26조",
+          "mappings": [
+            {
+              "old_position": "①7.",
+              "new_position": "①8.",
+              "relation": "이동",
+              "basis": "내용보존",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①7.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "사라진 항목이 없고, 새로 나타난 항목은 새로운 내용을 포함하고 있음."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [],
+  "no_comparison": []
+}

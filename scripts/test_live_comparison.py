@@ -5,7 +5,7 @@ from pathlib import Path
 # src 폴더를 경로에 추가
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from lawtrack.config import configure_utf8_console, load_settings, setup_logging
+from lawtrack.config import load_settings, setup_logging
 from lawtrack.db.conn import Database
 from lawtrack.api.client import LawApiClient
 from lawtrack.api.search import resolve_law
@@ -17,7 +17,6 @@ from lawtrack.locate.locator import locate_all
 
 def main():
     # 로그 설정
-    configure_utf8_console()
     settings = load_settings()
     setup_logging("WARNING")
     client = LawApiClient(settings.api)
@@ -27,8 +26,8 @@ def main():
     target_laws = sys.argv[1:]
     if not target_laws:
         with db.cursor() as (_, cur):
-            # laws 테이블에서 무작위 5개 추출
-            cur.execute("SELECT law_name FROM laws ORDER BY RAND() LIMIT 5")
+            # documents 테이블(kind='law')에서 무작위 5개 추출
+            cur.execute("SELECT doc_name AS law_name FROM documents WHERE kind='law' ORDER BY RANDOM() LIMIT 5")
             target_laws = [row["law_name"] for row in cur.fetchall()]
     
     for law_name in target_laws:

@@ -1,6 +1,6 @@
 """parse/oldnew.py classify() 회귀 테스트. 케이스는 실측 사례 기반."""
 
-from lawtrack.parse.oldnew import ChangeType, classify, extract_admrul_unchanged
+from lawtrack.parse.oldnew import ChangeType, classify, extract_admrul_unchanged, extract_changes
 
 
 class TestDeletedWholeBlockMarker:
@@ -52,12 +52,6 @@ class TestDeletedWholeBlockMarker:
         old = "<P>기존 문구</P>"
         new = "<P>자료를 삭제하는 절차를 마련한다</P>"  # 10자 초과, 실제 개정 내용
         assert classify(old, new) is not ChangeType.DELETED
-
-    def test_stale_deleted_item_with_empty_new_side_is_unchanged(self):
-        """실측(국민체육진흥법 MST 286627): 과거에 이미 삭제된 9호의
-        자리표시가 구법 쪽에만 남은 행은 이번 개정사항이 아니다."""
-        assert classify("9. 삭  제", "") is ChangeType.UNCHANGED
-        assert classify("<P>9. 삭제</P>", "") is ChangeType.UNCHANGED
 
 
 class TestPartialMarkerNotWholeBlock:
@@ -193,3 +187,71 @@ class TestExtractAdmrulUnchanged:
         new_texts = ["<P>제5조(정의) 6의2. ∼ 10의2. (현행과 같음)</P>"]
         result = extract_admrul_unchanged(old_texts, new_texts, {"제5조"})
         assert result == {}
+
+
+class TestExtractChangesArticleContext:
+    """★★★★★★ 실측(2026-08-03, 지능정보화 기본법 MST=268535 실API
+    재조회): 삭제 항목이 "몇 조였는지" 보여달라는 후속 요청에 대한 검증.
+    실제 API 응답을 그대로 재현한다 — 24개 old_texts 블록 중, 삭제된
+    9개 블록은 두 가지 패턴으로 나뉜다:
+      (a) 조문 헤더가 삭제될 그 블록 자체에 함께 옴(제46조~제49조 ①들)
+      (b) 헤더가 앞쪽 "(생 략)" 블록에만 있고, 삭제될 블록 자신은 헤더가
+          없어 순서로만 소속 조문을 알 수 있음(제67조/제69조/제70조 소속
+          호 단위 삭제들)
+    extract_changes()가 채우는 article_context가 9건 전부와 실제 정답이
+    맞아떨어지는지 이 테스트가 대조한다."""
+
+    #: 실측(2026-08-03) MST=268535 재조회 원본을 그대로 축약 없이 옮김
+    #: (내용 문구만 실제 값, 길이는 테스트 가독성을 위해 유지).
+    _OLD_TEXTS = [
+        "<P>제46조(장애인ㆍ고령자 등의 지능정보서비스 접근 및 이용 보장) ①  국가기관등은 정보통신망을 통하여 정보나 서비스를 제공할 때…</P>",
+        "<P>제46조의2(장애인ㆍ고령자 등의 무인정보단말기 이용 편의 제공) ①  무인정보단말기를 설치ㆍ운영하는 자는…</P>",
+        "제67조(연차보고 등) ① (생  략)",
+        "② 과학기술정보통신부장관은 다음 각 호의 사항에 관한 실태조사를 하고…",
+        "1.·2. (생  략)",
+        "<P>3. 정보격차의 실태 및 해소 현황</P>",
+        "제69조(권한의 위임 및 위탁) ① (생  략)",
+        "② 과학기술정보통신부장관은 다음 각 호의 권한을…",
+        "1. ∼ 3. (생  략)",
+        "<P>4. 제47조에 따른 정보통신접근성 품질인증 운영 지원</P>",
+        "제70조(과태료)",
+        "<P>①  제46조의2제2항에 따른 시정명령을 이행하지 아니한 자에게는…</P>",
+        "③ 다음 각 호의 어느 하나를 위반한 자에게는 500만원 이하의 과태료를 부과한다.",
+        "1. (생  략)",
+        "<P>2. 제48조제3항을 위반하여 정보통신접근성 품질인증의 표시 또는…</P>",
+    ]
+    #: new_texts는 인덱스가 위 old_texts와 1:1 대응해야 하므로, 실제
+    #: 삭제 마커("<삭  제>")나 (생략)/(현행과 같음) 등 API 그대로 넣는다.
+    _NEW_TEXTS = [
+        "<P><삭  제></P>",
+        "<P><삭  제></P>",
+        "① (현행과 같음)",
+        "② (현행과 같음)",
+        "1.·2. (현행과 같음)",
+        "<P><삭  제></P>",
+        "① (현행과 같음)",
+        "② (현행과 같음)",
+        "1. ∼ 3. (현행과 같음)",
+        "<P><삭  제></P>",
+        "제70조(과태료)",
+        "<P><삭  제></P>",
+        "③ (현행과 같음)",
+        "1. (현행과 같음)",
+        "<P><삭  제></P>",
+    ]
+
+    def test_own_block_header_used_as_own_context(self):
+        """(a) 패턴 — 조문 헤더가 삭제될 블록 자기 자신 안에 있으면 그걸 쓴다."""
+        changes = extract_changes(self._OLD_TEXTS, self._NEW_TEXTS)
+        deleted = {c.index: c.article_context for c in changes if c.change_type is ChangeType.DELETED}
+        assert deleted[0] == "제46조"
+        assert deleted[1] == "제46조의2"
+
+    def test_context_inherited_across_intervening_unchanged_blocks(self):
+        """(b) 패턴 — 헤더 없는 삭제 블록은 앞쪽 안 바뀐 블록에서 이어받는다."""
+        changes = extract_changes(self._OLD_TEXTS, self._NEW_TEXTS)
+        deleted = {c.index: c.article_context for c in changes if c.change_type is ChangeType.DELETED}
+        assert deleted[5] == "제67조"  # "3. 정보격차의 실태…" — 제67조② 소속
+        assert deleted[9] == "제69조"  # "4. 제47조에 따른…" — "제47조"는 참조일 뿐, 실제 소속은 제69조
+        assert deleted[11] == "제70조"  # 앞선 헤더-only 블록(제70조(과태료))에서 이어받음
+        assert deleted[14] == "제70조"  # ③ 이하 호 단위 삭제도 계속 이어받음

@@ -144,6 +144,14 @@ class ArticleChange:
     old_fragments: tuple[str, ...] = field(default_factory=tuple)  # <P> 안쪽만 (구)
     new_fragments: tuple[str, ...] = field(default_factory=tuple)  # <P> 안쪽만 (신)
 
+    #: ★ 쓰임(2026-08-03, 삭제 항목 "몇 조였는지" 표시): 이 조각이 속한
+    #: 조문 라벨("제49조") — extract_changes()가 old_texts 전체를 순서대로
+    #: 훑으며 채운다(아래 _article_context_for_each_index 참고). 조 번호를
+    #: 몰라도 되는 대다수 경로(AMENDED/NEWLY_CREATED — locate가 신 전문에서
+    #: 실제 조 번호를 다시 확정함)에는 안 쓰이고, DELETED처럼 위치 탐색
+    #: 자체를 생략하는 경로에서만 "이거라도 있으면 쓴다"는 참고값이다.
+    article_context: str | None = None
+
     @property
     def diff_pairs(self) -> list[tuple[str, str]]:
         """구/신 <P> 조각을 위치별로 짝지은 것.
@@ -167,13 +175,6 @@ def classify(old_text: str, new_text: str) -> ChangeType:
     old_text = old_text or ""
     new_text = new_text or ""
 
-    # 실측(국민체육진흥법 MST 286627): 신구조문 대비표가 이미 삭제되어 있던
-    # 호를 구법 쪽의 "9. 삭  제"로만 남기고 신법 쪽은 빈 문자열로 주는
-    # 경우가 있다. 이것은 이번 개정에서 삭제된 조문이 아니라 과거 삭제
-    # 자리표시가 신법 표에서 생략된 것이므로 변경·미확정으로 보고하면 안 된다.
-    if not strip_p_tags(new_text).strip() and _is_whole_block_deleted(strip_p_tags(old_text)):
-        return ChangeType.UNCHANGED
-
     old_skip = is_skippable(old_text)
     new_skip = is_skippable(new_text)
     if old_skip and new_skip:
@@ -196,7 +197,9 @@ def classify(old_text: str, new_text: str) -> ChangeType:
     return ChangeType.AMENDED
 
 
-def build_change(index: int, old_text: str, new_text: str) -> ArticleChange:
+def build_change(
+    index: int, old_text: str, new_text: str, article_context: str | None = None,
+) -> ArticleChange:
     """조각 하나를 분석해 ArticleChange 로 만든다."""
     return ArticleChange(
         index=index,
@@ -207,7 +210,36 @@ def build_change(index: int, old_text: str, new_text: str) -> ArticleChange:
         new_clean=strip_p_tags(new_text or ""),
         old_fragments=tuple(extract_p_fragments(old_text or "")),
         new_fragments=tuple(extract_p_fragments(new_text or "")),
+        article_context=article_context,
     )
+
+
+def _article_context_for_each_index(old_texts: list[str]) -> list[str | None]:
+    """구조문 리스트를 순서대로 훑으며, 각 인덱스 시점에 "지금 어느 조문
+    안인가"를 추적한다 — extract_admrul_unchanged()가 스킵 표시 라벨을
+    복원할 때 쓰는 current_article 추적과 같은 원리를 일반화한 것이다.
+
+    ★★★★★★ 실측 발견(2026-08-03, 지능정보화 기본법 삭제 항목 재검증,
+    MST=268535 실API 재조회): 조문 헤더("제46조(…) ① …")가 삭제될 조각과
+    "같은" old_texts 블록에 함께 오는 경우도 있고(그러면 그 조각 자기
+    자신이 자기 컨텍스트를 정함), "제67조(연차보고 등) ① (생  략)"처럼
+    안 바뀐 앞쪽 블록에만 있고 실제 삭제되는 "3. 정보격차의 실태…" 블록
+    자신에는 조 번호가 아예 없는 경우도 있다(뒤 항목은 그 앞 헤더가
+    설정한 조 안에 있다는 걸 순서로만 알 수 있음). 두 경우 다 "지금까지
+    본 것 중 가장 최근 조문 헤더"를 그대로 흘려보내면 정확히 맞아떨어짐을
+    9건 전부 수동 대조로 확인했다(제46조~제49조는 자기 블록에 헤더가
+    같이 있었고, 제67조/제69조/제70조 소속 항목들은 앞쪽 헤더 블록에서
+    이어받았다).
+    """
+    out: list[str | None] = []
+    current: str | None = None
+    for text in old_texts:
+        stripped = strip_p_tags(text or "").strip()
+        art_no = ArticleNo.from_text(stripped)
+        if art_no is not None:
+            current = art_no.label
+        out.append(current)
+    return out
 
 
 def extract_changes(old_texts: list[str], new_texts: list[str]) -> list[ArticleChange]:
@@ -226,9 +258,10 @@ def extract_changes(old_texts: list[str], new_texts: list[str]) -> list[ArticleC
         )
 
     n = min(len(old_texts), len(new_texts))
+    contexts = _article_context_for_each_index(old_texts[:n])
     changes = []
     for i in range(n):
-        change = build_change(i, old_texts[i], new_texts[i])
+        change = build_change(i, old_texts[i], new_texts[i], contexts[i])
         if change.change_type is not ChangeType.UNCHANGED:
             changes.append(change)
     return changes
