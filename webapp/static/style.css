@@ -1239,6 +1239,23 @@ mark.diff-changed {
 .hub-card--c3 { --hub-accent: var(--k-new); }
 .hub-card--c3 .hub-card-icon { background: var(--k-new-soft); color: var(--k-new); }
 
+/* 업로드 화면만 가운데로 모은다.
+   /summary·/laws·/pdf 결과는 목록이 화면 폭을 실제로 다 쓰므로 전체 폭
+   레이아웃(.page-layout)이 맞다. 그런데 업로드 화면은 히어로 한 덩이와
+   카드 하나뿐이고 .upload-card 가 max-width 로 묶여 있어, 같은 규칙을
+   쓰면 오른쪽이 통째로 비고 내용이 왼쪽 끝에 붙어 보인다.
+   허브(.hub-page)와 같은 방식으로 축을 잡는다. */
+.page-layout--center { max-width: 1400px; margin: 0 auto; }
+
+.content-col--upload { max-width: 640px; margin: 0 auto; }
+.content-col--upload .hero { text-align: center; padding-top: 72px; }
+.content-col--upload .upload-error,
+.content-col--upload .upload-note { text-align: center; }
+
+/* 칼럼이 이미 640px 로 좁혀져 있으니 카드는 그 폭을 그대로 채운다 —
+   여기서 또 640 으로 묶으면 칼럼 안에서 다시 왼쪽으로 쏠린다. */
+.content-col--upload .upload-card { max-width: none; }
+
 /* 파일 선택 + 제출 버튼이 한 줄, 기준 시점 칸이 그 아래 한 줄.
    DOM 순서(label → 날짜칸 → 버튼)와 상관없이 자리를 정해야 해서
    자동 배치 대신 행/열을 직접 지정한다. */
@@ -1343,6 +1360,45 @@ mark.diff-changed {
   border-color: var(--primary);
   background: var(--primary-soft);
 }
+
+/* ---------- 창 전체 드롭 영역 ---------- */
+
+/* 드롭 영역이 카드뿐이면 빗나갔을 때 브라우저가 파일을 새 탭으로 열어
+   작업이 날아간다. 창 어디에 놓아도 받도록 바꾸고, 끌어오는 동안 그
+   사실을 화면 전체로 알린다 — 안내가 없으면 여전히 카드를 겨냥한다.
+   pointer-events:none 이 중요하다. 이 층이 마우스를 받으면 그 순간
+   dragenter/dragleave 가 한 번 더 발생해 진입 카운트가 어긋난다. */
+.drop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  place-items: center;
+  pointer-events: none;
+  background: rgba(252, 252, 254, 0.82);
+  backdrop-filter: blur(2px);
+}
+
+body.is-dragover-page .drop-overlay { display: grid; }
+
+.drop-overlay-box {
+  text-align: center;
+  color: var(--primary-dark);
+  background: var(--card-bg);
+  border: 2px dashed var(--primary);
+  border-radius: 20px;
+  padding: 40px 56px;
+  box-shadow: var(--shadow-tint);
+}
+
+.drop-overlay-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 10px 0 4px;
+  letter-spacing: -0.02em;
+}
+
+.drop-overlay-sub { font-size: 0.88rem; color: var(--muted); margin: 0; }
 
 /* 페이지 번호 기준 안내 — 놓치면 안 되는 정보라 에러 배너(.upload-error)와
    같은 박스 문법을 쓰되, 오류가 아니라 안내이므로 primary 계열로 칠한다.

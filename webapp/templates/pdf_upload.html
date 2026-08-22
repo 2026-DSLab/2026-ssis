@@ -23,8 +23,8 @@
     </div>
   </nav>
 
-  <div class="page-layout">
-  <main class="content-col">
+  <div class="page-layout page-layout--center">
+  <main class="content-col content-col--upload">
     <section class="hero">
       <h1>PDF <span class="hero-accent">인용 확인</span></h1>
       <p class="hero-sub">문서를 올리면 사회보장정보원이 감시하는 법령·행정규칙 102건 중 어떤 것이 어디에 인용됐는지 찾아드려요. PDF와 HWPX를 지원해요.</p>
@@ -61,6 +61,20 @@
   </main>
   </div>
 
+  <!-- 파일을 끌어오는 동안에만 뜨는 전체 화면 안내. pointer-events:none 이라
+       드래그 이벤트를 가로채지 않는다(가로채면 아래의 진입/이탈 카운트가
+       어긋난다). -->
+  <div class="drop-overlay" id="drop-overlay" aria-hidden="true">
+    <div class="drop-overlay-box">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M7 3.5h7l4 4V19a1.2 1.2 0 0 1-1.2 1.2H7A1.2 1.2 0 0 1 5.8 19V4.7A1.2 1.2 0 0 1 7 3.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        <path d="M14 3.5V8h4" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+      </svg>
+      <p class="drop-overlay-title">여기에 놓으세요</p>
+      <p class="drop-overlay-sub">화면 어디에 놓아도 돼요 (.pdf / .hwpx)</p>
+    </div>
+  </div>
+
   <script>
     const input = document.getElementById("document");
     const label = document.getElementById("upload-filename");
@@ -71,31 +85,57 @@
     }
     input?.addEventListener("change", showName);
 
-    // 드래그앤드롭 — 카드 전체가 드롭 영역. 브라우저 기본 동작(파일을
-    // 새 탭으로 여는 것)을 막고, 떨어뜨린 파일을 file input 에 넣는다.
-    ["dragenter", "dragover"].forEach((ev) =>
-      card?.addEventListener(ev, (e) => {
-        e.preventDefault();
-        card.classList.add("is-dragover");
-      })
-    );
-    ["dragleave", "drop"].forEach((ev) =>
-      card?.addEventListener(ev, (e) => {
-        e.preventDefault();
-        card.classList.remove("is-dragover");
-      })
-    );
-    card?.addEventListener("drop", (e) => {
+    // 드래그앤드롭 — 창 전체가 드롭 영역이다. 카드를 겨냥해야 했을 때는
+    // 빗나가면 브라우저가 파일을 새 탭으로 열어버려서 하던 일이 날아갔다.
+    // 이제 어디에 놓아도 받고, 기본 동작은 창 단위로 막는다.
+
+    // 파일을 끄는 경우에만 반응한다 — 페이지 안의 글자를 드래그하는 것에
+    // 반응하면 안내가 뜬다.
+    function hasFiles(e) {
+      const types = (e.dataTransfer && e.dataTransfer.types) || [];
+      return Array.prototype.indexOf.call(types, "Files") !== -1;
+    }
+
+    function paint(on) {
+      document.body.classList.toggle("is-dragover-page", on);
+      card?.classList.toggle("is-dragover", on);
+    }
+
+    // dragleave 는 자식 요소를 지날 때마다 뜬다. 진입/이탈을 세어서 0 이 될
+    // 때만 안내를 끄지 않으면, 요소 경계를 넘을 때마다 깜빡인다.
+    let depth = 0;
+
+    window.addEventListener("dragenter", (e) => {
+      if (!hasFiles(e)) return;
+      e.preventDefault();
+      if (++depth === 1) paint(true);
+    });
+
+    window.addEventListener("dragover", (e) => {
+      if (!hasFiles(e)) return;
+      e.preventDefault();          // 막지 않으면 drop 이벤트가 오지 않는다
+      e.dataTransfer.dropEffect = "copy";
+    });
+
+    window.addEventListener("dragleave", (e) => {
+      if (!hasFiles(e)) return;
+      if (--depth <= 0) { depth = 0; paint(false); }
+    });
+
+    window.addEventListener("drop", (e) => {
+      e.preventDefault();          // 파일이 아니어도 막는다(새 탭 열림 방지)
+      depth = 0;
+      paint(false);
       const files = e.dataTransfer && e.dataTransfer.files;
       if (files && files.length) {
         input.files = files;   // 여러 개 떨어뜨려도 첫 파일만 전송됨(input 이 단일 선택)
         showName();
       }
     });
-    // 카드 밖에 떨어뜨리면 브라우저가 파일을 열어버리는 것 방지
-    ["dragover", "drop"].forEach((ev) =>
-      window.addEventListener(ev, (e) => e.preventDefault())
-    );
+
+    // 창 밖으로 끌고 나가면 dragleave 가 안 오는 브라우저가 있어 안내가
+    // 남는다 — 창이 포커스를 잃을 때 확실히 끈다.
+    window.addEventListener("blur", () => { depth = 0; paint(false); });
   </script>
 </body>
 </html>
