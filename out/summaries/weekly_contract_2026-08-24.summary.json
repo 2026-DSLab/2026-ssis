@@ -1,0 +1,348 @@
+{
+  "source_file": "weekly_contract_2026-08-24.json",
+  "batch_date": "2026-08-24",
+  "laws": [
+    {
+      "law_id": "011460",
+      "law_name": "보훈보상대상자 지원에 관한 법",
+      "law_type": "법률",
+      "enforce_date": "2026-08-20",
+      "revision_type": "일부개정",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=283369&type=HTML",
+      "new_serial_no": "283369",
+      "headline": "보훈보상대상자 및 배우자 의료지원 확대를 위한 의료기관 범위 변경",
+      "body": "이번 개정은 보훈보상대상자와 그 배우자가 다양한 의료기관에서 의료지원을 받을 수 있도록 하기 위한 것입니다. 특히, 대통령령으로 정하는 공공단체가 설립한 의료기관을 포함시켜 지원 접근성을 높이는 데 초점을 맞추고 있습니다.\n\n○ 조문별 변경 내용\n- 제51조\n    · ① (개정): '국가의 의료시설 또는 지방자치단체의 의료시설에서'라는 표현이 '다음 각 호의 의료기관에서'로 변경되었습니다.\n    · ①1. (신설): 국가의 의료기관이 추가되었습니다.\n    · ①2. (신설): 지방자치단체의 의료기관이 새로 신설되었습니다.\n    · ①3. (신설): 대통령령으로 정하는 공공단체가 설립 및 운영하는 의료기관이 새로 생깁니다. 이 의료기관은 \"공공단체의료기관\"으로 명칭됩니다.\n    · ② (개정): '국가나 지방자치단체 외의 의료시설에'라는 표현이 '제1항의 의료기관 외의 의료기관에'로 변경되었습니다.\n    · ③ (개정): 의료시설에서 지원하던 내용을 의료기관에서 지원하도록 변경하였습니다.\n    · ④ (개정): '의료시설'이 '의료기관'으로 변경되었으며, '의료시설에서'는 '의료기관에서'로 수정되었습니다.\n    · ⑤ (개정): 보훈병원에서 제공하던 서비스가 보훈병원 또는 공공단체의료기관에서 제공될 수 있게 되었습니다. 또한, 보훈병원에 대한 요구 사항이 보훈병원 또는 공공단체의료기관에 적용됩니다.\n    · ⑥ (개정): '보훈병원'이 '보훈병원과 공공단체의료기관'으로 변경되었습니다.\n- 제51조의2 (개정): 국가는 국민의 생명ㆍ재산 보호와 직접적인 관련이 없는 직무수행이나 교육훈련 중에 상이를 입고 퇴직하였으나 상이등급의 판정을 받지 못한 경찰ㆍ소방공무원 등 대통령령으로 정하는 사람에 대하여 보훈병원과 공공단체의료기관, 또는 국가보훈부장관이 지정하여 진료를 위탁한 의료기관에서 그 상이처에 대한 진료를 받게 할 수 있습니다. 이 경우 그 진료비용은 국가가 부담합니다.",
+      "overview": "이번 개정은 보훈보상대상자와 그 배우자가 다양한 의료기관에서 의료지원을 받을 수 있도록 하기 위한 것입니다. 특히, 대통령령으로 정하는 공공단체가 설립한 의료기관을 포함시켜 지원 접근성을 높이는 데 초점을 맞추고 있습니다.",
+      "caveats": [],
+      "article_summaries": [
+        {
+          "unit": {
+            "law_id": "011460",
+            "law_name": "보훈보상대상자 지원에 관한 법",
+            "location_label": "제51조①",
+            "change_type": "개정",
+            "old_text": "① 재해부상군경 및 재해부상공무원이 그 상이처에 대한 진료를 필요로 하거나 질병(부상을 포함한다. 이하 이 조에서 같다)에 걸린 경우에는 대통령령으로 정하는 바에 따라 국가의 의료시설  또는 지방자치단체의 의료시설에서 진료한다. 다만, 본인의 고의에 의하여 생긴 질병의 경우에는 그러하지 아니하다.",
+            "new_text": "① 재해부상군경 및 재해부상공무원이 그 상이처에 대한 진료를 필요로 하거나 질병(부상을 포함한다. 이하 이 조에서 같다)에 걸린 경우에는 대통령령으로 정하는 바에 따라 다음 각 호의 의료기관에서 진료한다. 다만, 본인의 고의에 의하여 생긴 질병의 경우에는 그러하지 아니하다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'국가의 의료시설  또는 지방자치단체의 의료시설에서' → '다음 각 호의 의료기관에서'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'국가의 의료시설 또는 지방자치단체의 의료시설에서'라는 표현이 '다음 각 호의 의료기관에서'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011460",
+            "law_name": "보훈보상대상자 지원에 관한 법",
+            "location_label": "제51조①1.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "1. 국가의 의료기관",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국가의 의료기관이 추가되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011460",
+            "law_name": "보훈보상대상자 지원에 관한 법",
+            "location_label": "제51조①2.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "2. 지방자치단체의 의료기관",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "지방자치단체의 의료기관이 새로 신설되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011460",
+            "law_name": "보훈보상대상자 지원에 관한 법",
+            "location_label": "제51조①3.",
+            "change_type": "신설",
+            "old_text": "",
+            "new_text": "3. 대통령령으로 정하는 공공단체가 설립ㆍ운영하는 의료기관(이하 “공공단체의료기관”이라 한다)",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "대통령령으로 정하는 공공단체가 설립 및 운영하는 의료기관이 새로 생깁니다. 이 의료기관은 \"공공단체의료기관\"으로 명칭됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011460",
+            "law_name": "보훈보상대상자 지원에 관한 법",
+            "location_label": "제51조②",
+            "change_type": "개정",
+            "old_text": "② 국가는 제1항에 따른 진료를 국가나 지방자치단체 외의 의료시설에 위탁할 수 있다.",
+            "new_text": "② 국가는 제1항에 따른 진료를 제1항의 의료기관 외의 의료기관에 위탁할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'국가나 지방자치단체 외의 의료시설에' → '제1항의 의료기관 외의 의료기관에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'국가나 지방자치단체 외의 의료시설에'라는 표현이 '제1항의 의료기관 외의 의료기관에'로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011460",
+            "law_name": "보훈보상대상자 지원에 관한 법",
+            "location_label": "제51조③",
+            "change_type": "개정",
+            "old_text": "③ 제1항과 제2항에 따른 진료 비용은 국가가 부담한다. 다만, 지방자치단체의 의료시설에서 진료한 경우에는 대통령령으로 정하는 바에 따라 지방자치단체가 그 일부를 부담할 수 있다.",
+            "new_text": "③ 제1항과 제2항에 따른 진료 비용은 국가가 부담한다. 다만, 지방자치단체의 의료기관에서 진료한 경우에는 대통령령으로 정하는 바에 따라 지방자치단체가 그 일부를 부담할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'의료시설에서' → '의료기관에서'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "의료시설에서 지원하던 내용을 의료기관에서 지원하도록 변경하였습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011460",
+            "law_name": "보훈보상대상자 지원에 관한 법",
+            "location_label": "제51조④",
+            "change_type": "개정",
+            "old_text": "④ 재해부상군경 및 재해부상공무원 중 대통령령으로 정하는 상이등급 미만으로 판정된 사람이 그 상이처 외에 질병에 걸려 제1항에 따른 의료시설 및 제2항에 따라 진료를 위탁받은 의료시설에서 진료를 받는 경우에는 제3항에도 불구하고 대통령령으로 정하는 바에 따라 그 진료 비용의 일부를 본인에게 부담하게 할 수 있다.",
+            "new_text": "④ 재해부상군경 및 재해부상공무원 중 대통령령으로 정하는 상이등급 미만으로 판정된 사람이 그 상이처 외에 질병에 걸려 제1항에 따른 의료기관 및 제2항에 따라 진료를 위탁받은 의료기관에서 진료를 받는 경우에는 제3항에도 불구하고 대통령령으로 정하는 바에 따라 그 진료 비용의 일부를 본인에게 부담하게 할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'의료시설' → '의료기관'",
+              "'의료시설에서' → '의료기관에서'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'의료시설'이 '의료기관'으로 변경되었으며, '의료시설에서'는 '의료기관에서'로 수정되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011460",
+            "law_name": "보훈보상대상자 지원에 관한 법",
+            "location_label": "제51조⑤",
+            "change_type": "개정",
+            "old_text": "⑤ 보훈보상대상자의 배우자는 보훈병원에서 진료한다. 이 경우 그 진료 비용은 대통령령으로 정하는 바에 따라 감면(減免)하며, 그 감면된 비용은 국가보훈부장관이 예산의 범위에서 해당 보훈병원에 지급할 수 있다.",
+            "new_text": "⑤ 보훈보상대상자의 배우자는 보훈병원 또는 공공단체의료기관에서 진료한다. 이 경우 그 진료 비용은 대통령령으로 정하는 바에 따라 감면(減免)하며, 그 감면된 비용은 국가보훈부장관이 예산의 범위에서 해당 보훈병원 또는 공공단체의료기관에 지급할 수 있다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'보훈병원에서' → '보훈병원 또는 공공단체의료기관에서'",
+              "'보훈병원에' → '보훈병원 또는 공공단체의료기관에'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "보훈병원에서 제공하던 서비스가 보훈병원 또는 공공단체의료기관에서 제공될 수 있게 되었습니다. 또한, 보훈병원에 대한 요구 사항이 보훈병원 또는 공공단체의료기관에 적용됩니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011460",
+            "law_name": "보훈보상대상자 지원에 관한 법",
+            "location_label": "제51조⑥",
+            "change_type": "개정",
+            "old_text": "⑥ 75세 이상으로서 다음 각 호의 어느 하나에 해당하는 사람은 보훈병원 외에 국가보훈부장관이 지정하여 진료를 위탁한 의료기관에서 진료를 받을 수 있다. 이 경우 그 진료 비용은 본인이 부담하게 될 비용의 범위에서 대통령령으로 정하는 바에 따라 감면하며, 그 감면된 비용은 국가가 부담한다.",
+            "new_text": "⑥ 75세 이상으로서 다음 각 호의 어느 하나에 해당하는 사람은 보훈병원과 공공단체의료기관 외에 국가보훈부장관이 지정하여 진료를 위탁한 의료기관에서 진료를 받을 수 있다. 이 경우 그 진료 비용은 본인이 부담하게 될 비용의 범위에서 대통령령으로 정하는 바에 따라 감면하며, 그 감면된 비용은 국가가 부담한다.",
+            "match_status": "위치재배치의심",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [
+              "'보훈병원' → '보훈병원과 공공단체의료기관'"
+            ],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "'보훈병원'이 '보훈병원과 공공단체의료기관'으로 변경되었습니다.",
+          "caveats": [],
+          "error": null
+        },
+        {
+          "unit": {
+            "law_id": "011460",
+            "law_name": "보훈보상대상자 지원에 관한 법",
+            "location_label": "제51조의2",
+            "change_type": "개정",
+            "old_text": "국가는 국민의 생명ㆍ재산 보호와 직접적인 관련이 없는 직무수행이나 교육훈련 중에 상이를 입고 퇴직하였으나 상이등급의 판정을 받지 못한 경찰ㆍ소방공무원 등 대통령령으로 정하는 사람에 대하여 보훈병원 또는 국가보훈부장관이 지정하여 진료를 위탁한 의료기관에서 그 상이처(본인의 고의로 악화된 경우는 제외한다)에 대한 진료를 받게 할 수 있다. 이 경우 그 진료비용은 국가가 부담한다.",
+            "new_text": "국가는 국민의 생명ㆍ재산 보호와 직접적인 관련이 없는 직무수행이나 교육훈련 중에 상이를 입고 퇴직하였으나 상이등급의 판정을 받지 못한 경찰ㆍ소방공무원 등 대통령령으로 정하는 사람에 대하여 보훈병원, 공공단체의료기관 또는 국가보훈부장관이 지정하여 진료를 위탁한 의료기관에서 그 상이처(본인의 고의로 악화된 경우는 제외한다)에 대한 진료를 받게 할 수 있다. 이 경우 그 진료비용은 국가가 부담한다.",
+            "match_status": "성공",
+            "old_text_is_context": false,
+            "moved_from": null,
+            "label_corrected": false,
+            "move_is_identical": false,
+            "diff_parts": [],
+            "is_whole_replace": false,
+            "no_change": false
+          },
+          "summary": "국가는 국민의 생명ㆍ재산 보호와 직접적인 관련이 없는 직무수행이나 교육훈련 중에 상이를 입고 퇴직하였으나 상이등급의 판정을 받지 못한 경찰ㆍ소방공무원 등 대통령령으로 정하는 사람에 대하여 보훈병원과 공공단체의료기관, 또는 국가보훈부장관이 지정하여 진료를 위탁한 의료기관에서 그 상이처에 대한 진료를 받게 할 수 있습니다. 이 경우 그 진료비용은 국가가 부담합니다.",
+          "caveats": [],
+          "error": null
+        }
+      ],
+      "mappings": [
+        {
+          "article_label": "제51조",
+          "mappings": [
+            {
+              "old_position": "①",
+              "new_position": "①",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "②",
+              "new_position": "②",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "③",
+              "new_position": "③",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "④",
+              "new_position": "④",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "⑤",
+              "new_position": "⑤",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": "⑥",
+              "new_position": "⑥",
+              "relation": "개정",
+              "basis": "번호일치",
+              "note": ""
+            },
+            {
+              "old_position": null,
+              "new_position": "①1.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "새로 나타난 항목으로, 사라진 항목과의 관계 없음."
+            },
+            {
+              "old_position": null,
+              "new_position": "①2.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "새로 나타난 항목으로, 사라진 항목과의 관계 없음."
+            },
+            {
+              "old_position": null,
+              "new_position": "①3.",
+              "relation": "신설",
+              "basis": "LLM판정",
+              "note": "새로 나타난 항목으로, 사라진 항목과의 관계 없음."
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        },
+        {
+          "article_label": "제51조의2",
+          "mappings": [
+            {
+              "old_position": "",
+              "new_position": "",
+              "relation": "개정",
+              "basis": "라벨",
+              "note": ""
+            }
+          ],
+          "needs_review": false,
+          "error": null
+        }
+      ],
+      "verifier_issues": [],
+      "error": null
+    }
+  ],
+  "unresolved": [
+    {
+      "law_id": "011460",
+      "law_name": "보훈보상대상자 지원에 관한 법",
+      "new_serial_no": "283369",
+      "reason": "0건실패",
+      "detail": "본문검색: '국가는 제51조제5항 전단에도 불구하고 「재…'; 0건 (정규화 적용된 상태에서도 미발견)",
+      "source_url": "https://www.law.go.kr/DRF/lawService.do?target=law&MST=283369&type=HTML",
+      "guards_tried": [
+        "본문검색: '국가는 제51조제5항 전단에도 불구하고 「재…'",
+        "0건 (정규화 적용된 상태에서도 미발견)"
+      ]
+    }
+  ],
+  "no_comparison": []
+}

@@ -1,7 +1,7 @@
 """요약 결과 저장 — 파일(JSON), 보고서(HWPX), DB.
 
 셋 다 같은 Sink 프로토콜을 따르므로 파이프라인은 어디에 저장되는지
-모른다. 저장처를 늘려도 pipeline.py 는 그대로다.
+모름. 저장처를 늘려도 pipeline.py 는 그대로임.
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ class Sink(Protocol):
 
 
 class JsonSink:
-    """계약 파일 하나당 요약 JSON 하나를 쓴다."""
+    """계약 파일 하나당 요약 JSON 하나를 씀."""
 
     def __init__(self, output_dir: Path):
         self._dir = Path(output_dir)
@@ -40,15 +40,15 @@ class JsonSink:
 
 
 class HwpxSink:
-    """계약 파일 하나당 HWPX 보고서 하나를 쓴다.
+    """계약 파일 하나당 HWPX 보고서 하나를 씀.
 
-    생성 후 곧바로 두 가지를 검증한다:
+    생성 후 곧바로 두 가지를 검증함:
       1) 요약 텍스트가 문서에 온전히 들어갔는지(특수문자·긴 문단에서
          누락 없는지) — verify_report, 내용 완전성.
       2) 문서 서식이 깨지지 않았는지(표 너비, 셀 정렬, 빈 문단 비율 등) —
          inspect_document, 구조/레이아웃. 둘 다 사람이 한글로 직접 열어야
-         보이는 문제라서 자동화 없이는 매주 놓친다. 계획서 4번(HWP 계열
-         문서 제공)을 충족한다.
+         보이는 문제라서 자동화 없이는 매주 놓침. 계획서 4번(HWP 계열
+         문서 제공)을 충족함.
     """
 
     def __init__(self, output_dir: Path):
@@ -85,21 +85,21 @@ class HwpxSink:
 
 
 class DbSink:
-    """요약을 law_summary 테이블에 적재한다.
+    """요약을 law_summary 테이블에 적재함.
 
     키는 (law_id, new_serial_no) — "어느 법의 어느 개정분에 대한 요약인가".
-    같은 개정분을 다시 요약하면 덮어쓴다. 판본을 쌓지 않는 이유는
-    database/schema.sql 의 law_summary COMMENT 에 적어 두었다.
+    같은 개정분을 다시 요약하면 덮어씀. 판본을 쌓지 않는 이유는
+    database/schema.sql 의 law_summary COMMENT 에 적어 두었음.
 
-    ★ 한 건이 실패해도 나머지를 계속 넣는다. run_weekly.py 가 워치리스트
-      한 건의 실패로 배치 전체를 죽이지 않는 것과 같은 이유다 — 10건 중
-      1건이 실패했다고 나머지 9건의 요약을 버릴 이유가 없다. 실패는
-      로그로 남기고, 몇 건이 들어갔는지 세어 돌려준다.
+    한 건이 실패해도 나머지를 계속 넣음. run_weekly.py 가 워치리스트
+      한 건의 실패로 배치 전체를 죽이지 않는 것과 같은 이유임 — 10건 중
+      1건이 실패했다고 나머지 9건의 요약을 버릴 이유가 없음. 실패는
+      로그로 남기고, 몇 건이 들어갔는지 세어 돌려줌.
     """
 
     def __init__(self, db, *, llm_provider: str = "", llm_model: str = ""):
         # lawtrack.db.conn.Database. 타입을 명시하지 않는 이유는 이 모듈이
-        # DB 없이도 import 되어야 하기 때문이다(파일 출력만 쓰는 사람도 있다).
+        # DB 없이도 import 되어야 하기 때문임(파일 출력만 쓰는 사람도 있음).
         from lawtrack.db.repo import LawSummaryRepo
 
         self._repo = LawSummaryRepo(db)
@@ -133,9 +133,9 @@ class DbSink:
             overview=law.overview,
             body=law.body,
             caveats=list(law.caveats),
-            # 조문 요약·매핑·감수 결과는 원문(old/new)까지 통째로 넣는다.
+            # 조문 요약·매핑·감수 결과는 원문(old/new)까지 통째로 넣음.
             # 나중에 "이 요약이 왜 이렇게 나왔나"를 추적하려면 그때 본
-            # 입력이 남아 있어야 한다 — 원문은 API 재조회로 바뀔 수 있다.
+            # 입력이 남아 있어야 함 — 원문은 API 재조회로 바뀔 수 있음.
             article_summaries=[asdict(s) for s in law.article_summaries],
             mappings=[asdict(m) for m in law.mappings],
             verifier_issues=[asdict(i) for i in law.verifier_issues],

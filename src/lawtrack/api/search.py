@@ -1,20 +1,20 @@
 """목록조회 (target=law / target=admrul).
 
 이 모듈의 책임은 "이름으로 검색해서, 그중 정확히 일치하는 것을 고른다"
-까지다. 등록 여부 판단(폐지/통합/시행전 분기)은 호출부(워치리스트 관리
-로직)의 책임으로 남긴다 — 여기서는 "0건이었다"는 사실만 정직하게
-돌려준다.
+까지임. 등록 여부 판단(폐지/통합/시행전 분기)은 호출부(워치리스트 관리
+로직)의 책임으로 남김 — 여기서는 "0건이었다"는 사실만 정직하게
+돌려줌.
 
 실측된 함정과 대응:
     - query 는 부분일치 → 유사법 다수 혼입 (지방자치단체~, 법원~ 등)
       => 정규화 후 완전일치로 재필터링 (names_match)
     - 검색어가 짧으면 정답이 display 밖으로 밀림 (에너지법: 32건 중 17번째)
       => client.search() 가 display=100 을 강제하므로 여기서는 대응 불필요.
-         단, totalCnt > display 이면 경고 로그를 남긴다.
+         단, totalCnt > display 이면 경고 로그를 남김.
     - 소관부처가 다르면 이름이 겹쳐도 다른 규칙
       (예: 협상에 의한 계약체결기준 — 재정경제부 vs 방위사업청)
       => dept_code 필터를 선택 인자로 제공.
-    - admrul 은 단일 결과가 dict 로 온다(87%) → as_list 로 정규화.
+    - admrul 은 단일 결과가 dict 로 옴(87%) → as_list 로 정규화.
 """
 
 from __future__ import annotations
@@ -69,9 +69,9 @@ class AdmrulSearchResult:
 # ---------------------------------------------------------------------------
 # 목록조회 - 필드 후보 경로
 # ---------------------------------------------------------------------------
-# ✅ 실측 확인됨(2026-07-16): 루트는 항상 ("LawSearch","law") /
-# ("AdmRulSearch","admrul") — 이미 각 튜플의 첫 후보가 정답이었다.
-# 두 번째 경로는 만약을 대비한 방어적 폴백으로 유지한다.
+# 실측 확인됨: 루트는 항상 ("LawSearch","law") /
+# ("AdmRulSearch","admrul") — 이미 각 튜플의 첫 후보가 정답이었음.
+# 두 번째 경로는 만약을 대비한 방어적 폴백으로 유지함.
 
 _LAW_ITEM_PATHS: tuple[tuple[str, ...], ...] = (
     ("LawSearch", "law"),
@@ -106,7 +106,7 @@ def _dept_tuple(raw: str) -> tuple[str, ...]:
 # ---------------------------------------------------------------------------
 
 def search_law(client: LawApiClient, query: str) -> list[LawSearchResult]:
-    """법령명으로 검색. 부분일치 결과를 그대로 반환한다 (필터링은 상위 책임)."""
+    """법령명으로 검색. 부분일치 결과를 그대로 반환함 (필터링은 상위 책임)."""
     resp = client.search(target="law", query=query)
     data = resp.json_or_raise()
 
@@ -217,7 +217,7 @@ def resolve_law(
         - "소프트웨어산업 진흥법" 검색 시 정확매칭 0건 (제명변경, not_found)
         - "국가를 당사자로 하는 계약에 관한 법률" 검색 시 유사법 7건 혼입
           → names_match 완전일치로 자동 제거됨 (지방자치단체~ 등은 이름이
-            다르므로 정규화해도 일치하지 않는다)
+            다르므로 정규화해도 일치하지 않음)
     """
     all_results = search_law(client, query)
     exact = [r for r in all_results if names_match(r.law_name, query)]

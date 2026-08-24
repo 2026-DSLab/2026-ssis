@@ -47,8 +47,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"설정 오류: {exc}", file=sys.stderr)
         return 2
 
-    # cp949 콘솔에서 em dash 같은 글자에 죽지 않게 한다. 요약을 다 만든 뒤
-    # 화면에 뿌리다가 죽으면 LLM 호출 비용을 그대로 날린다.
+    # cp949 콘솔에서 em dash 같은 글자에 죽지 않게 함. 요약을 다 만든 뒤
+    # 화면에 뿌리다가 죽으면 LLM 호출 비용을 그대로 날림.
     setup_console()
     logging.basicConfig(
         level=getattr(logging, settings.log_level, logging.INFO),
@@ -72,7 +72,7 @@ def main(argv: list[str] | None = None) -> int:
             HwpxSink(settings.pipeline.output_dir.parent / "reports").write(results)
         if args.db:
             # DB 관련 import 는 여기서만 — 파일 출력만 쓰는 사람이
-            # psycopg2 를 깔지 않아도 되게 한다.
+            # psycopg2 를 깔지 않아도 되게 함.
             from lawtrack.config import load_db_settings
             from lawtrack.db.conn import Database
 

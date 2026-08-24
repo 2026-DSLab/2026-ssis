@@ -1,21 +1,21 @@
-"""요약 멀티 에이전트 — 세 에이전트를 한 곳에 모은다.
+"""요약 멀티 에이전트 — 세 에이전트를 한 곳에 모음.
 
 파이프라인 순서:
     MappingAgent   구(舊) 위치가 신(新) 어디로 갔는지 판정 (요약보다 먼저)
     ArticleAgent   개별 조문 요약 (조문당 1회, 병렬)
     LawAgent       법령 단위 종합 요약 (법당 1회)
 
-★ 감수(사실 대조)는 별도 LLM 에이전트가 아니라 코드로 한다
-  (summarizer/verifier.py 의 verify_summaries) — 2026-07-25 재설계.
+감수(사실 대조)는 별도 LLM 에이전트가 아니라 코드로 함
+  (summarizer/verifier.py 의 verify_summaries).
   LLM 에게 "요약이 맞는지 봐줘"라고 시키면 정확한 요약에도 트집을 잡거나
-  (분량·표현 문제를 사실 오류로 오인), 자기모순되는 지적을 낸다. 한때
+  (분량·표현 문제를 사실 오류로 오인), 자기모순되는 지적을 냄. 한때
   이 파일에 VerifierAgent(LLM 기반 감수)가 있었지만 실제 파이프라인에서
-  쓰이지 않는 죽은 코드였다가 삭제됐다(2026-07-30) — 대체재인 코드 기반
-  검증이 이미 pipeline.py 에 연결돼 있었기 때문이다.
+  쓰이지 않는 죽은 코드였다가 삭제됐음 — 대체재인 코드 기반
+  검증이 이미 pipeline.py 에 연결돼 있었기 때문임.
 
 각 에이전트는 LLMClient 프로토콜만 보고, 어떤 구현체(OpenAI/QWEN 등)가
-꽂혔는지 모른다. 프롬프트는 summarizer/prompts/ 에 따로 둔다 — 가장 자주
-고치는 부분이라 로직과 섞으면 위험하기 때문이다.
+꽂혔는지 모름. 프롬프트는 summarizer/prompts/ 에 따로 둠 — 가장 자주
+고치는 부분이라 로직과 섞으면 위험하기 때문임.
 """
 
 from __future__ import annotations
@@ -68,11 +68,11 @@ class MappingAgent:
     """구(舊) 위치가 신(新) 어디로 갔는지 판정.
 
     2층 구조:
-        1층 (계산)  resolve_article() 이 대부분을 확정한다. 번호가 양쪽에
+        1층 (계산)  resolve_article() 이 대부분을 확정함. 번호가 양쪽에
                     있으면 제자리 개정, 사라진 내용이 다른 자리에 보존되면 이동.
         2층 (LLM)   계산으로 못 푼 '풀'(사라진 old / 출처 없는 new)만 대조.
-                    실측(2026-07-22): 12개 그룹 중 11개는 1층에서 끝나고,
-                    전자정부법 제56조의2 하나만 여기로 온다.
+                    실측: 12개 그룹 중 11개는 1층에서 끝나고,
+                    전자정부법 제56조의2 하나만 여기로 옴.
     """
 
     def __init__(self, client: LLMClient, settings: LLMSettings):
@@ -88,17 +88,17 @@ class MappingAgent:
     def run_article(
         self, law_name: str, article_label: str, items: list[ArticleDiffItem]
     ) -> ArticleMapping:
-        # 밀림이 불가능한 조문 — 계약 라벨을 그대로 믿는다. 판정 불필요.
+        # 밀림이 불가능한 조문 — 계약 라벨을 그대로 믿음. 판정 불필요.
         if not is_shift_possible(items):
             return ArticleMapping(article_label, trivial_mappings(items))
 
         resolved, pool_old, pool_new = resolve_article(items)
 
-        # 계산으로 다 풀렸으면 LLM 을 부르지 않는다.
+        # 계산으로 다 풀렸으면 LLM 을 부르지 않음.
         if not pool_old and not pool_new:
             return ArticleMapping(article_label, resolved)
 
-        # 남은 것만 LLM 에 넘긴다.
+        # 남은 것만 LLM 에 넘김.
         llm_maps, needs_review = self._resolve_pool(
             law_name, article_label, pool_old, pool_new
         )
@@ -111,7 +111,7 @@ class MappingAgent:
         pool_old: list[ArticleDiffItem],
         pool_new: list[ArticleDiffItem],
     ) -> tuple[list[PositionMapping], bool]:
-        """계산으로 못 푼 old/new 를 LLM 으로 대조한다."""
+        """계산으로 못 푼 old/new 를 LLM 으로 대조함."""
         valid_old = {canon_key(position_label(i)): position_label(i) for i in pool_old}
         valid_new = {canon_key(position_label(i)): position_label(i) for i in pool_new}
         depth_old = {canon_key(position_label(i)): depth(i) for i in pool_old}
@@ -140,19 +140,19 @@ class MappingAgent:
             ok = canon_key(m.get("old_position"))
             nk = canon_key(m.get("new_position"))
             rel = m.get("relation", "신설")
-            # 계약에 없는 위치를 지어냈으면 버린다.
+            # 계약에 없는 위치를 지어냈으면 버림.
             if ok and ok not in valid_old:
                 ok = ""
             if nk and nk not in valid_new:
                 continue
             # 이동인데 출처가 없거나, 이미 쓰인 출처거나, 층위가 다르면 →
-            # 논리 모순. 항(①)이 호(①1.)로 이동하는 일은 없다. 신설로 정정.
+            # 논리 모순. 항(①)이 호(①1.)로 이동하는 일은 없음. 신설로 정정.
             if rel in ("이동", "이동후개정") and (
                 not ok or ok in used_old or depth_old.get(ok) != depth_new.get(nk)
             ):
                 rel = "신설"
                 ok = ""
-            # 같은 번호끼리 짝지었으면 이동이 아니라 제자리 개정이다.
+            # 같은 번호끼리 짝지었으면 이동이 아니라 제자리 개정임.
             elif ok and nk and ok == nk and rel in ("이동", "이동후개정"):
                 rel = "개정"
             if nk in used_new:
@@ -171,12 +171,12 @@ class MappingAgent:
             if nk:
                 used_new.add(nk)
 
-        # 남은 것 정리. 순서가 중요하다:
+        # 남은 것 정리. 순서가 중요함:
         #   ① 대응 못 받은 old 와 new 중 '같은 번호'로 남은 것은 제자리
-        #      개정으로 잇는다. LLM 이 층위 위반 이동을 냈다가 정정되면
+        #      개정으로 잇음. LLM 이 층위 위반 이동을 냈다가 정정되면
         #      구①·신① 이 둘 다 미매칭으로 남는데, 이걸 삭제+신설로 흩으면
-        #      안 된다 — 통짜 내용이 골격으로 개정된 것이다.
-        #      (실측 2026-07-23, 개인정보 보호법 시행령 제60조의2 구①)
+        #      안 됨 — 통짜 내용이 골격으로 개정된 것임.
+        #      (실측, 개인정보 보호법 시행령 제60조의2 구①)
         #   ② 그래도 남는 new 는 신설, old 는 삭제.
         for o in pool_old:
             ok = canon_key(position_label(o))
@@ -220,28 +220,28 @@ def _has_batchim(word: str) -> bool:
 
 _TRAILING_JOSA = ("은", "는", "이", "가", "로", "의", "을", "를")
 """_strip_trailing_josa()가 떼어낼 후보 조사(길이 1). "으로"는 별도로
-2글자째 처리한다.
+2글자째 처리함.
 
-★★ 실측(2026-07-31, 환경개선비용 부담법 제22조 "환경부장관의 권한은" →
+실측(환경개선비용 부담법 제22조 "환경부장관의 권한은" →
 "기후에너지환경부장관의 권한은"): 소유격 "의"가 붙은 채로 diff에 뽑히면
 "환경부장관의" + "가" = "환경부장관의가"라는 조사 두 개가 겹친 비문이
-나왔다. "은는이가로" 뿐 아니라 diff 어절 끝에 올 수 있는 다른 조사도
-먼저 떼어내야 한다."""
+나왔음. "은는이가로" 뿐 아니라 diff 어절 끝에 올 수 있는 다른 조사도
+먼저 떼어내야 함."""
 
 
 def _strip_trailing_josa(word: str) -> str:
-    """단어 끝에 이미 붙어 있는 조사를 뗀다 — 다시 알맞은 조사를 붙이기 전
-    깨끗한 어간을 만들기 위해서다.
+    """단어 끝에 이미 붙어 있는 조사를 뗌 — 다시 알맞은 조사를 붙이기 전
+    깨끗한 어간을 만들기 위해서임.
 
-    ★★ 실측(2026-07-31, 환경개선비용 부담법 제20조① "환경부장관은" →
+    실측(환경개선비용 부담법 제20조① "환경부장관은" →
     "기후에너지환경부장관은", 국민기초생활보장법 제6조의2① "통계청이" →
     "국가데이터처가"): deleted_words/inserted_words 는 원문 문장 안에서
     diff로 뽑힌 어절이라, 이미 그 자리에 맞는 조사(은/는/이/가)가 붙어
-    있는 채로 온다. 그런데 아래 _describe_formal_change()는 항상 새
-    조사를 덧붙였다 — "환경부장관은"(이미 은 있음) + 배치침 판정으로 뽑은
+    있는 채로 옴. 그런데 아래 _describe_formal_change()는 항상 새
+    조사를 덧붙였음 — "환경부장관은"(이미 은 있음) + 배치침 판정으로 뽑은
     "이" = "환경부장관은이", "통계청이" + "가" = "통계청이가" 처럼 조사가
-    중복되는 비문이 나왔다. 조사를 새로 계산하기 전에 기존 조사를 먼저
-    떼어내면, 원래 조사가 있었든 없었든 항상 올바른 조사 하나만 남는다.
+    중복되는 비문이 나왔음. 조사를 새로 계산하기 전에 기존 조사를 먼저
+    떼어내면, 원래 조사가 있었든 없었든 항상 올바른 조사 하나만 남음.
     """
     if word.endswith("으로") and len(word) > 2:
         return word[:-2]
@@ -251,11 +251,11 @@ def _strip_trailing_josa(word: str) -> str:
 
 
 def _describe_formal_change(deleted_words: list[str], inserted_words: list[str]) -> str:
-    """기관명·인용 법령명 정비를 자연스러운 문장으로 서술한다.
+    """기관명·인용 법령명 정비를 자연스러운 문장으로 서술함.
 
-    ★ 화살표("'A' → 'B'") 표기 대신 자연스러운 문장으로 바꿨다
-    (2026-07-31, 사용자 요청) — "A가 B로 변경되는 등" 형태가 요약 톤을
-    조문 요약(ArticleAgent가 LLM으로 쓰는 문장)과 통일해 준다.
+    화살표("'A' → 'B'") 표기 대신 자연스러운 문장으로 바꿨음
+     — "A가 B로 변경되는 등" 형태가 요약 톤을
+    조문 요약(ArticleAgent가 LLM으로 쓰는 문장)과 통일해 줌.
     """
     parts = []
     for d, i in zip(deleted_words, inserted_words):
@@ -269,29 +269,29 @@ def _describe_formal_change(deleted_words: list[str], inserted_words: list[str])
 
 
 class ArticleAgent:
-    """조문 하나를 한두 문장으로 요약한다. 조문끼리 독립이라 병렬 실행된다."""
+    """조문 하나를 한두 문장으로 요약함. 조문끼리 독립이라 병렬 실행됨."""
 
     def __init__(self, client: LLMClient, settings: LLMSettings):
         self._client = client
         self._settings = settings
 
     def run(self, unit: ArticleUnit) -> ArticleSummary:
-        """조문 하나를 요약한다.
+        """조문 하나를 요약함.
 
-        호출이 실패해도 예외를 위로 던지지 않는다 — 조문 하나가 실패했다고
+        호출이 실패해도 예외를 위로 던지지 않음 — 조문 하나가 실패했다고
         법령 전체 요약을 포기할 이유가 없고, 실패를 조용히 빼면 2단계가
-        "이게 전부"라고 착각한다. 실패는 error 필드에 담아 전달한다.
+        "이게 전부"라고 착각함. 실패는 error 필드에 담아 전달함.
         """
         caveats = caveats_for(unit)
 
         # 번호만 밀렸고 내용이 글자까지 같은 것이 계산으로 확정된 경우.
-        # LLM 을 부르지 않는다 — 부를 이유가 없고, 부르면 없던 변경을
-        # 지어낼 위험만 생긴다.
+        # LLM 을 부르지 않음 — 부를 이유가 없고, 부르면 없던 변경을
+        # 지어낼 위험만 생김.
         if unit.move_is_identical and unit.moved_from:
-            # ★ 실측(2026-08-03, 사용자 리포트): "②5.에서 제8조②12.로"처럼
+            # 실측: "②5.에서 제8조②12.로"처럼
             # 원본 표기 그대로 문장에 박아 넣으면 읽기 힘들다는 지적 —
             # 웹페이지/HWPX 위치 칸에 이미 쓰는 항/호/목 표기 규칙(locfmt)을
-            # 이 규칙 기반 문장(LLM 호출 없음)에도 그대로 적용한다.
+            # 이 규칙 기반 문장(LLM 호출 없음)에도 그대로 적용함.
             return ArticleSummary(
                 unit=unit,
                 summary=(
@@ -302,7 +302,7 @@ class ArticleAgent:
             )
 
         # 같은 조문의 다른 항만 바뀌고 이 항은 안 바뀐 경우. LLM 불필요 —
-        # 부르면 "통째 교체됐다"고 없던 변경을 지어낸다(2026-07-25 실측).
+        # 부르면 "통째 교체됐다"고 없던 변경을 지어냄(실측).
         if unit.no_change:
             return ArticleSummary(
                 unit=unit,
@@ -310,13 +310,13 @@ class ArticleAgent:
                 caveats=caveats,
             )
 
-        # ★ 이식(2026-07-30, seongbeen2 브랜치): 형식적 정비(기관명·인용
+        # 이식: 형식적 정비(기관명·인용
         # 법령명 일괄 교체 등)는 결정론적으로 확신할 수 있을 때만 LLM을
-        # 건너뛴다 — 실측(704건 중 52%)으로 확인된 정부조직개편발 기관명
-        # 교체가 전형적인 예다. old_text가 이 위치의 실제 개정 전 문장이
+        # 건너뜀 — 실측(704건 중 52%)으로 확인된 정부조직개편발 기관명
+        # 교체가 전형적인 예임. old_text가 이 위치의 실제 개정 전 문장이
         # 아니라 참고 맥락일 뿐인 경우(구조확장/위치재배치의심,
         # unit.old_text_is_context)는 두 문장이 애초에 같은 위치를
-        # 가리키지 않으므로 이 판정 자체를 적용하지 않는다.
+        # 가리키지 않으므로 이 판정 자체를 적용하지 않음.
         if not unit.old_text_is_context:
             triaged = triage(unit.old_text, unit.new_text, change_type=unit.change_type)
             if triaged.change_class is ChangeClass.NO_CHANGE:
@@ -350,7 +350,7 @@ class ArticleAgent:
 
 
 class LawAgent:
-    """법령 1건의 조문별 요약을 종합 요약으로 묶는다."""
+    """법령 1건의 조문별 요약을 종합 요약으로 묶음."""
 
     def __init__(self, client: LLMClient, settings: LLMSettings):
         self._client = client
@@ -378,17 +378,17 @@ class LawAgent:
             payload = {"headline": "", "overview": ""}
             error = str(exc)
 
-        # ★ caveats 는 코드로만 만든다. LLM 이 낸 caveats 는 버린다.
-        #   실측(2026-07-22, 장애인 고시): 교정 후에도 LLM 이 프롬프트에
+        # caveats 는 코드로만 만듦. LLM 이 낸 caveats 는 버림.
+        #   실측(장애인 고시): 교정 후에도 LLM 이 프롬프트에
         #   남은 흔적을 보고 "신뢰도 경고가 붙어있어 확인이 필요하다"는
-        #   문장을 스스로 caveats 에 지어냈다. 경고는 판정 '상태'에서
-        #   결정론적으로 나와야지, 모델이 재생산하게 두면 안 된다.
+        #   문장을 스스로 caveats 에 지어냈음. 경고는 판정 '상태'에서
+        #   결정론적으로 나와야지, 모델이 재생산하게 두면 안 됨.
         caveats: list[str] = []
         failed = [s.unit.location_label for s in summaries if s.error]
         if failed:
             caveats.append(f"조문 요약 실패: {', '.join(failed)}")
 
-        # 대응 판정이 불확실한 조문은 담당자가 원문을 봐야 한다.
+        # 대응 판정이 불확실한 조문은 담당자가 원문을 봐야 함.
         review = [m.article_label for m in mappings if m.needs_review]
         if review:
             caveats.append(
@@ -396,16 +396,16 @@ class LawAgent:
             )
 
         # 후처리: LLM 이 낸 한자 오타 등을 코드로 정리. 병기(과(科))는 보존.
-        # LLM 은 headline 과 overview(취지)만 쓴다.
+        # LLM 은 headline 과 overview(취지)만 씀.
         headline, overview, warns = clean_summary(
             payload.get("headline", ""), payload.get("overview", "")
         )
         if warns:
             log.info("[%s] 후처리 경고: %s", law.law_id, "; ".join(warns))
 
-        # ★ 구조 사실(어느 조가 신설/개정/이동/삭제)은 코드가 붙인다.
-        #   LLM 판단에 맡기면 이동을 신설로 뭉뚱그리는 등 확률적으로 틀린다.
-        #   매핑(검증 완료)과 조문 요약을 그대로 박으므로 절대 안 틀린다.
+        # 구조 사실(어느 조가 신설/개정/이동/삭제)은 코드가 붙임.
+        #   LLM 판단에 맡기면 이동을 신설로 뭉뚱그리는 등 확률적으로 틀림.
+        #   매핑(검증 완료)과 조문 요약을 그대로 박으므로 절대 안 틀림.
         change_section = build_change_section(summaries)
         body = overview.strip()
         if change_section:

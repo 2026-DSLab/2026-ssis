@@ -1,14 +1,14 @@
 """DB → WeeklyContract → JSON 파일.
 
-이 파일이 사용자 역할의 종착점이다: "DB 가져와서 확인 후, 바뀐 부분을
-구조화된 형태로 LLM팀에게 넘겨주는" 마지막 단계.
+이 파일이 사용자 역할의 종착점임: "DB 가져와서 확인 후, 바뀐 부분을
+구조화된 형태로 요약 단계에 넘기는" 마지막 단계.
 
 주의 — API 키 노출 방지:
     목록조회 응답의 '법령상세링크' 등에는 실제 호출에 쓰인 OC 인증키가
-    쿼리스트링에 그대로 박혀 있다(실측: '/DRF/lawService.do?OC=joonone
+    쿼리스트링에 그대로 박혀 있음(실측: '/DRF/lawService.do?OC=joonone
     &target=law&MST=...'). 이걸 그대로 산출물에 옮기면 인증키가
-    LLM팀 산출물(파일)에 새어나간다. source_url 생성 시 반드시 OC 를
-    제거하거나 안전한 값으로 치환한다.
+    계약 산출물(파일)에 새어나감. source_url 생성 시 반드시 OC 를
+    제거하거나 안전한 값으로 치환함.
 """
 
 from __future__ import annotations
@@ -65,7 +65,7 @@ def build_contract(
     to_date: date,
     batch_date: date | None = None,
 ) -> WeeklyContract:
-    """DB 에서 기간 내 변경분을 모아 WeeklyContract 를 조립한다."""
+    """DB 에서 기간 내 변경분을 모아 WeeklyContract 를 조립함."""
     batch_date = batch_date or date.today()
 
     diff_rows = article_diff_repo.fetch_period(from_date, to_date)
@@ -121,13 +121,13 @@ def build_contract(
                 )
             )
 
-    # ★★ 실측 발견(2026-07-18): 위 amendment_groups 조립 경로는 article_diff에서
+    # 실측 발견: 위 amendment_groups 조립 경로는 article_diff에서
     # 시작해 (law_id, serial_no) 집합을 얻는데, 신구법 대비가 아예 불가능한
     # 건(제정/폐지제정 등)은 정의상 article_diff 행이 0개라 그 집합에 원천적으로
-    # 들어갈 수 없었다 — 즉 _build_laws의 no_comparison 처리 코드가 도달
+    # 들어갈 수 없었음 — 즉 _build_laws의 no_comparison 처리 코드가 도달
     # 불가능한 죽은 코드였고, NoComparisonItem은 스키마만 있고 실제로 채워진
-    # 적이 한 번도 없었다(제정된 법이 매번 산출물에서 통째로 사라짐). article_diff
-    # 를 거치지 않고 change_log를 직접 조회해 채운다.
+    # 적이 한 번도 없었음(제정된 법이 매번 산출물에서 통째로 사라짐). article_diff
+    # 를 거치지 않고 change_log를 직접 조회해 채움.
     seen = {(r["law_id"], r["new_serial_no"]) for r in change_rows}
     for pair in change_log_repo.fetch_no_comparison_in_period(from_date, to_date):
         law_id, serial_no = pair["law_id"], pair["new_serial_no"]
@@ -163,14 +163,14 @@ def _change_rows_in_period(
 ) -> list[dict]:
     """article_diff 에서 확보한 (law_id, serial_no) 조합별 메타 정보 집계.
 
-    ✅ 실측 발견·수정(2026-07-16): promulgation_no 는 article_diff 스키마에
+    실측 발견·수정: promulgation_no 는 article_diff 스키마에
     아예 없는 컬럼이라(law_id, law_serial_no, article_code, … 뿐), 예전엔
-    diffs[0].get("promulgation_no", "") 가 항상 기본값 ""로 떨어졌다.
+    diffs[0].get("promulgation_no", "") 가 항상 기본값 ""로 떨어졌음.
     그 결과 연쇄개정 그룹핑(link.py group_many)의 입력이 늘 빈 문자열이라
     같은 공포번호로 동시개정된 법들도 전부 별도 그룹으로 쪼개져 나오는
-    버그가 있었다(실측: 사회보장기본법/국민기초생활보장법이 같은
+    버그가 있었음(실측: 사회보장기본법/국민기초생활보장법이 같은
     공포번호 21065인데 그룹 3개로 쪼개짐). change_log(진짜 출처)에서
-    (law_id, new_serial_no) 별 최신 1건을 조회해 채운다.
+    (law_id, new_serial_no) 별 최신 1건을 조회해 채움.
     """
     rows = []
     for law_id, serial_no in by_law_serial:
@@ -211,7 +211,7 @@ def _build_laws(
         if not diffs:
             # article_diff 행이 없다 = process_law_entry 의 NO_COMPARISON
             # 분기를 탄 경우 (신구법 대비 불가). 설계상 이 경우 article_diff
-            # 에는 아무것도 안 쓰므로, 그 부재 자체가 신호가 된다.
+            # 에는 아무것도 안 쓰므로, 그 부재 자체가 신호가 됨.
             no_comparison.append(
                 NoComparisonItem(
                     law_id=law_id, law_name=law_name, new_serial_no=serial_no,
@@ -221,20 +221,20 @@ def _build_laws(
             continue
 
         articles: list[ArticleDiffItem] = []
-        # ★ 설계(2026-07-19): match_status="구조확장(구법미분리)" 행은
+        # 설계: match_status="구조확장(구법미분리)" 행은
         # articles[]에 안 넣고 이 딕셔너리에 모아 StructuralExpansion으로
-        # 재조립한다 — articles[]는 항상 "행 하나 = 위치 하나의 1:1 대응"만
+        # 재조립함 — articles[]는 항상 "행 하나 = 위치 하나의 1:1 대응"만
         # 담는다는 전제를 지키기 위함(schema.py 참고).
         #
-        # ★★ 실측 발견(2026-07-19, 전자정부법 제56조의3①~④): 처음엔
+        # 실측 발견(전자정부법 제56조의3①~④): 처음엔
         # (article_label, clause_no, old_text)로 묶었는데, "조문 하나가
         # 통째로 새 항(①②③④) 여러 개로 재작성"되는 경우 old_text는
-        # 4행 전부 동일한데 clause_no가 행마다 다르다(①,②,③,④) — 그룹
+        # 4행 전부 동일한데 clause_no가 행마다 다름(①,②,③,④) — 그룹
         # 키에 clause_no가 들어있으면 이 4행이 서로 다른 그룹으로
-        # 쪼개져 1개짜리 "그룹" 4개가 나온다(모순: 구조확장은 정의상
+        # 쪼개져 1개짜리 "그룹" 4개가 나옴(모순: 구조확장은 정의상
         # 1:N인데 그룹 크기가 1). 그룹 키에서 clause_no를 빼고
-        # (article_label, old_text)만 쓴다 — clause_no는 대신
-        # ExpandedItem 쪽에 항목별로 둔다.
+        # (article_label, old_text)만 씀 — clause_no는 대신
+        # ExpandedItem 쪽에 항목별로 둠.
         expansions_by_key: dict[tuple[str, str], StructuralExpansion] = {}
         for d in diffs:
             if d["match_status"] in ("0건실패", "중복실패"):
@@ -243,7 +243,7 @@ def _build_laws(
                     parsed_detail = json.loads(raw_detail or "[]")
                 else:
                     # PostgreSQL JSONB는 psycopg2가 이미 list/dict 등의
-                    # 파이썬 객체로 역직렬화해서 반환한다.
+                    # 파이썬 객체로 역직렬화해서 반환함.
                     parsed_detail = raw_detail
 
                 if parsed_detail is None:
@@ -252,7 +252,7 @@ def _build_laws(
                     detail = [str(item) for item in parsed_detail]
                 else:
                     # 예전 데이터나 수동 입력값이 배열이 아니어도 기간 전체의
-                    # 계약/캐시 생성을 중단하지 않고 진단 내용으로 남긴다.
+                    # 계약/캐시 생성을 중단하지 않고 진단 내용으로 남김.
                     detail = [str(parsed_detail)]
                 unresolved.append(
                     UnresolvedItem(
@@ -301,12 +301,12 @@ def _build_laws(
                 new_serial_no=serial_no,
                 enforce_date=str(diffs[0].get("enforce_date") or ""),
                 revision_type=row.get("revision_type", "") or "",
-                # ✅ 실측 발견·수정(2026-07-16): api/fulltext.py 가 "제개정이유"를
+                # 실측 발견·수정: api/fulltext.py 가 "제개정이유"를
                 # 이미 API 응답에서 뽑아오면서도(FullTextResult.revision_reason)
                 # 그 값을 change_log 에 저장하지도, contract 에 담지도 않아
-                # 항상 빈 문자열로 나갔다 — schema.py 의 설계 의도("LLM이
-                # 추론할 필요 없게 함")를 무력화하고 있었다. change_log에
-                # revision_reason 컬럼을 추가해 저장하고 여기서 채운다.
+                # 항상 빈 문자열로 나갔음 — schema.py 의 설계 의도("LLM이
+                # 추론할 필요 없게 함")를 무력화하고 있었음. change_log에
+                # revision_reason 컬럼을 추가해 저장하고 여기서 채움.
                 revision_reason=row.get("revision_reason", "") or "",
                 source_url=url,
                 articles=articles,

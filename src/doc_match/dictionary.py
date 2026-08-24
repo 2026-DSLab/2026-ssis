@@ -1,12 +1,12 @@
 """watchlist 102건 매칭 사전.
 
-DB 연결 없이 database/seed_watchlist.sql 을 직접 파싱한다.
+DB 연결 없이 database/seed_watchlist.sql 을 직접 파싱함.
 (PoC 단계에서 테스트를 DB 상태와 무관하게 만들기 위함.
  웹 통합 시 watchlist 테이블 SELECT 로 교체 가능한 동일 인터페이스.)
 
 사전 키 = norm(official_name) 및 norm(internal_name).
 official/internal 이원 구조 덕에 제명변경(지능정보화 기본법 등)과
-사내 표기가 모두 키로 등록된다.
+사내 표기가 모두 키로 등록됨.
 """
 import re
 import unicodedata

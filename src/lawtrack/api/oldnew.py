@@ -1,10 +1,10 @@
 """신구법 비교조회 (target=oldAndNew / target=admrulOldAndNew).
 
-★ 법령과 행정규칙 둘 다 "비교 대상 없음"을 표현하는 방식이 여러 가지다
-   (이 프로젝트 검증 과정에서 여러 차례 갱신된 사실 — 아래는 2026-07-18
-   기준 최신 확인 내용).
+법령과 행정규칙 둘 다 "비교 대상 없음"을 표현하는 방식이 여러 가지임
+   (아래는 실측으로 확인한 내용임. 법제처가 응답 형식을 바꾸면
+   달라질 수 있으니, 어긋나면 실제 응답부터 확인할 것).
 
-    법령 (oldAndNew) — 정상 JSON 구조로 오고, 필드값으로 표시된다:
+    법령 (oldAndNew) — 정상 JSON 구조로 오고, 필드값으로 표시됨:
         구조문_기본정보 전체가 null/0
         "신구법존재여부": "N"
 
@@ -12,19 +12,19 @@
         (1) 구조 자체가 없고 문자열 메시지만 오는 경우:
             <Law>일치하는 신구법 없습니다. </Law>
             (JSON 이 아니므로 client 단계에서 resp.data 는 None 이 되고
-             resp.text 에 위 문자열이 그대로 담긴다)
+             resp.text 에 위 문자열이 그대로 담김)
         (2) 같은 메시지가 {"Law": "일치하는 신구법 없습니다."} 형태의
             *유효한 JSON*으로 오는 경우 (resp.data 는 None 이 아님)
-        (3) ★★★ 실측 발견(2026-07-18, (계약예규) 공동계약운용요령 등):
+        (3) 실측 발견((계약예규) 공동계약운용요령 등):
             법령과 똑같이 "신구법존재여부": "N" 필드를 가진 정상 JSON
-            구조로 오는 경우도 있다(구조문목록/신조문목록 키 자체가 없음).
+            구조로 오는 경우도 있음(구조문목록/신조문목록 키 자체가 없음).
             이전엔 "행정규칙은 필드로 안 온다"고 단정해 이 케이스를
-            놓쳤었다 — 실측으로 반증됨.
+            놓쳤었음 — 실측으로 반증됨.
 
    => 행정규칙은 위 세 형태를 전부 확인해야 하며, 그중 어느 하나라도
-      맞으면 "비교 불가"로 처리해야 한다. 하나만 확인하고 나머지를
+      맞으면 "비교 불가"로 처리해야 함. 하나만 확인하고 나머지를
       "비교 가능"으로 오판하면, old_texts/new_texts 가 빈 리스트인 채로
-      "available=True" 가 나가는 조용한 오답이 생긴다(겉보기엔 "0건
+      "available=True" 가 나가는 조용한 오답이 생김(겉보기엔 "0건
       변경"과 구분이 안 되지만 의미가 다르다).
 """
 
@@ -43,11 +43,11 @@ _ADMRUL_NO_COMPARISON_MARKER = "일치하는 신구법 없습니다"
 
 
 def _unwrap_root(data: dict, key: str) -> dict:
-    """✅ 실측 확인됨(2026-07-16): 신구법 비교조회 응답은 항상 서비스명
+    """실측 확인됨: 신구법 비교조회 응답은 항상 서비스명
     키(법령="OldAndNewService", 행정규칙="AdmRulOldAndNewService") 한 겹
-    아래에 구조문_기본정보/신조문_기본정보/구조문목록/신조문목록이 들어있다.
+    아래에 구조문_기본정보/신조문_기본정보/구조문목록/신조문목록이 들어있음.
     이 함수 도입 전에는 이 사실을 몰라 dig()가 매번 실패하고 find_key()의
-    전체 트리 재귀탐색으로만 값을 찾아왔다(동작은 했지만 비효율적)."""
+    전체 트리 재귀탐색으로만 값을 찾아왔음(동작은 했지만 비효율적)."""
     inner = data.get(key)
     return inner if isinstance(inner, dict) else data
 
@@ -74,9 +74,9 @@ class OldNewResult:
     """신구법 비교조회 결과.
 
     available=False 인 경우 old/new 관련 필드는 참고용이며, 호출부는
-    <P> 추출을 시도하지 말고 "원문 링크만 제공"으로 처리해야 한다
+    <P> 추출을 시도하지 말고 "원문 링크만 제공"으로 처리해야 함
     (그 판단은 parse/oldnew.py 가 아니라 이 결과를 소비하는 파이프라인의
-    책임이며, 이 모듈은 사실만 전달한다).
+    책임이며, 이 모듈은 사실만 전달함).
     """
 
     available: bool
@@ -103,7 +103,7 @@ def fetch_law_oldnew(client: LawApiClient, mst: str) -> OldNewResult:
     resp = client.service(target="oldAndNew", MST=mst)
 
     if resp.data is None:
-        # 예상 밖 — 법령은 JSON 구조로 오는 것이 실측 기본값이었다.
+        # 예상 밖 — 법령은 JSON 구조로 오는 것이 실측 기본값이었음.
         log.warning("법령 oldAndNew 가 비-JSON 응답으로 옴 (MST=%s): %s", mst, resp.text[:200])
         return OldNewResult(False, "unexpected_non_json", _EMPTY_VERSION, _EMPTY_VERSION)
 
@@ -130,43 +130,43 @@ def fetch_law_oldnew(client: LawApiClient, mst: str) -> OldNewResult:
 def fetch_admrul_oldnew(client: LawApiClient, rule_serial_no: str) -> OldNewResult:
     """행정규칙 신구법 비교조회.
 
-    실측: 없을 때 보통은 JSON 이 아니라 아래 문자열이 그대로 온다.
+    실측: 없을 때 보통은 JSON 이 아니라 아래 문자열이 그대로 옴.
         <Law>일치하는 신구법 없습니다. </Law>
     이 경우 client 단계에서 JSON 파싱이 애초에 시도되지 않으므로
-    resp.data 는 None 이다. 따라서 여기서는 필드가 아니라
-    "resp.data 가 None 인지 + 마커 문구가 있는지"로 판정한다.
+    resp.data 는 None 임. 따라서 여기서는 필드가 아니라
+    "resp.data 가 None 인지 + 마커 문구가 있는지"로 판정함.
 
-    ★★ 실측 발견(2026-07-16, 하도급거래공정화 지침·중소기업자간 경쟁제품
+    실측 발견(하도급거래공정화 지침·중소기업자간 경쟁제품
     직접생산 확인기준): 같은 "없음" 메시지가 비-JSON 텍스트가 아니라
     {"Law": "일치하는 신구법 없습니다."} 형태의 *유효한 JSON*으로 오는
-    경우도 있다. 이때는 resp.data 가 None 이 아니므로 위 분기를 그냥
+    경우도 있음. 이때는 resp.data 가 None 이 아니므로 위 분기를 그냥
     통과해버려 "available=True, old_texts=[], new_texts=[]" 라는 잘못된
-    결과(신구법이 없는데 비교 가능하다고 오판)가 나왔었다 — 구조문목록/
+    결과(신구법이 없는데 비교 가능하다고 오판)가 나왔었음 — 구조문목록/
     신조문목록이 원래 없는 응답이라 그 자체로는 검색 실패도 안 나고
-    diff_count=0으로 "조용히" 넘어가 원인 파악이 어려웠다. resp.data가
-    JSON이어도 이 마커 문구가 있으면 마찬가지로 없음 처리한다.
+    diff_count=0으로 "조용히" 넘어가 원인 파악이 어려웠음. resp.data가
+    JSON이어도 이 마커 문구가 있으면 마찬가지로 없음 처리함.
 
-    ★★★ 실측 발견(2026-07-18, (계약예규) 공동계약운용요령·중소 소프트웨어
+    실측 발견((계약예규) 공동계약운용요령·중소 소프트웨어
     사업자의 사업 참여 지원에 관한 지침): 이 모듈 맨 위 docstring이 "행정규칙은
     구조 자체가 없고 문자열 메시지만 온다"고 단정했던 것 자체가 틀렸다 —
     법령과 완전히 동일한 `신구법존재여부: "N"` 필드를 정상 JSON 구조로
-    돌려주는 admrul 응답이 실제로 있다(raw: {"신구법존재여부":"N",
+    돌려주는 admrul 응답이 실제로 있음(raw: {"신구법존재여부":"N",
     "구조문_기본정보":{...},"신조문_기본정보":{...}} — 구조문목록/신조문목록
     키 자체가 아예 없음). 이 함수는 지금까지 텍스트 마커 2종(비-JSON/JSON내
-    "Law" 메시지)만 확인하고 이 필드는 전혀 안 봤다 — law쪽
-    fetch_law_oldnew는 이미 이 필드를 확인하는데 admrul쪽만 빠져 있었다.
+    "Law" 메시지)만 확인하고 이 필드는 전혀 안 봤음 — law쪽
+    fetch_law_oldnew는 이미 이 필드를 확인하는데 admrul쪽만 빠져 있었음.
     그 결과 "available=True, old_texts=[], new_texts=[]"로 잘못 통과되어,
     실제로는 "신구법 대비 불가"인 두 건이 "비교했는데 진짜 0건 변경"으로
-    둔갑했다 — 겉보기엔 무해해 보이지만(둘 다 결과적으로 "0건") 의미가
-    다르다: 전자는 "이 개정은 검토가 필요하다"는 신호이고 후자는 "정말
-    아무것도 안 바뀌었다"는 신호다. law와 동일하게 필드부터 확인한다.
+    둔갑했음 — 겉보기엔 무해해 보이지만(둘 다 결과적으로 "0건") 의미가
+    다름: 전자는 "이 개정은 검토가 필요하다"는 신호이고 후자는 "정말
+    아무것도 안 바뀌었다"는 신호임. law와 동일하게 필드부터 확인함.
     """
     resp = client.service(target="admrulOldAndNew", ID=rule_serial_no)
 
     if resp.data is None:
         if _ADMRUL_NO_COMPARISON_MARKER in resp.text:
             return OldNewResult(False, "no_comparison_admrul_text", _EMPTY_VERSION, _EMPTY_VERSION)
-        # 마커도 없고 JSON 도 아니면 진짜 이상 응답 — 조용히 넘기지 않는다.
+        # 마커도 없고 JSON 도 아니면 진짜 이상 응답 — 조용히 넘기지 않음.
         log.warning(
             "행정규칙 oldAndNew 응답이 JSON 도 아니고 '없음' 마커도 아님 "
             "(ID=%s): %s", rule_serial_no, resp.text[:200],

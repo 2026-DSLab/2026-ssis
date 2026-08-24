@@ -1,21 +1,21 @@
 """ContractSummary → HWPX 보고서.
 
-정해진 양식이 없어 표준적인 법령 개정 보고서 구조로 만든다:
+정해진 양식이 없어 표준적인 법령 개정 보고서 구조로 만듦:
 
     표제 → Ⅰ.개요(집계 표) → Ⅱ.개정 법령 목록(한눈에 보기)
          → Ⅲ.법령별 상세(취지 + 조문별 변경표) → Ⅳ.미확정 → Ⅴ.비교 불가
 
-★ 조문별 변경은 body 문자열을 파싱하지 않고 article_summaries(구조화
-  데이터)에서 직접 뽑아 표로 만든다. body 파싱은 형식이 바뀌면 깨지지만,
-  구조화 데이터는 안정적이다. overview(취지 문단)는 LawSummary.overview
-  에 따로 있으므로 그것을 쓴다.
+조문별 변경은 body 문자열을 파싱하지 않고 article_summaries(구조화
+  데이터)에서 직접 뽑아 표로 만듦. body 파싱은 형식이 바뀌면 깨지지만,
+  구조화 데이터는 안정적임. overview(취지 문단)는 LawSummary.overview
+  에 따로 있으므로 그것을 씀.
 
-★ 조문 열은 같은 조문끼리 세로 병합한다. '제60조의2' 가 아홉 줄 반복되는
-  대신 한 칸으로 묶이므로, 어느 조문 이야기인지가 눈에 바로 들어온다.
-  이를 위해 location_label 을 조문(제60조의2)과 위치(①1.가.)로 쪼갠다.
+조문 열은 같은 조문끼리 세로 병합함. '제60조의2' 가 아홉 줄 반복되는
+  대신 한 칸으로 묶이므로, 어느 조문 이야기인지가 눈에 바로 들어옴.
+  이를 위해 location_label 을 조문(제60조의2)과 위치(①1.가.)로 쪼갬.
 
-지면·표 배치(폭·열 너비·칸 여백·머리행)는 layout.py 가 맡는다. 표가
-지면 왼쪽으로 쏠리던 문제의 원인과 해법은 그쪽 모듈 설명에 적어 두었다.
+지면·표 배치(폭·열 너비·칸 여백·머리행)는 layout.py 가 맡음. 표가
+지면 왼쪽으로 쏠리던 문제의 원인과 해법은 그쪽 모듈 설명에 적어 두었음.
 """
 
 from __future__ import annotations
@@ -39,7 +39,7 @@ _TAG = {
     "이동후개정": "이동개정",
     "미상": "변경",
 }
-"""표의 '구분' 칸에 쓸 짧은 이름. 칸 폭이 좁아 4자를 넘기지 않는다."""
+"""표의 '구분' 칸에 쓸 짧은 이름. 칸 폭이 좁아 4자를 넘기지 않음."""
 
 
 def _text(s: ArticleSummary) -> str:
@@ -57,8 +57,8 @@ def _kind_of(s: ArticleSummary) -> str:
 def _content_of(s: ArticleSummary) -> str:
     """변경 내용 칸 — 요약문 + 따로 알아야 할 사항.
 
-    요약에 있는 건 하나도 빼지 않는다(검증이 그 전제로 대조한다). 이동
-    전 위치나 신뢰도 경고는 아랫줄에 덧붙인다.
+    요약에 있는 건 하나도 빼지 않음(검증이 그 전제로 대조함). 이동
+    전 위치나 신뢰도 경고는 아랫줄에 덧붙임.
     """
     parts = [_text(s)]
     if s.unit.moved_from:
@@ -138,9 +138,9 @@ class _Report:
         self.table.write(cols, rows)
 
     def law_detail(self, index: int, law: LawSummary) -> None:
-        # 시행일·개정 구분·조문 수는 Ⅱ장 목록 표에 이미 있다. 여기서 되풀이하지
-        # 않는다 — 상세는 '무엇이 어떻게 바뀌었나'만 다룬다.
-        # 첫 법령은 바로 위 장 제목과 붙여 둔다(제목-내용 사이가 벌어지지 않게).
+        # 시행일·개정 구분·조문 수는 Ⅱ장 목록 표에 이미 있음. 여기서 되풀이하지
+        # 않음 — 상세는 '무엇이 어떻게 바뀌었나'만 다룸.
+        # 첫 법령은 바로 위 장 제목과 붙여 둠(제목-내용 사이가 벌어지지 않게).
         para = self.st.p_law_first if index == 1 else self.st.p_law
         self.p(f"{index}. [{law.law_type}] {law.law_name}", self.st.law, para)
 
@@ -149,12 +149,12 @@ class _Report:
         if law.overview:
             self.p(law.overview, self.st.body, self.st.p_body)
 
-        # ★★★ 설계(2026-07-31, 사용자 최종 결정): caveats/verifier_issues를
-        # "※"·"⚠" 문구로 문서에 노출하던 걸 그만둔다 — webapp에서 "확인이
+        # 설계: caveats/verifier_issues를
+        # "※"·"⚠" 문구로 문서에 노출하던 걸 그만둠 — webapp에서 "확인이
         # 필요한 항목" 박스를 완전히 없앤 것과 같은 결정을 HWPX에도
-        # 적용한다. 데이터 자체(law.caveats/verifier_issues, DB)는 계속
-        # 남아 있으니 필요하면 내부적으로 다시 조회할 수 있다 — 다만
-        # 최종 산출물에 경고 문구로 새어나가는 마지막 경로를 끊는다.
+        # 적용함. 데이터 자체(law.caveats/verifier_issues, DB)는 계속
+        # 남아 있으니 필요하면 내부적으로 다시 조회할 수 있음 — 다만
+        # 최종 산출물에 경고 문구로 새어나가는 마지막 경로를 끊음.
 
         self.article_table(law.article_summaries)
 
@@ -203,7 +203,7 @@ class _Report:
 
 
 def build_report(contract: ContractSummary, out_path: str | Path) -> Path:
-    """ContractSummary 를 HWPX 로 저장하고 경로를 돌려준다."""
+    """ContractSummary 를 HWPX 로 저장하고 경로를 돌려줌."""
     rpt = _Report()
 
     rpt.cover(contract)

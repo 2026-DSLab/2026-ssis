@@ -1,13 +1,13 @@
 """법령 개정 요약 멀티 에이전트 파이프라인.
 
-2026-ssis 의 out/*.json (LLM팀 전달용 계약 산출물)을 입력으로 받아
-법령 단위 요약을 만든다.
+2026-ssis 의 out/*.json (감지·비교 단계가 낸 계약 산출물)을 입력으로 받아
+법령 단위 요약을 만듦.
 
     single_*.json  — 법령/행정규칙 1건의 개정 내용
     weekly_*.json  — 그 주에 바뀐 것 전부
 
-두 파일은 같은 WeeklyContract 스키마를 쓰므로 파이프라인은 동일하다.
-(single 은 amendment_groups 가 1개짜리인 weekly 일 뿐이다.)
+두 파일은 같은 WeeklyContract 스키마를 쓰므로 파이프라인은 동일함.
+(single 은 amendment_groups 가 1개짜리인 weekly 일 뿐임.)
 
 구성:
     config.py    설정 — API 키, 모델, 동시성
@@ -30,8 +30,8 @@ from pathlib import Path
 
 # lawtrack.contract.schema (팀 간 '계약' 정의)를 재사용하기 위한 경로 등록.
 # summarizer 는 2026-ssis 최상위에 있고 lawtrack 은 src/ 아래에 있어서,
-# 이 한 줄이 없으면 `python -m summarizer` 가 lawtrack 을 못 찾는다.
-# 계약 스키마를 여기에 복제하지 않으려는 것 — 복제하면 반드시 드리프트한다.
+# 이 한 줄이 없으면 `python -m summarizer` 가 lawtrack 을 못 찾음.
+# 계약 스키마를 여기에 복제하지 않으려는 것 — 복제하면 반드시 드리프트함.
 _SRC = Path(__file__).resolve().parent.parent / "src"
 if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))

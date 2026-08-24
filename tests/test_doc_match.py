@@ -17,7 +17,11 @@ from doc_match.normalize import norm
 from doc_match.report import build_summary
 
 SEED = Path(__file__).resolve().parents[1] / "database" / "seed_watchlist.sql"
-GOLD_PDF = Path(__file__).parent / "fixtures" / "표준가이드요약본.pdf"
+# ★ 파일 이름을 ASCII 로 둔다(원본: 표준가이드요약본.pdf). 배포용 zip 을
+#   UTF-8 플래그를 무시하는 압축 해제 도구로 풀면 한글 이름이 깨져, 이 골드셋
+#   테스트가 "PDF 미배치"로 조용히 건너뛰어진다 — 받는 쪽에서는 통과한 것처럼
+#   보이므로 눈치채기 어렵다.
+GOLD_PDF = Path(__file__).parent / "fixtures" / "goldset_guide_summary.pdf"
 
 
 @pytest.fixture(scope="module")

@@ -30,3 +30,6 @@ Thumbs.db
 
 # 배치 실행 산출물 (out/logs 는 *.log 규칙에 이미 걸리지만 디렉터리째 무시)
 out/logs/
+
+# 배포 꾸러미 (scripts/make_release.py 가 만든다 — 소스가 아니라 산출물)
+dist/

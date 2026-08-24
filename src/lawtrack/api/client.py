@@ -1,12 +1,12 @@
 """국가법령정보 Open API HTTP 클라이언트.
 
-모든 API 호출은 반드시 이 모듈을 거친다. 호출부마다 각자 검증하면
-아래와 같은 사고가 난다.
+모든 API 호출은 반드시 이 모듈을 거침. 호출부마다 각자 검증하면
+아래와 같은 사고가 남.
 
 --------------------------------------------------------------------------
 [실측된 치명적 버그 — 조용한 데이터 오염]
 
-    인증 실패 시 API 는 다음을 반환한다:
+    인증 실패 시 API 는 다음을 반환함:
 
         HTTP 200 OK
         {"result": "사용자 정보 검증에 실패하였습니다.",
@@ -17,13 +17,13 @@
         response.raise_for_status()  → HTTP 200 이므로 통과
         response.json()              → 유효한 JSON 이므로 통과
         isinstance(data, dict)       → True 이므로 통과
-    세 검사를 전부 통과한다.
+    세 검사를 전부 통과함.
 
     결과: 에러 메시지가 '법령 전문'으로 DB 에 저장되고, 콘솔에는
-          "[법령 성공]" 이 찍힌다. JSON_LENGTH() 가 0 이 아니게 되므로
+          "[법령 성공]" 이 찍힘. JSON_LENGTH() 가 0 이 아니게 되므로
           재적재 대상에서도 빠져 영구 복구 불가.
 
-    => 내용 기반 검증(_check_api_error)이 반드시 필요하다.
+    => 내용 기반 검증(_check_api_error)이 반드시 필요함.
 --------------------------------------------------------------------------
 
 [예외 설계]
@@ -62,7 +62,7 @@ class LawApiError(RuntimeError):
 
 
 class LawApiAuthError(LawApiError):
-    """인증키/IP 등록 문제. 재시도해도 소용없다."""
+    """인증키/IP 등록 문제. 재시도해도 소용없음."""
 
 
 class LawApiHttpError(LawApiError):
@@ -81,13 +81,13 @@ class LawApiFormatError(LawApiError):
 class ApiResponse:
     """API 응답 래퍼.
 
-    JSON 파싱 실패가 곧 에러는 아니다. 예를 들어 행정규칙 신구법이 없으면
-    구조화된 JSON 이 아니라 아래 텍스트가 온다(실측):
+    JSON 파싱 실패가 곧 에러는 아님. 예를 들어 행정규칙 신구법이 없으면
+    구조화된 JSON 이 아니라 아래 텍스트가 옴(실측):
 
         <Law>일치하는 신구법 없습니다. </Law>
 
     이는 정상적인 업무 응답이므로 client 에서 예외를 던지지 않고,
-    호출부(api/oldnew.py)가 판정하도록 text 를 그대로 넘긴다.
+    호출부(api/oldnew.py)가 판정하도록 text 를 그대로 넘김.
     """
 
     url: str
@@ -114,14 +114,14 @@ class ApiResponse:
 # 클라이언트
 # ---------------------------------------------------------------------------
 
-#: 인증 실패 응답에 등장하는 문구(실측). 부분일치로 탐지한다.
+#: 인증 실패 응답에 등장하는 문구(실측). 부분일치로 탐지함.
 _AUTH_ERROR_MARKERS = (
     "사용자 정보 검증에 실패",
     "IP주소 및 도메인주소를 등록",
     "인증키가 유효하지",
 )
 
-#: 전문 응답이라면 최소 이 정도 길이는 나온다. 지나치게 짧으면 이상 신호.
+#: 전문 응답이라면 최소 이 정도 길이는 나옴. 지나치게 짧으면 이상 신호.
 _MIN_FULLTEXT_CHARS = 300
 
 
@@ -145,7 +145,7 @@ class LawApiClient:
     def search(self, *, target: str, **params: Any) -> ApiResponse:
         """목록조회(lawSearch.do).
 
-        display 는 호출부가 무엇을 넘기든 최대치로 강제한다.
+        display 는 호출부가 무엇을 넘기든 최대치로 강제함.
         (에너지법 사례처럼 정답이 순위 밖으로 밀리는 것을 막기 위함)
         """
         params = {**params, "target": target, "display": self._s.display}
@@ -154,10 +154,10 @@ class LawApiClient:
     def service(self, *, target: str, **params: Any) -> ApiResponse:
         """본문조회(lawService.do).
 
-        파라미터가 대상별로 다르다(실측):
+        파라미터가 대상별로 다름(실측):
             법령      → MST=법령일련번호
             행정규칙  → ID=행정규칙일련번호
-        분기는 호출부(api/fulltext.py)가 담당한다.
+        분기는 호출부(api/fulltext.py)가 담당함.
         """
         params = {**params, "target": target}
         return self._request(self._s.service_url, params)
@@ -186,7 +186,7 @@ class LawApiClient:
                 return resp
 
             except LawApiAuthError:
-                # 인증/IP 문제는 재시도해도 동일하다. 즉시 전파.
+                # 인증/IP 문제는 재시도해도 동일함. 즉시 전파.
                 raise
 
             except LawApiFormatError:
@@ -229,7 +229,7 @@ class LawApiClient:
         # 1) 텍스트 레벨 인증 오류 탐지 (JSON/XML 양쪽 모두 커버)
         self._check_auth_error(text, r.url)
 
-        # 2) JSON 파싱 시도. 실패해도 예외를 던지지 않는다.
+        # 2) JSON 파싱 시도. 실패해도 예외를 던지지 않음.
         data: dict | None = None
         stripped = text.strip()
         if stripped.startswith("{"):
@@ -273,7 +273,7 @@ class LawApiClient:
         self._last_call_at = time.monotonic()
 
     def _safe_url(self, url: str, params: dict) -> str:
-        """로그용. OC 키를 마스킹한다."""
+        """로그용. OC 키를 마스킹함."""
         masked = {**params, "OC": "***"}
         query = "&".join(f"{k}={v}" for k, v in masked.items())
         return f"{url}?{query}"
@@ -288,11 +288,11 @@ def assert_fulltext_payload(data: dict, *, context: str = "") -> None:
 
     루트 키 이름을 하드코딩하지 않는 이유:
         본 프로젝트의 API 검증은 전부 type=XML 로 수행되었고,
-        type=JSON 응답의 루트 키를 실측으로 확정하지 못했다.
-        예측을 코드에 박으면 틀렸을 때 전 건이 막힌다.
+        type=JSON 응답의 루트 키를 실측으로 확정하지 못했음.
+        예측을 코드에 박으면 틀렸을 때 전 건이 막힘.
 
     대신 '에러가 아님 + 내용이 충분히 큼' 으로 방어하고,
-    실제 루트 키는 아래 로그로 확인한 뒤 확정한다.
+    실제 루트 키는 아래 로그로 확인한 뒤 확정함.
     """
     if looks_like_api_error(data):
         raise LawApiAuthError(f"{context}: API 에러 응답 {data}")

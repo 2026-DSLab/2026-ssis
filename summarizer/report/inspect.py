@@ -1,27 +1,27 @@
 """문서 구조·서식 검사 — 결정론적.
 
-생성된 HWPX 를 다시 열어 눈으로 보기 전에 기계가 먼저 훑는다.
+생성된 HWPX 를 다시 열어 눈으로 보기 전에 기계가 먼저 훑음.
 
 --------------------------------------------------------------------------
 [이 검사가 실제로 잡았어야 했던 버그 두 개]
 
     1) 표가 본문 폭의 30% 로 생성되어 왼쪽에 쏠림
-       add_table() 기본 너비 14400 HWPUNIT 을 그대로 쓴 탓이었다.
+       add_table() 기본 너비 14400 HWPUNIT 을 그대로 쓴 탓이었음.
        → check_table_width
 
     2) 셀 안 글자 사이가 벌어짐
        기본 paraPr 이 horizontal="JUSTIFY" 라 좁은 셀에서 한글이
-       공백을 늘려 폭을 맞췄다. "장해구조금   및   중상해구조금의"
+       공백을 늘려 폭을 맞췄음. "장해구조금   및   중상해구조금의"
        → check_cell_alignment
 
-    둘 다 사람이 한글로 열어보고서야 발견했다. 서식 문제는 LLM 이
-    볼 수 없는 영역(XML 속성)이므로 반드시 코드로 검사한다.
+    둘 다 사람이 한글로 열어보고서야 발견했음. 서식 문제는 LLM 이
+    볼 수 없는 영역(XML 속성)이므로 반드시 코드로 검사함.
 --------------------------------------------------------------------------
 
-★ 출처: seongbeen2 브랜치(lawtrack.report.inspect)에서 이식(2026-07-30).
+출처: seongbeen2 브랜치(lawtrack.report.inspect)에서 이식.
   _BODY_WIDTH(170mm)는 summarizer/report/layout.py의 실제 여백 설정
-  (좌우 각 20mm, A4 210mm 기준)과 일치함을 확인했다 — 이식 시 값을
-  바꾸지 않았다.
+  (좌우 각 20mm, A4 210mm 기준)과 일치함을 확인했음 — 이식 시 값을
+  바꾸지 않았음.
 """
 
 from __future__ import annotations
@@ -41,35 +41,35 @@ __all__ = ["Finding", "InspectionReport", "inspect_document"]
 _HP = "{http://www.hancom.co.kr/hwpml/2011/paragraph}"
 _HH = "{http://www.hancom.co.kr/hwpml/2011/head}"
 
-# A4 본문 폭. report/layout.py 와 같은 값이어야 한다.
+# A4 본문 폭. report/layout.py 와 같은 값이어야 함.
 _BODY_WIDTH = int(170 / 25.4 * 7200)
 _MIN_TABLE_WIDTH = int(_BODY_WIDTH * 0.8)
-"""본문 폭의 80% 미만이면 의도치 않게 좁은 표로 본다."""
+"""본문 폭의 80% 미만이면 의도치 않게 좁은 표로 봄."""
 
 _LONG_CELL_CHARS = 400
-"""이보다 긴 셀은 페이지 넘김에서 깨질 위험이 있어 경고한다."""
+"""이보다 긴 셀은 페이지 넘김에서 깨질 위험이 있어 경고함."""
 
 _HUGE_CELL_CHARS = 2500
-"""한 셀이 한 쪽을 넘기면 표가 셀 단위로 나뉘어도 레이아웃이 깨진다."""
+"""한 셀이 한 쪽을 넘기면 표가 셀 단위로 나뉘어도 레이아웃이 깨짐."""
 
 _MAX_BLANK_RATIO = 0.45
 """최상위 문단 중 빈 문단 비율 상한.
 
 [임계값을 0.25 로 잡았다가 되돌린 이유]
-    절 제목 앞 빈 줄 하나는 정상적인 단락 간격이다. 그 구조에서는
+    절 제목 앞 빈 줄 하나는 정상적인 단락 간격임. 그 구조에서는
     빈 문단 비율이 자연스럽게 35% 안팎이 되며, 0.25 로 잡으면
-    정상 문서가 전부 오류로 잡힌다.
+    정상 문서가 전부 오류로 잡힘.
 
     사람이 실제로 '공백이 크다'고 느낀 원인은 비율이 아니라
-    (1) 연속 빈 줄과 (2) 짧은 절에 걸린 쪽 나눔이었다.
-    그 둘은 아래 CONSECUTIVE_BLANK / SPARSE_PAGE 가 따로 잡는다.
-    이 비율 검사는 그 둘을 빠져나간 이상 상태만 걸러내는 최후 그물이다."""
+    (1) 연속 빈 줄과 (2) 짧은 절에 걸린 쪽 나눔이었음.
+    그 둘은 아래 CONSECUTIVE_BLANK / SPARSE_PAGE 가 따로 잡음.
+    이 비율 검사는 그 둘을 빠져나간 이상 상태만 걸러내는 최후 그물임."""
 
 _MAX_CONSECUTIVE_BLANK = 1
-"""연속 빈 문단 허용 개수. 2개 이상이면 눈에 띄는 공백이 된다."""
+"""연속 빈 문단 허용 개수. 2개 이상이면 눈에 띄는 공백이 됨."""
 
 _MIN_CONTENT_AFTER_BREAK = 6
-"""쪽 나눔 뒤 이만큼도 내용이 없으면 그 장은 사실상 빈 페이지다."""
+"""쪽 나눔 뒤 이만큼도 내용이 없으면 그 장은 사실상 빈 페이지임."""
 
 
 @dataclass
@@ -128,11 +128,11 @@ def inspect_document(
     expect_sections: list[str] | None = None,
     forbidden_texts: list[str] | None = None,
 ) -> InspectionReport:
-    """생성된 HWPX 를 검사한다.
+    """생성된 HWPX 를 검사함.
 
     expect_sections   : 본문에 반드시 있어야 할 제목 문자열
     forbidden_texts   : 본문에 절대 나오면 안 되는 문자열
-                        (검증 미통과 요약이 본문에 새어든 경우를 잡는다)
+                        (검증 미통과 요약이 본문에 새어든 경우를 잡음)
     """
     rep = InspectionReport()
     doc = HwpxDocument.open(str(path))
@@ -214,8 +214,8 @@ def inspect_document(
     for text in forbidden_texts or []:
         snippet = text.strip()[:40]
         if snippet and snippet in body:
-            # 부록 Ⅵ 에는 있어야 정상이므로 2회 이상일 때만 문제 삼지 않는다.
-            # 본문·부록 어디에 있는지까지는 이 계층에서 구분하지 않고 경고만 낸다.
+            # 부록 Ⅵ 에는 있어야 정상이므로 2회 이상일 때만 문제 삼지 않음.
+            # 본문·부록 어디에 있는지까지는 이 계층에서 구분하지 않고 경고만 냄.
             if body.count(snippet) > 1:
                 rep.findings.append(Finding(
                     "warn", "UNVERIFIED_ECHO",
@@ -223,8 +223,8 @@ def inspect_document(
 
     # ---------- 여백·레이아웃 ----------
     #
-    # 사람이 한글로 열어보고서야 "공백이 너무 크다"를 발견하는 일을 막는다.
-    # 서식 수치는 코드로만 볼 수 있으므로 여기서 반드시 검사한다.
+    # 사람이 한글로 열어보고서야 "공백이 너무 크다"를 발견하는 일을 막음.
+    # 서식 수치는 코드로만 볼 수 있으므로 여기서 반드시 검사함.
     top_paras = section.findall(f"{_HP}p")
     kinds: list[str] = []
     for para in top_paras:
@@ -256,7 +256,7 @@ def inspect_document(
             f"para() 의 빈 줄 억제가 동작하지 않았다",
         ))
 
-    # 쪽 나눔 뒤 내용이 거의 없으면 그 장은 빈 페이지가 된다
+    # 쪽 나눔 뒤 내용이 거의 없으면 그 장은 빈 페이지가 됨
     breaks = [i for i, para in enumerate(top_paras)
               if para.get("pageBreak") == "1"]
     for i in breaks:

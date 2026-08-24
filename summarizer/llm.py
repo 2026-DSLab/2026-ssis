@@ -1,8 +1,8 @@
 """LLM 호출 경계.
 
-★ 여기가 실제 Anthropic API 를 때리는 유일한 파일이다.
-   에이전트들은 LLMClient 프로토콜만 보고, 어떤 구현체가 꽂혔는지 모른다.
-   덕분에 API 키 없이도 DryRunClient 로 파이프라인 전체를 돌려볼 수 있다.
+여기가 실제 Anthropic API 를 때리는 유일한 파일임.
+   에이전트들은 LLMClient 프로토콜만 보고, 어떤 구현체가 꽂혔는지 모름.
+   덕분에 API 키 없이도 DryRunClient 로 파이프라인 전체를 돌려볼 수 있음.
 
 필요:
     pip install anthropic
@@ -31,7 +31,7 @@ class LLMClient(Protocol):
     def complete_text(
         self, *, system: str, user: str, max_tokens: int, thinking: bool = False
     ) -> str:
-        """평문 응답을 받는다. (1단계용)"""
+        """평문 응답을 받음. (1단계용)"""
         ...
 
     def complete_json(
@@ -43,7 +43,7 @@ class LLMClient(Protocol):
         max_tokens: int,
         thinking: bool = False,
     ) -> dict:
-        """JSON 스키마를 강제해 dict 로 받는다. (2단계용)"""
+        """JSON 스키마를 강제해 dict 로 받음. (2단계용)"""
         ...
 
 
@@ -56,12 +56,12 @@ class AnthropicClient:
     """Anthropic Messages API 클라이언트.
 
     설계 메모:
-      - 응답에서 text 블록을 '찾아서' 꺼낸다. thinking 을 켜면 thinking
-        블록이 먼저 오기 때문에 content[0] 을 그냥 집으면 깨진다.
+      - 응답에서 text 블록을 '찾아서' 꺼냄. thinking 을 켜면 thinking
+        블록이 먼저 오기 때문에 content[0] 을 그냥 집으면 깨짐.
       - 2단계는 structured outputs(output_config.format)로 JSON 스키마를
-        강제한다. 프롬프트로 "JSON 으로 답해줘"라고 부탁하는 것보다
-        안전하다 — 파싱 실패가 구조적으로 사라진다.
-      - 재시도는 SDK 가 429/5xx 에 대해 알아서 한다. 여기서 다시 감싸지 않는다.
+        강제함. 프롬프트로 "JSON 으로 답해줘"라고 부탁하는 것보다
+        안전함 — 파싱 실패가 구조적으로 사라짐.
+      - 재시도는 SDK 가 429/5xx 에 대해 알아서 함. 여기서 다시 감싸지 않음.
     """
 
     def __init__(self, settings: LLMSettings):
@@ -78,7 +78,7 @@ class AnthropicClient:
             api_key=settings.api_key,
             timeout=settings.timeout,
             max_retries=settings.max_retries,
-            # ★ OpenAIClient와 같은 이유(2026-07-30 실측) — lawtrack.api.client.
+            # OpenAIClient와 같은 이유(실측) — lawtrack.api.client.
             # LawApiClient가 이미 내린 것과 같은 결정.
             http_client=httpx.Client(verify=False),
         )
@@ -89,8 +89,8 @@ class AnthropicClient:
             "max_tokens": max_tokens,
         }
         if thinking:
-            # adaptive — 모델이 필요한 만큼만 생각한다.
-            # budget_tokens 방식은 Opus 4.7+ 에서 제거됐다(400 에러).
+            # adaptive — 모델이 필요한 만큼만 생각함.
+            # budget_tokens 방식은 Opus 4.7+ 에서 제거됐음(400 에러).
             kwargs["thinking"] = {"type": "adaptive"}
         if self._settings.effort:
             kwargs["output_config"] = {"effort": self._settings.effort}
@@ -98,9 +98,9 @@ class AnthropicClient:
 
     @staticmethod
     def _first_text(response: Any) -> str:
-        """응답에서 첫 text 블록을 꺼낸다.
+        """응답에서 첫 text 블록을 꺼냄.
 
-        thinking 블록이 앞에 올 수 있으므로 반드시 type 으로 걸러야 한다.
+        thinking 블록이 앞에 올 수 있으므로 반드시 type 으로 걸러야 함.
         """
         for block in response.content:
             if block.type == "text":
@@ -142,7 +142,7 @@ class AnthropicClient:
         thinking: bool = False,
     ) -> dict:
         kwargs = self._base_kwargs(max_tokens=max_tokens, thinking=thinking)
-        # effort 를 이미 넣었을 수 있으므로 output_config 를 덮어쓰지 않고 병합한다.
+        # effort 를 이미 넣었을 수 있으므로 output_config 를 덮어쓰지 않고 병합함.
         output_config = kwargs.pop("output_config", {})
         output_config["format"] = {"type": "json_schema", "schema": schema}
 
@@ -163,14 +163,14 @@ class AnthropicClient:
 class OpenAIClient:
     """OpenAI Chat Completions 클라이언트 (gpt-5.4-mini 등).
 
-    AnthropicClient 와 똑같은 LLMClient 프로토콜을 만족한다 — 파이프라인·
-    에이전트·프롬프트는 어느 쪽이 꽂혔는지 모른다. 원내 QWEN 으로 옮길 때도
-    이 자리에 QwenClient 를 하나 더 만들면 되고 나머지는 그대로다.
+    AnthropicClient 와 똑같은 LLMClient 프로토콜을 만족함 — 파이프라인·
+    에이전트·프롬프트는 어느 쪽이 꽂혔는지 모름. 원내 QWEN 으로 옮길 때도
+    이 자리에 QwenClient 를 하나 더 만들면 되고 나머지는 그대로임.
 
     ⚠️ 확인 필요:
-        max_tokens 파라미터 이름이 모델 세대에 따라 다르다(구형은
+        max_tokens 파라미터 이름이 모델 세대에 따라 다름(구형은
         max_tokens, 신형은 max_completion_tokens). 어느 쪽인지 확실하지
-        않아 실패 시 자동으로 바꿔 재시도하게 해뒀다. 실제로 한 번 돌려
+        않아 실패 시 자동으로 바꿔 재시도하게 해뒀음. 실제로 한 번 돌려
         보고 로그를 확인할 것.
     """
 
@@ -182,9 +182,9 @@ class OpenAIClient:
                 "openai 패키지가 없습니다. `pip install openai` 를 실행하세요."
             ) from exc
 
-        # openai 3.x부터 전송 계층이 httpx에서 httpx2로 바뀌었다. SDK가
+        # openai 3.x부터 전송 계층이 httpx에서 httpx2로 바뀌었음. SDK가
         # 요구하는 Client 타입과 정확히 맞춰야 하며, 1.x/2.x 설치 환경도
-        # 계속 지원한다.
+        # 계속 지원함.
         try:
             openai_major = int(openai.__version__.split(".", 1)[0])
         except (AttributeError, ValueError):  # pragma: no cover - 비표준 SDK 빌드
@@ -199,13 +199,12 @@ class OpenAIClient:
             "api_key": settings.api_key,
             "timeout": settings.timeout,
             "max_retries": settings.max_retries,
-            # ★ lawtrack.api.client.LawApiClient 와 동일한 이유(2026-07-30
-            # 실측): 개발 환경 네트워크가 HTTPS 를 중간에서 검사하며 자체
-            # 인증서로 재서명해, 표준 CA 저장소로는 검증에 실패한다(구글·
+            # lawtrack.api.client.LawApiClient 와 동일한 이유(실측): 개발 환경 네트워크가 HTTPS 를 중간에서 검사하며 자체
+            # 인증서로 재서명해, 표준 CA 저장소로는 검증에 실패함(구글·
             # OpenAI·법제처 API 등 목적지 무관하게 전부 동일 증상 확인).
             # 이 환경에서는 verify=True 로 두면 모든 LLM 호출이 그냥
-            # 실패한다 — 기존 LawApiClient 가 이미 내린 것과 같은 결정을
-            # 여기서도 따른다.
+            # 실패함 — 기존 LawApiClient 가 이미 내린 것과 같은 결정을
+            # 여기서도 따름.
             "http_client": openai_httpx.Client(verify=False),
         }
         if settings.base_url:
@@ -214,7 +213,7 @@ class OpenAIClient:
         if settings.provider == "openrouter":
             # 필수는 아니지만 OpenRouter 가 요청 출처를 식별하는 데 쓰는
             # 표준 헤더 — https://openrouter.ai/docs 권장사항. 없어도
-            # 호출은 되지만, 순위 집계 등에서 "unknown"으로 잡힌다.
+            # 호출은 되지만, 순위 집계 등에서 "unknown"으로 잡힘.
             kwargs["default_headers"] = {
                 "HTTP-Referer": "https://github.com/2026-DSLab/2026-ssis",
                 "X-Title": "2026-ssis lawtrack summarizer",
@@ -264,8 +263,8 @@ class OpenAIClient:
     def complete_text(
         self, *, system: str, user: str, max_tokens: int, thinking: bool = False
     ) -> str:
-        # thinking 은 Anthropic 전용 개념이라 여기서는 무시한다.
-        # 프로토콜을 맞추기 위해 인자만 받는다.
+        # thinking 은 Anthropic 전용 개념이라 여기서는 무시함.
+        # 프로토콜을 맞추기 위해 인자만 받음.
         return self._text_of(
             self._create(system=system, user=user, max_tokens=max_tokens)
         ).strip()
@@ -275,7 +274,7 @@ class OpenAIClient:
         """```json ... ``` 감싸기 제거.
 
         스키마 강제 모드가 아니면 모델이 마크다운 코드블록으로 감싸는 일이
-        흔하다. 그대로 json.loads 하면 실패한다.
+        흔함. 그대로 json.loads 하면 실패함.
         """
         t = text.strip()
         if t.startswith("```"):
@@ -292,15 +291,15 @@ class OpenAIClient:
         max_tokens: int,
         thinking: bool = False,
     ) -> dict:
-        """JSON 스키마를 강제해 dict 로 받는다.
+        """JSON 스키마를 강제해 dict 로 받음.
 
-        3단계로 물러난다 — OpenRouter 같은 중계 서비스나 원내 모델은
+        3단계로 물러남 — OpenRouter 같은 중계 서비스나 원내 모델은
         스키마 강제를 지원하지 않을 수 있는데, 그때 파이프라인 전체가
-        멈추면 안 되기 때문이다:
+        멈추면 안 되기 때문임:
             1) json_schema + strict   (가장 안전, OpenAI 직결에서 동작)
             2) json_object            (JSON 은 보장, 스키마는 프롬프트로)
             3) 형식 지정 없음          (프롬프트로만 지시)
-        한 번 성공한 방식은 기억해서 다음 호출부터 바로 쓴다.
+        한 번 성공한 방식은 기억해서 다음 호출부터 바로 씀.
         """
         strict_format = {
             "type": "json_schema",
@@ -353,7 +352,7 @@ class DryRunClient:
     """API 를 부르지 않고 프롬프트만 찍어보는 클라이언트.
 
     --dry-run 으로 파이프라인 배선(로드 → 정규화 → 팬아웃 → 취합)이
-    제대로 도는지, 프롬프트에 뭐가 들어가는지 API 키 없이 확인한다.
+    제대로 도는지, 프롬프트에 뭐가 들어가는지 API 키 없이 확인함.
     """
 
     def __init__(self, *, echo: bool = False):
@@ -381,7 +380,7 @@ class DryRunClient:
         max_tokens: int,
         thinking: bool = False,
     ) -> dict:
-        # 스키마 모양으로 어느 에이전트인지 구분한다.
+        # 스키마 모양으로 어느 에이전트인지 구분함.
         if "mappings" in schema.get("properties", {}):
             self._record("mapping", system, user)
             return {"mappings": [], "confidence": "low"}
@@ -394,15 +393,15 @@ class DryRunClient:
 
 
 def build_client(settings: LLMSettings, *, dry_run: bool = False, echo: bool = False) -> LLMClient:
-    """설정에 맞는 클라이언트를 만든다.
+    """설정에 맞는 클라이언트를 만듦.
 
-    QWEN 전환 시 여기에 분기 한 줄을 추가하면 된다.
+    QWEN 전환 시 여기에 분기 한 줄을 추가하면 됨.
     """
     if dry_run:
         return DryRunClient(echo=echo)
     if settings.provider in ("openai", "openrouter"):
-        # openrouter 는 OpenAI 호환 API 를 그대로 쓴다 — 다른 건 base_url뿐이고
-        # 그건 config.load_settings() 가 이미 채워 넣었다.
+        # openrouter 는 OpenAI 호환 API 를 그대로 씀 — 다른 건 base_url뿐이고
+        # 그건 config.load_settings() 가 이미 채워 넣었음.
         return OpenAIClient(settings)
     if settings.provider == "anthropic":
         return AnthropicClient(settings)

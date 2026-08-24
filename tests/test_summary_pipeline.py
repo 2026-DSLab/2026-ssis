@@ -238,6 +238,11 @@ def test_summary_stage_reports_failure_without_losing_detection(monkeypatch, tmp
     def boom(*_a, **_kw):
         raise RuntimeError("LLM 서버 응답 없음")
 
+    # ★ 키를 심어 두는 이유: 키가 없으면 build_client 에 닿기도 전에 "키를
+    #   추가하세요" 안내로 먼저 빠져나가, 이 테스트가 보려는 경로(요약 도중
+    #   실패)를 못 탄다. .env 가 채워진 개발 PC 에서는 우연히 통과했지만
+    #   배포 꾸러미를 막 푼 상태(.env 없음)에서는 실패했다.
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key-not-used")
     monkeypatch.setattr("summarizer.llm.build_client", boom)
     errors = rw.run_summary_stage(tmp_path / "c.json", db=None, hwpx=False, to_db=False)
 

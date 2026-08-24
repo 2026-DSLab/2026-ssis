@@ -1,10 +1,10 @@
 """설정.
 
-모든 설정은 환경변수(.env)에서 읽는다.
+모든 설정은 환경변수(.env)에서 읽음.
 
 getpass 대화형 입력을 쓰지 않는 이유:
-    주 1회 자동 실행(cron)이 요구사항인데, getpass 는 입력 대기로 멈춘다.
-    스케줄러에서는 절대 동작하지 않는다.
+    주 1회 자동 실행(cron)이 요구사항인데, getpass 는 입력 대기로 멈춤.
+    스케줄러에서는 절대 동작하지 않음.
 """
 
 from __future__ import annotations
@@ -66,8 +66,8 @@ class ApiSettings:
 
     oc: str
     """인증키(OC). 이 키만으로는 부족하며, 호출 서버의 공인 IP/도메인이
-    마이페이지 > API인증키관리에 등록되어 있어야 한다.
-    미등록 시 HTTP 200 + {"result": "사용자 정보 검증에 실패하였습니다."} 가 온다."""
+    마이페이지 > API인증키관리에 등록되어 있어야 함.
+    미등록 시 HTTP 200 + {"result": "사용자 정보 검증에 실패하였습니다."} 가 옴."""
 
     search_url: str = "https://www.law.go.kr/DRF/lawSearch.do"
     service_url: str = "https://www.law.go.kr/DRF/lawService.do"
@@ -75,17 +75,17 @@ class ApiSettings:
     response_type: str = "JSON"
 
     display: int = 100
-    """목록조회 1페이지 건수. 반드시 최대치(100)로 고정한다.
+    """목록조회 1페이지 건수. 반드시 최대치(100)로 고정함.
 
     실측: 검색어 '에너지법' → totalCnt=32 인데 기본 display 로는 20건만 수신되고,
-    정답인 '에너지법' 은 가나다순 17번째라 아슬아슬하게 걸렸다.
-    display=10 이었다면 정답을 아예 수신하지 못했다.
-    검색어가 짧을수록 위험도가 올라간다."""
+    정답인 '에너지법' 은 가나다순 17번째라 아슬아슬하게 걸렸음.
+    display=10 이었다면 정답을 아예 수신하지 못했음.
+    검색어가 짧을수록 위험도가 올라감."""
 
     timeout: float = 30.0
     max_retries: int = 3
-    """네트워크 순간 끊김 대비. 111건 전수 적재에서는 반드시 발생한다.
-    단, 인증 오류는 재시도해도 의미가 없으므로 client 에서 즉시 중단한다."""
+    """네트워크 순간 끊김 대비. 111건 전수 적재에서는 반드시 발생함.
+    단, 인증 오류는 재시도해도 의미가 없으므로 client 에서 즉시 중단함."""
 
     backoff_base: float = 1.0
     """지수 백오프 기준(초). 1s → 2s → 4s"""
@@ -107,7 +107,7 @@ class DbSettings:
     database: str
 
     def as_connect_kwargs(self) -> dict:
-        # psycopg2.connect() 는 database 가 아니라 dbname 을 받는다.
+        # psycopg2.connect() 는 database 가 아니라 dbname 을 받음.
         return {
             "host": self.host,
             "port": self.port,
@@ -119,7 +119,7 @@ class DbSettings:
 
 @dataclass(frozen=True)
 class ExportSettings:
-    """LLM 팀 전달용 산출물 설정."""
+    """요약 단계 전달용 산출물 설정."""
 
     output_dir: Path = field(default=PROJECT_ROOT / "out")
     contract_version: str = "1.0"
@@ -134,11 +134,11 @@ class Settings:
 
 
 def load_db_settings(env_file: str | Path | None = None) -> DbSettings:
-    """DB 설정만 읽는다.
+    """DB 설정만 읽음.
 
     load_settings() 와 따로 두는 이유: 요약 파이프라인(summarizer)은 DB 에
-    요약을 적재하지만 국가법령정보 API 는 부르지 않는다. load_settings() 를
-    쓰면 쓰지도 않는 LAW_API_OC 가 없다는 이유로 실패한다.
+    요약을 적재하지만 국가법령정보 API 는 부르지 않음. load_settings() 를
+    쓰면 쓰지도 않는 LAW_API_OC 가 없다는 이유로 실패함.
     """
     path = Path(env_file) if env_file else PROJECT_ROOT / ".env"
     if path.exists():
@@ -155,7 +155,7 @@ def load_db_settings(env_file: str | Path | None = None) -> DbSettings:
 
 
 def load_settings(env_file: str | Path | None = None) -> Settings:
-    """환경변수에서 설정을 읽는다.
+    """환경변수에서 설정을 읽음.
 
     우선순위: 이미 설정된 OS 환경변수 > .env 파일
     """
@@ -199,22 +199,22 @@ def setup_logging(level: str = "INFO") -> None:
 
 
 def setup_console() -> None:
-    """콘솔에 못 쓰는 글자가 나와도 배치가 죽지 않게 한다.
+    """콘솔에 못 쓰는 글자가 나와도 배치가 죽지 않게 함.
 
-    ★ 실측(2026-07-28): 한국어 Windows 콘솔의 기본 코드페이지는 cp949 인데,
-      요약의 caveat 문장에는 em dash(—)가 들어간다. cp949 에 그 글자가
-      없어서 print 하는 순간 UnicodeEncodeError 로 프로세스가 죽었다 —
+    실측: 한국어 Windows 콘솔의 기본 코드페이지는 cp949 인데,
+      요약의 caveat 문장에는 em dash(—)가 들어감. cp949 에 그 글자가
+      없어서 print 하는 순간 UnicodeEncodeError 로 프로세스가 죽었음 —
       요약을 다 만들어 놓고 화면에 뿌리다가 죽는 것이라, 그때까지의
-      LLM 호출 비용을 그대로 날린다.
+      LLM 호출 비용을 그대로 날림.
 
       encoding 을 바꾸지 않고 errors 만 바꾸는 이유: utf-8 로 강제하면
-      cp949 콘솔에서는 전부 깨져 보인다. 못 쓰는 글자 하나를 '?'로
-      바꾸는 편이 낫다. 스케줄 실행(weekly.cmd)은 PYTHONUTF8=1 로
-      아예 UTF-8 모드라 이 대체 자체가 일어나지 않는다.
+      cp949 콘솔에서는 전부 깨져 보임. 못 쓰는 글자 하나를 '?'로
+      바꾸는 편이 나음. 스케줄 실행(weekly.cmd)은 PYTHONUTF8=1 로
+      아예 UTF-8 모드라 이 대체 자체가 일어나지 않음.
     """
     for stream in (sys.stdout, sys.stderr):
         try:
             stream.reconfigure(errors="replace")
         except (AttributeError, ValueError):
-            # 파이프·리다이렉트로 교체된 스트림은 reconfigure 가 없을 수 있다.
+            # 파이프·리다이렉트로 교체된 스트림은 reconfigure 가 없을 수 있음.
             pass

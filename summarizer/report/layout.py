@@ -1,34 +1,34 @@
 """HWPX 지면 배치 — 페이지 규격, 글꼴 계층, '지면을 꽉 채우는' 표.
 
-★ 이 모듈이 존재하는 이유 — 표가 왼쪽으로 쏠리던 원인:
+이 모듈이 존재하는 이유 — 표가 왼쪽으로 쏠리던 원인:
 
     python-hwpx 의 ``add_table(rows, cols)`` 는 width 를 주지 않으면
-    ``cols × 7200 HWPUNIT`` (열당 1인치) 로 표를 만든다. 3열이면 21600,
+    ``cols × 7200 HWPUNIT`` (열당 1인치) 로 표를 만듦. 3열이면 21600,
     즉 76mm 다. A4 본문 폭은 여백 20mm 기준 48190 HWPUNIT(170mm) 이므로
-    표가 지면의 45% 만 쓰고 왼쪽에 붙어버린다. ``hp:pos`` 의
-    ``horzAlign="LEFT"`` 때문에 남는 공간은 전부 오른쪽에 생긴다.
+    표가 지면의 45% 만 쓰고 왼쪽에 붙어버림. ``hp:pos`` 의
+    ``horzAlign="LEFT"`` 때문에 남는 공간은 전부 오른쪽에 생김.
 
     그래서 여기서는
       1) 섹션의 ``pagePr`` 에서 실제 본문 폭을 읽어(하드코딩 금지),
       2) 표를 그 폭 그대로 만들고(``width=text_width``),
       3) 열 너비를 비율로 배분하고(``set_column_widths``),
-      4) 칸 여백·행 높이·머리행 음영·머리행 반복까지 채워 넣는다.
+      4) 칸 여백·행 높이·머리행 음영·머리행 반복까지 채워 넣음.
 
     행 높이는 hwpx 의 문자폭 추정기(``form_fit.measure``)로 줄 수를 계산해
-    잡는다. 한글이 열 때 자동으로 늘려주긴 하지만, 미리 맞춰두면 다른
-    뷰어나 PDF 변환에서도 글자가 잘리지 않는다.
+    잡음. 한글이 열 때 자동으로 늘려주긴 하지만, 미리 맞춰두면 다른
+    뷰어나 PDF 변환에서도 글자가 잘리지 않음.
 
-★ 표가 쪽 경계를 못 넘던 문제 — ``treatAsChar``:
+표가 쪽 경계를 못 넘던 문제 — ``treatAsChar``:
 
-    hwpx 가 만드는 표는 ``hp:pos treatAsChar="1"`` (글자처럼 취급) 이다.
+    hwpx 가 만드는 표는 ``hp:pos treatAsChar="1"`` (글자처럼 취급) 임.
     글자처럼 취급된 표는 한글에서 '한 글자' 취급이라 쪽 경계에서 쪼개지지
-    않는다. 그래서 한 쪽에 안 들어가는 긴 표는 통째로 다음 쪽으로 밀리고
+    않음. 그래서 한 쪽에 안 들어가는 긴 표는 통째로 다음 쪽으로 밀리고
     (앞 쪽은 텅 비고), 그러고도 안 들어가면 종이 밖으로 흘러넘쳐 꼬리말
-    위에 겹쳐 찍힌다. 실제로 50개 조문 표에서 두 쪽이 잘려 나갔다.
+    위에 겹쳐 찍힘. 실제로 50개 조문 표에서 두 쪽이 잘려 나갔음.
 
     ``treatAsChar="0"`` 으로 두면 표가 문단 흐름을 따라가되 쪽 단위로
-    나뉜다(``pageBreak="CELL"``). 제목 줄 반복은 ``repeatHeader="1"`` 만으로는
-    안 되고 머리행 칸에 ``header="1"`` 도 있어야 한글이 알아본다.
+    나뉨(``pageBreak="CELL"``). 제목 줄 반복은 ``repeatHeader="1"`` 만으로는
+    안 되고 머리행 칸에 ``header="1"`` 도 있어야 한글이 알아봄.
 
 HWPUNIT = 1/7200 inch.
 """
@@ -49,7 +49,7 @@ def mm(value: float) -> int:
     return round(value * MM)
 
 
-# 지면 — 공문서 관례(위 20 / 아래 15 / 좌우 20mm)에 맞춘다.
+# 지면 — 공문서 관례(위 20 / 아래 15 / 좌우 20mm)에 맞춤.
 PAGE = {
     "paper_size": "A4",
     "margin_top_mm": 20,
@@ -61,14 +61,14 @@ PAGE = {
 }
 
 CELL_MARGIN = {"left": mm(1.5), "right": mm(1.5), "top": mm(0.6), "bottom": mm(0.6)}
-"""칸 안쪽 여백. 0 이면 글자가 괘선에 붙어 읽기 나쁘다."""
+"""칸 안쪽 여백. 0 이면 글자가 괘선에 붙어 읽기 나쁨."""
 
 TABLE_MARGIN_BOTTOM = mm(6)
 """표 바깥 아래 여백.
 
     글자처럼 취급을 끄면(위 설명 참고) 한글이 표 아래 공간을 한 줄쯤
-    덜 잡아, 바로 다음 문단이 표 아래 괘선 위에 겹쳐 찍힌다. 그 한 줄을
-    여기서 되돌려 준다."""
+    덜 잡아, 바로 다음 문단이 표 아래 괘선 위에 겹쳐 찍힘. 그 한 줄을
+    여기서 되돌려 줌."""
 
 LINE_FACTOR = 1.65
 """줄 높이 = 글자 크기 × 이 값. 한글 기본 줄간격(160%)에 약간의 여유."""
@@ -76,21 +76,21 @@ LINE_FACTOR = 1.65
 MERGE_HEIGHT_LIMIT = 0.45
 """세로 병합 한 덩어리의 최대 높이(본문 높이 대비).
 
-    병합된 칸은 쪽이 넘어가도 글자를 되풀이해 주지 않는다. 한 조문이
+    병합된 칸은 쪽이 넘어가도 글자를 되풀이해 주지 않음. 한 조문이
     한 쪽을 통째로 차지하면 다음 쪽 '조문' 칸이 통째로 비어, 무슨 조문
-    이야기인지 알 수 없게 된다. 그래서 덩어리를 반 쪽 이하로 끊고
-    조문명을 다시 적는다."""
+    이야기인지 알 수 없게 됨. 그래서 덩어리를 반 쪽 이하로 끊고
+    조문명을 다시 적음."""
 
 WRAP_SAFETY = 0.94
 """줄 수 추정에 쓰는 안전 계수 — 추정기가 낙관적일 때 대비."""
 
 HEADER_SHADE = "D9E2F3"
-"""머리행 음영(연한 청회색). 흑백 인쇄에서도 옅은 회색으로 구분된다."""
+"""머리행 음영(연한 청회색). 흑백 인쇄에서도 옅은 회색으로 구분됨."""
 
 
 @dataclass(frozen=True)
 class Col:
-    """표의 열 하나. ``weight`` 는 본문 폭을 나눠 갖는 비율이다."""
+    """표의 열 하나. ``weight`` 는 본문 폭을 나눠 갖는 비율임."""
 
     title: str
     weight: float
@@ -128,9 +128,9 @@ class Styles:
     @classmethod
     def build(cls, doc: HwpxDocument) -> "Styles":
         head = doc.headers[0]
-        # ★ 색을 반드시 명시한다. ensure_run_style 은 굵기·크기만 맞으면
+        # 색을 반드시 명시함. ensure_run_style 은 굵기·크기만 맞으면
         #   기존 글꼴을 재사용하므로, 색을 비워 두면 먼저 만들어진 빨간
-        #   경고 글꼴(굵게 9.5pt)이 표 머리행에 그대로 딸려 온다.
+        #   경고 글꼴(굵게 9.5pt)이 표 머리행에 그대로 딸려 옴.
         black = "#000000"
         st = cls(
             title=doc.ensure_run_style(bold=True, size=18, color=black),
@@ -151,7 +151,7 @@ class Styles:
         st.p_body = head.ensure_paragraph_format(
             alignment="JUSTIFY", line_spacing_percent=160
         )
-        # 표·소제목이 쪽 끝에 홀로 떨어지지 않게 다음 문단과 붙여 둔다.
+        # 표·소제목이 쪽 끝에 홀로 떨어지지 않게 다음 문단과 붙여 둠.
         keep = {"keep_with_next": True}
         st.p_keep = head.ensure_paragraph_format(alignment="LEFT", break_setting=keep)
         st.p_section = head.ensure_paragraph_format(
@@ -160,9 +160,9 @@ class Styles:
         st.p_law = head.ensure_paragraph_format(
             alignment="LEFT", break_setting=keep, margins={"prev": mm(5)}
         )
-        # 장 제목 바로 밑에 오는 첫 법령 — 위 여백을 줄인다. 5mm 는 법령끼리
+        # 장 제목 바로 밑에 오는 첫 법령 — 위 여백을 줄임. 5mm 는 법령끼리
         # 떼어놓기 위한 값이라, 제목 다음 줄에 그대로 쓰면 제목이 내용에서
-        # 떨어져 나온 것처럼 보인다(제목 쪽 아래 여백 1mm 와 더해져 6mm).
+        # 떨어져 나온 것처럼 보임(제목 쪽 아래 여백 1mm 와 더해져 6mm).
         st.p_law_first = head.ensure_paragraph_format(
             alignment="LEFT", break_setting=keep, margins={"prev": mm(0.5)}
         )
@@ -171,20 +171,20 @@ class Styles:
 
 
 class Page:
-    """섹션 지면 정보 — 본문 폭을 계산해 들고 있는다."""
+    """섹션 지면 정보 — 본문 폭을 계산해 들고 있음."""
 
     def __init__(self, doc: HwpxDocument):
         doc.set_page_setup(**PAGE)  # orientation 은 건드리지 않는다(스켈레톤 값 유지).
         props = doc.sections[0].properties
         size, margin = props.page_size, props.page_margins
         self.text_width: int = size.width - margin.left - margin.right
-        """본문 폭(HWPUNIT). 표는 정확히 이 폭으로 만든다."""
+        """본문 폭(HWPUNIT). 표는 정확히 이 폭으로 만듦."""
         self.text_height: int = size.height - margin.top - margin.bottom
         """본문 높이(HWPUNIT). 병합 덩어리가 한 쪽을 넘지 않게 하는 기준."""
 
 
 def _distribute(total: int, weights: Sequence[float]) -> list[int]:
-    """비율대로 나누되 합이 total 과 정확히 같게 맞춘다(반올림 오차 흡수)."""
+    """비율대로 나누되 합이 total 과 정확히 같게 맞춤(반올림 오차 흡수)."""
     unit = sum(weights)
     widths: list[int] = []
     used = 0
@@ -216,10 +216,10 @@ def _row_height(lines: int, pt: float) -> int:
 
 
 class TableWriter:
-    """본문 폭을 꽉 채우는 표를 만든다.
+    """본문 폭을 꽉 채우는 표를 만듦.
 
-    셀 값은 문자열이며 ``\\n`` 으로 문단을 나눈다. 각 문단은 열 정의의
-    정렬을 따르고, 표 전체가 ``Page.text_width`` 폭을 갖는다.
+    셀 값은 문자열이며 ``\\n`` 으로 문단을 나눔. 각 문단은 열 정의의
+    정렬을 따르고, 표 전체가 ``Page.text_width`` 폭을 갖음.
     """
 
     def __init__(self, doc: HwpxDocument, page: Page, st: Styles):
@@ -258,7 +258,7 @@ class TableWriter:
                 value = row[c] if c < len(row) else ""
                 self._fill(table, r, c, value, self._st.td, col.align, col.vertical)
 
-        # 크기는 내용을 넣은 뒤에 잡는다 — set_cell_text 가 칸을 다시 쓰기 때문.
+        # 크기는 내용을 넣은 뒤에 잡음 — set_cell_text 가 칸을 다시 쓰기 때문.
         table.set_column_widths([c.weight for c in cols])
         self._set_heights(table, heights)
         self._set_margins(table)
@@ -270,7 +270,7 @@ class TableWriter:
 
     # -- 내부 ---------------------------------------------------------------
     def _make_splittable(self, table) -> None:
-        """쪽 경계에서 표가 나뉘도록 만든다(모듈 설명의 treatAsChar 참고)."""
+        """쪽 경계에서 표가 나뉘도록 만듦(모듈 설명의 treatAsChar 참고)."""
         hp = "{http://www.hancom.co.kr/hwpml/2011/paragraph}"
         table.element.set("repeatHeader", "1")
         table.element.set("pageBreak", "CELL")
@@ -336,11 +336,11 @@ class TableWriter:
                 node.set(key, str(value))
 
     def _merge_runs(self, table, rows, widths, heights) -> None:
-        """첫 열에서 같은 값이 이어지면 세로로 병합한다.
+        """첫 열에서 같은 값이 이어지면 세로로 병합함.
 
         조문 표에서 '제60조의2' 가 아홉 줄 반복되는 것을 한 칸으로 묶어
-        어느 조문의 이야기인지 한눈에 보이게 한다. 다만 한 덩어리가
-        반 쪽을 넘으면 끊는다(MERGE_HEIGHT_LIMIT 설명 참고).
+        어느 조문의 이야기인지 한눈에 보이게 함. 다만 한 덩어리가
+        반 쪽을 넘으면 끊음(MERGE_HEIGHT_LIMIT 설명 참고).
         """
         limit = self._page.text_height * MERGE_HEIGHT_LIMIT
         for first, last in reversed(self._spans(rows, heights, limit)):

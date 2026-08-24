@@ -1,6 +1,6 @@
 """매칭 결과 → 사람이 읽는 리포트(텍스트) + 구조화 dict.
 
-웹 통합 시 build_summary() 반환 dict 를 JSON 응답으로 그대로 쓸 수 있다.
+웹 통합 시 build_summary() 반환 dict 를 JSON 응답으로 그대로 쓸 수 있음.
 """
 import collections
 

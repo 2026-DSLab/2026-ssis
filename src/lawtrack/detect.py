@@ -2,13 +2,13 @@
 
 이 모듈은 워치리스트 항목 하나를 받아 "바뀌었는가"를 판정하고,
 바뀌었다면 지금까지 만든 계층(api → parse → locate → db)을 순서대로
-통과시켜 article_diff 에 결과를 남긴다.
+통과시켜 article_diff 에 결과를 남김.
 
 이 파일이 하지 않는 것: 워치리스트 전체를 도는 주간 배치 루프,
 스케줄링, 병렬 처리, 재시도 정책. 그건 이 함수를 호출하는 오케스트레이션
 레이어(주간 배치 파이프라인)의 책임이며, 이 프로젝트에서 그 부분은
-범위 밖이다. 여기서 제공하는 것은 "항목 하나를 정확하게 처리하는 방법"
-까지다.
+범위 밖임. 여기서 제공하는 것은 "항목 하나를 정확하게 처리하는 방법"
+까지임.
 """
 
 from __future__ import annotations
@@ -57,13 +57,13 @@ class DetectResult:
     search_result: object = None
     """LawSearchResult | AdmrulSearchResult | None.
 
-    ★ 수정 사유: 최초 버전에서는 current_serial_no 만 넘겼는데, 이러면
+    수정 사유: 최초 버전에서는 current_serial_no 만 넘겼는데, 이러면
     신구법 비교가 불가능한 경우(제정 등) process_law_entry 가 공포번호·
-    시행일자·제개정구분명을 잃어버린다. oldAndNew 의 신조문_기본정보는
+    시행일자·제개정구분명을 잃어버림. oldAndNew 의 신조문_기본정보는
     이 필드들을 항상 포함한다는 보장이 없지만(실측: 사회보장기본법
     시행규칙 N-케이스에서는 공포번호/시행일자가 아예 없었음), 목록조회
-    응답(LawSearchResult)은 이 필드들을 항상 포함한다(실측 확인).
-    그래서 목록조회 결과 객체를 그대로 들고 다니게 한다.
+    응답(LawSearchResult)은 이 필드들을 항상 포함함(실측 확인).
+    그래서 목록조회 결과 객체를 그대로 들고 다니게 함.
     """
 
 
@@ -71,8 +71,8 @@ def detect_law(client: LawApiClient, version_repo: VersionRepo, entry: Watchlist
     """법령 워치리스트 1건의 개정 여부 판정.
 
     조회는 반드시 official_name(또는 law_id)으로 하고, 저장된 MST로
-    조회하지 않는다 — MST로 조회하면 그 옛 버전만 돌아와 새 버전이
-    생겼는지 알 수 없다.
+    조회하지 않음 — MST로 조회하면 그 옛 버전만 돌아와 새 버전이
+    생겼는지 알 수 없음.
     """
     dept_code = entry.dept_codes[0] if entry.dept_codes else None
     try:
@@ -105,14 +105,14 @@ def detect_law(client: LawApiClient, version_repo: VersionRepo, entry: Watchlist
 def detect_admrul(client: LawApiClient, version_repo: VersionRepo, entry: WatchlistEntry) -> DetectResult:
     """행정규칙 워치리스트 1건의 개정 여부 판정.
 
-    ★ 실측 발견(2026-07-16): dept_name 이 entry.dept_codes 와 무관하게
-    항상 None으로 하드코딩돼 있었다 — watchlist.dept_codes 를 채워도
+    실측 발견: dept_name 이 entry.dept_codes 와 무관하게
+    항상 None으로 하드코딩돼 있었음 — watchlist.dept_codes 를 채워도
     실제로는 전혀 쓰이지 않아, 동명이인 행정규칙(예: "협상에 의한
     계약체결기준" — 재정경제부판/타부처판)이 완전일치 2건 이상으로
-    걸리면 dept_codes 를 아무리 채워도 영구히 AMBIGUOUS 로 막혔다.
+    걸리면 dept_codes 를 아무리 채워도 영구히 AMBIGUOUS 로 막혔음.
     entry.dept_codes 는 법령용으로는 부처 "코드"를 담지만, admrul
     쪽 API는 부처 "이름" 완전일치로만 좁혀지므로(api/search.py
-    resolve_admrul 참고) 같은 필드에 부처 이름 문자열을 담아 재사용한다.
+    resolve_admrul 참고) 같은 필드에 부처 이름 문자열을 담아 재사용함.
     """
     dept_name = entry.dept_codes[0] if entry.dept_codes else None
     try:
@@ -163,8 +163,8 @@ def process_law_entry(
           watchlist.last_serial_no 갱신.
 
     last_serial_no 갱신을 마지막에 두는 이유: 저장이 실패하면 갱신도
-    안 되어야 다음 주에 재시도되기 때문이다. 갱신이 먼저 일어나고
-    저장이 실패하면, 그 개정은 영원히 누락된다.
+    안 되어야 다음 주에 재시도되기 때문임. 갱신이 먼저 일어나고
+    저장이 실패하면, 그 개정은 영원히 누락됨.
     """
     result = detect_law(client, version_repo, entry)
     if result.status is not DetectStatus.CHANGED:
@@ -181,10 +181,10 @@ def process_law_entry(
         )
         fulltext = fetch_law_fulltext(client, new_serial)
         version_repo.insert_law(entry.official_name, entry.law_id, new_serial, fulltext.raw)
-        # ★ 실측 발견(2026-07-18): enforce_date를 None으로 그냥 두면(sr이 없는
+        # 실측 발견: enforce_date를 None으로 그냥 두면(sr이 없는
         # 경우) contract/export.py의 fetch_no_comparison_in_period가 이 행을
-        # 기간(BETWEEN) 조회로 영원히 못 찾는다 — 다른 브랜치처럼 오늘 날짜로
-        # 보강한다.
+        # 기간(BETWEEN) 조회로 영원히 못 찾음 — 다른 브랜치처럼 오늘 날짜로
+        # 보강함.
         change_log_repo.insert(
             law_id=entry.law_id, new_serial_no=new_serial,
             old_serial_no=entry.last_serial_no,
@@ -206,7 +206,7 @@ def process_law_entry(
     changes = extract_changes(oldnew.old_texts, oldnew.new_texts)
     located = locate_all(changes, units)
 
-    # 시행일: 목록조회 결과(sr)를 우선하고, 없으면 oldAndNew 쪽을 보조로 쓴다.
+    # 시행일: 목록조회 결과(sr)를 우선하고, 없으면 oldAndNew 쪽을 보조로 씀.
     enforce_raw = (sr.enforce_date if sr else "") or oldnew.new_version.enforce_date
     enforce_date = _parse_date(enforce_raw) or date.today()
     saved = article_diff_repo.insert_results(
@@ -246,14 +246,14 @@ def process_admrul_entry(
 ) -> ProcessOutcome:
     """행정규칙 1건을 감지부터 저장까지 전부 처리 — process_law_entry 의 admrul판.
 
-    ★ 실측 발견(2026-07-16): scripts/run_single_check.py 등 실행 스크립트가
+    실측 발견: scripts/run_single_check.py 등 실행 스크립트가
     entry.law_type 과 무관하게 항상 process_law_entry (target=law API) 만
-    호출하고 있었다. 행정규칙(25건 중 하나인 정보시스템 감리기준, law_id=33483)
+    호출하고 있었음. 행정규칙(25건 중 하나인 정보시스템 감리기준, law_id=33483)
     으로 실행하면 target=law 검색은 애초에 대상이 아니므로 항상 0건이 나와
-    "조회결과없음(제명변경/폐지 가능성)"으로 오판되었다 — 실제로는 목록조회
-    API를 잘못 골랐을 뿐, 그 행정규칙은 정상적으로 존재한다. 이 함수가 그
-    누락됐던 admrul 쓰기 경로다. process_entry() 로 law_type 에 따라 자동
-    분기하는 것을 권장한다.
+    "조회결과없음(제명변경/폐지 가능성)"으로 오판되었음 — 실제로는 목록조회
+    API를 잘못 골랐을 뿐, 그 행정규칙은 정상적으로 존재함. 이 함수가 그
+    누락됐던 admrul 쓰기 경로임. process_entry() 로 law_type 에 따라 자동
+    분기하는 것을 권장함.
 
     법령과의 구조적 차이 (api/oldnew.py, api/fulltext.py 실측 확인):
         - 목록조회: dept_code(코드) 대신 dept_name(이름) 으로 완전일치 좁힘
@@ -261,7 +261,7 @@ def process_admrul_entry(
         - 신구법"없음" 판정: 필드값(신구법존재여부=N) 이 아니라 비-JSON
           응답 자체("<Law>일치하는 신구법 없습니다.</Law>")로 판정됨
           (oldnew.available=False 로 이미 흡수되어 있어 이 함수 입장에서는
-          법령과 동일하게 처리하면 된다)
+          법령과 동일하게 처리하면 됨)
     """
     result = detect_admrul(client, version_repo, entry)
     if result.status is not DetectStatus.CHANGED:
@@ -291,10 +291,10 @@ def process_admrul_entry(
         return ProcessOutcome(DetectResult(entry, DetectStatus.NO_COMPARISON, new_serial))
 
     fulltext = fetch_admrul_fulltext(client, new_serial)
-    # ★ 실측(2026-07-16): 행정규칙은 법령과 본문 구조가 전혀 달라(조문/항/호가
+    # 실측: 행정규칙은 법령과 본문 구조가 전혀 달라(조문/항/호가
     # JSON 트리로 안 쪼개져 있고 평문 한 줄에 통째로 이어붙어 있음)
     # parse_articles+flatten_searchable(법령 전용)를 그대로 쓰면 조문을 0건
-    # 찾아 모든 위치확정이 100% 실패한다. 전용 파서를 쓴다.
+    # 찾아 모든 위치확정이 100% 실패함. 전용 파서를 씀.
     units = parse_admrul_units(fulltext.raw)
     version_repo.insert_admrul(entry.official_name, entry.law_id, new_serial, fulltext.raw)
 
@@ -302,7 +302,7 @@ def process_admrul_entry(
     located = locate_all(changes, units)
 
     # 시행일: 행정규칙 목록조회에는 시행일자가 없으므로(발령일자만 있음),
-    # 목록조회(sr)가 있으면 발령일을 시행일 대용으로, 없으면 oldAndNew 쪽을 보조로 쓴다.
+    # 목록조회(sr)가 있으면 발령일을 시행일 대용으로, 없으면 oldAndNew 쪽을 보조로 씀.
     enforce_raw = (sr.promulgation_date if sr else "") or oldnew.new_version.enforce_date
     enforce_date = _parse_date(enforce_raw) or date.today()
     saved = article_diff_repo.insert_results(
@@ -343,7 +343,7 @@ def process_entry(
     """entry.law_type 에 따라 process_law_entry / process_admrul_entry 로 분기.
 
     워치리스트를 순회하는 배치/스크립트는 이 함수 하나만 부르면 되고,
-    법령/행정규칙 구분을 직접 신경 쓰지 않아도 된다.
+    법령/행정규칙 구분을 직접 신경 쓰지 않아도 됨.
     """
     fn = process_admrul_entry if entry.law_type == ADMRUL_LAW_TYPE else process_law_entry
     return fn(client, version_repo, watchlist_repo, change_log_repo, article_diff_repo, entry)
@@ -352,38 +352,38 @@ def process_entry(
 def _unchanged_clauses(
     articles: list, located: list[tuple],
 ) -> dict[str, list[str]]:
-    """개정된 조문 중, 이번에 안 바뀐 항(現行 항)의 라벨만 뽑는다.
+    """개정된 조문 중, 이번에 안 바뀐 항(現行 항)의 라벨만 뽑음.
 
-    ★ 법령 전용: ClauseNode.change_type ("개정"/"신설"/... 또는 없으면 "")
+    법령 전용: ClauseNode.change_type ("개정"/"신설"/... 또는 없으면 "")
     은 법제처 API가 항마다 이미 매겨주는 공식 필드라, 별도 추론 없이
-    "빈 문자열 = 이번 개정에서 안 바뀐 현행 항"으로 바로 읽을 수 있다.
+    "빈 문자열 = 이번 개정에서 안 바뀐 현행 항"으로 바로 읽을 수 있음.
     행정규칙은 이런 항 단위 태그 자체가 없는 평문이라(parse_admrul_units
-    참고) 이 함수를 적용하지 않는다 — LLM팀에게 "확정 사실만" 준다는
-    schema.py 설계 원칙상, 근거 없는 추정치를 섞고 싶지 않기 때문이다.
+    참고) 이 함수를 적용하지 않음 — 요약 단계에 "확정 사실만" 준다는
+    schema.py 설계 원칙상, 근거 없는 추정치를 섞고 싶지 않기 때문임.
 
-    ★★ 실측 발견(2026-07-16, 전자정부법 제2조): 항(①②③) 없이 호가
+    실측 발견(전자정부법 제2조): 항(①②③) 없이 호가
     조문에 바로 붙는 조문은 `parse_articles`가 라벨 없는 더미 ClauseNode
-    (no="", change_type="")를 하나 만들어 호 목록을 담는 그릇으로 쓴다
+    (no="", change_type="")를 하나 만들어 호 목록을 담는 그릇으로 씀
     (flatten_searchable 의 "headerless item container" 처리와 동일한
     구조). 이 더미 항은 실제 "①②③" 같은 항이 전혀 아닌데, change_type이
     비어있다는 이유만으로 "안 바뀐 항"에 포함되면 `{"제2조": [""]}` 처럼
-    빈 문자열 라벨이 그대로 노출되어 LLM팀 입장에서 의미를 알 수 없는
-    항목이 된다. 라벨이 빈 clause는 애초에 "항"이 아니므로 제외한다.
+    빈 문자열 라벨이 그대로 노출되어 요약 단계에서 의미를 알 수 없는
+    항목이 됨. 라벨이 빈 clause는 애초에 "항"이 아니므로 제외함.
 
-    ★★★ 실측 발견(2026-07-18, 청소년복지 지원법 제16조의2 등): 조문
+    실측 발견(청소년복지 지원법 제16조의2 등): 조문
     자체가 신설되었거나(제16조의2) 크게 재구성된(제18조의4/5/6) 경우,
-    법제처 API는 그 조문 안 "모든" 항의 항제개정유형을 통째로 비워둔다
+    법제처 API는 그 조문 안 "모든" 항의 항제개정유형을 통째로 비워둠
     (None) — 일부만 개정된 조문(제31조의2, 제75조 등)에서는 바뀐 항에만
-    값이 채워지고 안 바뀐 항은 진짜로 비어있는 것과 대조적이다. 이걸
+    값이 채워지고 안 바뀐 항은 진짜로 비어있는 것과 대조적임. 이걸
     구분 안 하고 "비어있으면 무조건 현행유지"로 읽으면, 방금 change_type
     ="신설"로 저장한 항(예: 제16조의2①②)이 같은 조문 안에서 동시에
-    "현행유지"로도 보고되는 자기모순이 생긴다({"제16조의2": ["①","②"]}
+    "현행유지"로도 보고되는 자기모순이 생김({"제16조의2": ["①","②"]}
     가 articles 배열의 신설 항목과 정면으로 충돌). 판별 신호는 "그
     조문의 항 중 하나라도 change_type이 채워져 있는가" — 하나라도
     채워져 있으면 API가 이번 조문에 대해 항 단위 태깅을 실제로 하고
     있다는 뜻이므로 비어있는 항은 진짜 현행유지로 신뢰할 수 있고, 전부
     비어있으면 항 단위 태깅 자체가 생략된 것이므로 이 조문에 대해서는
-    아무것도 "현행유지"라고 확정하지 않는다(모른다고 솔직히 비워둠 —
+    아무것도 "현행유지"라고 확정하지 않음(모른다고 솔직히 비워둠 —
     틀린 확정 사실을 주는 것보다 안전).
     """
     touched_articles = {
@@ -411,19 +411,19 @@ def _unchanged_clauses(
 
 def _unchanged_clauses_admrul(oldnew, located: list[tuple]) -> dict[str, list[str]]:
     """행정규칙 전용: oldAndNew의 "(생략)/(현행과 같음)" 스킵 표시에서 안
-    바뀐 항/호 라벨을 뽑는다.
+    바뀐 항/호 라벨을 뽑음.
 
-    ★ 설계(2026-07-18): law쪽 _unchanged_clauses()는 법제처가 항마다
+    설계: law쪽 _unchanged_clauses()는 법제처가 항마다
     매겨주는 공식 항제개정유형 태그를 읽지만, admrul 본문은 평문이라 그
-    태그 자체가 없다(parse_admrul_units 참고). 대신 신구법 비교 API가
+    태그 자체가 없음(parse_admrul_units 참고). 대신 신구법 비교 API가
     스킵 표시("1. ∼ 4. (생 략)")로 이미 "이 범위는 안 바뀌었다"를
     알려주고 있는데, extract_changes()는 지금까지 이걸 UNCHANGED로만
-    분류하고 버려왔다(parse/oldnew.py). extract_admrul_unchanged()가 그
-    버려지던 정보를 되살린다 — 근거는 여전히 법제처 API 자체이지 이
-    코드의 추론이 아니다.
+    분류하고 버려왔음(parse/oldnew.py). extract_admrul_unchanged()가 그
+    버려지던 정보를 되살림 — 근거는 여전히 법제처 API 자체이지 이
+    코드의 추론이 아님.
 
     touched_articles 필터는 law쪽과 동일한 이유: 이번에 실제로 CHANGED로
-    감지된 조문에 대해서만 "안 바뀜"을 보고한다.
+    감지된 조문에 대해서만 "안 바뀜"을 보고함.
     """
     touched_articles = {
         lr.unit.article_label

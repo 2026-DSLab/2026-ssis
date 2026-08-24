@@ -1,7 +1,7 @@
 """요약 파이프라인 설정.
 
-lawtrack/config.py 와 같은 방식 — 모든 설정은 환경변수(.env)에서 읽는다.
-대화형 입력을 쓰지 않는 이유도 같다: 배치 실행에서 멈추면 안 된다.
+lawtrack/config.py 와 같은 방식 — 모든 설정은 환경변수(.env)에서 읽음.
+대화형 입력을 쓰지 않는 이유도 같음: 배치 실행에서 멈추면 안 됨.
 """
 
 from __future__ import annotations
@@ -22,17 +22,17 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PROVIDER = "openai"
 DEFAULT_MODEL = "gpt-5.4-mini"
 
-#: 프로바이더별 API 키 환경변수. QWEN 을 붙일 때 여기에 한 줄 추가한다.
+#: 프로바이더별 API 키 환경변수. QWEN 을 붙일 때 여기에 한 줄 추가함.
 API_KEY_ENV = {
     "openai": "OPENAI_API_KEY",
     "anthropic": "ANTHROPIC_API_KEY",
     "openrouter": "OPENROUTER_API_KEY",
 }
 
-#: OpenRouter 는 OpenAI 호환 API 를 그대로 쓰되 주소만 다르다
-#: (llm.py OpenAIClient 가 그대로 처리한다). SUMMARY_BASE_URL 을 매번
-#: 손으로 적지 않아도 되도록 기본값을 여기 박아 둔다 — 더 구체적인 값이
-#: 필요하면 SUMMARY_BASE_URL 로 덮어쓸 수 있다.
+#: OpenRouter 는 OpenAI 호환 API 를 그대로 쓰되 주소만 다름
+#: (llm.py OpenAIClient 가 그대로 처리함). SUMMARY_BASE_URL 을 매번
+#: 손으로 적지 않아도 되도록 기본값을 여기 박아 둠 — 더 구체적인 값이
+#: 필요하면 SUMMARY_BASE_URL 로 덮어쓸 수 있음.
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
@@ -46,26 +46,26 @@ class LLMSettings:
 
     api_key: str
     provider: str = DEFAULT_PROVIDER
-    """openai | anthropic | openrouter. 원내 QWEN 전환 시 여기에 값을 추가한다.
+    """openai | anthropic | openrouter. 원내 QWEN 전환 시 여기에 값을 추가함.
 
-    openrouter 는 별도 구현체가 없다 — OpenAI 호환 API 를 그대로 쓰므로
+    openrouter 는 별도 구현체가 없음 — OpenAI 호환 API 를 그대로 쓰므로
     llm.py 의 OpenAIClient 가 처리하고, base_url 만 OpenRouter 주소로
-    바뀐다(load_settings 가 자동으로 채운다)."""
+    바뀜(load_settings 가 자동으로 채움)."""
 
     model: str = DEFAULT_MODEL
 
     base_url: str | None = None
     """API 주소. None 이면 프로바이더 기본값(OpenAI 는 api.openai.com).
 
-    OpenRouter 처럼 OpenAI 호환 API 를 쓰는 중계 서비스는 여기를 바꾼다:
+    OpenRouter 처럼 OpenAI 호환 API 를 쓰는 중계 서비스는 여기를 바꿈:
         SUMMARY_BASE_URL=https://openrouter.ai/api/v1
-    원내 QWEN 이 OpenAI 호환 엔드포인트를 제공한다면 이것만 바꿔도 된다."""
+    원내 QWEN 이 OpenAI 호환 엔드포인트를 제공한다면 이것만 바꿔도 됨."""
 
     article_max_tokens: int = 2048
-    """1단계는 조문 하나당 2~3문장이라 낮게 잡아도 안전하다."""
+    """1단계는 조문 하나당 2~3문장이라 낮게 잡아도 안전함."""
 
     law_max_tokens: int = 8192
-    """2단계는 조문 개수만큼 길어질 수 있어 여유를 둔다."""
+    """2단계는 조문 개수만큼 길어질 수 있어 여유를 둠."""
 
     mapping_max_tokens: int = 4096
     """매핑 에이전트 — 조문 항목 수만큼 대응 관계를 내야 해서 중간 크기."""
@@ -75,9 +75,9 @@ class LLMSettings:
 
     enable_verifier: bool = True
     """감수(사실 대조) 사용 여부. summarizer/verifier.py의 코드 기반
-    verify_summaries()를 켤지 말지만 결정한다 — LLM을 호출하지 않으므로
+    verify_summaries()를 켤지 말지만 결정함 — LLM을 호출하지 않으므로
     비용과는 무관하고(끈다고 절약되는 토큰 없음), 순수 검증 단계 자체를
-    건너뛰고 싶을 때만 끈다."""
+    건너뛰고 싶을 때만 끔."""
 
     article_thinking: bool = False
     """1단계는 '주어진 두 문장을 다듬는' 단순 작업이라 기본 off.
@@ -85,7 +85,7 @@ class LLMSettings:
 
     law_thinking: bool = True
     """2단계는 여러 조문을 묶어 개정 취지와 연결하는 종합 작업이라 기본 on.
-    adaptive thinking — 모델이 필요한 만큼만 생각한다."""
+    adaptive thinking — 모델이 필요한 만큼만 생각함."""
 
     effort: str | None = None
     """low | medium | high | xhigh | max. None 이면 API 기본값(high).
@@ -93,7 +93,7 @@ class LLMSettings:
 
     timeout: float = 600.0
     max_retries: int = 3
-    """429/5xx 는 SDK 가 알아서 재시도한다. 여기서는 횟수만 조정."""
+    """429/5xx 는 SDK 가 알아서 재시도함. 여기서는 횟수만 조정."""
 
 
 @dataclass(frozen=True)
@@ -101,7 +101,7 @@ class PipelineSettings:
     """오케스트레이션 설정."""
 
     max_workers: int = 4
-    """1단계 조문 팬아웃 동시성. 조문끼리 독립이라 병렬이 안전하다.
+    """1단계 조문 팬아웃 동시성. 조문끼리 독립이라 병렬이 안전함.
     rate limit 에 걸리면 낮출 것."""
 
     output_dir: Path = field(default=PROJECT_ROOT / "out" / "summaries")
@@ -132,12 +132,12 @@ def _bool(key: str, default: bool) -> bool:
 
 
 def load_settings(env_file: str | Path | None = None, *, require_api_key: bool = True) -> Settings:
-    """환경변수에서 설정을 읽는다.
+    """환경변수에서 설정을 읽음.
 
     우선순위: 이미 설정된 OS 환경변수 > .env 파일
 
     require_api_key=False 는 --dry-run 용 — API 키 없이 프롬프트만
-    확인하고 싶을 때 쓴다.
+    확인하고 싶을 때 씀.
     """
     path = Path(env_file) if env_file else PROJECT_ROOT / ".env"
     if path.exists():
@@ -167,8 +167,8 @@ def load_settings(env_file: str | Path | None = None, *, require_api_key: bool =
     if provider == "openrouter" and not model:
         # OpenRouter 모델명은 "provider/model" 형식이라(예: openai/gpt-4o-mini,
         # anthropic/claude-3.5-sonnet) OpenAI 전용 기본값(gpt-5.4-mini)을
-        # 그대로 쓰면 100% 실패한다. 조용히 틀린 기본값을 쓰는 대신 명시를
-        # 요구한다 — https://openrouter.ai/models 에서 실제 이름을 확인할 것.
+        # 그대로 쓰면 100% 실패함. 조용히 틀린 기본값을 쓰는 대신 명시를
+        # 요구함 — https://openrouter.ai/models 에서 실제 이름을 확인할 것.
         raise ConfigError(
             "SUMMARY_PROVIDER=openrouter 는 SUMMARY_MODEL 을 반드시 명시해야 합니다"
             " (형식: provider/model, 예: openai/gpt-4o-mini). "

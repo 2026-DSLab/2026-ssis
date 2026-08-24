@@ -1,23 +1,23 @@
 """전문(lawService 본문) → 조/항/호/목 검색 트리.
 
-★ 가드 ③ (개정문 이중매칭 방지)와 직결된다.
+가드 ③ (개정문 이중매칭 방지)와 직결됨.
 
     실측: 신설 조문은 <개정문>(관보 공포문)과 <조문>(현행 법전) 양쪽에
-    텍스트가 100% 동일하게 들어간다 (아동복지법 MST=281929 실측).
+    텍스트가 100% 동일하게 들어감 (아동복지법 MST=281929 실측).
     이 모듈은 api/fulltext.py 가 이미 분리해 둔 '조문' 노드만 다루고,
-    '개정문'/'제개정이유' 쪽에는 아예 접근하지 않는다 — 즉 이 모듈이
-    만들어내는 검색 트리 자체에 개정문 텍스트가 섞여 들어올 수 없다.
+    '개정문'/'제개정이유' 쪽에는 아예 접근하지 않음 — 즉 이 모듈이
+    만들어내는 검색 트리 자체에 개정문 텍스트가 섞여 들어올 수 없음.
     (분리 자체는 api/fulltext.FullTextResult.revision_text 가 담당)
 
 필드명 신뢰도:
     조문번호 / 조문변경여부 / 항번호 / 항내용 / 항제개정유형 /
     항제개정일자문자열 / 호번호 / 호가지번호 / 호내용
-        → ✅ 실측 확인된 필드명 (국민기초생활보장법 시행규칙,
+        → 실측 확인된 필드명 (국민기초생활보장법 시행규칙,
            아동복지법 응답에서 직접 확인)
 
     목(目) 레벨 필드명(목번호/목내용)
-        → ✅ 실측 확인됨 (2026-07-16, 전자정부법 MST=268103 제2조제3호·
-           제9호). 호와 동일 패턴("목번호"/"목내용")이 맞았다.
+        → 실측 확인됨 (전자정부법 MST=268103 제2조제3호·
+           제9호). 호와 동일 패턴("목번호"/"목내용")이 맞았음.
 
     상위 경로("조문" 밑에 바로 항목 리스트가 오는지, "조문단위"라는
     한 겹이 더 있는지)
@@ -87,9 +87,9 @@ class ArticleUnit:  # 조
     label: str               # "제6조의2" 형태로 정규화된 표시용 라벨
     title: str | None          # 짧은 괄호 제목 (예: "기준 중위소득의 산정")
     changed: bool             # 조문변경여부 Y/N
-    content: str = ""          # ★ "조문내용" 원문 그대로.
+    content: str = ""          # "조문내용" 원문 그대로.
     # 항이 있는 조문은 이 필드가 헤더뿐이지만("제6조의2(기준 중위소득의 산정)"),
-    # 항이 없는 단일 문단형 조문(예: 제56조의6)은 본문 전체가 여기 들어있다.
+    # 항이 없는 단일 문단형 조문(예: 제56조의6)은 본문 전체가 여기 들어있음.
     # (실측: 항 배열 없는 조문에서 title만 쓰면 본문이 통째로 유실되는
     #  버그가 있었음 — 이 필드가 그 수정)
     enforce_date: str = ""    # 조문시행일자 (예: "20251001") — 실측 확인, 조문 단위 시행일
@@ -135,14 +135,14 @@ class SearchUnit:
 def _article_label(code: str, branch: str) -> str:
     """조문번호 + 조문가지번호 → 표시 라벨.
 
-    ✅ 실측 확인 (2026-07-16, 국민기초생활보장법 MST=276653 원본 JSON):
+    실측 확인 (국민기초생활보장법 MST=276653 원본 JSON):
         "조문번호": "6", "조문가지번호": "2" → 제6조의2
 
     이전 버전은 조문번호가 lsJoHstInf 의 6자리 인코딩("000602")과 같을
     거라 가정했는데, 실제 lawService 본문조회 응답은 조번호와 가지번호가
-    "6" / "2" 처럼 완전히 분리된 별도 필드였다. 그 가정으로 짰던 코드가
+    "6" / "2" 처럼 완전히 분리된 별도 필드였음. 그 가정으로 짰던 코드가
     가지번호를 통째로 누락시켜 "제6조의2"가 "제6조"로 잘못 표시되는
-    버그가 있었다 — 이 함수가 그 수정본이다.
+    버그가 있었음 — 이 함수가 그 수정본임.
     """
     code = (code or "").strip()
     branch = (branch or "").strip().lstrip("0") or ("0" if branch and branch.strip("0") == "" else branch.strip())
@@ -159,7 +159,7 @@ def _find_article_items(root: dict) -> list:
         items = dig(root, *path)
         if items:
             return as_list(items)
-    # 경로 후보가 전부 실패하면 트리 전체에서 '조문번호' 를 가진 dict 를 찾는다.
+    # 경로 후보가 전부 실패하면 트리 전체에서 '조문번호' 를 가진 dict 를 찾음.
     found = find_key(root, "조문번호")
     if found is not None:
         log.debug("조문 목록 경로 탐색 실패 — find_key 로 대체 탐색됨")
@@ -169,7 +169,7 @@ def _find_article_items(root: dict) -> list:
 def parse_articles(raw: dict) -> list[ArticleUnit]:
     """법령 본문 JSON(raw) → ArticleUnit 목록.
 
-    raw 는 api/fulltext.FullTextResult.raw 를 그대로 받는다 (root 탐색은
+    raw 는 api/fulltext.FullTextResult.raw 를 그대로 받음 (root 탐색은
     이 함수 내부에서 수행).
     """
     root = _find_root(raw)
@@ -184,10 +184,10 @@ def parse_articles(raw: dict) -> list[ArticleUnit]:
             continue
         code = text_of(raw_article.get("조문번호"))
         branch = text_of(raw_article.get("조문가지번호"))
-        # ✅ 실측: 조문 제목은 "조문제목" 필드에 이미 분리되어 있음
+        # 실측: 조문 제목은 "조문제목" 필드에 이미 분리되어 있음
         #    (기존엔 "조문내용"에서 정규식으로 다시 뽑으려 했었는데,
         #     "조문내용"은 "제6조의2(기준 중위소득의 산정)"처럼 헤더 전체이고
-        #     "조문제목"이 그 안의 괄호 안 텍스트만 이미 담고 있다.)
+        #     "조문제목"이 그 안의 괄호 안 텍스트만 이미 담고 있음.)
         title = text_of(raw_article.get("조문제목")) or article_title(text_of(raw_article.get("조문내용")))
         content = text_of(raw_article.get("조문내용"))
         changed = text_of(raw_article.get("조문변경여부")).upper() == "Y"
@@ -212,13 +212,13 @@ def parse_articles(raw: dict) -> list[ArticleUnit]:
 
 def _split_mok_groups(mok_list: list) -> list[list]:
     """항의 형제로 붙은 평탄화된 목 배열을, 목번호가 '가'로 리셋되는
-    지점마다 끊어 원래의 호별 그룹으로 되돌린다.
+    지점마다 끊어 원래의 호별 그룹으로 되돌림.
 
-    ✅ 실측(2026-07-31, 국가를 당사자로 하는 계약에 관한 법률 시행령
+    실측(국가를 당사자로 하는 계약에 관한 법률 시행령
     제26조①): 호가 5개고 각각 목을 갖는 항인데, API가 목을 각 호 안에
-    넣지 않고 항의 형제로 통째로(호 5개의 목 40개를 배열 하나에) 내려줬다
-    — 각 호 객체엔 "목" 키 자체가 없었다. 목번호가 "가."로 되돌아가는
-    지점이 곧 새 호의 목록 시작이므로, 그 경계로 그룹을 복원한다.
+    넣지 않고 항의 형제로 통째로(호 5개의 목 40개를 배열 하나에) 내려줬음
+    — 각 호 객체엔 "목" 키 자체가 없었음. 목번호가 "가."로 되돌아가는
+    지점이 곧 새 호의 목록 시작이므로, 그 경계로 그룹을 복원함.
     """
     groups: list[list] = []
     for raw_sub in mok_list:
@@ -236,10 +236,10 @@ def _parse_clause(raw_clause: dict) -> ClauseNode:
 
     # 위 _split_mok_groups 독스트링 참고: 정상 경로로 목을 하나도 못 찾았고
     # (모든 호의 subitems가 비어있고) 항의 형제로 목 배열이 붙어있으면,
-    # 그걸 호 개수만큼 그룹으로 쪼개 순서대로 이어붙인다. 그룹 수가 호
-    # 개수와 정확히 같을 때만 적용한다 — 안 맞으면 잘못된 호에 붙일
-    # 위험이 있으니 차라리 기존처럼 목 없이 둔다(회귀 없음, 조용한
-    # 오귀속보다 "0건실패"가 낫다).
+    # 그걸 호 개수만큼 그룹으로 쪼개 순서대로 이어붙임. 그룹 수가 호
+    # 개수와 정확히 같을 때만 적용함 — 안 맞으면 잘못된 호에 붙일
+    # 위험이 있으니 차라리 기존처럼 목 없이 둠(회귀 없음, 조용한
+    # 오귀속보다 "0건실패"가 나음).
     sibling_mok = as_list(raw_clause.get("목"))
     if sibling_mok and items and not any(it.subitems for it in items):
         groups = _split_mok_groups(sibling_mok)
@@ -293,17 +293,17 @@ def _find_root(raw: dict) -> dict:
 def _unit_article_code(art: ArticleUnit) -> str:
     """SearchUnit.article_code 생성 — 조문가지번호까지 포함해 article당 고유해야 함.
 
-    ★★ 실측 발견(2026-07-16, contract/export.py 실데이터 검증): art.code는
+    실측 발견(contract/export.py 실데이터 검증): art.code는
     "조문번호"(순수 조번호, 예: "56")뿐이라 제56조/제56조의2/…/제56조의6이
-    전부 같은 article_code="56"을 공유했다. article_diff의 UNIQUE KEY가
+    전부 같은 article_code="56"을 공유했음. article_diff의 UNIQUE KEY가
     (law_id, law_serial_no, article_code, clause_no, item_label,
     subitem_label)이고 article_label은 ON DUPLICATE KEY UPDATE 대상이
     아니어서, 여러 조문의 같은 항번호(예: 둘 다 "①")가 전부 같은 키로
     충돌 — 먼저 들어간 행의 article_label은 그대로 남은 채 change_type/
     old_text/new_text/match_status만 나중 값으로 덮어써지는 심각한 버그가
-    있었다(실측: 제56조의5① 의 내용이 "제56조의2①"라는 라벨을 달고
+    있었음(실측: 제56조의5① 의 내용이 "제56조의2①"라는 라벨을 달고
     저장됨). art.label("제56조의2" 등)은 이미 조번호+가지번호 조합이라
-    article당 고유하므로 그대로 code로 재사용한다.
+    article당 고유하므로 그대로 code로 재사용함.
     """
     return art.label
 
@@ -311,25 +311,25 @@ def _unit_article_code(art: ArticleUnit) -> str:
 def flatten_searchable(articles: list[ArticleUnit]) -> list[SearchUnit]:
     """locate 단계가 순회할 최소 검색 단위 리스트.
 
-    항이 없는 조문(단문 조문)은 조문 자체를 하나의 유닛으로 반환한다.
-    enforce_date는 조문(art) 단위 값을 그대로 물려받는다 — 실측 확인된
+    항이 없는 조문(단문 조문)은 조문 자체를 하나의 유닛으로 반환함.
+    enforce_date는 조문(art) 단위 값을 그대로 물려받음 — 실측 확인된
     "조문시행일자"가 항/호 레벨에 별도로 있지는 않았으므로, 조문 레벨
-    값을 그 조문 산하 모든 유닛에 공통 적용한다.
+    값을 그 조문 산하 모든 유닛에 공통 적용함.
     """
     units: list[SearchUnit] = []
     for art in articles:
         code = _unit_article_code(art)
-        # ★★ 실측 발견(2026-07-16, 공공기관의 정보공개에 관한 법률 제22조):
+        # 실측 발견(공공기관의 정보공개에 관한 법률 제22조):
         # 항 없이 호가 조문에 바로 붙는 구조("항" JSON 키가 실제 항번호/
-        # 항내용 없이 "호" 배열만 담은 빈 컨테이너)가 있다. 이 경우
+        # 항내용 없이 "호" 배열만 담은 빈 컨테이너)가 있음. 이 경우
         # art.clauses 는 비어있지 않으므로(빈 ClauseNode 하나) 아래
         # "항이 없는 조문" 분기를 안 타는데, 정작 조문 자신의 도입부 문장
         # ("다음 각 호의 사항을 심의ㆍ조정하기 위하여…")은 그 어떤 항/호
-        # 필드에도 없고 오직 art.content 에만 있다 — 항/호 레벨에서 이미
+        # 필드에도 없고 오직 art.content 에만 있음 — 항/호 레벨에서 이미
         # 두 번 겪은 "자식이 있으면 부모 텍스트가 통째로 사라지는" 문제의
         # 세 번째 사례(조문→항 레벨)다. 항 유무와 무관하게 조문 자체도
-        # 항상 검색 유닛으로 추가한다(정상적인 다항 조문에서는 content가
-        # 헤더뿐이라 strip 후 빈 문자열이 되어 무해하다).
+        # 항상 검색 유닛으로 추가함(정상적인 다항 조문에서는 content가
+        # 헤더뿐이라 strip 후 빈 문자열이 되어 무해함).
         head_body = strip_article_head(art.content) if art.content else ""
         if head_body:
             units.append(
@@ -341,12 +341,12 @@ def flatten_searchable(articles: list[ArticleUnit]) -> list[SearchUnit]:
                 )
             )
         if not art.clauses:
-            # ★ 수정: 항이 없는 단일 문단형 조문은 title(짧은 괄호 제목)이
-            # 아니라 content(조문내용 전체)에서 헤더만 뗀 본문을 써야 한다.
+            # 수정: 항이 없는 단일 문단형 조문은 title(짧은 괄호 제목)이
+            # 아니라 content(조문내용 전체)에서 헤더만 뗀 본문을 써야 함.
             # 실측: 제56조의6(항 없음)에서 title만 쓰면 본문이 통째로
-            # 유실되어 검색이 항상 0건실패로 죽는 버그가 있었다. 위에서
+            # 유실되어 검색이 항상 0건실패로 죽는 버그가 있었음. 위에서
             # 이미 head_body 로 처리했으므로, content 가 비어 title만
-            # 있는 경우에만 보강한다.
+            # 있는 경우에만 보강함.
             if not head_body and art.title:
                 units.append(
                     SearchUnit(
@@ -358,11 +358,11 @@ def flatten_searchable(articles: list[ArticleUnit]) -> list[SearchUnit]:
                 )
             continue
         for clause in art.clauses:
-            # ★ 실측(전자정부법 제56조의2 항①): 호가 있는 항이라도 항내용
+            # 실측(전자정부법 제56조의2 항①): 호가 있는 항이라도 항내용
             # 필드 자체에 호 목록 전에 나오는 전제문(예: "…통보하여야 한다.")이
-            # 실질적인 내용을 담고 있을 수 있다. 호가 있다고 이 텍스트를
-            # 건너뛰면, 전제문 안에서 바뀐 부분은 영원히 위치확정에 실패한다.
-            # 그래서 호 유무와 무관하게 항 자체도 항상 검색 유닛으로 추가한다.
+            # 실질적인 내용을 담고 있을 수 있음. 호가 있다고 이 텍스트를
+            # 건너뛰면, 전제문 안에서 바뀐 부분은 영원히 위치확정에 실패함.
+            # 그래서 호 유무와 무관하게 항 자체도 항상 검색 유닛으로 추가함.
             units.append(
                 SearchUnit(
                     article_code=code, article_label=art.label,
@@ -374,10 +374,10 @@ def flatten_searchable(articles: list[ArticleUnit]) -> list[SearchUnit]:
             if not clause.items:
                 continue
             for item in clause.items:
-                # ★ 실측(전자정부법 제2조제11호): 목이 있는 호도 호내용 필드
+                # 실측(전자정부법 제2조제11호): 목이 있는 호도 호내용 필드
                 # 자체에 목 목록 전의 전제문("…다음 각 목의 자원을 말한다.
-                # 다만…")이 실질 내용을 담고 있을 수 있다. 항 레벨과 동일한
-                # 이유로, 목 유무와 무관하게 호 자체도 항상 유닛으로 추가한다.
+                # 다만…")이 실질 내용을 담고 있을 수 있음. 항 레벨과 동일한
+                # 이유로, 목 유무와 무관하게 호 자체도 항상 유닛으로 추가함.
                 units.append(
                     SearchUnit(
                         article_code=code, article_label=art.label,
@@ -404,35 +404,35 @@ def flatten_searchable(articles: list[ArticleUnit]) -> list[SearchUnit]:
 def parse_admrul_units(raw: dict) -> list[SearchUnit]:
     """행정규칙 본문(조문내용) → 검색 유닛 목록.
 
-    ★★ 실측 발견(2026-07-16, 15개 행정규칙 실제 개정 시뮬레이션 검증):
-    행정규칙 본문조회 응답은 법령과 구조가 완전히 다르다. 법령은
+    실측 발견(15개 행정규칙 실제 개정 시뮬레이션 검증):
+    행정규칙 본문조회 응답은 법령과 구조가 완전히 다름. 법령은
     조문/항/호/목이 JSON 트리로 미리 쪼개져 있어 parse_articles가 그
     구조를 그대로 읽으면 되지만, 행정규칙은 "AdmRulService.조문내용"
-    이라는 평문 문자열 배열 하나뿐이다. 조문 하나가 배열의 원소 하나이긴
+    이라는 평문 문자열 배열 하나뿐임. 조문 하나가 배열의 원소 하나이긴
     하지만, 그 안의 항①②③/호1.2.3./목가.나.다.는 전혀 분리돼 있지 않고
     (예: "제5조(사용언어) ① 계약을 이행함에 있어서는… ② 계약담당공무원은…")
-    한 줄에 통째로 이어붙어 있다. "제1장 총칙" 같은 장(章) 제목도 조문과
-    같은 배열에 섞여 있어 걸러내야 한다.
+    한 줄에 통째로 이어붙어 있음. "제1장 총칙" 같은 장(章) 제목도 조문과
+    같은 배열에 섞여 있어 걸러내야 함.
 
     이 사실을 몰랐을 때는 parse_articles(법령 전용)를 행정규칙에도 그대로
     썼는데, "조문"/"조문단위" 키가 없어 조문을 0건 찾고, 그 결과 검색
-    대상 유닛이 하나도 없어 모든 위치확정이 100% 실패했다(실측: 15개
+    대상 유닛이 하나도 없어 모든 위치확정이 100% 실패했음(실측: 15개
     행정규칙 시뮬레이션에서 5개 전부 succ=0).
 
     해결: oldAndNew 조각을 자르는 데 이미 쓰던 text.split의 항/호/목
     분해기(split_by_clause/item/subitem, 목 리스트 오탐 방지 로직 포함)를
-    본문 자체에도 그대로 적용해 SearchUnit을 직접 만든다. 법령 쪽과 달리
-    "항 자체 텍스트를 늘 별도 유닛으로 추가"하지 않는다 — 항 텍스트가
+    본문 자체에도 그대로 적용해 SearchUnit을 직접 만듦. 법령 쪽과 달리
+    "항 자체 텍스트를 늘 별도 유닛으로 추가"하지 않음 — 항 텍스트가
     JSON 필드처럼 호 내용과 분리돼 있지 않고 통째로 한 덩어리이므로,
     항 유닛과 호 유닛을 둘 다 만들면 호 내용을 포함한 중복(상위집합)
-    유닛이 생겨 불필요한 중복매칭을 유발한다. split_by_item이 반환하는
-    "호 기호 이전 전제문" 조각(Level.NONE)이 이미 그 역할을 대신한다.
+    유닛이 생겨 불필요한 중복매칭을 유발함. split_by_item이 반환하는
+    "호 기호 이전 전제문" 조각(Level.NONE)이 이미 그 역할을 대신함.
 
-    ★ 실측 추가 발견(보안업무규정 시행규칙, law_id=9008822): 같은 평문
+    실측 추가 발견(보안업무규정 시행규칙, law_id=9008822): 같은 평문
     배열이 루트 바로 아래("AdmRulService.조문내용")가 아니라 "조문" 한
-    겹 아래("AdmRulService.조문.조문내용")에 오는 경우도 있다(조문이
+    겹 아래("AdmRulService.조문.조문내용")에 오는 경우도 있음(조문이
     1건뿐일 때 dict로 오는 admrul 특유의 패턴과 유사). 두 경로를 다
-    시도한다.
+    시도함.
     """
     root = raw.get("AdmRulService", raw)
     lines = as_list(root.get("조문내용"))
@@ -450,15 +450,15 @@ def parse_admrul_units(raw: dict) -> list[SearchUnit]:
         if no is None:
             continue  # "제1장 총칙" 같은 장 제목 — 조문이 아니므로 건너뜀
         article_label = no.label
-        # ★★ 실측 발견(2026-07-16, (계약예규) 정부 입찰ㆍ계약 집행기준
+        # 실측 발견((계약예규) 정부 입찰ㆍ계약 집행기준
         # 제34조④): 행정규칙 평문 본문에는 "<개정 2008.12.29.>" 같은
-        # 개정이력 각주가 항/호/목 사이사이에 그대로 섞여 있다. 이걸 안
+        # 개정이력 각주가 항/호/목 사이사이에 그대로 섞여 있음. 이걸 안
         # 지우고 split_by_item/split_by_subitem 에 넘기면 각주 속 날짜
         # 조각("2008." 등)이 진짜 호 번호로 오인되고, 그 여파로 목 분해
-        # 시작 위치까지 틀어진다. locator.py 는 이미 검색 직전에
+        # 시작 위치까지 틀어짐. locator.py 는 이미 검색 직전에
         # strip_annotations 를 적용하지만, 여기서 만드는 SearchUnit 자체가
         # 오염된 조각으로 쪼개지면 그 시점에 손쓸 수 없으므로 분해 전에
-        # 미리 제거한다.
+        # 미리 제거함.
         body = strip_annotations(strip_article_head(text))
 
         clauses = split_by_clause(body) or [Fragment(Level.NONE, None, body, body)]
@@ -502,16 +502,16 @@ def parse_admrul_units(raw: dict) -> list[SearchUnit]:
 
 
 #: 제N조가 없는 행정규칙에서 절(節) 머리로 쓰이는 표기 중, **다른 것과
-#: 헷갈릴 수 없는 것만** 담는다.
+#: 헷갈릴 수 없는 것만** 담음.
 #:
-#: ★ 실측(2026-08-18): 처음엔 "1.1", "1." 같은 번호 체계도 절 머리로
-#:   잡으려 했는데, 본문의 날짜·수치가 그대로 걸려들었다.
+#: 실측: 처음엔 "1.1", "1." 같은 번호 체계도 절 머리로
+#:   잡으려 했는데, 본문의 날짜·수치가 그대로 걸려들었음.
 #:       "2013. 7. 25.)" -> 7.25 를 절 머리로 오인
 #:       "38.4", "41.9"  -> 금액·비율을 절 머리로 오인
-#:   화면에 "38.4" 라는 절 제목이 뜨면 그 자체가 버그로 보인다. 애매한
-#:   패턴은 아예 빼고, 못 쪼개면 통째로 한 덩어리로 두는 편이 낫다 —
+#:   화면에 "38.4" 라는 절 제목이 뜨면 그 자체가 버그로 보임. 애매한
+#:   패턴은 아예 빼고, 못 쪼개면 통째로 한 덩어리로 두는 편이 나음 —
 #:   어차피 _readable_text() 가 항/호/목 경계에서 줄을 나눠 주므로
-#:   한 덩어리여도 읽는 데는 지장이 없다.
+#:   한 덩어리여도 읽는 데는 지장이 없음.
 _SECTION_HEAD_RE = re.compile(
     r"(?:(?<=^)|(?<=[\s　]))("
     r"[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ]+\s*\.(?=\s*[가-힣])"   # Ⅰ. 목적  (하도급거래공정화 지침)
@@ -521,30 +521,30 @@ _SECTION_HEAD_RE = re.compile(
 
 
 def _units_without_articles(lines: list) -> list[SearchUnit]:
-    """제N조 구조가 전혀 없는 행정규칙을 표시·비교 가능한 단위로 쪼갠다.
+    """제N조 구조가 전혀 없는 행정규칙을 표시·비교 가능한 단위로 쪼갬.
 
-    ★ 실측 발견(2026-08-18, 전수검증 — 전문 비교 화면에서 "전문 내용을
+    실측 발견(전수검증 — 전문 비교 화면에서 "전문 내용을
     찾지 못했습니다"만 뜨는 행정규칙 3건): 아래 문서들은 조문내용이
-    "제N조"가 하나도 없는 평문 한 덩어리(4천~2만8천자)로 온다.
+    "제N조"가 하나도 없는 평문 한 덩어리(4천~2만8천자)로 옴.
 
         하도급거래공정화 지침            Ⅰ. 목 적 / Ⅱ. 용어의 정의
         정보보호시스템 평가·인증 고시     제1장 총칙 / 1.1 목적 / 1.2 …
         행정업무용 표준 관리규정          1. 목적 및 범위 / 가. 목적
 
     parse_admrul_units 의 본 경로는 ArticleNo.from_text() 가 조문번호를
-    못 찾은 줄을 "제1장 총칙 같은 장 제목"으로 보고 건너뛴다 — 이 문서들은
-    모든 줄이 거기 걸려 유닛이 0개가 됐다. 그 결과 전문 비교 화면에는
+    못 찾은 줄을 "제1장 총칙 같은 장 제목"으로 보고 건너뜀 — 이 문서들은
+    모든 줄이 거기 걸려 유닛이 0개가 됐음. 그 결과 전문 비교 화면에는
     아무것도 안 나오고, 본 파이프라인의 locate_all() 도 검색 대상이 없어
-    위치확정이 100% 실패한다(2026-07-16에 고친 것과 같은 종류의 실패가
-    다른 원인으로 재발한 셈이다).
+    위치확정이 100% 실패함(같은 종류의 실패가
+    다른 원인으로 재발한 셈임).
 
-    조문 구조가 없으니 조/항/호 라벨을 지어낼 수는 없다. 대신 문서가
+    조문 구조가 없으니 조/항/호 라벨을 지어낼 수는 없음. 대신 문서가
     실제로 쓰는 절 머리(Ⅰ., 1.1, 제N장)로 끊어 그 머리를 라벨로 삼고,
-    그것마저 없으면 전체를 한 덩어리로 낸다 — 최소한 화면에 보이고
-    어절 단위 비교가 되는 상태를 보장한다.
+    그것마저 없으면 전체를 한 덩어리로 냄 — 최소한 화면에 보이고
+    어절 단위 비교가 되는 상태를 보장함.
 
-    ※ 본 경로가 유닛을 하나라도 만들면 이 함수는 호출되지 않는다. 즉
-      지금까지 정상 동작하던 행정규칙의 결과는 하나도 바뀌지 않는다.
+    ※ 본 경로가 유닛을 하나라도 만들면 이 함수는 호출되지 않음. 즉
+      지금까지 정상 동작하던 행정규칙의 결과는 하나도 바뀌지 않음.
     """
     units: list[SearchUnit] = []
     for raw_line in lines:
@@ -558,7 +558,7 @@ def _units_without_articles(lines: list) -> list[SearchUnit]:
                 item_label="", subitem_label="", text=text, changed=True,
             ))
             continue
-        # 첫 절 머리 앞의 도입부가 있으면 그것도 버리지 않고 담는다
+        # 첫 절 머리 앞의 도입부가 있으면 그것도 버리지 않고 담음
         if heads[0].start() > 0:
             lead = text[:heads[0].start()].strip()
             if lead:
@@ -590,12 +590,12 @@ def changed_articles(articles: list[ArticleUnit]) -> list[ArticleUnit]:
 def searchable_units_for(kind: str, raw: dict) -> list[SearchUnit]:
     """전문 JSON(raw) → SearchUnit 목록. kind에 따라 법령/행정규칙 파싱
     경로가 다르다는 걸 호출부(webapp의 전문 비교 페이지 등)가 몰라도
-    되게 감싼다.
+    되게 감쌈.
 
     법령은 parse_articles()가 조/항/호/목을 구조화한 ArticleUnit을
     돌려주므로 flatten_searchable()로 한 번 더 평탄화해야 하고,
     행정규칙은 parse_admrul_units()가 이미 평탄화된 SearchUnit을 바로
-    돌려준다 — 이 비대칭을 여기서 흡수한다.
+    돌려줌 — 이 비대칭을 여기서 흡수함.
     """
     if kind == "admrul":
         return parse_admrul_units(raw)

@@ -2,12 +2,12 @@
 
 실측: 공포번호 하나(예: 35948)로 전자정부법 시행령·국민기초생활보장법
 시행령·사회보장기본법 시행령·기초연금법 시행령 등 최소 5개+ 법령이
-동시에 개정되었다. "2~3개 묶임" 이 아니라 대량 묶임을 전제로 설계한다.
+동시에 개정되었음. "2~3개 묶임" 이 아니라 대량 묶임을 전제로 설계함.
 
-이 매칭은 3단비교(thdCmp) API 보다 가볍고 정확하다 — 이미 change_log 에
+이 매칭은 3단비교(thdCmp) API 보다 가볍고 정확함 — 이미 change_log 에
 쌓인 데이터로 조인 한 번이면 되고, thdCmp 처럼 별도 API 호출도, flat
 list 안에서 국회규칙/대법원규칙까지 뒤섞인 구조를 다시 걸러내는 작업도
-필요 없다.
+필요 없음.
 """
 
 from __future__ import annotations
@@ -37,7 +37,7 @@ def group_by_promulgation(change_log_repo: ChangeLogRepo, promulgation_no: str) 
     """이번에 감지된 개정과 같은 공포번호를 가진 다른 법을 조회.
 
     promulgation_no 가 빈 문자열이면(신구법 없음 등으로 공포번호를
-    못 얻은 경우) 항상 단독 그룹을 반환한다.
+    못 얻은 경우) 항상 단독 그룹을 반환함.
     """
     if not promulgation_no:
         return LinkedGroup(promulgation_no="", law_ids=())
@@ -56,7 +56,7 @@ def group_by_promulgation(change_log_repo: ChangeLogRepo, promulgation_no: str) 
 def group_many(change_log_repo: ChangeLogRepo, promulgation_numbers: list[str]) -> dict[str, LinkedGroup]:
     """여러 공포번호를 한 번에 그룹핑. 중복 조회를 피하기 위한 편의 함수.
 
-    빈 문자열은 애초에 그룹화 대상이 아니므로 제외한다.
+    빈 문자열은 애초에 그룹화 대상이 아니므로 제외함.
     """
     result: dict[str, LinkedGroup] = {}
     for no in dict.fromkeys(n for n in promulgation_numbers if n):

@@ -2,13 +2,13 @@
 
 배경: oldAndNew 는 "무엇이 바뀌었는지"(<P> 태그)는 정확히 알려주지만,
 그 변경이 정확히 몇 조 몇 항 몇 호에 있는지는 구조화된 필드로 주지
-않는다(구조문목록/신조문목록은 조문 순번 "no" 만 가질 뿐, 항/호/목
-깊이의 구조가 없다). 반면 lawService 본문은 조/항/호/목이 전부 태그로
-분리되어 있다. 그래서 "oldAndNew 에서 나온 변경 문장을 lawService
+않음(구조문목록/신조문목록은 조문 순번 "no" 만 가질 뿐, 항/호/목
+깊이의 구조가 없음). 반면 lawService 본문은 조/항/호/목이 전부 태그로
+분리되어 있음. 그래서 "oldAndNew 에서 나온 변경 문장을 lawService
 전문 안에서 찾아 정확한 위치를 알아낸다"는 전략을 쓴다 — 이 파일이
-그 검색을 담당한다.
+그 검색을 담당함.
 
-6가드는 코드 전체에 흩어져 있지 않고 아래처럼 각 계층에 나뉘어 있다.
+6가드는 코드 전체에 흩어져 있지 않고 아래처럼 각 계층에 나뉘어 있음.
 
     가드①②(유니코드/공백 정규화) → text.normalize.count_occurrences 내부
     가드③(개정문 파트 제외)      → parse.fulltext.parse_articles 가
@@ -58,7 +58,7 @@ class LocateStatus(str, Enum):
 class LocateResult:
     """조각 하나에 대한 위치 확정 결과.
 
-    tried 는 사람이 읽을 수 있는 진행 로그다. 실패 시 "어느 가드까지
+    tried 는 사람이 읽을 수 있는 진행 로그임. 실패 시 "어느 가드까지
     가서 왜 깨졌는지"가 여기 남아야 개선이 가능하다 — 조용히 넘기지
     않는다는 원칙의 구현.
     """
@@ -78,7 +78,7 @@ def _count_matches(needle: str, units: list[SearchUnit]) -> list[tuple[SearchUni
     """조각 텍스트가 각 유닛에 몇 번 등장하는지.
 
     count_occurrences 내부에서 유니코드(가드①)·공백(가드②) 정규화가
-    이미 적용된다.
+    이미 적용됨.
     """
     if not needle.strip():
         return []
@@ -131,15 +131,15 @@ def _locate_fragment(frag: Fragment, units: list[SearchUnit]) -> LocateResult:
 
 
 def locate_change(change: ArticleChange, units: list[SearchUnit]) -> list[LocateResult]:
-    """ArticleChange 하나(구/신 한 쌍)를 조각내어 위치를 확정한다.
+    """ArticleChange 하나(구/신 한 쌍)를 조각내어 위치를 확정함.
 
     반환값이 list 인 이유: oldAndNew 의 한 블록(예: "no"=1)이 실제로는
     여러 항/호를 한 문자열로 담고 있을 수 있어(실측: 전자정부법), 조각
-    개수만큼 결과가 나온다.
+    개수만큼 결과가 나옴.
 
-    change_type=DELETED 는 검색하지 않는다: 삭제된 내용은 정의상 현재
+    change_type=DELETED 는 검색하지 않음: 삭제된 내용은 정의상 현재
     (신) 본문에 더 이상 존재하지 않으므로, 신 전문에서 찾으려는 시도
-    자체가 무의미하다. 위치 없이 "삭제됨"으로만 기록한다.
+    자체가 무의미함. 위치 없이 "삭제됨"으로만 기록함.
     """
     if change.change_type is ChangeType.DELETED:
         return [
@@ -161,7 +161,7 @@ def locate_change(change: ArticleChange, units: list[SearchUnit]) -> list[Locate
 def locate_all(
     changes: list[ArticleChange], units: list[SearchUnit]
 ) -> list[tuple[ArticleChange, list[LocateResult]]]:
-    """여러 ArticleChange 를 일괄 처리. 실패 건은 요약 로그를 남긴다."""
+    """여러 ArticleChange 를 일괄 처리. 실패 건은 요약 로그를 남김."""
     out = []
     for change in changes:
         results = locate_change(change, units)

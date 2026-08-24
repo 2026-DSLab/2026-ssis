@@ -1,7 +1,7 @@
 """단일 법령 전체 파이프라인 실행 테스트.
 
 실제 국가법령정보 API + 실제 DB를 사용해, 감지→조회→분석→저장 전 과정을
-한 건에 대해 실행하고 결과를 상세히 출력한다.
+한 건에 대해 실행하고 결과를 상세히 출력함.
 
 사용법 (law-tracking-db 폴더 루트, 가상환경 활성화 상태에서):
 
@@ -9,7 +9,7 @@
     python scripts\\run_single_check.py 001973          # 국민기초생활보장법으로 테스트
     python scripts\\run_single_check.py 33483            # 정보시스템 감리기준(행정규칙)
 
-law_id 는 watchlist 테이블에 등록된 값이어야 한다.
+law_id 는 watchlist 테이블에 등록된 값이어야 함.
 """
 
 from __future__ import annotations
@@ -32,12 +32,12 @@ log = logging.getLogger("run_single_check")
 
 
 def _extract_word_changes(old_text: str, new_text: str) -> list[tuple[str, str]]:
-    """단어 단위로 두 문장을 대조해 (바뀌기 전, 바뀐 후) 쌍의 목록을 만든다.
+    """단어 단위로 두 문장을 대조해 (바뀌기 전, 바뀐 후) 쌍의 목록을 만듦.
 
     difflib.SequenceMatcher 로 안 바뀐 구간(equal)을 건너뛰고, 바뀐 구간
-    (replace/delete/insert)만 뽑아 앞뒤 단어를 그대로 묶는다. 국방데이터·
+    (replace/delete/insert)만 뽑아 앞뒤 단어를 그대로 묶음. 국방데이터·
     인공지능업무 훈령 실측 사례처럼 한 문장 안에 바뀐 곳이 여러 군데면
-    쌍이 여러 개 나온다.
+    쌍이 여러 개 나옴.
     """
     import difflib
 

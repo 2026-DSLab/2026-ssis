@@ -1,18 +1,21 @@
 -- PostgreSQL 스키마.
 --
--- ★ MySQL → PostgreSQL 전환(2026-08-03): 데이터베이스 자체(law_tracking_db)는
--- 이 스크립트가 만들지 않는다 — Postgres는 CREATE DATABASE에 IF NOT EXISTS를
--- 지원하지 않고, 같은 트랜잭션 안에서 DB를 만들고 그 DB로 접속을 옮겨갈 수도
--- 없다(MySQL의 USE 같은 게 없다). 배포 시 먼저
+-- 데이터베이스 자체(law_tracking_db)는 이 스크립트가 만들지 않는다 —
+-- PostgreSQL은 CREATE DATABASE에 IF NOT EXISTS가 없고, 같은 트랜잭션 안에서
+-- DB를 만든 뒤 그 DB로 접속을 옮길 수도 없다. 그 한 단계는 따로 해야 한다.
+--
+-- 가장 간단한 방법은 구축 스크립트를 쓰는 것이다(DB 생성·스키마·워치리스트
+-- 적재를 한 번에 한다):
+--     python scripts/setup_db.py
+--
+-- 손으로 하려면 DB를 먼저 만들고, 그 DB에 접속한 상태에서 이 파일을 실행한다:
 --     createdb -U postgres -E UTF8 law_tracking_db
--- (또는 CREATE DATABASE law_tracking_db ENCODING 'UTF8';) 로 DB를 만든 뒤,
--- 그 DB에 접속한 상태에서 이 파일을 실행한다:
 --     psql -U postgres -d law_tracking_db -f database/schema.sql
 
--- ★ 설계(2026-08-03 DB 간소화): 예전엔 laws/administrative_rules 두
--- 테이블로 나뉘어 있었다 — 컬럼 구성이 이름만 다를 뿐 완전히 같아서(법령
--- 명/ID/일련번호/전문JSON/타임스탬프), repo.py에도 거의 동일한 CRUD 코드가
--- 두 벌 있었다. kind 구분 컬럼('law'/'admrul') 하나로 합쳤다.
+-- 설계: 법령과 행정규칙을 documents 한 테이블에 담는다. 둘로 나누면 컬럼
+-- 구성이 이름만 다를 뿐 완전히 같아(법령명/ID/일련번호/전문JSON/타임스탬프)
+-- repo.py에 거의 동일한 CRUD 코드가 두 벌 생긴다. kind 구분 컬럼
+-- ('law'/'admrul') 하나로 그 중복을 없앤다.
 CREATE TABLE IF NOT EXISTS documents (
     kind VARCHAR(10) NOT NULL,
     doc_id VARCHAR(50) NOT NULL,
@@ -68,8 +71,8 @@ CREATE TABLE IF NOT EXISTS change_log (
     detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-COMMENT ON COLUMN change_log.revision_reason IS '법제처 공식 개정이유(제개정이유) — LLM팀이 추론할 필요 없게 원문 그대로 보관';
-COMMENT ON COLUMN change_log.unchanged_clauses IS '{"제34조": ["①","②","③"]} 형태 — 이번 개정에서 안 바뀐 항(항제개정유형 필드 기준, 법령만). LLM팀이 "이 조문의 나머지 항은 현행 유지"임을 추론하지 않아도 되게 함';
+COMMENT ON COLUMN change_log.revision_reason IS '법제처 공식 개정이유(제개정이유) — 요약 단계가 추론할 필요 없게 원문 그대로 보관';
+COMMENT ON COLUMN change_log.unchanged_clauses IS '{"제34조": ["①","②","③"]} 형태 — 이번 개정에서 안 바뀐 항(항제개정유형 필드 기준, 법령만). 요약 단계가 "이 조문의 나머지 항은 현행 유지"임을 추론하지 않아도 되게 함';
 COMMENT ON COLUMN change_log.comparison_available IS '신구법 대비 가능 여부. FALSE면 article_diff에 이 (law_id,new_serial_no)의 행이 하나도 없다는 뜻과 정확히 같지만, 그 부재만으로는 "신구법없음"과 "대비했는데 실제로 0건 변경"을 구분할 수 없어(둘 다 article_diff 0행) 별도 컬럼으로 명시적으로 남긴다 — contract/export.py의 no_comparison 리포팅이 이 컬럼에 의존함';
 
 CREATE TABLE IF NOT EXISTS article_diff (
@@ -140,8 +143,8 @@ COMMENT ON COLUMN law_summary.error IS 'LLM 호출 실패 사유. 실패를 조�
 COMMENT ON TABLE law_summary IS 'LLM 요약 결과. 키가 (law_id, new_serial_no)인 이유: 요약의 정체성은 "어느 법의 어느 개정분에 대한 요약인가"이지 "언제 만들었나"가 아니다. 같은 개정분을 다시 요약하면 덮어쓴다 — 요약은 계약 JSON에서 언제든 다시 만들 수 있는 파생물이라 판본을 쌓아두면 "어느 게 맞는 요약인가"를 매번 따져야 하고, 실제로 참조되는 것은 항상 최신 1건이기 때문이다. 언제/무엇으로 만들었는지는 batch_date/llm_model 컬럼에 남는다. 이 설계는 article_diff(재계산 시 해당 범위를 지우고 다시 채움)와 같은 원칙이다.';
 
 -- ---------------------------------------------------------------------------
--- MySQL의 "TIMESTAMP ... ON UPDATE CURRENT_TIMESTAMP"에 해당하는 자동 갱신.
--- Postgres에는 같은 컬럼 속성이 없어 트리거로 구현한다.
+-- 행이 갱신될 때 타임스탬프를 자동으로 올린다. PostgreSQL 에는 컬럼 속성으로
+-- 그렇게 하는 방법이 없어 트리거로 구현한다.
 -- ---------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION touch_db_timestamp() RETURNS TRIGGER AS $$
