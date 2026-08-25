@@ -43,10 +43,10 @@ def _change_log_repo():
 
 
 class TestRevisionReasonWiredThrough:
-    """실측(2026-07-16): api/fulltext.py 가 이미 API 응답에서 뽑아오는
+    """실측: api/fulltext.py 가 이미 API 응답에서 뽑아오는
     "제개정이유"(FullTextResult.revision_reason)가 change_log 에 저장도
-    안 되고 contract 에도 담기지 않아 항상 빈 문자열로 나갔다 — schema.py
-    의 설계 의도("LLM이 추론할 필요 없게 함")를 무력화하고 있었다."""
+    안 되고 contract 에도 담기지 않아 항상 빈 문자열로 나갔음 — schema.py
+    의 설계 의도("LLM이 추론할 필요 없게 함")를 무력화하고 있었음."""
 
     def test_revision_reason_appears_in_law_change(self):
         contract = build_contract(
@@ -65,11 +65,11 @@ class TestRevisionReasonWiredThrough:
         assert law.old_serial_no == "200001"
 
     def test_unchanged_clauses_appears_in_law_change(self):
-        """★ 실측(2026-07-16): detect.py 가 법제처의 항제개정유형 필드를 읽어
+        """실측: detect.py 가 법제처의 항제개정유형 필드를 읽어
         "이번에 안 바뀐 항"을 change_log.unchanged_clauses 에 이미 저장하지만,
         contract 조립 단계에서 옮겨 담지 않으면 LawChange 에서 항상 빈 dict로
-        나가 LLM팀이 "나머지 항도 바뀐 건가?"를 스스로 추론해야 하는 상황이
-        재발한다."""
+        나가 요약 단계가 "나머지 항도 바뀐 건가?"를 스스로 추론해야 하는 상황이
+        재발함."""
         contract = build_contract(
             _watchlist_repo(), _article_diff_repo(), _change_log_repo(),
             from_date=date(2020, 1, 1), to_date=date(2100, 1, 1),
@@ -94,12 +94,12 @@ class TestRevisionReasonWiredThrough:
 
 
 class TestNoComparisonReporting:
-    """★★ 실측 발견(2026-07-18): build_contract()의 amendment_groups 조립은
+    """실측 발견: build_contract()의 amendment_groups 조립은
     article_diff에서 시작해 (law_id, serial_no) 집합을 얻는데, 신구법 대비
     자체가 불가능한 건(제정/폐지제정 등)은 정의상 article_diff 행이 0개라
-    그 집합에 원천적으로 들어갈 수 없었다 — NoComparisonItem 스키마는 있었지만
-    실제로 채워진 적이 한 번도 없는 죽은 코드였다. change_log를 직접
-    조회하는 fetch_no_comparison_in_period로 고쳤다."""
+    그 집합에 원천적으로 들어갈 수 없었음 — NoComparisonItem 스키마는 있었지만
+    실제로 채워진 적이 한 번도 없는 죽은 코드였음. change_log를 직접
+    조회하는 fetch_no_comparison_in_period로 고쳤음."""
 
     def test_no_comparison_entry_reported_even_with_zero_article_diff_rows(self):
         article_diff_repo = MagicMock()
@@ -133,7 +133,7 @@ class TestNoComparisonReporting:
 
     def test_no_comparison_entry_not_duplicated_when_already_in_amendment_groups(self):
         """(law_id, serial_no)가 이미 diff 기반 경로로 잡혔다면(구조상 있을 수
-        없지만 방어적으로) no_comparison에 중복 보고하지 않는다."""
+        없지만 방어적으로) no_comparison에 중복 보고하지 않음."""
         article_diff_repo = MagicMock()
         article_diff_repo.fetch_period.return_value = [
             {
@@ -171,7 +171,7 @@ class TestNoComparisonReporting:
 
 
 class TestMatchDetailJsonbHandling:
-    """PostgreSQL JSONB는 문자열이 아니라 이미 역직렬화된 list를 반환한다."""
+    """PostgreSQL JSONB는 문자열이 아니라 이미 역직렬화된 list를 반환함."""
 
     @staticmethod
     def _failure_repo(match_detail):
@@ -210,10 +210,10 @@ class TestMatchDetailJsonbHandling:
 
 
 class TestStructuralExpansionGrouping:
-    """★ 설계(2026-07-19, LLM팀 산출물 리뷰): match_status="구조확장(구법미분리)"
+    """설계: match_status="구조확장(구법미분리)"
     행들(구법엔 없던 호/목 구조가 신법에서 새로 생겨 old_text가 여러 행에
     복제되는 케이스)은 articles[]가 아니라 structural_expansions[]로 완전히
-    분리되어야 한다 — articles[]는 항상 1:1만 담는다는 전제를 지키기 위함."""
+    분리되어야 함 — articles[]는 항상 1:1만 담는다는 전제를 지키기 위함."""
 
     def _diff_repo_with_expansion(self):
         repo = MagicMock()
@@ -285,11 +285,11 @@ class TestStructuralExpansionGrouping:
         assert exp.new_items[1].text == "가. 행정정보"
 
     def test_expansion_across_different_clauses_grouped_together(self):
-        """★★ 실측(2026-07-19, 전자정부법 제56조의3①~④): 항 구분조차 없던
+        """실측(전자정부법 제56조의3①~④): 항 구분조차 없던
         조문 하나가 통째로 새 항(①②③④) 여러 개로 재작성되면, old_text는
-        4행 전부 동일한데 clause_no는 행마다 다르다(①,②,③,④). 그룹 키에
+        4행 전부 동일한데 clause_no는 행마다 다름(①,②,③,④). 그룹 키에
         clause_no가 섞여 있으면 이 4행이 서로 다른 "1개짜리 그룹" 4개로
-        쪼개진다 — 정의상 구조확장은 1:N이어야 하므로 이건 모순이다."""
+        쪼개짐 — 정의상 구조확장은 1:N이어야 하므로 이건 모순임."""
         repo = MagicMock()
         repo.fetch_period.return_value = [
             {

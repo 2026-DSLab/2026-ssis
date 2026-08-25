@@ -26,7 +26,7 @@ class TestUnicodeDots:
         assert ud.normalize("NFC", "\u318D") != ud.normalize("NFC", "\u00B7")
 
     def test_nfkc_does_not_unify_either(self):
-        # NFKC 는 NFC 보다 공격적인 호환 정규화인데도 통일되지 않는다.
+        # NFKC 는 NFC 보다 공격적인 호환 정규화인데도 통일되지 않음.
         assert ud.normalize("NFKC", "\u318D") != ud.normalize("NFKC", "\u00B7")
 
     def test_custom_map_unifies_all(self):
@@ -60,7 +60,7 @@ class TestRealLawNames:
         assert names_match("고독사 예방 및 관리에 관한 법", "고독사 예방 및 관리에 관한 법률")
 
     def test_similar_law_must_not_match(self):
-        """유사법 오염 방지 — 완전일치라 다른 법은 걸러져야 한다."""
+        """유사법 오염 방지 — 완전일치라 다른 법은 걸러져야 함."""
         assert not names_match(
             "국가를 당사자로 하는 계약에 관한 법률",
             "지방자치단체를 당사자로 하는 계약에 관한 법률",

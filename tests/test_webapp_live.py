@@ -1,8 +1,8 @@
 """webapp/live.py — 기간 지정 즉석 조회의 캐싱 로직.
 
-실 DB/API/LLM 없이 돈다. _run_live_sweep 자체(실제 국가법령정보 API +
+실 DB/API/LLM 없이 돎. _run_live_sweep 자체(실제 국가법령정보 API +
 LLM 호출)는 monkeypatch로 대체하고, get_period_result()가 캐시를 언제
-재사용하고 언제 다시 계산하는지만 검증한다.
+재사용하고 언제 다시 계산하는지만 검증함.
 """
 
 from __future__ import annotations
@@ -108,7 +108,7 @@ def test_period_windows_days_are_correct():
 
 # ---------------------------------------------------------------------------
 # "이미 요약된 건 LLM 다시 안 부른다" 로직이 쓰는 순수 헬퍼들.
-# 실측(2026-08-03, 사용자 지적): 배경 사전 캐싱을 켜면 넓은 기간(1개월)의
+# 실측: 배경 사전 캐싱을 켜면 넓은 기간(1개월)의
 # 같은 개정 건이 계속 재조회되는데, LLM을 매번 다시 부르면 완전히 낭비다.
 # ---------------------------------------------------------------------------
 
@@ -160,7 +160,7 @@ def test_filter_contract_drops_group_with_no_matching_laws():
 
 def test_filter_contract_preserves_unresolved_and_no_comparison():
     """unresolved/no_comparison은 애초에 LLM이 안 만지는 항목이라, 필터링
-    대상(amendment_groups)이 아니라 그대로 통과해야 한다."""
+    대상(amendment_groups)이 아니라 그대로 통과해야 함."""
     from lawtrack.contract.schema import AmendmentGroup
 
     contract = _contract([AmendmentGroup(group_id="g1", laws=[_law_change("A", "1")])])
@@ -173,8 +173,8 @@ def test_filter_contract_preserves_unresolved_and_no_comparison():
 
 def test_row_to_law_summary_round_trip():
     """DbSink가 쓰는 방향(LawSummary -> asdict -> JSON -> DB)의 정반대를
-    한다 — 실제로 DB에 JSON으로 저장됐다가 풀린 모양(딕셔너리)을 그대로
-    입력으로 준다."""
+    함 — 실제로 DB에 JSON으로 저장됐다가 풀린 모양(딕셔너리)을 그대로
+    입력으로 줌."""
     from dataclasses import asdict
 
     from summarizer.models import ArticleSummary, ArticleUnit, LawSummary
@@ -196,7 +196,7 @@ def test_row_to_law_summary_round_trip():
         ],
     )
 
-    # DB round-trip 흉내: asdict()로 풀어 JSON 컬럼처럼 파이썬 dict/list로 온다.
+    # DB round-trip 흉내: asdict()로 풀어 JSON 컬럼처럼 파이썬 dict/list로 옴.
     row = asdict(original)
 
     rebuilt = live._row_to_law_summary(row)
@@ -276,8 +276,8 @@ def test_start_background_refresh_does_not_start_twice(monkeypatch):
 
 
 # ---------------------------------------------------------------------------
-# "어떤 단계인지 보여주고 싶어"(2026-08-03) — 논블로킹 진입점 +
-# 폴링용 진행상태. 실 DB/API 없이 스레드 동작만 확인한다.
+# "어떤 단계인지 보여주고 싶어" — 논블로킹 진입점 +
+# 폴링용 진행상태. 실 DB/API 없이 스레드 동작만 확인함.
 # ---------------------------------------------------------------------------
 
 def test_get_progress_returns_empty_when_never_set():
@@ -368,12 +368,12 @@ def test_ensure_sweep_started_does_not_start_second_thread_while_running(monkeyp
 
 
 def test_ensure_sweep_started_detects_background_prewarm_already_running(monkeypatch):
-    """★★ 실측 발견(2026-08-03, 서버 재시작 직후 curl로 재현): 백그라운드
+    """실측 발견(서버 재시작 직후 curl로 재현): 백그라운드
     미리캐싱 루프가 get_period_result를 직접 불러서 _running_sweeps에
     아무 흔적을 안 남기면, 그 루프가 "5d"를 스윕하는 도중에 방문자가
     /period-check?period=5d를 눌렀을 때 ensure_sweep_started가 "안 도는
     중"으로 오판해 같은 기간을 중복으로 또 스윕한다. 백그라운드 루프도
-    자기 자신을 _running_sweeps에 등록해야 이 dedup이 실제로 먹힌다."""
+    자기 자신을 _running_sweeps에 등록해야 이 dedup이 실제로 먹힘."""
     created = []
 
     class _FakeThread:
@@ -388,9 +388,9 @@ def test_ensure_sweep_started_detects_background_prewarm_already_running(monkeyp
 
     monkeypatch.setattr(live.threading, "Thread", _FakeThread)
 
-    # 백그라운드 루프가 "지금 5d를 스윕 중"이라고 등록한 상태를 흉내낸다
+    # 백그라운드 루프가 "지금 5d를 스윕 중"이라고 등록한 상태를 흉내냄
     # (실제로는 start_background_refresh의 _loop가 threading.current_thread()를
-    # 등록한다 — 여기선 살아있는 스레드 스텁으로 같은 상황을 재현).
+    # 등록함 — 여기선 살아있는 스레드 스텁으로 같은 상황을 재현).
     class _AliveMarker:
         def is_alive(self):
             return True

@@ -17,6 +17,7 @@ import logging
 from dataclasses import dataclass
 from datetime import date
 from enum import Enum
+from typing import Callable
 
 from lawtrack.api.client import LawApiClient, LawApiError
 from lawtrack.api.fulltext import fetch_admrul_fulltext, fetch_law_fulltext
@@ -67,6 +68,40 @@ class DetectResult:
     """
 
 
+def _already_processed(
+    entry: WatchlistEntry, current: str, exists: Callable[[], bool],
+) -> bool:
+    """이번 현행본을 배치가 이미 처리했는가.
+
+    두 신호를 함께 봄.
+
+      1) watchlist.last_serial_no 와 번호가 다르면 → 무조건 개정.
+         이 값은 배치만 갱신하므로 담당자가 화면을 열어 봐도 안 바뀜.
+      2) 번호가 같으면(또는 값이 비었으면) → 전문을 실제로 갖고 있는지로 판단.
+
+    실측 버그 ①(개인정보 보호법 시행령 011468): 예전에는 documents 존재
+    여부 하나로만 판정했음. 그런데 전문 비교 화면(webapp/laws.py → history.
+    get_or_fetch_full_text)이 과거 버전을 documents 에 캐시로 넣음.
+    이 시행령은 시행일이 엇갈린 개정 두 건이 걸려 있어(283503 은 2월 공포
+    8월 20일 시행, 286175 는 5월 공포 즉시 시행), 8월 20일에 283503 이
+    현행이 되었는데 그 전문이 이미 열람 캐시로 들어가 있었음. 그래서 배치가
+    "이미 있음 = 변경 없음"으로 넘겨 현행 교체를 통째로 놓쳤음. 담당자가
+    화면을 자주 볼수록 감지가 조용히 막히는 구조였음 — 규칙 1이 이걸 막음.
+
+    실측 버그 ②(위를 고치다 만든 회귀): last_serial_no 만 보게 했더니 최초
+    백필이 통째로 건너뛰어졌음. scripts/load_watchlist.py 가 감시 대상을
+    등록할 때 last_serial_no 를 미리 채워 두기 때문에, 갓 구축한 DB 에서는
+    "번호가 같음 = 이미 처리함"이 되어 전문을 한 건도 받지 않음.
+    규칙 2가 이걸 막음 — 번호가 같아도 전문이 없으면 받아옴.
+
+    일련번호의 대소는 보지 않음 — 버그 ① 처럼 나중에 현행이 되는 쪽의
+    번호가 더 작을 수 있어, "커졌을 때만 개정"으로 보면 같은 것을 또 놓침.
+    """
+    if entry.last_serial_no and entry.last_serial_no != current:
+        return False
+    return exists()
+
+
 def detect_law(client: LawApiClient, version_repo: VersionRepo, entry: WatchlistEntry) -> DetectResult:
     """법령 워치리스트 1건의 개정 여부 판정.
 
@@ -97,7 +132,7 @@ def detect_law(client: LawApiClient, version_repo: VersionRepo, entry: Watchlist
         return DetectResult(entry, DetectStatus.AMBIGUOUS)
 
     current = outcome.candidates[0].serial_no
-    if version_repo.law_exists(entry.law_id, current):
+    if _already_processed(entry, current, lambda: version_repo.law_exists(entry.law_id, current)):
         return DetectResult(entry, DetectStatus.UNCHANGED, current, search_result=outcome.candidates[0])
     return DetectResult(entry, DetectStatus.CHANGED, current, search_result=outcome.candidates[0])
 
@@ -131,7 +166,7 @@ def detect_admrul(client: LawApiClient, version_repo: VersionRepo, entry: Watchl
         return DetectResult(entry, DetectStatus.AMBIGUOUS)
 
     current = outcome.candidates[0].serial_no
-    if version_repo.admrul_exists(entry.law_id, current):
+    if _already_processed(entry, current, lambda: version_repo.admrul_exists(entry.law_id, current)):
         return DetectResult(entry, DetectStatus.UNCHANGED, current, search_result=outcome.candidates[0])
     return DetectResult(entry, DetectStatus.CHANGED, current, search_result=outcome.candidates[0])
 

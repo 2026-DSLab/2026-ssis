@@ -1,19 +1,19 @@
 """apply_mappings()가 매핑의 "이동"(내용 그대로 번호만 이동) 주장을
-맹신하지 않고 코드로 재검증하는지 확인한다.
+맹신하지 않고 코드로 재검증하는지 확인함.
 
-★★ 실측(2026-07-30, 전자정부법 제56조의2 구②→신⑤): MappingAgent(LLM)가
+실측(전자정부법 제56조의2 구②→신⑤): MappingAgent(LLM)가
 이 위치를 "이동"이라 판정했는데, 그 판정의 note 자체에는 "재구성됨"이라고
-써서 자기모순이었다(실제로 문장이 확장됨 — "제1항에 따른"→"제1항부터
+써서 자기모순이었음(실제로 문장이 확장됨 — "제1항에 따른"→"제1항부터
 제4항까지에 따른"). apply_mappings()가 relation=="이동"이면 basis를
 따지지 않고 무조건 move_is_identical=True 를 줘버려서, ArticleAgent가
 LLM 요약도 verifier 검증도 없이 "내용 변경 없이 번호만 이동했습니다"라는
-사실과 다른 문장을 그대로 냈다.
+사실과 다른 문장을 그대로 냈음.
 
 matching.py의 resolve_article()은 이미 이 정확한 케이스를 실측 근거로
-남겨뒀다 — 완전일치(코드 계산)로는 못 풀리고(문장이 확장돼 있어서),
-그래서 LLM 판정으로 넘어갔다는 것 자체가 "애매함"의 신호다. apply_mappings()
+남겨뒀음 — 완전일치(코드 계산)로는 못 풀리고(문장이 확장돼 있어서),
+그래서 LLM 판정으로 넘어갔다는 것 자체가 "애매함"의 신호임. apply_mappings()
 가 그 LLM 판정을 곧이곧대로 믿지 않고 content_ratio 로 한 번 더 확인해야
-한다.
+함.
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ def _unit(location_label: str, old_text: str = "", new_text: str = "") -> Articl
 
 def test_llm_claimed_move_with_reworded_content_becomes_moved_and_amended():
     """LLM이 "이동"이라 주장해도, 실제 문장이 재구성됐으면(유사도 낮음)
-    이동후개정으로 강등해 diff/요약 경로를 그대로 타게 해야 한다."""
+    이동후개정으로 강등해 diff/요약 경로를 그대로 타게 해야 함."""
     units = [
         _unit("제56조의2②", old_text="", new_text="② 새로 생긴 다른 내용"),
         _unit(
@@ -64,15 +64,15 @@ def test_llm_claimed_move_with_reworded_content_becomes_moved_and_amended():
 
 def test_genuinely_identical_move_still_trusted():
     """진짜로 번호만 밀리고 내용이 글자까지 같으면 여전히 규칙 기반으로
-    처리해야 한다 — 이번 수정이 정상적인 이동까지 LLM으로 밀어내면 안 된다.
+    처리해야 함 — 이번 수정이 정상적인 이동까지 LLM으로 밀어내면 안 됨.
 
-    ★★★ 실측 발견(2026-07-31, 공공기관 데이터베이스 표준화 지침 제16조⑤):
+    실측 발견(공공기관 데이터베이스 표준화 지침 제16조⑤):
     "이동" 분기가 content_ratio 로 moved_old 를 찾아 유사도만 확인하고,
-    정작 unit.old_text 를 그 moved_old 로 바꿔치기하는 걸 빠뜨렸다.
+    정작 unit.old_text 를 그 moved_old 로 바꿔치기하는 걸 빠뜨렸음.
     그 결과 unit.old_text 는 여전히 "이 새 위치와 같은 번호였던 옛
     위치"의 엉뚱한 문장이 남아 있었다 — "내용 변경 없이 이동했다"는
     요약(사실은 맞음)과 "원문 보기"에 뜨는 개정 전 문장(실제로 비교한
-    문장이 아님)이 서로 모순돼 보이는 버그였다."""
+    문장이 아님)이 서로 모순돼 보이는 버그였음."""
     units = [
         ArticleUnit(
             law_id="27947", law_name="(계약예규) 물품구매(제조)계약일반조건",

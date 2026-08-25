@@ -194,7 +194,7 @@ def main() -> int:
     print(f"{len(rows)}건 적재 중...")
     cur.executemany(sql, rows)
     conn.commit()
-    print(f"✅ {cur.rowcount}건 반영됨 (INSERT+UPDATE 합산이라 rowcount는 다를 수 있음)")
+    print(f"{cur.rowcount}건 반영됨 (INSERT+UPDATE 합산이라 rowcount는 다를 수 있음)")
 
     # 검증 — 한글이 실제로 정상 저장됐는지 바로 확인
     cur.execute("SELECT COUNT(*) FROM watchlist")

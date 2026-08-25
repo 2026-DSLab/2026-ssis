@@ -1,7 +1,7 @@
 """요약 파이프라인 — 검증(코드 대조), 보고서 생성, 배치 배선.
 
-LLM 을 부르지 않는다. 부르는 곳은 전부 가짜 클라이언트로 바꿔 끼운다 —
-테스트가 네트워크와 과금에 의존하면 아무도 돌리지 않게 된다.
+LLM 을 부르지 않음. 부르는 곳은 전부 가짜 클라이언트로 바꿔 끼움 —
+테스트가 네트워크와 과금에 의존하면 아무도 돌리지 않게 됨.
 """
 
 from __future__ import annotations
@@ -33,18 +33,18 @@ def unit(**kw) -> ArticleUnit:
 
 
 # ---------------------------------------------------------------------------
-# 검증 — 코드로 원문과 대조한다 (LLM 판단 없음)
+# 검증 — 코드로 원문과 대조함 (LLM 판단 없음)
 # ---------------------------------------------------------------------------
 
 def test_accurate_summary_passes():
-    """정확한 요약에 트집을 잡지 않아야 한다. LLM 감수를 코드 대조로
-    바꾼 이유가 바로 이 오탐 때문이었다."""
+    """정확한 요약에 트집을 잡지 않아야 함. LLM 감수를 코드 대조로
+    바꾼 이유가 바로 이 오탐 때문이었음."""
     s = ArticleSummary(unit=unit(), summary="'통계청'이 '국가데이터처'로 변경되었습니다.")
     assert verify_summaries([s]) == []
 
 
 def test_hallucinated_quote_is_caught():
-    """요약이 인용한 조각이 원문 어디에도 없으면 지어낸 것이다."""
+    """요약이 인용한 조각이 원문 어디에도 없으면 지어낸 것임."""
     s = ArticleSummary(unit=unit(), summary="'보건복지부장관'이 '국가데이터처'로 변경되었습니다.")
     issues = verify_summaries([s])
 
@@ -54,7 +54,7 @@ def test_hallucinated_quote_is_caught():
 
 
 def test_reversed_direction_is_caught():
-    """요약이 개정 전후를 뒤집어 말하면 잡아야 한다."""
+    """요약이 개정 전후를 뒤집어 말하면 잡아야 함."""
     s = ArticleSummary(unit=unit(), summary="'국가데이터처'가 '통계청'으로 변경되었습니다.")
     issues = verify_summaries([s])
 
@@ -82,7 +82,7 @@ def test_failed_summary_is_reported():
 
 
 def test_rule_based_summaries_are_not_verified():
-    """이동(내용 동일)·변경없음은 코드가 만든 확정 문장이라 검증 대상이 아니다."""
+    """이동(내용 동일)·변경없음은 코드가 만든 확정 문장이라 검증 대상이 아님."""
     moved = ArticleSummary(
         unit=unit(change_type="이동", move_is_identical=True, diff_parts=[]),
         summary="제5조①이 제5조②로 이동했습니다(내용 동일).",
@@ -95,7 +95,7 @@ def test_rule_based_summaries_are_not_verified():
 
 
 # ---------------------------------------------------------------------------
-# HWPX 보고서 — 만든 문서를 다시 열어 원본과 대조한다
+# HWPX 보고서 — 만든 문서를 다시 열어 원본과 대조함
 # ---------------------------------------------------------------------------
 
 def sample_contract(**kw) -> ContractSummary:
@@ -125,7 +125,7 @@ def sample_contract(**kw) -> ContractSummary:
 
 
 def test_report_contains_every_summary(tmp_path):
-    """요약이 문서에 온전히 들어갔는지 — 생성 후 다시 열어 대조한다."""
+    """요약이 문서에 온전히 들어갔는지 — 생성 후 다시 열어 대조함."""
     contract = sample_contract()
     path = build_report(contract, tmp_path / "report.hwpx")
 
@@ -134,7 +134,7 @@ def test_report_contains_every_summary(tmp_path):
 
 
 def test_report_survives_xml_special_characters(tmp_path):
-    """HWPX 는 XML+ZIP 이라 &, <, > 가 그대로 들어가면 문서가 깨진다."""
+    """HWPX 는 XML+ZIP 이라 &, <, > 가 그대로 들어가면 문서가 깨짐."""
     law = sample_contract().laws[0]
     tricky = ArticleSummary(
         unit=unit(location_label="제7조③"),
@@ -150,8 +150,8 @@ def test_report_survives_xml_special_characters(tmp_path):
 
 
 def test_report_with_no_changes(tmp_path):
-    """개정 0건인 주에도 보고서는 나와야 한다 — '이번 주 개정 없음'이
-    보고서로 남는 것 자체가 결과물이다."""
+    """개정 0건인 주에도 보고서는 나와야 함 — '이번 주 개정 없음'이
+    보고서로 남는 것 자체가 결과물임."""
     contract = ContractSummary(source_file="empty.json", batch_date="2026-07-20", laws=[])
     path = build_report(contract, tmp_path / "empty.hwpx")
 
@@ -160,7 +160,7 @@ def test_report_with_no_changes(tmp_path):
 
 
 def test_report_includes_unresolved_and_no_comparison(tmp_path):
-    """위치 미확정·비교 불가는 요약하지 않고 그대로 싣는다."""
+    """위치 미확정·비교 불가는 요약하지 않고 그대로 싣음."""
     contract = ContractSummary(
         source_file="x.json", batch_date="2026-07-20", laws=[],
         unresolved=[{"law_name": "사회보장기본법", "reason": "위치확정실패", "detail": "제3조 조각 2건"}],
@@ -175,11 +175,11 @@ def test_report_includes_unresolved_and_no_comparison(tmp_path):
 
 
 def test_verify_report_detects_missing_text(tmp_path):
-    """검증이 실제로 누락을 잡는지 — 검증 자체가 늘 빈 목록만 내면 무의미하다."""
+    """검증이 실제로 누락을 잡는지 — 검증 자체가 늘 빈 목록만 내면 무의미함."""
     contract = sample_contract()
     path = build_report(contract, tmp_path / "r.hwpx")
 
-    # 문서를 만든 뒤 원본에 없던 문장을 기대치에 추가하면 누락으로 잡혀야 한다.
+    # 문서를 만든 뒤 원본에 없던 문장을 기대치에 추가하면 누락으로 잡혀야 함.
     tampered = replace(
         contract,
         laws=[replace(contract.laws[0], overview="이 문장은 보고서에 들어간 적이 없습니다.")],
@@ -207,11 +207,11 @@ def test_flag_combinations(argv, summarize, hwpx, to_db):
 
 
 def test_console_survives_characters_the_codepage_lacks(monkeypatch):
-    """cp949 콘솔에서 em dash(—) 를 출력해도 죽지 않아야 한다.
+    """cp949 콘솔에서 em dash(—) 를 출력해도 죽지 않아야 함.
 
     회귀 테스트: 요약 caveat 에 em dash 가 들어있어 화면 출력 도중
-    UnicodeEncodeError 로 프로세스가 죽던 버그(2026-07-28). 요약을 다
-    만든 뒤에 죽는 것이라 LLM 호출 비용을 그대로 날렸다.
+    UnicodeEncodeError 로 프로세스가 죽던 버그. 요약을 다
+    만든 뒤에 죽는 것이라 LLM 호출 비용을 그대로 날렸음.
     """
     import io
     import sys
@@ -232,16 +232,16 @@ def test_console_survives_characters_the_codepage_lacks(monkeypatch):
 
 
 def test_summary_stage_reports_failure_without_losing_detection(monkeypatch, tmp_path, capsys):
-    """요약이 실패해도 감지 결과는 이미 저장되어 있다는 것을 알려야 한다."""
+    """요약이 실패해도 감지 결과는 이미 저장되어 있다는 것을 알려야 함."""
     import scripts.run_weekly as rw
 
     def boom(*_a, **_kw):
         raise RuntimeError("LLM 서버 응답 없음")
 
-    # ★ 키를 심어 두는 이유: 키가 없으면 build_client 에 닿기도 전에 "키를
+    # 키를 심어 두는 이유: 키가 없으면 build_client 에 닿기도 전에 "키를
     #   추가하세요" 안내로 먼저 빠져나가, 이 테스트가 보려는 경로(요약 도중
-    #   실패)를 못 탄다. .env 가 채워진 개발 PC 에서는 우연히 통과했지만
-    #   배포 꾸러미를 막 푼 상태(.env 없음)에서는 실패했다.
+    #   실패)를 못 탐. .env 가 채워진 개발 PC 에서는 우연히 통과했지만
+    #   배포 꾸러미를 막 푼 상태(.env 없음)에서는 실패했음.
     monkeypatch.setenv("OPENAI_API_KEY", "test-key-not-used")
     monkeypatch.setattr("summarizer.llm.build_client", boom)
     errors = rw.run_summary_stage(tmp_path / "c.json", db=None, hwpx=False, to_db=False)

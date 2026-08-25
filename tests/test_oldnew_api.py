@@ -7,12 +7,12 @@ from lawtrack.api.oldnew import fetch_admrul_oldnew
 
 
 class TestAdmrulNoComparisonJsonForm:
-    """★★ 실측(2026-07-16, 하도급거래공정화 지침·중소기업자간 경쟁제품
+    """실측(하도급거래공정화 지침·중소기업자간 경쟁제품
     직접생산 확인기준): "신구법 없음" 메시지가 비-JSON 텍스트가 아니라
-    {"Law": "일치하는 신구법 없습니다."} 형태의 유효한 JSON으로도 온다.
+    {"Law": "일치하는 신구법 없습니다."} 형태의 유효한 JSON으로도 옴.
     이전엔 resp.data가 None일 때만 마커를 확인해서, JSON으로 온 경우
     available=True로 잘못 판정하고 old_texts/new_texts가 빈 채로
-    "비교 가능한데 변경사항 없음"처럼 보이는 결과가 나왔다."""
+    "비교 가능한데 변경사항 없음"처럼 보이는 결과가 나왔음."""
 
     def test_json_wrapped_no_comparison_marker(self):
         client = MagicMock()
@@ -58,12 +58,12 @@ class TestAdmrulNoComparisonJsonForm:
 
 
 class TestAdmrulNoComparisonFieldForm:
-    """★★★ 실측(2026-07-18, (계약예규) 공동계약운용요령·중소 소프트웨어사업자의
+    """실측((계약예규) 공동계약운용요령·중소 소프트웨어사업자의
     사업 참여 지원에 관한 지침): "신구법 없음"이 텍스트 마커가 아니라 법령과
-    똑같은 "신구법존재여부": "N" 필드로도 온다(구조문목록/신조문목록 키 자체가
+    똑같은 "신구법존재여부": "N" 필드로도 옴(구조문목록/신조문목록 키 자체가
     없음). 이 필드를 확인 안 하면 available=True에 old_texts/new_texts가 빈
-    채로 나가 "비교했는데 진짜 0건 변경"처럼 조용히 오판된다 — 실제로는
-    "비교 자체가 불가능"인 것과 의미가 다르다."""
+    채로 나가 "비교했는데 진짜 0건 변경"처럼 조용히 오판됨 — 실제로는
+    "비교 자체가 불가능"인 것과 의미가 다름."""
 
     def test_field_based_no_comparison_recognized(self):
         client = MagicMock()

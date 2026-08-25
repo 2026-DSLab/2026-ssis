@@ -1,10 +1,10 @@
 """ArticleAgent가 사전 선별(triage) 결과에 따라 LLM 호출을 실제로
-건너뛰는지 검증한다.
+건너뛰는지 검증함.
 
 summarizer/agents.py의 ArticleAgent.run()에 summarizer/triage.triage()를
-이식(2026-07-30, seongbeen2 브랜치)했는데, triage() 자체가 옳게 판단해도
+이식했는데, triage() 자체가 옳게 판단해도
 ArticleAgent가 그 판단을 실제로 LLM 스킵에 연결하지 않으면(배선 실수)
-아무 효과가 없다 — 이 파일은 그 배선을 확인한다.
+아무 효과가 없음 — 이 파일은 그 배선을 확인함.
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ from summarizer.models import ArticleUnit
 
 class _CountingClient:
     """호출 여부만 세는 가짜 LLMClient. 실제로 불리면 안 되는 경로에서
-    불렸는지를 이걸로 확인한다."""
+    불렸는지를 이걸로 확인함."""
 
     def __init__(self):
         self.calls = 0
@@ -44,7 +44,7 @@ def _agent(client) -> ArticleAgent:
 
 
 def test_formal_change_skips_llm_call():
-    """기관명만 바뀐 조문은 LLM을 부르지 않고 규칙 기반 요약을 낸다."""
+    """기관명만 바뀐 조문은 LLM을 부르지 않고 규칙 기반 요약을 냄."""
     client = _CountingClient()
     unit = _unit(
         old_text="환경부장관은 매년 기본계획을 수립하여야 한다.",
@@ -59,7 +59,7 @@ def test_formal_change_skips_llm_call():
 
 def test_no_change_at_raw_text_level_skips_llm_call():
     """unit.no_change 플래그가 없어도(계약 단계에서 놓친 경우), old/new
-    본문 자체가 완전히 동일하면 triage가 잡아 LLM을 부르지 않는다."""
+    본문 자체가 완전히 동일하면 triage가 잡아 LLM을 부르지 않음."""
     client = _CountingClient()
     text = "1. 주요재료비    계약목적물의 기본적 구성형태를 이루는 물품의 가치"
     unit = _unit(old_text=text, new_text=text, no_change=False)
@@ -71,7 +71,7 @@ def test_no_change_at_raw_text_level_skips_llm_call():
 
 
 def test_substantive_change_still_calls_llm():
-    """실질 변경은 여전히 LLM을 부른다 — triage가 전부를 막아서는 안 된다."""
+    """실질 변경은 여전히 LLM을 부름 — triage가 전부를 막아서는 안 됨."""
     client = _CountingClient()
     unit = _unit(
         old_text="① 신청은 30일 이내에 하여야 한다.",
@@ -84,12 +84,12 @@ def test_substantive_change_still_calls_llm():
 
 
 def test_move_identical_sentence_uses_readable_location_format():
-    """실측(2026-08-03, 사용자 리포트): move_is_identical 경로는 LLM을
+    """실측: move_is_identical 경로는 LLM을
     부르지 않고 규칙 기반 문장을 직접 만드는데("내용 변경 없이 ~에서
     ~로 번호만 이동했습니다"), moved_from/location_label 원본 표기를
     그대로 박아 넣으면 "②5.에서 제8조②12.로"처럼 읽기 힘들다는 지적을
-    받았다. 웹페이지/HWPX가 이미 쓰는 항/호/목 표기(locfmt.format_location)
-    를 이 문장에도 적용해야 한다."""
+    받았음. 웹페이지/HWPX가 이미 쓰는 항/호/목 표기(locfmt.format_location)
+    를 이 문장에도 적용해야 함."""
     client = _CountingClient()
     unit = _unit(
         location_label="제8조②12.", change_type="이동",
@@ -104,8 +104,8 @@ def test_move_identical_sentence_uses_readable_location_format():
 def test_old_text_is_context_bypasses_triage_even_if_texts_look_formal():
     """old_text가 이 위치의 실제 개정 전 문장이 아니라 참고 맥락뿐인 경우
     (구조확장/위치재배치의심)는, 설사 두 문장이 기관명 정비처럼 보여도
-    triage 자체를 적용하면 안 된다 — 애초에 같은 위치를 가리키지 않는
-    문장끼리 비교하는 것이기 때문이다. 이때는 항상 LLM 경로로 간다."""
+    triage 자체를 적용하면 안 됨 — 애초에 같은 위치를 가리키지 않는
+    문장끼리 비교하는 것이기 때문임. 이때는 항상 LLM 경로로 감."""
     client = _CountingClient()
     unit = _unit(
         old_text="환경부장관은 매년 기본계획을 수립하여야 한다.",

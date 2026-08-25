@@ -1,13 +1,13 @@
 """VersionRepo 테스트. DB 연결 없이 SQL/파라미터만 검증.
 
-★ 2026-08-03 DB 간소화(1): law_articles_parsed/administrative_rule_articles_parsed
-캐시 컬럼을 제거했다 — 아무 코드도 그 캐시를 다시 읽지 않았고(write-only),
+ DB 간소화(1): law_articles_parsed/administrative_rule_articles_parsed
+캐시 컬럼을 제거했음 — 아무 코드도 그 캐시를 다시 읽지 않았고(write-only),
 필요하면 parse_articles(law_full_text)로 언제든 그 자리에서 다시 만들 수
-있다.
+있음.
 
-★ 2026-08-03 DB 간소화(2): laws/administrative_rules 두 테이블을 documents
-하나로 합쳤다 — 컬럼 구성이 이름만 다를 뿐 완전히 같았다. kind 구분
-컬럼('law'/'admrul')으로 어느 쪽인지 가른다.
+ DB 간소화(2): laws/administrative_rules 두 테이블을 documents
+하나로 합쳤음 — 컬럼 구성이 이름만 다를 뿐 완전히 같았음. kind 구분
+컬럼('law'/'admrul')으로 어느 쪽인지 가름.
 """
 
 import json
@@ -55,8 +55,8 @@ class TestInsertAdmrul:
 
 class TestExistsQueriesUseKind:
     """law_exists/admrul_exists 는 같은 documents 테이블을 kind로만 갈라
-    조회해야 한다 — 서로 다른 kind끼리 doc_id/doc_serial_no 가 우연히
-    같아도 섞이면 안 된다."""
+    조회해야 함 — 서로 다른 kind끼리 doc_id/doc_serial_no 가 우연히
+    같아도 섞이면 안 됨."""
 
     def test_law_exists_filters_by_law_kind(self):
         db, cur = _mock_db()

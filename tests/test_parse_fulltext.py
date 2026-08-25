@@ -16,13 +16,13 @@ from lawtrack.parse.fulltext import (
 
 class TestFlattenSearchablePreambleNotLost:
     """실측(전자정부법 제56조의2 항①, 제2조제11호): 자식(호/목)이 있는
-    부모(항/호)라도 부모 자신의 본문(전제문)이 검색 대상에서 빠지면 안 된다.
+    부모(항/호)라도 부모 자신의 본문(전제문)이 검색 대상에서 빠지면 안 됨.
     예전엔 자식이 있으면 부모 유닛 생성 자체를 건너뛰어, 자식 목록
-    앞부분(전제문) 안에서 바뀐 내용은 영원히 위치확정에 실패했다."""
+    앞부분(전제문) 안에서 바뀐 내용은 영원히 위치확정에 실패했음."""
 
     def test_clause_with_items_keeps_its_own_unit(self):
         """실측: 전자정부법 제56조의2 항① — '중앙사무관장기관의 장은 …
-        통보하여야 한다.'는 항내용 필드 자체에 있고, 뒤따르는 호 1~5와는
+        통보하여야 함.'는 항내용 필드 자체에 있고, 뒤따르는 호 1~5와는
         별개의 텍스트다."""
         clause = ClauseNode(
             no="①",
@@ -49,7 +49,7 @@ class TestFlattenSearchablePreambleNotLost:
 
     def test_item_with_subitems_keeps_its_own_unit(self):
         """실측: 전자정부법 제2조제11호 — '"정보자원"이란 …말한다. 다만…
-        한정한다.'는 호내용 필드 자체에 있고, 뒤따르는 목 가~바와는
+        한정함.'는 호내용 필드 자체에 있고, 뒤따르는 목 가~바와는
         별개의 텍스트다."""
         item = ItemNode(
             no="11.", branch="",
@@ -74,7 +74,7 @@ class TestFlattenSearchablePreambleNotLost:
         assert len(subitem_units) == 2
 
     def test_clause_without_items_unaffected(self):
-        """자식이 없는 항은 예전처럼 하나의 유닛만 생성한다 (회귀 방지)."""
+        """자식이 없는 항은 예전처럼 하나의 유닛만 생성함 (회귀 방지)."""
         clause = ClauseNode(no="①", text="① 단순한 항 내용", change_type="", change_dates="")
         article = ArticleUnit(
             code="1", branch="", label="제1조", title="목적", changed=False,
@@ -85,12 +85,12 @@ class TestFlattenSearchablePreambleNotLost:
         assert units[0].clause_no == "①"
 
     def test_article_with_headerless_item_container_keeps_own_intro(self):
-        """★★ 실측(2026-07-16, 공공기관의 정보공개에 관한 법률 제22조):
+        """실측(공공기관의 정보공개에 관한 법률 제22조):
         항 없이 호가 조문에 바로 붙는 구조("항" JSON 키가 항번호/항내용
-        없이 "호" 배열만 담은 빈 컨테이너)가 있다. art.clauses 가 비어
+        없이 "호" 배열만 담은 빈 컨테이너)가 있음. art.clauses 가 비어
         있지 않아(빈 ClauseNode 하나) "항 없는 조문" 분기를 안 타는데,
         조문 자신의 도입부 문장은 그 어떤 항/호 필드에도 없고 오직
-        art.content 에만 있다 — 조문→항 레벨에서도 동일한 '자식이 있으면
+        art.content 에만 있음 — 조문→항 레벨에서도 동일한 '자식이 있으면
         부모 텍스트가 사라지는' 문제가 있었다."""
         item1 = ItemNode(no="1.", branch="", text="1.  정보공개에 관한 정책 수립")
         item2 = ItemNode(no="2.", branch="", text="2.  정보공개에 관한 기준 수립")
@@ -113,14 +113,14 @@ class TestFlattenSearchablePreambleNotLost:
 
 
 class TestArticleCodeUniquePerBranch:
-    """★★ 실측(2026-07-16, contract/export.py 실데이터 검증 — 전자정부법
+    """실측(contract/export.py 실데이터 검증 — 전자정부법
     제56조~제56조의6): article_code가 조문가지번호를 빼고 순수 조번호만
     담아서(예: "56"), 제56조/제56조의2/…/제56조의6이 전부 같은
-    article_code를 공유했다. article_diff의 UNIQUE KEY가 article_code+
+    article_code를 공유했음. article_diff의 UNIQUE KEY가 article_code+
     clause_no 등으로만 구성되고 article_label은 ON DUPLICATE KEY UPDATE
     대상이 아니어서, 서로 다른 조문의 같은 항번호(둘 다 "①")가 충돌해
     라벨은 먼저 들어간 값 그대로, 본문은 나중 값으로 뒤섞이는 심각한
-    버그가 있었다."""
+    버그가 있었음."""
 
     def test_articles_sharing_base_number_get_distinct_codes(self):
         clause = ClauseNode(no="①", text="① 내용", change_type="", change_dates="")
@@ -137,7 +137,7 @@ class TestArticleCodeUniquePerBranch:
         assert len(codes) == 2, "서로 다른 조문의 article_code가 겹치면 안 됨"
 
     def test_base_article_and_branch_article_get_distinct_codes(self):
-        """제56조(가지번호 없음) 자체도 제56조의2와 구분돼야 한다."""
+        """제56조(가지번호 없음) 자체도 제56조의2와 구분돼야 함."""
         clause = ClauseNode(no="①", text="① 내용", change_type="", change_dates="")
         base = ArticleUnit(
             code="56", branch="", label="제56조", title="A", changed=True,
@@ -153,13 +153,13 @@ class TestArticleCodeUniquePerBranch:
 
 
 class TestParseAdmrulUnits:
-    """★★ 실측(2026-07-16, 행정규칙 15건 실제 개정 시뮬레이션 검증):
-    행정규칙 본문조회 응답은 법령과 구조가 전혀 다르다 — 조문/항/호가
+    """실측(행정규칙 15건 실제 개정 시뮬레이션 검증):
+    행정규칙 본문조회 응답은 법령과 구조가 전혀 다름 — 조문/항/호가
     JSON 트리로 안 쪼개져 있고, "AdmRulService.조문내용"이라는 평문
-    문자열 배열 하나뿐이며 한 조문 전체가 한 줄에 통째로 이어붙어 있다.
+    문자열 배열 하나뿐이며 한 조문 전체가 한 줄에 통째로 이어붙어 있음.
     예전엔 법령 전용 파서(parse_articles)를 그대로 써서 조문을 0건
     찾았고, 그 결과 검색 유닛이 하나도 없어 모든 위치확정이 100%
-    실패했다(실측: 15개 중 5개 시뮬레이션에서 전부 succ=0)."""
+    실패했음(실측: 15개 중 5개 시뮬레이션에서 전부 succ=0)."""
 
     def test_flat_text_lines_split_into_units(self):
         raw = {
@@ -186,7 +186,7 @@ class TestParseAdmrulUnits:
     def test_nested_under_jomun_key(self):
         """실측(보안업무규정 시행규칙, law_id=9008822): 같은 배열이
         "AdmRulService.조문내용"이 아니라 "AdmRulService.조문.조문내용"
-        한 겹 더 안에 오는 경우도 있다."""
+        한 겹 더 안에 오는 경우도 있음."""
         raw = {
             "AdmRulService": {
                 "조문": {
@@ -205,17 +205,17 @@ class TestParseAdmrulUnits:
         assert parse_admrul_units(raw) == []
 
     def test_embedded_annotation_does_not_break_subitem_split(self):
-        """★★ 실측(2026-07-16, (계약예규) 정부 입찰ㆍ계약 집행기준 law_id=34470
+        """실측((계약예규) 정부 입찰ㆍ계약 집행기준 law_id=34470
         제34조④): "<개정 2008.12.29.>" 같은 각주가 호/목 사이에 공백 없이
         섞여 있으면, 각주 속 날짜 조각("2008.")이 호 번호로 오인돼 item_label
         이 "2008." 처럼 깨지고 그 여파로 진짜 1호의 목(가나다) 분해가 통째로
-        시작조차 안 됐다. strip_annotations 를 분해 전에 적용해 이 각주
-        오염 문제는 해결한다.
+        시작조차 안 됐음. strip_annotations 를 분해 전에 적용해 이 각주
+        오염 문제는 해결함.
 
         단, "…100분의 502. 물품의 제조…"처럼 앞 호의 숫자 내용과 다음 호
         번호가 공백 없이 바로 붙는 경우(1호와 2호 사이)는 다자리 숫자 보호
         규칙(_ITEM_RE 의 (?<!\\d))과 근본적으로 충돌해 일반 규칙으로는 안전하게
-        구분할 수 없는 진짜 애매한 case라 여기서는 다루지 않는다."""
+        구분할 수 없는 진짜 애매한 case라 여기서는 다루지 않음."""
         raw = {
             "AdmRulService": {
                 "조문내용": [
@@ -237,10 +237,10 @@ class TestParseAdmrulUnits:
 
 
 def _raw_article_with_sibling_mok(extra_item: dict | None = None) -> dict:
-    """실측(2026-07-31, 국가를 당사자로 하는 계약에 관한 법률 시행령
+    """실측(국가를 당사자로 하는 계약에 관한 법률 시행령
     제26조①) 구조의 축소 재현: 목이 각 호 안에 있지 않고, 항의 형제로
-    호 개수만큼의 목 그룹이 하나의 배열에 통째로 붙는다. 목번호가 '가.'
-    로 리셋되는 지점이 새 호의 시작이다(실측에서는 호 5개·목 40개)."""
+    호 개수만큼의 목 그룹이 하나의 배열에 통째로 붙음. 목번호가 '가.'
+    로 리셋되는 지점이 새 호의 시작임(실측에서는 호 5개·목 40개)."""
     hos = [
         {"호번호": "1.", "호내용": "1. 첫째 사유"},
         {"호번호": "2.", "호내용": "2. 둘째 사유"},
@@ -278,13 +278,13 @@ def _raw_article_with_sibling_mok(extra_item: dict | None = None) -> dict:
 
 
 class TestSiblingMokRecoveredIntoItems:
-    """실측(2026-07-31, 국가를 당사자로 하는 계약에 관한 법률 시행령
+    """실측(국가를 당사자로 하는 계약에 관한 법률 시행령
     제26조①, redo5.py 3번째 재처리 케이스): 목이 호 안이 아니라 항의
     형제로 통째로(호 5개분 목 40개가 배열 하나에) 붙어 나오는 문서가
-    있었다 — 각 호 객체엔 "목" 키 자체가 없었다. 그 결과 "지정받은 제품"
+    있었음 — 각 호 객체엔 "목" 키 자체가 없었음. 그 결과 "지정받은 제품"
     같은 실제 개정 문구가 검색 유닛(units)에 전혀 안 잡혀 위치확정이
-    100% 실패(0건실패)했다. 목번호가 '가.'로 리셋되는 지점을 호 경계로
-    보고 순서대로 이어붙이면 복구된다."""
+    100% 실패(0건실패)했음. 목번호가 '가.'로 리셋되는 지점을 호 경계로
+    보고 순서대로 이어붙이면 복구됨."""
 
     def test_sibling_mok_split_and_attached_to_matching_item(self):
         articles = parse_articles(_raw_article_with_sibling_mok())
@@ -297,8 +297,8 @@ class TestSiblingMokRecoveredIntoItems:
 
     def test_sibling_mok_not_attached_when_group_count_mismatches_item_count(self):
         """그룹 수와 호 개수가 안 맞아 모호하면 잘못된 호에 붙이지 않고
-        그대로 둔다 — 조용한 오귀속보다 0건실패가 낫다는 이 프로젝트의
-        원칙 그대로다."""
+        그대로 둠 — 조용한 오귀속보다 0건실패가 낫다는 이 프로젝트의
+        원칙 그대로임."""
         raw = _raw_article_with_sibling_mok(extra_item={"호번호": "3.", "호내용": "3. 셋째 사유"})
         articles = parse_articles(raw)
         clause = articles[0].clauses[0]
@@ -307,7 +307,7 @@ class TestSiblingMokRecoveredIntoItems:
 
     def test_normal_nested_mok_unaffected(self):
         """목이 정상적으로 각 호 안에 이미 있는 경우(원래 동작)는 그대로
-        보존된다 — 회귀 방지."""
+        보존됨 — 회귀 방지."""
         raw = {
             "법령": {"조문": {"조문단위": [{
                 "조문번호": "2", "조문가지번호": "",
@@ -329,7 +329,7 @@ class TestSiblingMokRecoveredIntoItems:
 
 class TestSearchableUnitsFor:
     """전문 비교 페이지(webapp/laws.py)가 쓰는 진입점 — kind에 따라
-    법령/행정규칙 파싱 경로를 자동으로 골라준다."""
+    법령/행정규칙 파싱 경로를 자동으로 골라줌."""
 
     def test_law_kind_uses_article_flattening_path(self):
         raw = {
@@ -356,8 +356,8 @@ class TestSearchableUnitsFor:
 
     def test_unknown_kind_falls_back_to_law_path(self):
         """kind가 'law'가 아니면(예: 오타) 무조건 admrul로 잘못 보내는
-        대신, law 경로를 기본값으로 쓴다 — 법령이 훨씬 흔한 다수이므로
-        더 안전한 기본값이다."""
+        대신, law 경로를 기본값으로 씀 — 법령이 훨씬 흔한 다수이므로
+        더 안전한 기본값임."""
         raw = {
             "법령": {"조문": {"조문단위": [{
                 "조문번호": "1", "조문가지번호": "",
@@ -369,15 +369,15 @@ class TestSearchableUnitsFor:
 
 
 class TestAdmrulWithoutArticles:
-    """제N조 구조가 전혀 없는 행정규칙도 표시·비교 가능한 단위로 나온다.
+    """제N조 구조가 전혀 없는 행정규칙도 표시·비교 가능한 단위로 나옴.
 
-    ★ 실측 버그(2026-08-18, 전수검증 — 전문 비교 화면에 "전문 내용을
+    실측 버그(전수검증 — 전문 비교 화면에 "전문 내용을
     찾지 못했습니다"만 뜨는 행정규칙 3건): 조문내용이 "제N조"가 하나도
-    없는 평문 한 덩어리로 오는 문서들이 있다(하도급거래공정화 지침 Ⅰ/Ⅱ,
+    없는 평문 한 덩어리로 오는 문서들이 있음(하도급거래공정화 지침 Ⅰ/Ⅱ,
     정보보호시스템 고시 제1장/1.1, 행정업무용 표준 관리규정 1./가.).
     ArticleNo 를 못 찾은 줄을 전부 건너뛰던 탓에 유닛이 0개가 됐고,
     화면이 비었을 뿐 아니라 본 파이프라인의 locate_all() 도 검색 대상이
-    없어 위치확정이 100% 실패했다.
+    없어 위치확정이 100% 실패했음.
     """
 
     def _raw(self, body: str) -> dict:
@@ -400,7 +400,7 @@ class TestAdmrulWithoutArticles:
         assert [u.article_label for u in units] == ["제1장", "제2장"]
 
     def test_text_without_any_heading_is_one_block(self):
-        # 쪼갤 근거가 없으면 통째로 한 덩어리 — 최소한 화면에는 보여야 한다
+        # 쪼갤 근거가 없으면 통째로 한 덩어리 — 최소한 화면에는 보여야 함
         units = parse_admrul_units(self._raw(
             "1. 목적 및 범위가. 목적행정업무용 표준 관리규정은 상호운용성을 위한 것이다."
         ))
@@ -409,7 +409,7 @@ class TestAdmrulWithoutArticles:
         assert "목적 및 범위" in units[0].text
 
     def test_dates_and_numbers_are_not_mistaken_for_headings(self):
-        # ★ 실측: "2013. 7. 25.)" 의 7.25, 금액 "38.4" 가 절 머리로 잡혀
+        # 실측: "2013. 7. 25.)" 의 7.25, 금액 "38.4" 가 절 머리로 잡혀
         #   화면에 "38.4" 라는 절 제목이 뜨던 문제의 회귀 방지.
         units = parse_admrul_units(self._raw(
             "Ⅰ. 총칙심사지침 개정일은 2013. 7. 25.) 이며 매출액은 38.4억원, 41.9%이다."
@@ -427,7 +427,7 @@ class TestAdmrulWithoutArticles:
         assert re.sub(r"\s", "", joined) == re.sub(r"\s", "", body)
 
     def test_normal_article_structure_is_untouched(self):
-        # 폴백은 "유닛이 하나도 안 나왔을 때만" 돈다 — 정상 문서는 그대로.
+        # 폴백은 "유닛이 하나도 안 나왔을 때만" 돎 — 정상 문서는 그대로.
         units = parse_admrul_units(self._raw(
             "제1조(목적) 이 규정은 목적을 정한다."
         ))

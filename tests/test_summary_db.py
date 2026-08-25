@@ -1,13 +1,13 @@
 """요약 DB 적재 — LawSummaryRepo 와 DbSink.
 
-실제 PostgreSQL 없이 돌아간다. 커넥션 계층(Database)을 가짜로 바꿔 끼워
-"어떤 SQL 에 어떤 파라미터가 실렸는가"만 본다.
+실제 PostgreSQL 없이 돌아감. 커넥션 계층(Database)을 가짜로 바꿔 끼워
+"어떤 SQL 에 어떤 파라미터가 실렸는가"만 봄.
 
-★ 왜 실 DB 를 안 쓰는가: 이 계층에서 틀릴 수 있는 것은 SQL 문법이
+왜 실 DB 를 안 쓰는가: 이 계층에서 틀릴 수 있는 것은 SQL 문법이
   아니라 '무엇을 키로 삼았는가', '실패한 한 건이 나머지를 죽이는가',
   'dataclass 를 JSON 으로 옮길 때 빠지는 필드가 없는가' 다. 그건 전부
-  가짜 커넥션으로 확인된다. 실 DB 연결은 테스트를 느리고 불안정하게
-  만들 뿐 이 질문들에 답해주지 않는다.
+  가짜 커넥션으로 확인됨. 실 DB 연결은 테스트를 느리고 불안정하게
+  만들 뿐 이 질문들에 답해주지 않음.
 """
 
 from __future__ import annotations
@@ -46,7 +46,7 @@ class FakeCursor:
 
 
 class FakeDb:
-    """Database 의 transaction()/cursor() 계약만 흉내낸다."""
+    """Database 의 transaction()/cursor() 계약만 흉내냄."""
 
     def __init__(self, rows=None, *, fail_on: str = ""):
         self.cursor_obj = FakeCursor(rows)
@@ -58,8 +58,8 @@ class FakeDb:
     def transaction(self, *, dictionary: bool = True):
         try:
             yield None, self.cursor_obj
-            # 방금 실린 파라미터만 본다. 누적된 호출 이력 전체를 보면
-            # 한 번 실패한 뒤의 모든 호출이 덩달아 실패한다.
+            # 방금 실린 파라미터만 봄. 누적된 호출 이력 전체를 보면
+            # 한 번 실패한 뒤의 모든 호출이 덩달아 실패함.
             last = self.cursor_obj.calls[-1] if self.cursor_obj.calls else (None, ())
             if self._fail_on and self._fail_on in str(last[1]):
                 raise RuntimeError("의도적 DB 실패")
@@ -131,8 +131,8 @@ def make_contract(laws=None) -> ContractSummary:
         ("", None),
         (None, None),
         ("   ", None),
-        # date.fromisoformat 은 3.11+ 부터 압축 표기('20251001')도 받는다.
-        # 계약은 하이픈 표기지만, 받아준다고 손해볼 것이 없어 그대로 둔다.
+        # date.fromisoformat 은 3.11+ 부터 압축 표기('20251001')도 받음.
+        # 계약은 하이픈 표기지만, 받아준다고 손해볼 것이 없어 그대로 둠.
         ("20251001", date(2025, 10, 1)),
         ("2025-13-99", None),      # 달·일이 범위를 벗어나면 조용히 None
         ("시행일 미상", None),      # 날짜가 아닌 문자열도 터지지 않고 NULL
@@ -148,7 +148,7 @@ def test_parse_iso_date(raw, expected):
 # ---------------------------------------------------------------------------
 
 def test_upsert_uses_law_id_and_serial_as_key():
-    """키가 (law_id, new_serial_no) 라는 것이 이 테이블 설계의 핵심이다."""
+    """키가 (law_id, new_serial_no) 라는 것이 이 테이블 설계의 핵심임."""
     db = FakeDb()
     LawSummaryRepo(db).upsert(
         law_id="012045", new_serial_no="276657", law_name="국민기초생활 보장법",
@@ -164,7 +164,7 @@ def test_upsert_uses_law_id_and_serial_as_key():
 
 def test_upsert_rejects_empty_serial_no():
     """빈 일련번호를 허용하면 서로 다른 개정분이 같은 키('')로 몰려
-    마지막 것만 남는다 — 조용히 데이터가 사라지므로 여기서 막는다."""
+    마지막 것만 남음 — 조용히 데이터가 사라지므로 여기서 막음."""
     repo = LawSummaryRepo(FakeDb())
     with pytest.raises(ValueError, match="new_serial_no"):
         repo.upsert(law_id="012045", new_serial_no="", law_name="법")
@@ -173,7 +173,7 @@ def test_upsert_rejects_empty_serial_no():
 
 
 def test_upsert_serializes_json_columns_as_utf8():
-    """한글이 \\uXXXX 로 이스케이프되면 DB 에서 눈으로 못 읽는다."""
+    """한글이 \\uXXXX 로 이스케이프되면 DB 에서 눈으로 못 읽음."""
     db = FakeDb()
     LawSummaryRepo(db).upsert(
         law_id="012045", new_serial_no="276657", law_name="법",
@@ -187,7 +187,7 @@ def test_upsert_serializes_json_columns_as_utf8():
 
 def test_upsert_empty_lists_become_null():
     """빈 목록을 '[]' 문자열로 넣으면 '값이 있는데 빈 것'과 '아직 안 넣은 것'을
-    구분할 수 없다. 빈 것은 NULL 로 둔다."""
+    구분할 수 없음. 빈 것은 NULL 로 둠."""
     db = FakeDb()
     LawSummaryRepo(db).upsert(
         law_id="012045", new_serial_no="276657", law_name="법", caveats=[],
@@ -225,7 +225,7 @@ def test_fetch_decodes_json_columns():
 
 
 def test_decode_summary_row_accepts_already_parsed_json():
-    """드라이버 버전에 따라 JSON 컬럼이 이미 객체로 오기도 한다."""
+    """드라이버 버전에 따라 JSON 컬럼이 이미 객체로 오기도 함."""
     row = {"caveats": ["이미 파싱됨"], "article_summaries": [], "mappings": [], "verifier_issues": []}
     assert _decode_summary_row(row)["caveats"] == ["이미 파싱됨"]
 
@@ -249,7 +249,7 @@ def test_dbsink_writes_every_law():
 
 
 def test_dbsink_carries_provider_and_model():
-    """모델을 바꾼 뒤 요약 품질이 달라졌을 때 어느 판본인지 알아야 한다."""
+    """모델을 바꾼 뒤 요약 품질이 달라졌을 때 어느 판본인지 알아야 함."""
     db = FakeDb()
     DbSink(db, llm_provider="anthropic", llm_model="claude-opus-5").write([make_contract()])
 
@@ -259,8 +259,8 @@ def test_dbsink_carries_provider_and_model():
 
 
 def test_dbsink_serializes_nested_dataclasses():
-    """article_summaries 는 dataclass 중첩(ArticleSummary → ArticleUnit)이다.
-    asdict 로 풀지 않으면 json.dumps 가 터진다."""
+    """article_summaries 는 dataclass 중첩(ArticleSummary → ArticleUnit)임.
+    asdict 로 풀지 않으면 json.dumps 가 터짐."""
     db = FakeDb()
     DbSink(db).write([make_contract()])
 
@@ -272,7 +272,7 @@ def test_dbsink_serializes_nested_dataclasses():
 
 
 def test_dbsink_keeps_going_when_one_law_fails(caplog):
-    """한 건이 실패해도 나머지는 들어가야 한다 — run_weekly 가 워치리스트
+    """한 건이 실패해도 나머지는 들어가야 함 — run_weekly 가 워치리스트
     한 건의 실패로 배치를 죽이지 않는 것과 같은 원칙."""
     db = FakeDb(fail_on="터질법")
     saved = DbSink(db).write(
@@ -287,7 +287,7 @@ def test_dbsink_keeps_going_when_one_law_fails(caplog):
 
 
 def test_dbsink_records_failed_summaries_too():
-    """LLM 호출이 실패한 요약도 행으로 남긴다 — 실패를 조용히 빼지 않는다."""
+    """LLM 호출이 실패한 요약도 행으로 남김 — 실패를 조용히 빼지 않음."""
     db = FakeDb()
     DbSink(db).write([make_contract([make_law(error="API timeout", headline="", body="")])])
 
@@ -296,7 +296,7 @@ def test_dbsink_records_failed_summaries_too():
 
 
 def test_dbsink_skips_law_without_serial_no():
-    """일련번호가 없는 요약은 저장하지 않되, 나머지는 계속 저장한다."""
+    """일련번호가 없는 요약은 저장하지 않되, 나머지는 계속 저장함."""
     db = FakeDb()
     saved = DbSink(db).write(
         [make_contract([

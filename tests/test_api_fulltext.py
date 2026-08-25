@@ -4,11 +4,11 @@ from lawtrack.api.fulltext import _build_admrul_result, _build_law_result
 
 
 class TestNestedRevisionReasonExtraction:
-    """★★ 실측(2026-07-16, 공공기관의 정보공개에 관한 법률): "제개정이유"/
+    """실측(공공기관의 정보공개에 관한 법률): "제개정이유"/
     "개정문" 키는 그 자체가 문자열이 아니라 한 겹 더 감싸인
     {"제개정이유내용": [[...줄들...]]} 구조다. 예전엔 이 사실을 몰라
     _dig_any(root, ("제개정이유", "제개정이유내용"))가 "제개정이유"
-    (딕셔너리) 자체를 text_of()에 넘겨 항상 빈 문자열이 나왔다."""
+    (딕셔너리) 자체를 text_of()에 넘겨 항상 빈 문자열이 나왔음."""
 
     def test_law_revision_reason_flattened_from_nested_lines(self):
         data = {

@@ -69,10 +69,12 @@
           <div class="compare-col-head {{ 'is-current' if col.is_current else '' }}">
             <span class="compare-col-title">{{ col.label }}
               {% if col.is_current and recent_revision %}
-              <span class="match-revision">최근 개정 · {{ recent_revision.revision_type }} · 시행 {{ recent_revision.enforce_date }}</span>
+              {# 시행일은 바로 아래 열 머리에 "시행 2026-08-20" 으로 이미 나오므로
+                 배지에서는 뺌. /pdf 결과 쪽 배지에는 옆에 날짜가 없어 그대로 둠. #}
+              <span class="match-revision">최근 개정 · {{ recent_revision.revision_type }}</span>
               {% endif %}
             </span>
-            <span class="compare-serial" title="일련번호 {{ col.serial_no }}">{{ col.date_label }}</span>
+            <span class="compare-serial" title="일련번호 {{ col.serial_no }}">{% if col.date_kind %}{{ col.date_kind }} {% endif %}{{ col.date_label }}</span>
           </div>
           <div class="compare-col-body">
             {% for art in col.articles %}

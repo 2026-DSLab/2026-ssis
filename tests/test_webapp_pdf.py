@@ -1,9 +1,9 @@
 """webapp/pdfcheck.py — PDF/HWPX 업로드 인용 확인(/pdf) 라우트 테스트.
 
-실 DB/API/LLM 없이 돈다 — 매칭 사전은 repo 의 seed_watchlist.sql 에서
-만들어지고, 업로드 문서는 합성 HWPX(메모리에서 조립한 zip)를 쓴다.
+실 DB/API/LLM 없이 돎 — 매칭 사전은 repo 의 seed_watchlist.sql 에서
+만들어지고, 업로드 문서는 합성 HWPX(메모리에서 조립한 zip)를 씀.
 PDF 추출 자체의 품질은 test_doc_match.py 의 골드셋 테스트가 담당하므로
-여기서는 라우트 계층(수신·검증·렌더링)만 본다.
+여기서는 라우트 계층(수신·검증·렌더링)만 봄.
 """
 
 from __future__ import annotations
@@ -81,10 +81,10 @@ def test_post_hwpx_matches_watchlist(client):
     assert r.status_code == 200
     assert "소프트웨어 진흥법" in html
     assert "개인정보 보호법 시행령" in html
-    # 페이지 번호가 "뷰어 기준(표지 포함)"임을 결과 화면이 명시해야 한다
+    # 페이지 번호가 "뷰어 기준(표지 포함)"임을 결과 화면이 명시해야 함
     # — 인쇄된 쪽 번호와 오프셋이 있는 문서(실측 4/4)에서의 혼동 방지
     assert "뷰어에서 보이는 순서 기준" in html
-    # 시행령이 잡힌 자리에서 법률 본체가 이중 계상되면 안 된다 —
+    # 시행령이 잡힌 자리에서 법률 본체가 이중 계상되면 안 됨 —
     # "개인정보 보호법" 단독 행이 없어야 함 (law-row 는 시행령 1건뿐)
     assert html.count("law-row-name") == 2  # 소프트웨어 진흥법 + 개인정보 보호법 시행령
 
@@ -109,7 +109,7 @@ def test_matched_law_links_to_fulltext_page(client):
 
 
 def test_scan_warning_on_near_empty_text(client):
-    # 텍스트가 거의 없으면(스캔본 PDF 상황) 경고 문구가 떠야 한다
+    # 텍스트가 거의 없으면(스캔본 PDF 상황) 경고 문구가 떠야 함
     r = client.post("/pdf", data={
         "document": (_hwpx_bytes("표지"), "스캔본추정.hwpx"),
     })
@@ -163,7 +163,7 @@ def test_old_revision_gets_no_badge_but_headline_stays():
 
 
 def test_lookup_failure_degrades_gracefully():
-    # DB가 없거나 조회가 예외를 던져도 매칭 결과 자체는 그대로 나와야 한다
+    # DB가 없거나 조회가 예외를 던져도 매칭 결과 자체는 그대로 나와야 함
     def broken(law_ids):
         raise RuntimeError("DB down")
 
@@ -176,8 +176,8 @@ def test_lookup_failure_degrades_gracefully():
 
 
 def test_oversize_upload_is_413_with_styled_page():
-    # ★ 회귀 방지: MAX_CONTENT_LENGTH 를 setdefault 로 걸면 Flask 기본
-    # 설정(None)이 이미 있어 조용히 무시된다 — 상한이 실제로 걸리는지,
+    # 회귀 방지: MAX_CONTENT_LENGTH 를 setdefault 로 걸면 Flask 기본
+    # 설정(None)이 이미 있어 조용히 무시됨 — 상한이 실제로 걸리는지,
     # 걸렸을 때 기본 Werkzeug 화면이 아니라 우리 업로드 화면이 나오는지 확인.
     app = create_app(repo=object())
     app.testing = True
@@ -191,7 +191,7 @@ def test_oversize_upload_is_413_with_styled_page():
 
 
 def test_out_of_watchlist_candidate_listed(client):
-    # 감시 대상 외 후보(법령류 접미 + 사전 미등록)가 별도 섹션에 나와야 한다
+    # 감시 대상 외 후보(법령류 접미 + 사전 미등록)가 별도 섹션에 나와야 함
     r = client.post("/pdf", data={
         "document": (_hwpx_bytes("「지방계약법」을 따른다."), "후보확인.hwpx"),
     })
@@ -203,10 +203,10 @@ def test_out_of_watchlist_candidate_listed(client):
 
 # ---------- 기준 시점(문서 작성일) 이후 개정 여부 ----------
 #
-# 판정 근거는 "지금 시행 중인 버전의 시행일"뿐이다(webapp/pdfcheck.py
+# 판정 근거는 "지금 시행 중인 버전의 시행일"뿐임(webapp/pdfcheck.py
 # _change_status 주석 참고) — change_log 에 개정 이력이 쌓여 있지 않다는
-# 실측(2026-08-18: 1909행이 전부 법당 현재 버전 하나의 중복)을 반영한
-# 설계라, 그 전제가 깨지지 않는지 여기서 고정한다.
+# 실측(1909행이 전부 법당 현재 버전 하나의 중복)을 반영한
+# 설계라, 그 전제가 깨지지 않는지 여기서 고정함.
 
 def _post_with_date(client_, doc_date):
     data = {"document": (_hwpx_bytes("「소프트웨어 진흥법」 제20조."), "문서.hwpx")}
@@ -247,19 +247,19 @@ def test_law_enforced_before_doc_date_is_reported_unchanged():
 
 
 def test_missing_revision_info_is_unknown_not_unchanged():
-    # ★ 이 기능에서 제일 위험한 오답 방지: 모르는 것을 "안 바뀜"으로
-    #   뭉개면 사용자가 낡은 문서를 최신이라고 믿게 된다.
+    # 이 기능에서 제일 위험한 오답 방지: 모르는 것을 "안 바뀜"으로
+    #   뭉개면 사용자가 낡은 문서를 최신이라고 믿게 됨.
     c = _client_with_lookup(lambda law_ids: {})
     html = _post_with_date(c, "2023-05-01").get_data(as_text=True)
-    # 별도 경고 박스는 없앴지만(사용자 요청 2026-08-18) 목록에는 남아야
-    # 한다 — 확인 못 한 것을 "변동 없음"으로 옮기면 안 된다.
+    # 별도 경고 박스는 없앴지만 목록에는 남아야
+    # 함 — 확인 못 한 것을 "변동 없음"으로 옮기면 안 됨.
     assert "개정 여부 확인 불가" in html
     assert "소프트웨어 진흥법" in html
     assert "변동 없는" not in html
 
 
 def test_without_doc_date_behaviour_is_unchanged():
-    # 날짜를 안 넣으면 예전처럼 인용 목록 전체만 나온다(구분 없음)
+    # 날짜를 안 넣으면 예전처럼 인용 목록 전체만 나옴(구분 없음)
     from datetime import date
 
     c = _client_with_lookup(_lookup_enforced_on(date(2020, 1, 1)))
@@ -286,7 +286,7 @@ def test_future_doc_date_is_400():
 
 
 def test_doc_date_survives_validation_error():
-    # 오류로 화면을 다시 그려도 고른 날짜는 남아 있어야 한다
+    # 오류로 화면을 다시 그려도 고른 날짜는 남아 있어야 함
     c = _client_with_lookup(_lookup_enforced_on(None))
     r = c.post("/pdf", data={
         "document": (io.BytesIO(b"x"), "note.txt"),
@@ -298,10 +298,10 @@ def test_doc_date_survives_validation_error():
 
 # ---------- 헤드라인이 "확인 못 함"을 "안 바뀜"으로 단언하지 않는지 ----------
 #
-# ★ 실측 발견(2026-08-18, 전수 검증 중): 헤드라인이 어떤 경우에도
-#   "N건이 개정됐어요"를 냈다. 인용이 0건이거나 DB 장애로 하나도 확인
+# 실측 발견(전수 검증 중): 헤드라인이 어떤 경우에도
+#   "N건이 개정됐어요"를 냈음. 인용이 0건이거나 DB 장애로 하나도 확인
 #   못 했을 때도 "0건이 개정됐어요"가 떠서, 본문의 "확인 불가"와 정면으로
-#   어긋나는 안심 문구가 먼저 눈에 들어왔다.
+#   어긋나는 안심 문구가 먼저 눈에 들어왔음.
 
 def test_headline_does_not_claim_zero_revisions_when_nothing_matched():
     c = _client_with_lookup(_lookup_enforced_on(None))
@@ -322,16 +322,16 @@ def test_headline_says_unverified_when_lookup_fails_entirely():
     html = _post_with_date(_client_with_lookup(broken), "2023-05-01").get_data(as_text=True)
     assert "개정 여부를 확인하지 못했어요" in html
     assert "개정된 법령은 없어요" not in html
-    # 전부 확인 못 했으면 같은 말을 두 번 하지 않는다
+    # 전부 확인 못 했으면 같은 말을 두 번 하지 않음
     assert html.count("확인하지 못했어요") == 1
-    # 경고 박스는 없앴다 — 목록의 표시로만 알린다
+    # 경고 박스는 없앴음 — 목록의 표시로만 알림
     assert "안 바뀐 것이 아니라 모르는 것" not in html
 
 
 def test_headline_flags_partial_unknown_alongside_known_result():
     from datetime import date
 
-    # 한 건은 확인되고(개정됨) 한 건은 기록이 없다 => 둘 다 알려야 한다
+    # 한 건은 확인되고(개정됨) 한 건은 기록이 없다 => 둘 다 알려야 함
     def lookup(law_ids):
         return {"011357": {"revision_type": "일부개정",
                            "enforce_date": date(2025, 1, 1),

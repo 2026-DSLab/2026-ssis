@@ -17,10 +17,10 @@ from doc_match.normalize import norm
 from doc_match.report import build_summary
 
 SEED = Path(__file__).resolve().parents[1] / "database" / "seed_watchlist.sql"
-# ★ 파일 이름을 ASCII 로 둔다(원본: 표준가이드요약본.pdf). 배포용 zip 을
+# 파일 이름을 ASCII 로 둠(원본: 표준가이드요약본.pdf). 배포용 zip 을
 #   UTF-8 플래그를 무시하는 압축 해제 도구로 풀면 한글 이름이 깨져, 이 골드셋
-#   테스트가 "PDF 미배치"로 조용히 건너뛰어진다 — 받는 쪽에서는 통과한 것처럼
-#   보이므로 눈치채기 어렵다.
+#   테스트가 "PDF 미배치"로 조용히 건너뛰어짐 — 받는 쪽에서는 통과한 것처럼
+#   보이므로 눈치채기 어려움.
 GOLD_PDF = Path(__file__).parent / "fixtures" / "goldset_guide_summary.pdf"
 
 
@@ -46,7 +46,7 @@ def test_norm_variants_collapse(a, b):
 
 def test_seed_loads_102(d):
     assert len(d.entries) == 102
-    # official/internal 이원 키: 구명칭으로도 조회된다
+    # official/internal 이원 키: 구명칭으로도 조회됨
     assert norm("국가정보화 기본법") in d.alias
     assert norm("지능정보화 기본법") in d.alias
     assert d.alias[norm("국가정보화 기본법")] == d.alias[norm("지능정보화 기본법")]
@@ -102,7 +102,7 @@ def test_hwpx_synthetic_fixture(tmp_path):
 def test_goldset_guide_summary(d):
     pages = extract_text(str(GOLD_PDF))
     summary = build_summary(match_pages(pages, d), d)
-    # 2026-08-05 실측 기준: watchlist 26건 인용
+    # 실측 기준: watchlist 26건 인용
     assert summary["watchlist_matched"] >= 24
     matched_names = {m["official_name"] for m in summary["matched"]}
     for name in ["개인정보 보호법", "소프트웨어 진흥법",

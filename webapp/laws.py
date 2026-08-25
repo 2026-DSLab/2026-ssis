@@ -53,6 +53,21 @@ def _format_yyyymmdd(s: str) -> str:
     return s
 
 
+def _date_of(version) -> dict:
+    """버전 하나의 머리에 적을 날짜와 그 종류.
+
+    시행일을 먼저 쓰고, 없으면 공포일, 그것도 없으면(드묾) 일련번호로 내려감.
+    date_kind 가 비면 화면은 날짜 없이 일련번호만 보여 줌.
+    """
+    enforce = _format_yyyymmdd(version.enforce_date)
+    if enforce:
+        return {"date_label": enforce, "date_kind": "시행"}
+    promulgated = _format_yyyymmdd(version.promulgation_date)
+    if promulgated:
+        return {"date_label": promulgated, "date_kind": "공포"}
+    return {"date_label": version.serial_no, "date_kind": ""}
+
+
 def _group_by_article(units: list) -> list[dict]:
     """SearchUnit 목록(문서 순서 보존)을 조문 단위로 묶음.
 
@@ -358,11 +373,14 @@ def register_law_routes(
                 # 요구사항: "2100000272436" 같은 일련번호 대신
                 # 시행일/공포일을 보여 줌 — 시행일이 없으면
                 # 공포일로, 그것도 없으면(드묾) 일련번호로 최종 폴백함.
-                "date_label": (
-                    _format_yyyymmdd(v.enforce_date)
-                    or _format_yyyymmdd(v.promulgation_date)
-                    or v.serial_no
-                ),
+                #
+                # 무슨 날짜인지 앞에 붙이는 이유: 라벨 없이 날짜만 두면
+                # 시행일인지 공포일인지 알 수 없음. 시행이 유예된 개정이
+                # 걸려 있으면 왼쪽(개정 전) 열의 날짜가 오른쪽보다 늦게
+                # 보이는 일이 실제로 생기는데(개인정보 보호법 시행령:
+                # 2월 공포·8월 시행분과 5월 공포·즉시 시행분이 함께 있음),
+                # 그때 라벨이 없으면 순서가 뒤집힌 것처럼 읽힘.
+                **_date_of(v),
                 "is_current": v.serial_no == entry.last_serial_no,
                 "label": _LABELS_BY_DISTANCE.get((n - 1) - i, f"{(n - 1) - i}단계 전"),
                 "articles": _group_by_article(searchable_units_for(kind, v.full_text)),

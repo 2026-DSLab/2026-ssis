@@ -10,14 +10,23 @@
 
    가변 폰트 하나로 400~800 굵기를 모두 덮음. 굵기별 파일을 따로 두면
    5개에 5MB 가까이 되는데, 이 파일 하나는 2MB 임.
-   local() 을 먼저 두어, PC 에 Pretendard 가 깔려 있으면 내려받지 않음. */
+
+   local() 을 쓰지 않는 이유: 쓰면 PC 에 Pretendard 가 깔린 사람은 설치본으로,
+   나머지는 번들본으로 그려져 화면이 사람마다 달라짐. 게다가 설치된 PC 에서는
+   url() 을 아예 타지 않아, 번들 파일이 실제로 되는지 검증되지 않은 채 넘어감
+   (실측: 개발 PC 에서는 잘 보이는데 팀원 PC 에서만 대체 글꼴로 나오는 문제가
+   이 때문이었음). 전원이 같은 파일을 쓰게 함.
+
+   format() 을 둘 다 적는 이유: 'woff2-variations' 는 가변 폰트 초안 시절
+   문법이라 모르는 브라우저는 그 줄을 통째로 건너뜀. 그 뒤에 표준 'woff2' 를
+   한 번 더 두면, 둘 중 아는 쪽을 골라 씀. 같은 파일이라 두 번 받지 않음. */
 @font-face {
   font-family: "Pretendard";
   font-weight: 45 920;
   font-style: normal;
   font-display: swap;
-  src: local("Pretendard Variable"), local("Pretendard"),
-       url("fonts/PretendardVariable.woff2") format("woff2-variations");
+  src: url("fonts/PretendardVariable.woff2") format("woff2-variations"),
+       url("fonts/PretendardVariable.woff2") format("woff2");
 }
 
 :root {

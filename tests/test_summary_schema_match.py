@@ -1,15 +1,15 @@
 """law_summary: DDL(schema.sql)과 INSERT 문(repo.py)이 서로 맞는가.
 
-★ 왜 이 테스트가 따로 필요한가 (2026-07-28):
+왜 이 테스트가 따로 필요한가 :
     law_summary 의 INSERT 는 컬럼 19개를 손으로 나열하고, 값 19개를
-    위치로 맞춰 넣는다. 여기서 나는 실수(컬럼 하나 오타, 순서 뒤바뀜,
+    위치로 맞춰 넣음. 여기서 나는 실수(컬럼 하나 오타, 순서 뒤바뀜,
     자리표시자 개수 불일치)는 파이썬 문법으로는 멀쩡해서 단위 테스트를
-    다 통과하고, 실제 PostgreSQL 에 연결되는 순간에야 터진다. 그게 주간
-    배치 한밤중이면 아무도 안 보고 있다.
+    다 통과하고, 실제 PostgreSQL 에 연결되는 순간에야 터짐. 그게 주간
+    배치 한밤중이면 아무도 안 보고 있음.
 
-    실 DB 없이도 이건 확인할 수 있다 — DDL 과 SQL 문자열을 둘 다 텍스트로
-    읽어 대조하면 된다. 실제 PostgreSQL 연결이 필요한 것은 이 테스트가
-    잡을 수 없는 것(권한, 인코딩, 인덱스 길이 한계)뿐이다.
+    실 DB 없이도 이건 확인할 수 있음 — DDL 과 SQL 문자열을 둘 다 텍스트로
+    읽어 대조하면 됨. 실제 PostgreSQL 연결이 필요한 것은 이 테스트가
+    잡을 수 없는 것(권한, 인코딩, 인덱스 길이 한계)뿐임.
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ SCHEMA = Path(__file__).resolve().parents[1] / "database" / "schema.sql"
 # ---------------------------------------------------------------------------
 
 def ddl_columns() -> list[str]:
-    """schema.sql 의 law_summary 정의에서 컬럼 이름을 순서대로 뽑는다."""
+    """schema.sql 의 law_summary 정의에서 컬럼 이름을 순서대로 뽑음."""
     sql = SCHEMA.read_text(encoding="utf-8")
     m = re.search(
         r"CREATE TABLE IF NOT EXISTS law_summary\s*\((.*?)\n\);",
@@ -43,7 +43,7 @@ def ddl_columns() -> list[str]:
     columns = []
     for line in m.group(1).splitlines():
         line = line.strip()
-        # 컬럼 정의는 '이름 타입 ...' 형태. 제약조건 줄은 건너뛴다.
+        # 컬럼 정의는 '이름 타입 ...' 형태. 제약조건 줄은 건너뜀.
         if not line or line.upper().startswith(
             ("PRIMARY KEY", "UNIQUE", "KEY ", "INDEX ", "CONSTRAINT", "FOREIGN KEY")
         ):
@@ -96,10 +96,10 @@ def test_placeholder_count_matches_column_count():
 
 
 def test_param_tuple_length_matches_columns(monkeypatch):
-    """실제로 넘기는 파라미터 개수까지 확인한다.
+    """실제로 넘기는 파라미터 개수까지 확인함.
 
-    앞의 두 테스트는 SQL 문자열 안쪽만 본다. 정작 틀리기 쉬운 것은
-    파이썬 쪽 튜플이라 실행해서 세어 본다.
+    앞의 두 테스트는 SQL 문자열 안쪽만 봄. 정작 틀리기 쉬운 것은
+    파이썬 쪽 튜플이라 실행해서 세어 봄.
     """
     captured = {}
 
@@ -123,9 +123,9 @@ def test_param_tuple_length_matches_columns(monkeypatch):
 
 
 def test_update_clause_covers_everything_except_the_key():
-    """재요약이 덮어써야 할 컬럼을 빠뜨리면, 값이 조용히 옛것으로 남는다.
+    """재요약이 덮어써야 할 컬럼을 빠뜨리면, 값이 조용히 옛것으로 남음.
 
-    키(law_id, new_serial_no)와 DB 가 스스로 채우는 시각 컬럼은 제외한다.
+    키(law_id, new_serial_no)와 DB 가 스스로 채우는 시각 컬럼은 제외함.
     """
     auto = {"law_id", "new_serial_no", "created_at", "updated_at"}
     expected = [c for c in insert_columns() if c not in auto]
@@ -138,7 +138,7 @@ def test_update_clause_covers_everything_except_the_key():
 
 
 def test_primary_key_is_law_id_and_serial_no():
-    """키가 바뀌면 '같은 개정분은 덮어쓴다'는 설계 자체가 깨진다."""
+    """키가 바뀌면 '같은 개정분은 덮어쓴다'는 설계 자체가 깨짐."""
     sql = SCHEMA.read_text(encoding="utf-8")
     m = re.search(
         r"CREATE TABLE IF NOT EXISTS law_summary.*?PRIMARY KEY\s*\(([^)]*)\)",
@@ -153,7 +153,7 @@ def test_primary_key_is_law_id_and_serial_no():
 
 @pytest.mark.parametrize("column", ["caveats", "article_summaries", "mappings", "verifier_issues"])
 def test_json_columns_declared_as_json(column):
-    """JSONB 타입이어야 조회 시 드라이버가 풀어 준다. TEXT 면 문자열로만 온다."""
+    """JSONB 타입이어야 조회 시 드라이버가 풀어 줌. TEXT 면 문자열로만 옴."""
     sql = SCHEMA.read_text(encoding="utf-8")
     m = re.search(
         r"CREATE TABLE IF NOT EXISTS law_summary\s*\((.*?)\n\);", sql, re.DOTALL
@@ -164,7 +164,7 @@ def test_json_columns_declared_as_json(column):
 
 def test_decoder_covers_all_json_columns():
     """_decode_summary_row 가 JSON 컬럼 하나를 빠뜨리면, 그 컬럼만 문자열로
-    돌아와 호출부에서 뒤늦게 터진다."""
+    돌아와 호출부에서 뒤늦게 터짐."""
     sql = SCHEMA.read_text(encoding="utf-8")
     m = re.search(
         r"CREATE TABLE IF NOT EXISTS law_summary\s*\((.*?)\n\);", sql, re.DOTALL

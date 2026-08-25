@@ -1,8 +1,8 @@
 """lawtrack.history — 전문 비교 페이지가 쓰는 버전 체인 조회+캐싱 테스트.
 
-실 API/DB 없이 돈다. fetch_law_oldnew/fetch_law_fulltext 등은 모듈
+실 API/DB 없이 돎. fetch_law_oldnew/fetch_law_fulltext 등은 모듈
 네임스페이스에서 monkeypatch로 대체하고, VersionRepo는 딕셔너리 기반
-가짜로 대체한다.
+가짜로 대체함.
 """
 
 from __future__ import annotations
@@ -53,8 +53,8 @@ class TestGetPreviousSerial:
         assert history.get_previous_serial(client=None, kind="law", serial_no="268103") == "245293"
 
     def test_returns_none_at_first_ever_version(self, monkeypatch):
-        """실측(2026-08-05, 스파이크): 제정본까지 거슬러 올라가면
-        신구법존재여부="N"으로 온다 — 오류가 아니라 체인의 정상적인 끝."""
+        """실측(스파이크): 제정본까지 거슬러 올라가면
+        신구법존재여부="N"으로 옴 — 오류가 아니라 체인의 정상적인 끝."""
         def fake_fetch_law_oldnew(client, mst):
             return OldNewResult(False, "no_comparison_field", VersionInfo("", "", "", "", "", "", "", False), _version(mst))
 
@@ -111,11 +111,11 @@ class TestGetOrFetchFullText:
         assert repo.fetch("law", "009199", "245293") == {"법령": "새 전문"}  # 캐싱됨
 
     def test_empty_cached_payload_is_refetched(self, monkeypatch):
-        """★ 실측 버그(2026-08-18, 전수검증): documents 에 full_text 가 {} 인
-        빈 껍데기 행이 있었다(초기 세팅 때 들어간 자리표시자). "행이 있으면
+        """실측 버그(전수검증): documents 에 full_text 가 {} 인
+        빈 껍데기 행이 있었음(초기 세팅 때 들어간 자리표시자). "행이 있으면
         캐시 적중"으로만 보면 이 빈 값을 그대로 돌려줘서, 파서가 유닛을
-        0개 내고 전문 비교 화면이 빈 채로 남는다. 내용 없는 캐시는 캐시가
-        아니므로 다시 받아와야 한다."""
+        0개 내고 전문 비교 화면이 빈 채로 남음. 내용 없는 캐시는 캐시가
+        아니므로 다시 받아와야 함."""
         repo = _FakeRepo()
         repo._store[("law", "001973", "281585")] = {}  # 빈 껍데기
 
@@ -132,13 +132,13 @@ class TestGetOrFetchFullText:
         )
 
         assert result == {"법령": "제대로 받은 전문"}
-        # 빈 행이 제대로 된 내용으로 덮어써져야 한다(_insert 는 upsert)
+        # 빈 행이 제대로 된 내용으로 덮어써져야 함(_insert 는 upsert)
         assert repo.fetch("law", "001973", "281585") == {"법령": "제대로 받은 전문"}
 
 
 class TestBuildVersionChain:
     def test_depth_2_returns_oldest_to_newest(self, monkeypatch):
-        """실측 확인된 전자정부법 체인(245293 -> 268103)을 흉내낸다."""
+        """실측 확인된 전자정부법 체인(245293 -> 268103)을 흉내냄."""
         def fake_oldnew(client, mst):
             assert mst == "268103"
             return OldNewResult(True, "", _version("245293"), _version("268103"))
@@ -157,7 +157,7 @@ class TestBuildVersionChain:
         assert [v.serial_no for v in chain] == ["245293", "268103"]  # 오래된 -> 최신
 
     def test_depth_3_chains_two_hops_back(self, monkeypatch):
-        """실측 확인된 3단 체인(239279 -> 245293 -> 268103)을 흉내낸다."""
+        """실측 확인된 3단 체인(239279 -> 245293 -> 268103)을 흉내냄."""
         oldnew_map = {
             "268103": OldNewResult(True, "", _version("245293"), _version("268103")),
             "245293": OldNewResult(True, "", _version("239279"), _version("245293")),
@@ -181,7 +181,7 @@ class TestBuildVersionChain:
 
     def test_stops_early_when_no_earlier_version_exists(self, monkeypatch):
         """depth=3을 요청했지만 한 단계만에 제정본에 닿으면, 체인은
-        depth보다 짧게 끝나야 한다(오류를 내지 않고)."""
+        depth보다 짧게 끝나야 함(오류를 내지 않고)."""
         def fake_oldnew(client, mst):
             return OldNewResult(False, "no_comparison_field", VersionInfo("", "", "", "", "", "", "", False), _version(mst))
 
@@ -224,9 +224,9 @@ class TestBuildVersionChain:
 
 
 class TestBuildVersionChainCapturesDates:
-    """★ 사용자 요청(2026-08-05): 화면에 일련번호 대신 시행일/공포일을
+    """요구사항: 화면에 일련번호 대신 시행일/공포일을
     보여달라는 요청 — oldAndNew 응답에 이미 실려 오는 날짜를 체인을
-    걸으면서 같이 챙긴다(추가 API 호출 없이)."""
+    걸으면서 같이 챙김(추가 API 호출 없이)."""
 
     def test_depth_2_captures_dates_for_both_versions_from_single_call(self, monkeypatch):
         def fake_oldnew(client, mst):
@@ -275,7 +275,7 @@ class TestBuildVersionChainCapturesDates:
 
     def test_missing_date_info_falls_back_to_empty_string(self, monkeypatch):
         """depth=3인데 체인이 1개뿐으로 끝나도(제정본) 최소한 자기 자신의
-        날짜는 채워져야 한다 — new_version은 flag='N'이어도 채워진다."""
+        날짜는 채워져야 함 — new_version은 flag='N'이어도 채워짐."""
         def fake_oldnew(client, mst):
             return OldNewResult(
                 False, "no_comparison_field",

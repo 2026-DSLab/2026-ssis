@@ -1,12 +1,12 @@
 """어절 단위 diff 와 사전 선별 테스트.
 
-선별의 안전 원칙을 테스트로 못 박는다:
-    실질 변경이 FORMAL 로 새어나가면 보고서에서 누락된다. 이게 최악이다.
+선별의 안전 원칙을 테스트로 못 박음:
+    실질 변경이 FORMAL 로 새어나가면 보고서에서 누락됨. 이게 최악임.
 
-★ 출처: seongbeen2 브랜치(tests/test_mas_triage.py)에서 이식(2026-07-30).
-  summarizer.triage / summarizer.textdiff 로 import 경로만 바꿨다.
+출처: seongbeen2 브랜치(tests/test_mas_triage.py)에서 이식.
+  summarizer.triage / summarizer.textdiff 로 import 경로만 바꿨음.
   triage_many(dict 기반 일괄처리)는 hyunki 쪽 ArticleUnit 기반 파이프라인에서
-  쓰이지 않아 이식하지 않았다 — 관련 테스트(TestTriageMany)도 제외했다.
+  쓰이지 않아 이식하지 않았음 — 관련 테스트(TestTriageMany)도 제외했음.
 """
 
 import pytest
@@ -33,7 +33,7 @@ class TestDiffSegments:
         assert "".join(s.text for s in right) == new
 
     def test_어절이_조각나지_않는다(self):
-        """글자 단위였다면 '통계청'->'국가데' 처럼 쪼개졌다."""
+        """글자 단위였다면 '통계청'->'국가데' 처럼 쪼개졌음."""
         dels, inss = changed_words("통계청장이 고시한다", "국가데이터처장이 고시한다")
         assert dels == ["통계청장이"]
         assert inss == ["국가데이터처장이"]
@@ -58,7 +58,7 @@ class TestSimilarity:
 
 
 class TestTriageSafety:
-    """실질 변경이 FORMAL 로 분류되면 안 된다."""
+    """실질 변경이 FORMAL 로 분류되면 안 됨."""
 
     def test_내용이_바뀌면_실질변경(self):
         r = triage(
@@ -68,7 +68,7 @@ class TestTriageSafety:
         assert r.change_class is ChangeClass.SUBSTANTIVE
 
     def test_기간_숫자만_바뀌어도_FORMAL_이_아니다(self):
-        """'30일 -> 60일' 은 어절 하나지만 실무 영향이 크다."""
+        """'30일 -> 60일' 은 어절 하나지만 실무 영향이 큼."""
         r = triage("신청은 30일 이내에 하여야 한다", "신청은 60일 이내에 하여야 한다")
         assert r.change_class is not ChangeClass.FORMAL
 
@@ -100,7 +100,7 @@ class TestTriageSafety:
         ("일부를 지원한다", "전부를 지원한다", "'부'가 기관 접미사로 오인됨"),
     ])
     def test_기관명_오탐_회귀(self, old, new, why):
-        """한 글자 접미사가 일반 명사를 기관명으로 오인하면 실질 변경이 누락된다."""
+        """한 글자 접미사가 일반 명사를 기관명으로 오인하면 실질 변경이 누락됨."""
         assert triage(old, new).change_class is not ChangeClass.FORMAL, why
 
     def test_숫자가_섞인_어절은_기관명이_아니다(self):
@@ -109,7 +109,7 @@ class TestTriageSafety:
 
 
 class TestTriageFormal:
-    """확실한 조직 개편 정비만 걸러낸다."""
+    """확실한 조직 개편 정비만 걸러냄."""
 
     def test_기관명_변경은_형식정비(self):
         r = triage(
@@ -157,7 +157,7 @@ class TestOrgCategoryRegression:
     """실데이터에서 잡힌 오탐 회귀 방지."""
 
     def test_권한이관은_형식정비가_아니다(self):
-        """'심의위원회 -> 보건복지부장관' 은 개편이 아니라 권한 이관이다."""
+        """'심의위원회 -> 보건복지부장관' 은 개편이 아니라 권한 이관임."""
         r = triage(
             "심의위원회가 그 적정성을 심의하여 결정한다. 이 경우 관계 서류를 첨부하여야 한다.",
             "보건복지부장관이 그 적정성을 심의하여 결정한다. 이 경우 관계 서류를 첨부하여야 한다.",
@@ -165,7 +165,7 @@ class TestOrgCategoryRegression:
         assert r.change_class is not ChangeClass.FORMAL
 
     def test_같은_범주_명칭변경은_형식정비(self):
-        """직위 -> 직위, 기관 -> 기관 은 통과해야 한다."""
+        """직위 -> 직위, 기관 -> 기관 은 통과해야 함."""
         pairs = [
             ("통계청장이 매년 고시하는 물가변동률을 반영하여 산정한다.",
              "국가데이터처장이 매년 고시하는 물가변동률을 반영하여 산정한다."),

@@ -319,10 +319,22 @@ erDiagram
 - **PK**: `(kind, doc_id, doc_serial_no)` — 같은 법이라도 일련번호(버전)마다 별도 행.
 - 개정이 감지되면 새 일련번호로 새 행이 **추가**되며, 기존 행은 지우지
   않는다 — 즉 매 버전이 그대로 쌓이는 이력 테이블이다.
-- **행 존재 여부 자체가 개정감지 신호다**: `VersionRepo.law_exists(law_id,
-  new_serial_no)`가 False면 "아직 안 본 버전"이라는 뜻이고, 이게 곧
-  "개정됨"으로 판정되는 기준이다. 그래서 최초 구축 시 이 테이블을 절대
-  미리 채우면 안 된다(아래 "DB 최초 구축 순서" 절 참고).
+- **개정감지의 보조 신호다**: `VersionRepo.law_exists(law_id, new_serial_no)`가
+  False면 "이 버전의 전문을 아직 안 받았다"는 뜻이다. `detect._already_processed()`
+  가 이 값을 **번호가 같을 때만** 본다 — 판정의 1순위는
+  `watchlist.last_serial_no` 다.
+
+  예전에는 이 테이블만 보고 판정했는데, 전문 비교 화면(`webapp/laws.py` →
+  `history.get_or_fetch_full_text`)이 **과거 버전을 여기에 캐시로 넣는다.**
+  시행일이 엇갈린 개정이 걸린 법(개인정보 보호법 시행령 011468: 283503 은
+  2월 공포·8월 20일 시행, 286175 는 5월 공포·즉시 시행)에서 나중에 283503 이
+  현행이 되었을 때, 그 전문이 이미 열람 캐시로 들어와 있어 배치가
+  "이미 있음 = 변경 없음"으로 넘겨 현행 교체를 통째로 놓쳤다. 담당자가 화면을
+  자주 볼수록 감지가 조용히 막히는 구조였다.
+
+  반대로 번호만 보게 하면 최초 백필이 통째로 건너뛰어진다 —
+  `scripts/load_watchlist.py` 가 `last_serial_no` 를 미리 채워 두기 때문이다.
+  그래서 두 신호를 함께 본다(자세한 것은 `detect._already_processed()` 주석).
 - 법령/행정규칙은 원래 별도 테이블(`laws`/`administrative_rules`)이었는데,
   컬럼 구성이 이름만 다를 뿐 완전히 같아 하나로 합쳤다. 조/항/호/목으로
   미리 파싱해 캐시하던 컬럼(`*_articles_parsed`)은 어느 코드도 다시
@@ -426,13 +438,15 @@ erDiagram
 ## DB 최초 구축 순서
 
 **아래 순서를 반드시 지킨다.** `database/schema.sql`이 DB/테이블을 만들고,
-`database/seed_watchlist.sql`이 감시 대상 워치리스트를 등록한다. `documents`
-(법령/행정규칙 전문 아카이브)와 `article_diff`(조문별 diff)는 **반드시
-비워둔 채로 시작해야 한다** — 이 두 테이블에 행이 있는지 없는지 자체가
-"이 버전을 이미 처리했는가"를 판단하는 개정감지의 핵심 신호이기 때문이다
-(`VersionRepo.law_exists`/`admrul_exists`). 미리 채워 넣으면(빈 값이든 실제
-값이든) 그 항목은 영원히 "이미 처리됨"으로 오판되어 개정감지가 동작하지
-않는다 — 최초 백필은 반드시 아래 3번 단계(`scripts/run_weekly.py`)로 한다.
+`database/seed_watchlist.sql`(또는 `scripts/load_watchlist.py`)이 감시 대상을
+등록한다. `documents`(전문 아카이브)와 `article_diff`(조문별 diff)는 **비워둔
+채로 시작한다** — 최초 백필은 반드시 아래 2번 단계(`scripts/run_weekly.py`)로
+하고, 값을 손으로 넣지 않는다.
+
+특히 **`watchlist.last_serial_no` 를 임의로 바꾸면 안 된다.** 개정감지의 1순위
+기준이라, 실제 현행 번호와 같게 맞춰 놓으면 그 법의 개정이 영영 안 잡힌다
+(`detect._already_processed()` 참고). 반대로 이 값이 비어 있거나 다르면
+배치가 알아서 전문을 받아 오므로, 손댈 이유 자체가 없다.
 
 1. **DB 생성 + 스키마 + 워치리스트** — 한 번에 끝난다. `.env`만 채워 두면 된다.
 
@@ -548,7 +562,7 @@ python scripts/make_release.py --dry-run  # 무엇이 들어가는지만 확인
 `out/`의 배치 산출물도 제외한다 — 받는 쪽이 무엇이 프로그램인지 가릴 수 있어야 한다.
 
 `tests`를 함께 넘기는 이유는 받는 쪽이 직접 돌려 확인할 수 있게 하기 위해서다.
-**`.env`가 없는 상태에서도 455건 전부 통과해야 정상이다**(실측 확인). 실패가
+**`.env`가 없는 상태에서도 460건 전부 통과해야 정상이다**(실측 확인). 실패가
 나온다면 파이썬 버전이나 의존성 설치를 먼저 의심할 것.
 
 받는 쪽 순서:
@@ -557,7 +571,7 @@ python scripts/make_release.py --dry-run  # 무엇이 들어가는지만 확인
 # 1) 압축 해제 후
 copy .env.example .env      # 값을 채운다 (LAW_API_OC, POSTGRES_*, API 키)
 pip install -e ".[openai,web,dev]"
-python -m pytest -q         # 455 passed 확인
+python -m pytest -q         # 460 passed 확인
 
 # 2) DB 구축
 python scripts/setup_db.py

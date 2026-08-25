@@ -1,4 +1,4 @@
-"""locator 회귀 테스트. 실측 성공/실패 사례를 그대로 재현한다."""
+"""locator 회귀 테스트. 실측 성공/실패 사례를 그대로 재현함."""
 
 from lawtrack.locate.locator import (
     LocateStatus,
@@ -154,11 +154,11 @@ class TestMassSubstitution:
 
 
 class TestAnnotationStripping:
-    """★★ 실측(2026-07-16, (계약예규) 예정가격작성기준): 조문 문장 중간에
+    """실측((계약예규) 예정가격작성기준): 조문 문장 중간에
     "<개정 2011.5.13., 2015.9.21., 2025.5.1.>" 같은 개정이력 각주가 섞여
     있으면, 그 안의 날짜 조각("5.13." "9.21.")이 호 번호 패턴과 우연히
-    겹쳐 엉뚱하게 분해되어 검색에 실패했다. locate_change가 검색 직전에
-    이런 <...> 각주를 걷어내야 한다."""
+    겹쳐 엉뚱하게 분해되어 검색에 실패했음. locate_change가 검색 직전에
+    이런 <...> 각주를 걷어내야 함."""
 
     def test_revision_annotation_with_dates_does_not_break_search(self):
         old = (
@@ -190,9 +190,9 @@ class TestAnnotationStripping:
         assert results[0].status is LocateStatus.SUCCESS
 
     def test_bracket_annotation_does_not_break_search(self):
-        """실측(2026-07-16, (계약예규) 정부 입찰ㆍ계약 집행기준): "[본조신설
+        """실측((계약예규) 정부 입찰ㆍ계약 집행기준): "[본조신설
         2018.3.20.][종전 제99조는 제100조로 이동…]" 처럼 대괄호로 감싼
-        조문 이력 각주도 검색 전에 제거돼야 한다."""
+        조문 이력 각주도 검색 전에 제거돼야 함."""
         old = "시행령 제26조부터 제30조까지에 따라 체결하는 수의계약."
         new = (
             "시행령 제26조부터 제30조까지에 따라 체결하는 수의계약.[본조신설 "
@@ -205,9 +205,9 @@ class TestAnnotationStripping:
         assert results[0].status is LocateStatus.SUCCESS
 
     def test_unclosed_trailing_annotation_does_not_break_search(self):
-        """실측(2026-07-16, (계약예규) 협상에 의한 계약체결기준): oldAndNew
+        """실측((계약예규) 협상에 의한 계약체결기준): oldAndNew
         블록 경계에서 "<개정 2020.9.24." 처럼 닫는 ">" 없이 각주가 잘리는
-        경우가 있다. 닫는 괄호가 없어도 문자열 끝까지 제거돼야 한다."""
+        경우가 있음. 닫는 괄호가 없어도 문자열 끝까지 제거돼야 함."""
         old = "제안서를 계약담당공무원에게 제출하여야 한다."
         new = "제안서를 계약담당공무원에게 제출하여야 한다. <개정 2020.9.24."
         change = build_change(0, old, new)

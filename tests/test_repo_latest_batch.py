@@ -1,7 +1,7 @@
 """LawSummaryRepo.latest_batch_date() — 웹페이지가 "이번 배치"를 찾는 진입점.
 
 실제 PostgreSQL 없이, cursor()가 돌려주는 값만으로 SQL이 기대한 대로 쓰이는지
-확인한다(다른 law_summary 테스트와 같은 가짜 DB 패턴 — tests/test_summary_db.py 참고).
+확인함(다른 law_summary 테스트와 같은 가짜 DB 패턴 — tests/test_summary_db.py 참고).
 """
 
 from __future__ import annotations
@@ -41,8 +41,8 @@ def test_latest_batch_date_returns_max_date():
 
 
 def test_latest_batch_date_none_when_table_empty():
-    """law_summary 가 비어 있으면 MAX()는 NULL이 담긴 행 하나를 돌려준다
-    (0행이 아니다) — None으로 정확히 변환되는지 확인한다."""
+    """law_summary 가 비어 있으면 MAX()는 NULL이 담긴 행 하나를 돌려줌
+    (0행이 아님) — None으로 정확히 변환되는지 확인함."""
     db = _FakeDb({"d": None})
     repo = LawSummaryRepo(db)
 

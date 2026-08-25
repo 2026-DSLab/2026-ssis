@@ -1,11 +1,11 @@
 """summarizer.loader._units_from_expansion() 내용 대조 매칭 회귀 테스트.
 
-2026-07-31 추가 기능: 구조확장(옛 프로즈 문장이 목 단위로 안 나뉘어 있던
+구조확장(옛 프로즈 문장이 목 단위로 안 나뉘어 있던
 경우) 그룹에서, 새 항목 문구가 옛 프로즈 안에 그대로(부분문자열로) 남아
 있으면 match_status="성공"으로 확정하고, 없으면(진짜 새 내용) 예전처럼
-"구조확장(구법미분리)"로 미확정 남긴다.
+"구조확장(구법미분리)"로 미확정 남김.
 
-실측 원본(전자정부법 제2조11. "정보자원" 정의)을 그대로 고정값으로 쓴다.
+실측 원본(전자정부법 제2조11. "정보자원" 정의)을 그대로 고정값으로 씀.
 """
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ def _law(group: StructuralExpansion) -> LawChange:
 
 
 def test_items_preserved_in_old_prose_are_resolved_as_success():
-    """★★ 실측(2026-07-31, 전자정부법 제2조11.): 옛 프로즈 안에 그대로
+    """실측(전자정부법 제2조11.): 옛 프로즈 안에 그대로
     남아있는 "행정정보"/"정보시스템"/"정보시스템의 구축에 적용되는
     정보기술" 3개 항목은 match_status="성공"으로 확정되어야 한다."""
     group = StructuralExpansion(
@@ -53,9 +53,9 @@ def test_items_preserved_in_old_prose_are_resolved_as_success():
 
 
 def test_genuinely_new_item_stays_unresolved():
-    """★★ 실측: "정보시스템 운영시설" 관련 항목("라")은 옛 프로즈 어디에도
+    """실측: "정보시스템 운영시설" 관련 항목("라")은 옛 프로즈 어디에도
     없는 완전히 새 내용이라, 매칭하면 안 되고 예전처럼 미확정으로 남아야
-    한다."""
+    함."""
     group = StructuralExpansion(
         article_label="제2조", old_text=_OLD_TEXT,
         new_items=[
@@ -76,8 +76,8 @@ def test_genuinely_new_item_stays_unresolved():
 
 
 def test_match_ignores_whitespace_differences():
-    """★★ 실측: 옛 프로즈엔 "정보화예산"(공백 없음), 새 항목엔 "정보화 예산"
-    (공백 있음)으로 나온다 — 공백 차이만으로 매칭을 놓치면 안 된다."""
+    """실측: 옛 프로즈엔 "정보화예산"(공백 없음), 새 항목엔 "정보화 예산"
+    (공백 있음)으로 나옴 — 공백 차이만으로 매칭을 놓치면 안 됨."""
     group = StructuralExpansion(
         article_label="제2조", old_text=_OLD_TEXT,
         new_items=[ExpandedItem(item_label="마.", text="마. 정보화 예산")],
@@ -92,7 +92,7 @@ def test_match_ignores_whitespace_differences():
 
 def test_short_match_below_threshold_is_not_confirmed():
     """오탐 방지: 정규화 길이가 너무 짧은 조각(예: 2글자)은 우연히 걸릴
-    위험이 크므로 확정하지 않는다."""
+    위험이 크므로 확정하지 않음."""
     group = StructuralExpansion(
         article_label="제2조", old_text="1. 정보 관련 여러 사항을 말한다.",
         new_items=[ExpandedItem(item_label="가.", text="가. 정보")],
@@ -105,7 +105,7 @@ def test_short_match_below_threshold_is_not_confirmed():
 
 
 def test_two_items_do_not_claim_the_same_old_fragment_twice():
-    """안전장치: 같은 옛 조각을 두 새 항목이 중복해서 근거로 삼지 않는다."""
+    """안전장치: 같은 옛 조각을 두 새 항목이 중복해서 근거로 삼지 않음."""
     group = StructuralExpansion(
         article_label="제2조", old_text="1. 정보시스템 하나만 언급한다.",
         new_items=[

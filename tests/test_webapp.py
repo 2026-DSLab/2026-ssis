@@ -1,6 +1,6 @@
 """웹페이지(webapp/app.py) 라우트 테스트.
 
-진짜 DB 없이 돈다 — repo를 가짜로 주입한다(create_app(repo=...)).
+진짜 DB 없이 돎 — repo를 가짜로 주입함(create_app(repo=...)).
 법령 요약이 실제로 law_summary에 어떻게 JSON으로 저장/디코딩되는지는
 tests/test_summary_db.py가 이미 검증하므로, 여기서는 "그 dict가 웹페이지에
 정확히 반영되는가"만 본다.
@@ -44,7 +44,7 @@ def _law_row(**kw) -> dict:
 
 def test_law_dominant_kind_prioritizes_new_over_amend():
     """신설이 1건만 섞여 있어도(나머지는 개정) 카드 강조색은 신설이어야
-    한다 — 다수결로 고르면 눈에 띄어야 할 신설이 묻힌다."""
+    함 — 다수결로 고르면 눈에 띄어야 할 신설이 묻힘."""
     from webapp.app import _law_dominant_kind
 
     law = {"article_summaries": [
@@ -91,19 +91,19 @@ def test_index_renders_headline_and_article_row():
 
     assert resp.status_code == 200
     assert "정보시스템 장애관리 체계 강화" in html
-    # location_label은 조/항 구획마다 다른 span으로 쪼개져 렌더링된다(format_location).
-    # 항/호/목은 색 대신 회색 글자(항/호/목)로 구분한다.
+    # location_label은 조/항 구획마다 다른 span으로 쪼개져 렌더링됨(format_location).
+    # 항/호/목은 색 대신 회색 글자(항/호/목)로 구분함.
     assert '<span class="loc-article">제56조의2</span>' in html
     assert '<span class="loc-clause">⑤<span class="loc-suffix">항</span></span>' in html
     assert "이동개정" in html  # _TAG 축약 규칙 적용됨
     # moved_from("②")도 "제N조" 없이 항/호만 오는 값이라 같은
-    # format_location 규칙(항/호/목 회색 접미사)을 거쳐 렌더링된다.
+    # format_location 규칙(항/호/목 회색 접미사)을 거쳐 렌더링됨.
     assert '※ 이동 전 위치: <span class="item-loc"><span class="loc-clause">②<span class="loc-suffix">항</span></span></span>' in html
 
 
 def test_index_shows_enforce_date_small_above_location():
-    """★ 설계(2026-08-03, 사용자 요청): 조문 위치 줄 위에 작고 옅은 색으로
-    시행일을 덧붙인다 — 본문보다 눈에 띄면 안 되므로 별도 클래스로."""
+    """설계: 조문 위치 줄 위에 작고 옅은 색으로
+    시행일을 덧붙임 — 본문보다 눈에 띄면 안 되므로 별도 클래스로."""
     laws = [_law_row(enforce_date="2026-07-10", article_summaries=[
         {
             "unit": {"location_label": "제9조⑥", "change_type": "개정", "no_change": False},
@@ -130,10 +130,10 @@ def test_index_omits_enforce_date_line_when_missing():
 
 
 def test_format_location_wraps_branch_numbered_item_as_one_chip():
-    """★★ 실측(2026-07-31, 국고금관리법 제10조의2②12의2.): 호가지번호가
+    """실측(국고금관리법 제10조의2②12의2.): 호가지번호가
     있는 "12의2." 같은 표기는 이전 정규식(\\d+\\.)이 "12"부터 이어지는
     "의2"를 못 잡아, "의2"만 스타일 없는 맨 텍스트로 남아 어색하게
-    붙어 보였다. "의N"까지 통째로 하나의 loc-item 칩으로 감싸야 한다."""
+    붙어 보였음. "의N"까지 통째로 하나의 loc-item 칩으로 감싸야 함."""
     from webapp.app import _format_location
 
     html = str(_format_location("제10조의2②12의2."))
@@ -145,11 +145,11 @@ def test_format_location_wraps_branch_numbered_item_as_one_chip():
 
 
 def test_format_location_leaves_deletion_sentence_untouched():
-    """실측(2026-08-03): db/repo.py._to_row()가 삭제 항목에 이미 사람이
+    """실측: db/repo.py._to_row()가 삭제 항목에 이미 사람이
     읽는 문장("(삭제됨 — 개정 전 ①항 참고)")을 만들어 두는데, 이 문장을
     그대로 토큰 스캔에 태우면 "①"이 다시 항 패턴으로 잡혀 "항"이 중복
-    붙는다("①항항 참고"). "("로 시작하는 값은 이미 완성된 문장으로 보고
-    그대로 반환해야 한다."""
+    붙음("①항항 참고"). "("로 시작하는 값은 이미 완성된 문장으로 보고
+    그대로 반환해야 함."""
     from webapp.app import _format_location
 
     html = str(_format_location("(삭제됨 — 개정 전 ①항 참고)"))
@@ -159,7 +159,7 @@ def test_format_location_leaves_deletion_sentence_untouched():
 
 def test_index_bolds_only_changed_words_in_fulltext():
     """"원문 보기"의 개정 전/후는 어절 단위로 diff해서 바뀐 부분만
-    <mark class="diff-changed">로 감싸야 한다 — summarizer.textdiff의
+    <mark class="diff-changed">로 감싸야 함 — summarizer.textdiff의
     같은 어절 diff를 재사용(diff_old_html/diff_new_html)."""
     laws = [_law_row(article_summaries=[
         {
@@ -178,22 +178,22 @@ def test_index_bolds_only_changed_words_in_fulltext():
 
     assert '<mark class="diff-changed">기획재정부</mark>' in html
     assert '<mark class="diff-changed">기획예산처</mark>' in html
-    # 안 바뀐 어절("위원은", "차관으로")은 굵게 감싸면 안 된다.
+    # 안 바뀐 어절("위원은", "차관으로")은 굵게 감싸면 안 됨.
     assert '<mark class="diff-changed">위원은</mark>' not in html
-    # 실측(2026-08-03, 사용자 리포트): 선행 항 기호("②")도 readable_text
-    # 필터와 마찬가지로 굵게 나와야 한다 — diff 강조 경로(_diff_html)는
-    # 별도 코드라 이 처리가 빠져 있었다.
+    # 실측: 선행 항 기호("②")도 readable_text
+    # 필터와 마찬가지로 굵게 나와야 함 — diff 강조 경로(_diff_html)는
+    # 별도 코드라 이 처리가 빠져 있었음.
     assert "<strong>②</strong>" in html
 
 
 def test_index_diff_bolds_leading_marker_matching_readable_text():
-    """실측(2026-08-03, 사용자 리포트 — "5. 금고 이상의 실형을…"에서
+    """실측("5. 금고 이상의 실형을…"에서
     선행 기호 볼드 누락): 성공적으로 매칭된 항목(can_diff=True)의 "개정
     전/후" 패널은 readable_text() 필터가 아니라 diff_old_html/diff_new_html
     을 타는 완전히 다른 코드 경로라, readable_text에만 있던 선행 기호
-    볼드 처리가 빠져 있었다. 양쪽 old_text/new_text의 선행 기호가 같으면
+    볼드 처리가 빠져 있었음. 양쪽 old_text/new_text의 선행 기호가 같으면
     (제자리 개정이라 번호 자체는 안 바뀐 경우) 그 기호를 diff 대상에서
-    떼어 먼저 굵게 내고, 나머지만 어절 diff한다."""
+    떼어 먼저 굵게 내고, 나머지만 어절 diff함."""
     laws = [_law_row(article_summaries=[
         {
             "unit": {
@@ -212,14 +212,14 @@ def test_index_diff_bolds_leading_marker_matching_readable_text():
     assert "<strong>5.</strong>" in html
     assert '<mark class="diff-changed">5년</mark>' in html
     assert '<mark class="diff-changed">7년</mark>' in html
-    # 선행 기호 자체가 어절 diff에 다시 걸려 이중으로 강조되면 안 된다.
+    # 선행 기호 자체가 어절 diff에 다시 걸려 이중으로 강조되면 안 됨.
     assert '<mark class="diff-changed">5.</mark>' not in html
 
 
 def test_index_no_diff_highlight_when_old_text_is_context():
     """old_text_is_context=True(구조확장 등)인 경우 old_text가 이 위치의
     진짜 개정 전 문장이 아니므로, new_text를 그것과 diff해서 강조하면
-    안 된다 — 원문 그대로(강조 없이) 보여야 한다."""
+    안 됨 — 원문 그대로(강조 없이) 보여야 함."""
     laws = [_law_row(article_summaries=[
         {
             "unit": {
@@ -240,11 +240,11 @@ def test_index_no_diff_highlight_when_old_text_is_context():
 
 
 def test_index_deletion_shows_old_text_without_diff_or_placeholder():
-    """실측(2026-08-03, 사용자 리포트): 삭제 항목은 old_text_is_context=True로
+    """실측: 삭제 항목은 old_text_is_context=True로
     저장되지만(loader.py의 일괄 규칙), 삭제의 old_text는 구조확장과 달리
     애매한 공유 맥락이 아니라 "삭제된 바로 그 문장"이라 정반대로 다뤄야
-    한다 — 개정 전 문장은 (강조 없이) 그대로 보여주고, new_text 쪽은 합성
-    표시("<삭  제>") 대신 "삭제되었습니다"라는 사람이 읽는 문구를 보여준다
+    함 — 개정 전 문장은 (강조 없이) 그대로 보여주고, new_text 쪽은 합성
+    표시("<삭  제>") 대신 "삭제되었습니다"라는 사람이 읽는 문구를 보여줌
     (후속 요청: "개정후에도 삭제되었다고 보여줘")."""
     laws = [_law_row(article_summaries=[
         {
@@ -262,9 +262,9 @@ def test_index_deletion_shows_old_text_without_diff_or_placeholder():
     app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=laws))
     html = app.test_client().get("/summary").get_data(as_text=True)
 
-    # readable_text 필터가 선행 항 기호("①")를 굵게 감싸므로(2026-08-03
-    # 후속 요청) 원문이 토막 없이 그대로 이어붙진 않는다 — 기호와 본문이
-    # 각각 온전히 들어있는지를 확인한다.
+    # readable_text 필터가 선행 항 기호("①")를 굵게 감싸므로(
+    # 후속 요청) 원문이 토막 없이 그대로 이어붙진 않음 — 기호와 본문이
+    # 각각 온전히 들어있는지를 확인함.
     assert "<strong>①</strong>" in html
     assert "국가기관등은 정보통신망을 통하여…" in html
     assert '<mark class="diff-changed">' not in html
@@ -274,12 +274,12 @@ def test_index_deletion_shows_old_text_without_diff_or_placeholder():
 
 
 def test_readable_text_breaks_run_together_clauses_onto_separate_lines():
-    """실측(2026-08-03, 사용자 리포트 — 지능정보화 기본법 제46조①~⑦ 통짜
+    """실측(지능정보화 기본법 제46조①~⑦ 통짜
     텍스트): 신구법 비교 API가 조문 전체를 <P> 블록 하나로 통짜로 주다 보니,
     "원문 보기"에 old_text를 그대로 뿌리면 항/호 경계 없이 벽처럼 붙어 나와
-    "구분이 안 된다"는 지적을 받았다. text.split.split_all()(이미 검색에
+    "구분이 안 된다"는 지적을 받았음. text.split.split_all()(이미 검색에
     쓰며 소수점ㆍ날짜ㆍ괄호참조 오탐을 걸러내도록 다듬어진 로직)을 재사용해
-    조각 경계마다 줄바꿈만 넣는다."""
+    조각 경계마다 줄바꿈만 넣음."""
     from webapp.app import _readable_text
 
     text = "①  국가기관등은 정보통신망을…1. 웹사이트2. 이동통신단말장치② 지능정보서비스 제공자는…"
@@ -292,10 +292,10 @@ def test_readable_text_breaks_run_together_clauses_onto_separate_lines():
 
 
 def test_readable_text_bolds_only_leading_marker_not_whole_line():
-    """실측(2026-08-03, 사용자 리포트 — "7. 영유아의 인권 보호에 관한
+    """실측("7. 영유아의 인권 보호에 관한
     업무"): 줄바꿈만으론 부족하고, 줄 맨 앞의 "7." 같은 항/호/목 기호
     "숫자기호들만" 굵게 강조해야 한다는 후속 요청. 본문까지 통째로
-    굵어지면 안 된다."""
+    굵어지면 안 됨."""
     from webapp.app import _readable_text
 
     result = str(_readable_text("7. 영유아의 인권 보호에 관한 업무"))
@@ -313,7 +313,7 @@ def test_readable_text_returns_plain_text_when_no_markers():
 
 def test_index_shows_no_change_kind_even_though_change_type_is_amend():
     """no_change=True 인 항목은 change_type("개정")이 아니라 "변경없음"으로
-    보여야 한다 — summarizer/report/builder.py의 _kind_of()와 동일 규칙."""
+    보여야 함 — summarizer/report/builder.py의 _kind_of()와 동일 규칙."""
     laws = [_law_row(article_summaries=[
         {
             "unit": {
@@ -331,10 +331,10 @@ def test_index_shows_no_change_kind_even_though_change_type_is_amend():
 
 
 def test_index_never_renders_highlight_box():
-    """★★★ 설계(2026-07-31, 사용자 결정): "확인이 필요한 항목" 박스를
-    완전히 없앴다. caveats/verifier_issues가 있어도 화면에 별도 경고
-    박스로 노출되면 안 된다 — 데이터 자체(DB)는 남아있어도 웹페이지엔
-    안 보여준다."""
+    """설계: "확인이 필요한 항목" 박스를
+    완전히 없앴음. caveats/verifier_issues가 있어도 화면에 별도 경고
+    박스로 노출되면 안 됨 — 데이터 자체(DB)는 남아있어도 웹페이지엔
+    안 보여줌."""
     laws = [_law_row(
         article_summaries=[
             {
@@ -385,7 +385,7 @@ def test_download_404_when_no_batch():
 
 # ---------------------------------------------------------------------------
 # 기간 지정 즉석 조회 (webapp/live.py 연동) — live_check를 주입해 실
-# API/LLM/DB 없이 라우팅·렌더링만 확인한다.
+# API/LLM/DB 없이 라우팅·렌더링만 확인함.
 # ---------------------------------------------------------------------------
 
 def _period_result(**kw) -> PeriodResult:
@@ -423,7 +423,7 @@ def test_index_rejects_unknown_period():
 
 def test_index_period_renders_period_laws_not_batch_repo():
     """period 모드에서는 _repo.fetch_by_batch가 아니라 live_check 결과를
-    보여줘야 한다 — _FakeRepo에 다른 batch_date를 넣어도 무시되는지 확인."""
+    보여줘야 함 — _FakeRepo에 다른 batch_date를 넣어도 무시되는지 확인."""
     laws = [_law_row(law_name="기간조회법", headline="기간 내 발견된 개정")]
     result = _period_result(laws=laws)
     app = create_app(
@@ -451,7 +451,7 @@ def test_index_period_empty_shows_period_specific_message():
     html = app.test_client().get("/summary?period=2w").get_data(as_text=True)
 
     assert "동안 감지된 개정사항이 없습니다" in html
-    # 배치 모드 전용 안내(run_weekly.py 실행법)는 기간 모드에서 안 보여야 한다.
+    # 배치 모드 전용 안내(run_weekly.py 실행법)는 기간 모드에서 안 보여야 함.
     assert "python scripts/run_weekly.py --full" not in html
 
 
@@ -502,7 +502,7 @@ def test_download_rejects_unknown_period():
 
 # ---------------------------------------------------------------------------
 # /period-check, /period-status — 로딩 화면이 폴링하는 논블로킹 진입점.
-# sweep_starter/progress_getter를 주입해 실 스레드/API 없이 확인한다.
+# sweep_starter/progress_getter를 주입해 실 스레드/API 없이 확인함.
 # ---------------------------------------------------------------------------
 
 def test_period_check_returns_ready_true_when_no_wait_needed():

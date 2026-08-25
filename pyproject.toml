@@ -21,7 +21,10 @@ dependencies = [
 # 제공하면 openai 쪽만 있으면 된다(SUMMARY_BASE_URL 로 주소만 바꿈).
 openai = ["openai>=1.40"]
 anthropic = ["anthropic>=0.40"]
-web = ["flask>=3.0", "pypdfium2>=5"]  # pypdfium2: PDF 업로드 매칭(doc_match)의 텍스트 추출
+# pypdfium2: PDF 업로드 매칭(doc_match)의 텍스트 추출
+# markupsafe: webapp/app.py 가 직접 import 함. Flask 가 어차피 끌고 오지만,
+#   직접 부르는 것은 직접 적어 둔다 — Flask 가 나중에 뺄 수도 있다.
+web = ["flask>=3.0", "pypdfium2>=5", "markupsafe>=2.1"]
 dev = ["pytest>=8.0"]
 
 # ---------------------------------------------------------------------------

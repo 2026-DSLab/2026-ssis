@@ -1,8 +1,8 @@
 """webapp/laws.py — 전문 비교 페이지(/laws, /laws/<law_id>) 라우트 테스트.
 
-실 DB/API 없이 돈다. watchlist_repo/version_repo/client_factory를
+실 DB/API 없이 돎. watchlist_repo/version_repo/client_factory를
 create_app()에 주입하고, lawtrack.history의 fetch_* 함수는
-monkeypatch로 대체한다(test_history.py와 같은 방식).
+monkeypatch로 대체함(test_history.py와 같은 방식).
 """
 
 from __future__ import annotations
@@ -89,7 +89,7 @@ def _app(entries, monkeypatch, *, oldnew_map=None, fulltext_by_serial=None, revi
         watchlist_repo=_FakeWatchlistRepo(entries),
         version_repo=_FakeVersionRepo(),
         law_api_client_factory=lambda: _FakeClient(),
-        # 실 DB 상태와 무관하게 결정론적으로 — 배지 테스트는 직접 주입한다
+        # 실 DB 상태와 무관하게 결정론적으로 — 배지 테스트는 직접 주입함
         revision_lookup=revision_lookup or (lambda ids: {}),
     )
 
@@ -139,10 +139,10 @@ def test_law_detail_404_for_unknown_law_id():
 
 
 def test_law_detail_shows_two_columns_by_default(monkeypatch):
-    """★ 옛날/새 문구를 같은 위치(제1조)에 둬서 강조 대상(어절 diff)이
-    되게 한다 — 바뀐 단어만 <mark>로 쪼개져도 "옛날"/"새"라는 단어
-    자체는 그대로 남으므로, 그 단어들로 존재를 확인한다("옛날 문구"
-    처럼 공백 포함 통짜로 찾으면 마크 태그가 중간에 끼어들어 실패한다)."""
+    """옛날/새 문구를 같은 위치(제1조)에 둬서 강조 대상(어절 diff)이
+    되게 함 — 바뀐 단어만 <mark>로 쪼개져도 "옛날"/"새"라는 단어
+    자체는 그대로 남으므로, 그 단어들로 존재를 확인함("옛날 문구"
+    처럼 공백 포함 통짜로 찾으면 마크 태그가 중간에 끼어들어 실패함)."""
     app = _app(
         [_entry()], monkeypatch,
         oldnew_map={"268103": OldNewResult(True, "", _version("245293"), _version("268103"))},
@@ -160,9 +160,13 @@ def test_law_detail_shows_two_columns_by_default(monkeypatch):
 
 
 def test_law_detail_current_column_shows_recent_revision_badge(monkeypatch):
-    """/pdf 결과의 배지를 눌러 넘어온 사용자가 같은 개정 정보를 현재 열
-    머리에서 다시 볼 수 있어야 한다(2026-08-11 사용자 요청). 배지 데이터
-    소스·90일 규칙은 pdfcheck 와 공유하므로 여기서는 배선만 본다."""
+    """/pdf 결과의 배지를 눌러 넘어온 담당자가 같은 개정 정보를 현재 열
+    머리에서 다시 볼 수 있어야 함. 배지 데이터 소스·90일 규칙은 pdfcheck 와
+    공유하므로 여기서는 배선만 봄.
+
+    시행일은 배지에 넣지 않음 — 바로 아래 열 머리에 "시행 …" 으로 이미
+    나오므로 같은 날짜가 두 번 찍힘.
+    """
     from datetime import date, timedelta
 
     recent = date.today() - timedelta(days=10)
@@ -178,14 +182,18 @@ def test_law_detail_current_column_shows_recent_revision_badge(monkeypatch):
     )
     html = app.test_client().get("/laws/009199").get_data(as_text=True)
 
-    assert f"최근 개정 · 일부개정 · 시행 {recent}" in html
-    # 배지는 현재 열에 1번만 — 개정 전 열에는 붙지 않는다
+    assert "최근 개정 · 일부개정" in html
+    # 배지는 현재 열에 1번만 — 개정 전 열에는 붙지 않음
     assert html.count("최근 개정 ·") == 1
+    # 배지에 시행일을 다시 넣지 않음 — 열 머리에 이미 나오므로 중복임.
+    # (배지 날짜는 DB(change_log), 열 머리 날짜는 API 응답이라 출처가 다름.
+    #  여기서는 배지 쪽만 검사함.)
+    assert f"일부개정 · 시행 {recent}" not in html
 
 
 def test_law_detail_depth_3_shows_three_columns(monkeypatch):
     """세 버전을 서로 다른 조번호에 둬서(제1/2/3조) 강조 매칭 대상이
-    안 되게 한다 — 이 테스트의 관심사는 강조가 아니라 "3개 버전이 각자
+    안 되게 함 — 이 테스트의 관심사는 강조가 아니라 "3개 버전이 각자
     받아온 내용 그대로 뜨는가"뿐이라, 어절 diff에 얽히지 않게 한다."""
     app = _app(
         [_entry()], monkeypatch,
@@ -207,7 +215,7 @@ def test_law_detail_depth_3_shows_three_columns(monkeypatch):
 
 
 def test_law_detail_depth_3_shows_notice_when_no_earlier_version(monkeypatch):
-    """실측 확인된 체인의 끝(제정본) 케이스 — 오류가 아니라 안내문구여야 한다."""
+    """실측 확인된 체인의 끝(제정본) 케이스 — 오류가 아니라 안내문구여야 함."""
     app = _app(
         [_entry()], monkeypatch,
         oldnew_map={
@@ -248,8 +256,8 @@ def test_law_detail_caches_fetched_version_in_repo(monkeypatch):
 
 
 def test_law_detail_admrul_kind_uses_admrul_oldnew(monkeypatch):
-    """watchlist.law_type='행정규칙'이면 admrul 전용 API 경로를 타야 한다
-    (실측: MST=/ID= 파라미터를 잘못 맞추면 엉뚱한 응답이 온다)."""
+    """watchlist.law_type='행정규칙'이면 admrul 전용 API 경로를 타야 함
+    (실측: MST=/ID= 파라미터를 잘못 맞추면 엉뚱한 응답이 옴)."""
     calls = []
 
     def fail_if_law_oldnew_called(client, mst):
@@ -331,10 +339,10 @@ def _law_raw_multi(articles: list[tuple[str, str]]) -> dict:
 
 
 class TestDiffHighlight:
-    """★ 사용자 요청(2026-08-05): 개정 요약 페이지("개정 전/개정 후"
+    """요구사항: 개정 요약 페이지("개정 전/개정 후"
     색 강조)와 같은 방식으로, 전문 비교 페이지도 뭐가 바뀌었는지 색으로
     보여달라는 요청. location_label이 같은데 텍스트만 다르면 어절 단위
-    강조(changed), 한쪽에만 있으면 그 줄 전체를 신설/삭제로 표시한다."""
+    강조(changed), 한쪽에만 있으면 그 줄 전체를 신설/삭제로 표시함."""
 
     def test_same_location_different_text_gets_word_level_marks(self, monkeypatch):
         app = _app(
@@ -366,7 +374,7 @@ class TestDiffHighlight:
 
         assert 'compare-line--added' in html
         assert "새로 생긴 조문" in html
-        # 안 바뀐 제1조는 강조가 없어야 한다("same" 상태 유지)
+        # 안 바뀐 제1조는 강조가 없어야 함("same" 상태 유지)
         assert 'compare-line--same">원래 있던 조문' in html or 'compare-line--same">' in html
 
     def test_old_only_location_marked_as_removed(self, monkeypatch):
@@ -384,9 +392,9 @@ class TestDiffHighlight:
         assert "없어질 조문" in html
 
     def test_oldest_column_in_depth_3_is_not_highlighted(self, monkeypatch):
-        """강조는 마지막 두 열(직전 버전 vs 현재)에만 적용한다 — 맨 왼쪽
+        """강조는 마지막 두 열(직전 버전 vs 현재)에만 적용함 — 맨 왼쪽
         (전전) 열은 비교 대상이 아니므로 added/removed/changed 상태가
-        전혀 없어야 한다(항상 same)."""
+        전혀 없어야 함(항상 same)."""
         app = _app(
             [_entry()], monkeypatch,
             oldnew_map={
@@ -401,15 +409,15 @@ class TestDiffHighlight:
         )
         html = app.test_client().get("/laws/009199?depth=3").get_data(as_text=True)
 
-        # 전전 열의 문장은 강조 클래스가 하나도 안 붙어야 한다.
+        # 전전 열의 문장은 강조 클래스가 하나도 안 붙어야 함.
         assert 'compare-line--same">전전 내용만 있음' in html
 
 
 def test_law_detail_strips_amendment_annotations(monkeypatch):
-    """실측(2026-08-05, 사용자 리포트): "<개정 2003.12.31>" 같은 각주가
-    화면에 그대로 노출됐다. 기존 개정 요약 페이지(law_summary/article_diff
+    """실측: "<개정 2003.12.31>" 같은 각주가
+    화면에 그대로 노출됐음. 기존 개정 요약 페이지(law_summary/article_diff
     경로)는 저장 전에 strip_annotations를 이미 적용하므로(repo.py),
-    전문 비교 페이지도 같은 기준을 지켜야 한다."""
+    전문 비교 페이지도 같은 기준을 지켜야 함."""
     app = _app(
         [_entry()], monkeypatch,
         oldnew_map={"268103": OldNewResult(True, "", _version("245293"), _version("268103"))},
@@ -426,8 +434,12 @@ def test_law_detail_strips_amendment_annotations(monkeypatch):
 
 
 def test_law_detail_shows_enforce_date_instead_of_serial_no(monkeypatch):
-    """사용자 요청(2026-08-05): "2100000272436" 같은 일련번호 대신
-    시행일을 보여달라는 요청."""
+    """요구사항: "2100000272436" 같은 일련번호 대신 시행일을 보여 줌.
+
+    날짜 앞에 "시행"을 붙이는 이유는, 시행이 유예된 개정이 걸려 있으면
+    왼쪽(개정 전) 열의 날짜가 오른쪽보다 늦게 보일 수 있어서임 — 무슨
+    날짜인지 적어 두지 않으면 순서가 뒤집힌 것처럼 읽힘.
+    """
     app = _app(
         [_entry()], monkeypatch,
         oldnew_map={"268103": OldNewResult(
@@ -441,21 +453,22 @@ def test_law_detail_shows_enforce_date_instead_of_serial_no(monkeypatch):
 
     assert "2023-05-16" in html
     assert "2025-07-08" in html
-    # 일련번호는 title 툴팁에만 남고(참고용), 화면에 보이는 본문 텍스트는 아니다.
-    assert 'title="일련번호 245293">2023-05-16<' in html
+    # 일련번호는 title 툴팁에만 남고(참고용), 화면에 보이는 본문 텍스트는 아님.
+    assert 'title="일련번호 245293">시행 2023-05-16<' in html
+    assert 'title="일련번호 268103">시행 2025-07-08<' in html
 
 
 class TestLinePairingRobustness:
     """짝짓기가 라벨 표기 차이·중복 라벨에 흔들리지 않는지.
 
-    ★ 실측 버그(2026-08-18, 사용자 리포트 — "이 부분은 변한 게 없는데
+    실측 버그("이 부분은 변한 게 없는데
     색깔 표시가 돼있어", 국가를 당사자로 하는 계약에 관한 법률 시행령):
-    두 가지가 겹쳐 있었다.
+    두 가지가 겹쳐 있었음.
       1) 같은 항목의 라벨이 버전마다 "1의2." / "1의2" 로 갈려 짝을 못 찾고
-         한쪽 '삭제' + 다른 쪽 '신설'로 표시됐다(그 법에서만 18줄).
+         한쪽 '삭제' + 다른 쪽 '신설'로 표시됐음(그 법에서만 18줄).
       2) location_label 이 고유하지 않은데 dict 키로 써서(같은 조에 장
-         제목 줄과 본문 줄이 같은 라벨을 갖는 경우가 있다) 뒤 줄이 앞 줄을
-         덮어써 비교가 통째로 누락됐다.
+         제목 줄과 본문 줄이 같은 라벨을 갖는 경우가 있음) 뒤 줄이 앞 줄을
+         덮어써 비교가 통째로 누락됐음.
     """
 
     def _cols(self, old_lines, new_lines):
@@ -468,7 +481,7 @@ class TestLinePairingRobustness:
         return col(old_lines), col(new_lines)
 
     def test_trailing_dot_in_label_still_pairs(self):
-        # 라벨 끝점만 다르고 내용은 같다 => 아무 표시도 없어야 한다
+        # 라벨 끝점만 다르고 내용은 같다 => 아무 표시도 없어야 함
         old, new = self._cols(
             [("제110조②1의2.", "기성부분에 대한 대가 지급과 관련된 사항")],
             [("제110조②1의2", "기성부분에 대한 대가 지급과 관련된 사항")],
@@ -478,7 +491,7 @@ class TestLinePairingRobustness:
         assert new["articles"][0]["lines"][0]["status"] == "same"
 
     def test_trailing_dot_difference_still_detects_real_change(self):
-        # 끝점 차이를 무시하되, 내용이 진짜 다르면 변경으로 잡아야 한다
+        # 끝점 차이를 무시하되, 내용이 진짜 다르면 변경으로 잡아야 함
         old, new = self._cols(
             [("제110조②1의2.", "예전 문구")],
             [("제110조②1의2", "새로운 문구")],
@@ -487,8 +500,8 @@ class TestLinePairingRobustness:
         assert old["articles"][0]["lines"][0]["status"] == "changed"
 
     def test_duplicate_labels_pair_in_order_not_overwritten(self):
-        # 같은 라벨이 두 줄 => 앞은 앞끼리, 뒤는 뒤끼리 짝지어야 한다.
-        # dict 로 덮어쓰면 첫 줄이 사라져 비교가 누락된다.
+        # 같은 라벨이 두 줄 => 앞은 앞끼리, 뒤는 뒤끼리 짝지어야 함.
+        # dict 로 덮어쓰면 첫 줄이 사라져 비교가 누락됨.
         old, new = self._cols(
             [("제1조", "제1장 총칙"), ("제1조", "이 영은 …을 규정함을 목적으로 한다")],
             [("제1조", "제1장 총칙"), ("제1조", "이 영은 …을 규정함을 목적으로 한다")],

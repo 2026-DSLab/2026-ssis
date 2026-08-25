@@ -23,11 +23,19 @@
 
 from __future__ import annotations
 
+import mimetypes
 import os
 import re
 from pathlib import Path
 from typing import Callable
 from urllib.parse import quote
+
+# 폰트 MIME 타입을 직접 등록함. Windows 의 mimetypes 는 레지스트리를 읽는데
+# .woff2 가 없는 PC 가 있어, 그런 곳에서는 application/octet-stream 으로
+# 내려감(실측). 브라우저는 대개 그래도 폰트로 받아들이지만, 앞단에
+# nosniff 를 거는 프록시가 있으면 거부될 수 있어 맞춰 둠.
+mimetypes.add_type("font/woff2", ".woff2")
+mimetypes.add_type("font/woff", ".woff")
 
 from flask import Flask, Response, abort, jsonify, render_template, request
 from markupsafe import Markup, escape
