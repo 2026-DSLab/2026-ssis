@@ -1,3 +1,25 @@
+/* Pretendard — 저장소에 함께 넣어 둔 가변 폰트(static/fonts/).
+   SIL Open Font License 1.1, 전문은 같은 폴더의 LICENSE.txt.
+
+   외부 CDN 을 부르지 않는 이유가 둘 있음.
+     · 원내(사내망)에서는 외부 접속이 막혀 있을 수 있어, 링크로 걸면
+       그 환경에서는 폰트가 영영 안 나옴.
+     · 종전에는 Google Fonts 로 걸려 있었는데 거기엔 Pretendard 가
+       없음 — 요청이 HTTP 400 으로 떨어져 실제로는 계속 대체 글꼴
+       (맑은 고딕)로 그려지고 있었음.
+
+   가변 폰트 하나로 400~800 굵기를 모두 덮음. 굵기별 파일을 따로 두면
+   5개에 5MB 가까이 되는데, 이 파일 하나는 2MB 임.
+   local() 을 먼저 두어, PC 에 Pretendard 가 깔려 있으면 내려받지 않음. */
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: local("Pretendard Variable"), local("Pretendard"),
+       url("fonts/PretendardVariable.woff2") format("woff2-variations");
+}
+
 :root {
   --bg: #fcfcfe;
   --surface: #f7f8fa;
