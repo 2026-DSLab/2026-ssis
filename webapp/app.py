@@ -1,11 +1,11 @@
 """Flask 앱 — 최신 배치 요약 페이지 + HWPX 다운로드.
 
 라우트:
-    GET /               가장 최근 배치(law_summary.batch_date MAX)의
-                         법령별 요약을 렌더링함. period 쿼리파라미터가
-                         있으면 대신 기간 즉석 조회 결과를 보여줌.
-    GET /download       같은 배치(또는 period)가 만든 HWPX 보고서 파일을
-                         내려줌.
+    GET /summary        지난 달력 주(월~일)에 시행된 개정의 법령별 요약을
+                         렌더링함. period 쿼리파라미터가 있으면 대신 기간
+                         즉석 조회 결과를 보여줌.
+    GET /download       같은 창(또는 period)의 요약으로 HWPX 보고서를
+                         그 자리에서 만들어 내려줌.
     GET /period-check   기간 즉석 조회를 논블로킹으로 시작만 시킴 —
                          캐시가 신선하면 {"ready": true}, 아니면 백그라운드
                          스윕을 시작하고 {"ready": false}. 로딩 화면이
@@ -17,8 +17,11 @@
 
 왜 파일이 아니라 DB(law_summary)를 보는가: out/summaries/*.json은
 "최신이 뭔지"를 파일명·수정시각으로 추론해야 하는데(계약 파일 하나가
-여러 데모 조각으로 쪼개질 수도 있어 모호함), law_summary.batch_date는
-그 자체로 "이 배치가 언제 것인가"를 확정해 주는 값이라 더 명확함.
+여러 데모 조각으로 쪼개질 수도 있어 모호함), DB는 시행일로 그 주에 드는
+것만 그때그때 골라낼 수 있어 배치를 언제 돌렸는지와 무관해짐.
+
+주간 리포트가 지난 한 주인 이유는 lawtrack/week.py 의 last_full_week()
+설명에 있음 — 월요일에 도는 배치가 정리하는 창과 화면의 창을 맞춘 것임.
 """
 
 from __future__ import annotations
@@ -26,6 +29,7 @@ from __future__ import annotations
 import mimetypes
 import os
 import re
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Callable
 from urllib.parse import quote
@@ -45,6 +49,7 @@ from lawtrack.config import PROJECT_ROOT, load_settings
 from lawtrack.db.conn import Database
 from lawtrack.db.repo import LawSummaryRepo, VersionRepo, WatchlistRepo
 from lawtrack.text.split import leading_marker, split_all
+from lawtrack.week import last_full_week
 from summarizer.textdiff import diff_segments
 from webapp.live import (
     PERIOD_WINDOWS,
@@ -54,7 +59,10 @@ from webapp.live import (
     get_progress,
 )
 
-REPORTS_DIR = PROJECT_ROOT / "out" / "reports"
+#: 주간 리포트(지난 달력 주) 보고서를 만들어 두는 자리. 기간 조회 산출물
+#: (out/reports/live/*)과 주간 배치 산출물(out/reports/*.hwpx) 어느 쪽과도
+#: 파일 이름이 겹치지 않도록 따로 둠.
+WEEK_REPORTS_DIR = PROJECT_ROOT / "out" / "reports" / "week"
 
 #: 기간 선택 버튼에 쓰는 사람이 읽는 라벨 — PERIOD_WINDOWS(webapp/live.py)의
 #: 일수 매핑과 키를 공유하되, 표시 문구는 웹 레이어 관심사라 여기 둠.
@@ -348,10 +356,65 @@ def _summary_stats(laws: list[dict]) -> dict:
     return {"total_laws": len(laws), "total_articles": total, "breakdown": breakdown}
 
 
+def _build_week_report(laws: list[dict], week_from: date, week_to: date) -> Path | None:
+    """주간 리포트 다운로드 — 화면에 보이는 그 목록으로 HWPX 를 그 자리에서
+    만듦.
+
+    예전에는 배치가 남긴 source_file 로 out/reports/ 에서 파일을 찾아
+    줬음. 화면이 달력 주로 바뀌면 한 주에 여러 배치(또는 즉석 조회)가
+    걸칠 수 있어 "어느 파일을 줄 것인가"가 정해지지 않고, 어느 하나를
+    고르면 화면 목록과 파일 내용이 어긋남. 기간 조회가 이미 쓰던 방식
+    (write_hwpx_from_rows — LLM 없이 DB→파일 변환)을 그대로 씀.
+    """
+    if not laws:
+        return None
+    from webapp.live import write_hwpx_from_rows
+
+    return write_hwpx_from_rows(
+        laws,
+        source_file=f"week_{week_from.isoformat()}_{week_to.isoformat()}.json",
+        batch_date=week_to,
+        out_dir=WEEK_REPORTS_DIR,
+    )
+
+
+def _after_week_notice(repo: LawSummaryRepo, week_to: date, today: date) -> dict | None:
+    """주간 리포트 창이 끝난 뒤에 시행된 개정이 있으면 알려줄 거리.
+
+    왜 필요한가: 이 탭의 창은 지난 한 주라(그 이유는 lawtrack/week.py),
+    목요일에 열면 화요일에 시행된 개정이 여기 없고 옆의 "최근 5일"에만
+    있음. 탭 이름이 "이번 주"였을 때는 이게 "이번 주가 최근 5일보다
+    적다"로 읽혀 실제로 문의가 들어왔음 — 이름은 창에 맞게 고쳤고,
+    이 안내는 그래도 남는 "그럼 그 개정은 어디 있나"에 답하는 자리임.
+
+    링크는 그 개정들을 **전부** 담는 가장 짧은 프리셋으로 보냄. "3건 더
+    있다"고 알려 놓고 눌렀더니 3건이 다 안 보이면 같은 종류의 어긋남을
+    새로 만드는 셈이라, 창 길이를 맞춰서 고름 — 일요일에 열면 알릴
+    구간이 월~일 7일이라 "최근 5일"로는 월·화가 빠지므로 "최근 2주"가
+    걸림.
+    """
+    start = week_to + timedelta(days=1)
+    if start > today:
+        return None
+    count = repo.count_by_enforce_period(start, today)
+    if not count:
+        return None
+    needed = (today - start).days
+    window_key = next((k for k, days in PERIOD_WINDOWS.items() if days >= needed), None)
+    if window_key is None:
+        return None
+    return {"count": count, "period": window_key, "label": PERIOD_LABELS[window_key]}
+
+
 def _period_context(result: PeriodResult) -> dict:
     laws = result.laws
     return {
-        "batch_date": None,
+        "week_from": None,
+        "week_to": None,
+        "last_batch_date": None,
+        # 이 안내는 주간 리포트 탭 전용임 — 기간 탭은 창이 오늘까지라
+        # 알릴 뒷구간 자체가 없음.
+        "after_week": None,
         "laws": laws,
         "stats": _summary_stats(laws),
         "sections": _group_by_kind(laws),
@@ -375,6 +438,7 @@ def create_app(
     version_repo: VersionRepo | None = None,
     law_api_client_factory: Callable[[], LawApiClient] | None = None,
     revision_lookup: Callable[[list[str]], dict[str, dict]] | None = None,
+    week_report_builder: Callable[[list[dict], date, date], Path | None] | None = None,
 ) -> Flask:
     """앱 팩토리. repo/live_check/sweep_starter/progress_getter를 주입할
     수 있어 테스트에서 진짜 DB나 실 API+LLM 없이 확인 가능함.
@@ -409,6 +473,10 @@ def create_app(
             _repo_cache.append(_build_repo())
         return _repo_cache[0]
 
+    # 기본값을 함수 호출이 아니라 함수 자체로 둠 — 테스트가 실제 HWPX
+    # 조립(hwpx 패키지·서식 템플릿)을 타지 않고 라우팅만 확인할 수 있게
+    # 주입 지점을 열어 둔 것임.
+    _report_builder = week_report_builder or _build_week_report
     _live_check = live_check or (lambda window_key: get_period_result(load_settings(), window_key))
     _sweep_starter = sweep_starter or (lambda window_key: ensure_sweep_started(load_settings(), window_key))
     _progress_getter = progress_getter or get_progress
@@ -488,17 +556,18 @@ def create_app(
             result = _live_check(period)
             return render_template("report.html", **_period_context(result))
 
-        batch_date = _repo_of().latest_batch_date()
-        if batch_date is None:
-            return render_template(
-                "report.html", batch_date=None, laws=[], stats=None, sections=[],
-                period=None, period_windows=PERIOD_LABELS,
-            )
-        laws = _repo_of().fetch_by_batch(batch_date)
-        stats = _summary_stats(laws)
-        sections = _group_by_kind(laws)
+        week_from, week_to = last_full_week()
+        laws = _repo_of().fetch_by_enforce_period(week_from, week_to)
         return render_template(
-            "report.html", batch_date=batch_date, laws=laws, stats=stats, sections=sections,
+            "report.html",
+            week_from=week_from, week_to=week_to,
+            after_week=_after_week_notice(_repo_of(), week_to, date.today()),
+            # 비었을 때만 조회함 — "개정이 없었던 주"와 "배치를 거른 주"를
+            # 갈라 안내하는 데만 쓰는 값이라, 볼 게 있으면 부를 이유가 없음.
+            last_batch_date=None if laws else _repo_of().latest_batch_date(),
+            laws=laws,
+            stats=_summary_stats(laws) if laws else None,
+            sections=_group_by_kind(laws),
             period=None, period_windows=PERIOD_LABELS,
         )
 
@@ -517,16 +586,13 @@ def create_app(
                 mimetype="application/octet-stream",
             )
 
-        batch_date = _repo_of().latest_batch_date()
-        if batch_date is None:
-            abort(404, "아직 생성된 배치가 없습니다.")
-        laws = _repo_of().fetch_by_batch(batch_date)
-        source_file = next((law["source_file"] for law in laws if law.get("source_file")), None)
-        if not source_file:
-            abort(404, "이 배치의 원본 계약 파일 정보를 찾을 수 없습니다.")
-        hwpx_path = REPORTS_DIR / f"{Path(source_file).stem}.hwpx"
-        if not hwpx_path.exists():
-            abort(404, f"HWPX 보고서 파일이 없습니다: {hwpx_path.name} (--hwpx 로 생성했는지 확인)")
+        week_from, week_to = last_full_week()
+        laws = _repo_of().fetch_by_enforce_period(week_from, week_to)
+        if not laws:
+            abort(404, f"{week_from} ~ {week_to} 에 시행된 개정이 없어 내려받을 보고서가 없습니다.")
+        hwpx_path = _report_builder(laws, week_from, week_to)
+        if hwpx_path is None or not hwpx_path.exists():
+            abort(404, "HWPX 보고서를 만들지 못했습니다. 서버 로그를 확인하세요.")
         return send_file(
             hwpx_path, as_attachment=True, download_name=hwpx_path.name,
             mimetype="application/octet-stream",

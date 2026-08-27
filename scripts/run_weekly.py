@@ -40,7 +40,7 @@ from __future__ import annotations
 import argparse
 import logging
 from collections import Counter
-from datetime import date, timedelta
+from datetime import date
 from pathlib import Path
 
 from lawtrack.api.client import LawApiClient, LawApiError
@@ -54,6 +54,7 @@ from lawtrack.db.repo import (
     WatchlistRepo,
 )
 from lawtrack.detect import DetectStatus, process_entry
+from lawtrack.week import last_full_week
 
 log = logging.getLogger("run_weekly")
 
@@ -244,14 +245,34 @@ def main(argv: list[str] | None = None) -> int:
     for status, n in counts.most_common():
         print(f"  {status}: {n}건")
 
+    # 첫 실행이면 감시 대상 대부분이 "개정발생"으로 잡힌다 — 전문을 아직
+    # 한 건도 갖고 있지 않기 때문이다. 이 숫자를 "이번 주에 그만큼
+    # 개정됐다"로 읽으면 놀라게 되므로(실제로 그런 문의가 있었다) 그 자리에서
+    # 뜻을 밝혀 둔다. 절반이 넘으면 첫 실행으로 본다 — 평시 주간 배치에서
+    # 102건 중 절반이 한꺼번에 개정되는 일은 없다.
+    changed = counts.get(DetectStatus.CHANGED.value, 0) + counts.get(DetectStatus.NO_COMPARISON.value, 0)
+    if entries and changed > len(entries) / 2:
+        print(
+            "\n  ※ 첫 실행으로 보입니다 — 전문을 아직 갖고 있지 않아 감시 대상\n"
+            "     대부분이 '개정발생'으로 잡힙니다. 이번 주에 그만큼 개정됐다는\n"
+            "     뜻이 아니라, 현행 전문을 처음 받아오는 것입니다.\n"
+            "     웹 화면의 '주간 리포트'는 지난 한 주(월~일)에 시행된 것만\n"
+            "     골라 보여주므로 훨씬 적게 나옵니다."
+        )
+
     if errors:
         print(f"\n⚠️ 오류 {len(errors)}건 — 해당 항목은 last_serial_no가 갱신되지 않았으므로 다음 배치에서 재시도됩니다:")
         for law_id, name, detail in errors:
             print(f"  {law_id} {name}: {detail}")
 
-    # --- 산출물(JSON) 조립: 최근 7일 시행분 ---
-    to_date = date.today()
-    from_date = to_date - timedelta(days=7)
+    # --- 산출물(JSON) 조립: 지난 달력 주(월~일) 시행분 ---
+    # 예전에는 "오늘부터 7일 전"이었음. 그러면 배치를 언제 돌리느냐에 따라
+    # 창이 매번 달라져서, 웹 화면이 보여주는 주(달력 주)와 배치가 담은
+    # 기간이 하루이틀씩 어긋났음 — 화면에는 있는데 보고서에는 없거나 그
+    # 반대인 상황이 생김. 두 곳이 lawtrack.week.last_full_week() 하나를
+    # 같이 봄.
+    from_date, to_date = last_full_week()
+    print(f"\n대상 기간: {from_date} ~ {to_date} (지난 한 주 시행분)")
     contract = build_contract(
         watchlist_repo, article_diff_repo, change_log_repo,
         from_date=from_date, to_date=to_date,

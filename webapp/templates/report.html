@@ -1,3 +1,16 @@
+{#  주간 리포트 창 뒤에 시행된 개정이 있을 때의 안내 한 줄. 볼 게 있을 때
+    (hero 밑)와 없을 때(빈 화면) 둘 다 같은 문구를 내야 해서 매크로로
+    한 번만 적어 둔다 — 한쪽만 고쳐 두 화면이 다른 말을 하는 걸 막는다. #}
+{% macro after_week_note(info) %}
+  {% if info %}
+    <p class="week-tail-note">
+      <span class="week-tail-icon" aria-hidden="true">ℹ</span>
+      이 주 이후에 시행된 개정이 <strong>{{ info.count }}</strong>건 더 있습니다
+      <a class="period-jump" data-loading-label="{{ info.label }}"
+         href="{{ url_for('index', period=info.period) }}">{{ info.label }} 보기 →</a>
+    </p>
+  {% endif %}
+{% endmacro %}
 <!doctype html>
 <html lang="ko">
 <head>
@@ -30,7 +43,10 @@
       <!-- 기간 선택 — 5일/2주/1개월 프리셋(자유 날짜 선택 대신). 요청마다
            실 API+LLM 비용이 드는 즉석 조회라 몇 개로 고정했다(2026-08-03). -->
       <div class="period-nav">
-        <a class="period-link {{ 'is-active' if not period }}" href="{{ url_for('index') }}">이번 주</a>
+        <!-- 이 탭은 지난 한 주(월~일) 시행분을 보여준다. 예전 이름이
+             "이번 주"였는데, 이름과 창이 어긋나 "이번 주보다 최근 5일이
+             많다"는 문의가 실제로 들어왔다 — 이름을 창에 맞췄다. -->
+        <a class="period-link {{ 'is-active' if not period }}" href="{{ url_for('index') }}">주간 리포트</a>
         {% for key, label in period_windows.items() %}
           <a class="period-link {{ 'is-active' if period == key }}" href="{{ url_for('index', period=key) }}">{{ label }}</a>
         {% endfor %}
@@ -43,12 +59,14 @@
              같은 전환 링크가 있게 된다. -->
         <a class="period-link period-link--section" href="{{ url_for('laws_list') }}">전문 보기</a>
       </div>
-      {% if batch_date or period %}
+      {% if laws or period %}
         <div class="topbar-right">
           {% if period %}
             <span class="batch-pill">{{ period_from }} ~ {{ period_to }}</span>
           {% else %}
-            <span class="batch-pill">{{ batch_date }} 기준</span>
+            <!-- 창이 달력 주(월~일)로 고정돼 있으므로, 배치를 언제
+                 돌렸는지가 아니라 그 창 자체를 적는다. -->
+            <span class="batch-pill">{{ week_from }} ~ {{ week_to }} 시행</span>
           {% endif %}
           <a class="download-btn" href="{{ url_for('download', period=period) }}">
             <span>HWPX 다운로드</span>
@@ -69,8 +87,15 @@
       {% if period %}
         <p>{{ period_label }}({{ period_from }} ~ {{ period_to }}) 동안 감지된 개정사항이 없습니다.</p>
       {% else %}
-        <p>아직 생성된 주간 요약이 없습니다.</p>
-        <code>python scripts/run_weekly.py --full</code>
+        <p>지난 한 주({{ week_from }} ~ {{ week_to }})에 시행된 개정이 없습니다.</p>
+        {% if last_batch_date is none %}
+          <p class="empty-note">아직 한 번도 배치를 돌리지 않았습니다.</p>
+          <code>python scripts/run_weekly.py --full</code>
+        {% elif last_batch_date <= week_to %}
+          <p class="empty-note">마지막 배치는 {{ last_batch_date }} 입니다 — 이 주의 배치가 아직 실행되지 않았을 수 있습니다.</p>
+          <code>python scripts/run_weekly.py --full</code>
+        {% endif %}
+        {{ after_week_note(after_week) }}
       {% endif %}
     </div>
   {% else %}
@@ -79,12 +104,13 @@
         <h1>{{ period_label }} <span class="hero-accent">개정 요약</span></h1>
         <p class="hero-sub">{{ period_from }}부터 {{ period_to }}까지, 국가법령정보 API로 확인한 결과예요.</p>
       {% else %}
-        <h1>이번 주 <span class="hero-accent">개정 요약</span></h1>
-        <p class="hero-sub">법령·행정규칙 개정을 자동으로 감지해서 보여드려요.</p>
+        <h1>주간 <span class="hero-accent">개정 요약</span></h1>
+        <p class="hero-sub">{{ week_from }}부터 {{ week_to }}까지 시행된 개정이에요.</p>
+        {{ after_week_note(after_week) }}
       {% endif %}
 
       <p class="hero-lede">
-        {% if period %}이 기간{% else %}이번 주{% endif %} 개정 법령은 <strong class="lede-num" data-count="{{ stats.total_laws }}">0</strong>개,
+        {% if period %}이 기간{% else %}지난 한 주{% endif %} 개정 법령은 <strong class="lede-num" data-count="{{ stats.total_laws }}">0</strong>개,
         변경 조문은 <strong class="lede-num" data-count="{{ stats.total_articles }}">0</strong>건입니다.
       </p>
 
@@ -450,13 +476,18 @@
         .catch(onDone);
     }
 
-    document.querySelectorAll(".period-nav .period-link").forEach((link) => {
+    // .period-jump("이 주 이후에 N건 더 있습니다 → 최근 5일 보기")도 같은
+    // 흐름을 탄다. 상단 탭과 도착지가 똑같은데 이 링크만 곧바로 이동하면,
+    // 캐시가 식어 있을 때 흰 화면으로 몇 분을 기다리게 된다.
+    document.querySelectorAll(".period-nav .period-link, .period-jump").forEach((link) => {
       link.addEventListener("click", (e) => {
         if (link.classList.contains("is-active")) return;  // 이미 보고 있는 기간이면 아무것도 안 함
         const period = new URL(link.href, window.location.origin).searchParams.get("period");
-        if (!period) return;  // "이번 주"는 즉석 조회가 아니라 그냥 원래대로 이동
+        if (!period) return;  // "주간 리포트"는 즉석 조회가 아니라 그냥 원래대로 이동
         e.preventDefault();
-        showLoadingOverlay(link.textContent.trim(), "조회 중이에요");
+        // 안내 링크는 글자가 "최근 5일 보기 →"라 그대로 쓰면 로딩 문구가
+        // "최근 5일 보기 → 조회 중이에요"가 된다. data-loading-label로 짧게.
+        showLoadingOverlay(link.dataset.loadingLabel || link.textContent.trim(), "조회 중이에요");
         runPeriodFlow(period, () => { window.location.href = link.href; });
       });
     });

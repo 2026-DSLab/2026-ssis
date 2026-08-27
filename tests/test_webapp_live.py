@@ -106,6 +106,26 @@ def test_period_windows_days_are_correct():
     assert live.PERIOD_WINDOWS == {"5d": 5, "2w": 14, "1m": 30}
 
 
+def test_sweep_selects_and_summarizes_by_the_same_window():
+    """스윕 한 함수 안에서 기준이 갈리지 않는지 — 실측으로 드러난 버그의
+    회귀 방지.
+
+    build_contract()는 from_date~to_date 를 시행일로 자르는데 화면에 뿌릴
+    목록은 감지일(created_at)로 골랐던 적이 있음. 그래서 "최근 5일"인데
+    시행일이 7일 전인 법이 들어왔음. 두 호출이 같은 두 변수를 그대로
+    받는지 확인함 — 실 DB/API 없이 확인할 수 있는 건 여기까지고, 실제
+    건수는 사람이 실 DB로 확인해야 함.
+    """
+    import inspect
+
+    src = inspect.getsource(live._run_live_sweep)
+
+    assert "from_date=from_date, to_date=to_date," in src          # 요약 대상 고르기
+    assert "fetch_by_enforce_period(from_date, to_date)" in src    # 화면에 뿌릴 목록
+    # 호출 형태로만 봄 — 경위를 적어둔 주석에도 옛 이름이 나오기 때문.
+    assert "law_summary_repo.fetch_by_period(" not in src
+
+
 # ---------------------------------------------------------------------------
 # "이미 요약된 건 LLM 다시 안 부른다" 로직이 쓰는 순수 헬퍼들.
 # 실측: 배경 사전 캐싱을 켜면 넓은 기간(1개월)의
@@ -215,7 +235,9 @@ def test_bundle_from_rows_wraps_into_contract_summary():
         "headline": "h", "body": "b", "article_summaries": [], "mappings": [],
         "verifier_issues": [], "caveats": [],
     }
-    bundle = live._bundle_from_rows([row], window_key="5d", to_date=date(2026, 8, 3))
+    bundle = live._bundle_from_rows(
+        [row], source_file="live_5d_2026-08-03.json", batch_date=date(2026, 8, 3),
+    )
 
     assert bundle.source_file == "live_5d_2026-08-03.json"
     assert bundle.batch_date == "2026-08-03"

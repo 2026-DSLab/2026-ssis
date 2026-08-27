@@ -292,10 +292,16 @@ def _run_live_sweep(settings: Settings, window_key: str) -> PeriodResult:
         # 배치 전체(원래 68건)를 밀어내고 혼자 "이번 주"를 차지해버렸음.
         # batch_date는 "run_weekly.py --full이 만든 진짜 주간 배치"만의
         # 것이어야 함 — 즉석 조회 결과는 batch_date를 NULL로 둬서
-        # latest_batch_date()/이번 주 탭이 절대 이걸 주워가지 않게 함
-        # (기간별 화면은 batch_date가 아니라 created_at으로 걸러서
-        # 보여주므로 NULL이어도 전혀 문제 없음 — created_at은 INSERT
-        # 시점에 자동으로 찍히지 이 UPDATE로 건드리는 값이 아님).
+        # latest_batch_date()가 절대 이걸 주워가지 않게 함
+        # 화면은 네 탭 모두 시행일(enforce_date)로 거르므로 batch_date가
+        # NULL이어도 아무것도 안 가려짐 — 여기서 요약한 개정도 시행일이
+        # 그 창에 들면 주간 리포트에 그대로 함께 보임(그게 맞는 동작임).
+        #
+        # 그래서 이 UPDATE는 이제 화면을 지키기 위한 것이 아님. 유지하는
+        # 이유는 batch_date의 뜻을 "주간 배치가 담은 것"으로 남겨 두기
+        # 위해서임 — latest_batch_date()가 "배치를 걸렀는지" 안내에
+        # 그대로 쓰이므로, 즉석 조회가 오늘 날짜를 찍으면 배치를 안 돌린
+        # 주에도 돌린 것처럼 보임.
         with db.transaction() as (_, cur):
             for law_id, new_serial_no in unsummarized_keys:
                 cur.execute(
@@ -305,27 +311,37 @@ def _run_live_sweep(settings: Settings, window_key: str) -> PeriodResult:
 
         # 실측 발견: law_summary.source_file이
         # 가리키는 "weekly_contract_....json"과 짝이 되는 .hwpx가 out/reports/
-        # (표준 위치 — "이번 주" 배치 모드 다운로드가 보는 자리)에 실제로는
-        # 한 번도 안 만들어져서, "이번 주" 탭에서 이 개정이 요약되어 보여도
+        # (표준 위치 — 당시 주간 다운로드가 파일을 찾던 자리)에 실제로는
+        # 한 번도 안 만들어져서, 주간 탭에서 이 개정이 요약되어 보여도
         # HWPX 다운로드는 항상 404였음. 여기서 표준 위치에도 만들어 둠
         # (LLM 재호출 없음 — 방금 만든 summary_results를 그대로 문서화만 함).
         HwpxSink(PROJECT_ROOT / "out" / "reports").write(summary_results)
 
-    laws = law_summary_repo.fetch_by_period(from_date, to_date)
+    # 실측 발견(사용자 지적 "최근 5일인데 7일 전에 바뀐 법이 들어있다"):
+    # 이 한 함수 안에서 기준이 둘로 갈려 있었음 — 위 build_contract()는
+    # from_date~to_date 를 시행일(article_diff.enforce_date)로 자르는데,
+    # 정작 화면에 뿌릴 목록은 fetch_by_period(created_at, 감지일)로 골랐음.
+    # 그래서 시행은 창 밖인데 감지만 최근인 개정이 그대로 딸려 들어옴
+    # (실측: 최근 5일에 시행일 7일 전인 개인정보 보호법 시행령, 최근
+    # 1개월에 시행일 217일 전인 지능정보화 기본법). 감지일은 우리 쪽
+    # 사정일 뿐이라 — 배치를 늦게 돌리거나 이 스윕이 뒤늦게 처음 본
+    # 개정은 시행이 아무리 오래됐어도 "최근"이 되어버림 — 창을 자르는
+    # 기준으로 쓸 수 없음. 화면 네 탭 전부 시행일 하나로 통일함.
+    laws = law_summary_repo.fetch_by_enforce_period(from_date, to_date)
 
     # HWPX는 항상 law_summary에서 다시 읽어(이미 요약된 것 + 방금 요약한
     # 것 전부 포함) 새로 만듦 — LLM 호출 없이 순수 DB→파일 변환이라
-    # 반복 실행해도 비용이 안 듦. 그래서 웹페이지(fetch_by_period)와
-    # 다운로드 파일의 내용이 항상 정확히 같음.
+    # 반복 실행해도 비용이 안 듦. 그래서 웹페이지와 다운로드 파일의
+    # 내용이 항상 정확히 같음.
     hwpx_path = None
     if laws:
-        from summarizer.sinks import HwpxSink
-
         _set_progress(window_key, "보고서 작성 중")
-        report_dir = PROJECT_ROOT / "out" / "reports" / "live" / window_key
-        bundle_summary = _bundle_from_rows(laws, window_key=window_key, to_date=to_date)
-        HwpxSink(report_dir).write([bundle_summary])
-        hwpx_path = report_dir / f"{Path(bundle_summary.source_file).stem}.hwpx"
+        hwpx_path = write_hwpx_from_rows(
+            laws,
+            source_file=f"live_{window_key}_{to_date.isoformat()}.json",
+            batch_date=to_date,
+            out_dir=PROJECT_ROOT / "out" / "reports" / "live" / window_key,
+        )
 
     db.close()
     _set_progress(window_key, "완료")
@@ -401,17 +417,39 @@ def _row_to_law_summary(row: dict):
     )
 
 
-def _bundle_from_rows(rows: list[dict], *, window_key: str, to_date: date):
-    """기간 조회 결과(law_summary 행들)를 HwpxSink가 받는 ContractSummary
-    하나로 묶음. source_file 이름에 window_key를 넣어 배치 산출물
-    (weekly_contract_*.hwpx)과 겹치지 않게 함."""
+def _bundle_from_rows(rows: list[dict], *, source_file: str, batch_date: date):
+    """law_summary 행들을 HwpxSink가 받는 ContractSummary 하나로 묶음.
+
+    source_file 은 만들어질 파일 이름을 정함 — 호출부마다 다른 이름을
+    줘서(live_5d_*, week_*) 배치 산출물(weekly_contract_*.hwpx)이나 서로의
+    파일을 덮어쓰지 않게 함.
+    """
     from summarizer.models import ContractSummary
 
     return ContractSummary(
-        source_file=f"live_{window_key}_{to_date.isoformat()}.json",
-        batch_date=to_date.isoformat(),
+        source_file=source_file,
+        batch_date=batch_date.isoformat(),
         laws=[_row_to_law_summary(row) for row in rows],
     )
+
+
+def write_hwpx_from_rows(
+    rows: list[dict], *, source_file: str, batch_date: date, out_dir: Path,
+) -> Path:
+    """이미 요약된 law_summary 행들만으로 HWPX 보고서 파일을 다시 씀.
+
+    LLM 을 부르지 않음 — DB→파일 변환뿐이라 요청마다 다시 만들어도 비용이
+    안 듦. 그래서 화면에 보이는 목록과 내려받은 파일의 내용이 항상 정확히
+    같음(파일을 미리 만들어 두고 나중에 그 파일을 찾아 주는 방식이면,
+    화면 쪽 창이 바뀔 때 둘이 어긋남).
+
+    "최근 N일" 기간 조회와 주간 리포트(달력 주) 다운로드가 같이 씀.
+    """
+    from summarizer.sinks import HwpxSink
+
+    bundle = _bundle_from_rows(rows, source_file=source_file, batch_date=batch_date)
+    HwpxSink(out_dir).write([bundle])
+    return out_dir / f"{Path(source_file).stem}.hwpx"
 
 
 #: 백그라운드 사전 캐싱 주기(초). CACHE_TTL_SECONDS(15분)보다 확실히

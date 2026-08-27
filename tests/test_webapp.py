@@ -8,26 +8,39 @@ tests/test_summary_db.py가 이미 검증하므로, 여기서는 "그 dict가 �
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 
 import pytest
 
-import webapp.app as webapp_module
 from webapp.app import create_app
 from webapp.live import PeriodResult
 
 
 class _FakeRepo:
-    def __init__(self, *, batch_date: date | None, laws: list[dict] | None = None):
+    """batch_date 는 이제 주간 리포트에 무엇을 보여줄지 고르는 값이 아니라,
+    비었을 때 "배치를 거른 것인가"를 안내하는 데만 쓰는 값임 — 렌더링
+    테스트들은 여전히 이 인자를 넘기지만 목록 자체는 laws 로만 정해짐."""
+
+    def __init__(
+        self, *, batch_date: date | None, laws: list[dict] | None = None,
+        after_week_count: int = 0,
+    ):
         self._batch_date = batch_date
         self._laws = laws or []
+        self._after_week_count = after_week_count
+        self.enforce_periods: list[tuple[date, date]] = []
+        self.counted_periods: list[tuple[date, date]] = []
 
     def latest_batch_date(self):
         return self._batch_date
 
-    def fetch_by_batch(self, batch_date):
-        assert batch_date == self._batch_date
+    def fetch_by_enforce_period(self, from_date, to_date):
+        self.enforce_periods.append((from_date, to_date))
         return self._laws
+
+    def count_by_enforce_period(self, from_date, to_date):
+        self.counted_periods.append((from_date, to_date))
+        return self._after_week_count
 
 
 def _law_row(**kw) -> dict:
@@ -68,8 +81,122 @@ def test_index_shows_empty_state_when_no_batch():
 
     resp = client.get("/summary")
 
+    html = resp.get_data(as_text=True)
     assert resp.status_code == 200
-    assert "아직 생성된 주간 요약이 없습니다" in resp.get_data(as_text=True)
+    assert "시행된 개정이 없습니다" in html
+    assert "아직 한 번도 배치를 돌리지 않았습니다" in html
+
+
+def test_index_selects_last_full_calendar_week():
+    """주간 리포트는 마지막 배치가 아니라 지난 달력 주(월~일)를 창으로
+    씀 — 배치를 언제 돌렸는지와 무관해야 함."""
+    from lawtrack.week import last_full_week
+
+    repo = _FakeRepo(batch_date=date(2026, 7, 20), laws=[_law_row()])
+    create_app(repo=repo).test_client().get("/summary")
+
+    assert repo.enforce_periods == [last_full_week()]
+
+
+def test_index_shows_week_range_instead_of_batch_date():
+    laws = [_law_row()]
+    repo = _FakeRepo(batch_date=date(2026, 7, 20), laws=laws)
+    html = create_app(repo=repo).test_client().get("/summary").get_data(as_text=True)
+
+    week_from, week_to = repo.enforce_periods[0]
+    assert f"{week_from} ~ {week_to} 시행" in html
+    assert "2026-07-20 기준" not in html
+
+
+def test_index_empty_week_hints_that_batch_may_be_overdue():
+    """지난주 시행분이 0건일 때, 마지막 배치가 그 주보다 오래됐으면
+    "개정이 없었다"가 아니라 "배치를 아직 안 돌렸다"일 수 있음을 알림."""
+    repo = _FakeRepo(batch_date=date(2020, 1, 1), laws=[])
+    html = create_app(repo=repo).test_client().get("/summary").get_data(as_text=True)
+
+    assert "마지막 배치는 2020-01-01 입니다" in html
+
+
+def test_index_notes_revisions_enforced_after_the_week():
+    """주간 리포트의 창은 지난 한 주라, 이번 주 들어 시행된 개정은 여기
+    안 뜨고 옆의 "최근 5일"에만 뜸 — "그럼 그건 어디 있나"에 화면에서
+    바로 답함."""
+    repo = _FakeRepo(batch_date=date(2026, 7, 20), laws=[_law_row()], after_week_count=3)
+    html = create_app(repo=repo).test_client().get("/summary").get_data(as_text=True)
+
+    assert "이 주 이후에 시행된 개정이" in html
+    assert "<strong>3</strong>건 더 있습니다" in html
+
+
+def test_after_week_notice_counts_from_the_day_after_the_window():
+    """세는 구간은 창 다음 날부터 오늘까지 — 창 안의 개정을 다시 세면
+    "더 있습니다"가 거짓말이 됨."""
+    from lawtrack.week import last_full_week
+
+    _, week_to = last_full_week()
+    repo = _FakeRepo(batch_date=date(2026, 7, 20), laws=[_law_row()], after_week_count=1)
+    create_app(repo=repo).test_client().get("/summary")
+
+    assert repo.counted_periods == [(week_to + timedelta(days=1), date.today())]
+
+
+def test_after_week_notice_links_to_a_window_that_covers_it():
+    """알린 건수를 전부 담는 가장 짧은 프리셋으로 보냄. 일요일에는 창
+    다음 날(월)부터 오늘까지가 6일이라 "최근 5일"로는 월요일이 빠지므로
+    "최근 2주"여야 함 — "3건 더 있다"고 해놓고 눌렀더니 안 보이면 같은
+    종류의 어긋남임."""
+    from webapp.app import _after_week_notice
+
+    class _Counter:
+        def count_by_enforce_period(self, f, t):
+            return 3
+
+    # 목요일에 열었을 때 — 알릴 구간 월~목(3일)
+    thu = _after_week_notice(_Counter(), date(2026, 8, 23), date(2026, 8, 27))
+    assert (thu["period"], thu["label"]) == ("5d", "최근 5일")
+
+    # 일요일에 열었을 때 — 알릴 구간 월~일(6일)
+    sun = _after_week_notice(_Counter(), date(2026, 8, 23), date(2026, 8, 30))
+    assert (sun["period"], sun["label"]) == ("2w", "최근 2주")
+
+
+def test_no_after_week_notice_when_nothing_enforced_since():
+    repo = _FakeRepo(batch_date=date(2026, 7, 20), laws=[_law_row()], after_week_count=0)
+    html = create_app(repo=repo).test_client().get("/summary").get_data(as_text=True)
+
+    assert "이 주 이후에 시행된 개정이" not in html
+
+
+def test_after_week_notice_also_shows_on_the_empty_week():
+    """이번 주가 0건일 때야말로 이 안내가 가장 필요함 — 빈 화면만 보고
+    "아무 일도 없었다"로 읽으면 안 되기 때문."""
+    repo = _FakeRepo(batch_date=None, laws=[], after_week_count=2)
+    html = create_app(repo=repo).test_client().get("/summary").get_data(as_text=True)
+
+    assert "시행된 개정이 없습니다" in html
+    assert "<strong>2</strong>건 더 있습니다" in html
+
+
+def test_period_screen_has_no_after_week_notice():
+    """기간 탭은 창이 오늘까지라 알릴 뒷구간 자체가 없음."""
+    result = _period_result(laws=[_law_row()])
+    app = create_app(repo=_FakeRepo(batch_date=None), live_check=lambda k: result)
+    html = app.test_client().get("/summary?period=5d").get_data(as_text=True)
+
+    assert "이 주 이후에 시행된 개정이" not in html
+
+
+def test_index_empty_week_stays_quiet_when_batch_is_current():
+    """배치는 제때 돌았는데 그 주에 시행된 개정이 없었던 정상 상황 —
+    괜히 배치 안내를 띄우지 않음."""
+    from lawtrack.week import last_full_week
+
+    _, week_to = last_full_week()
+    repo = _FakeRepo(batch_date=week_to + timedelta(days=1), laws=[])
+    html = create_app(repo=repo).test_client().get("/summary").get_data(as_text=True)
+
+    assert "시행된 개정이 없습니다" in html
+    assert "마지막 배치는" not in html
 
 
 def test_index_renders_headline_and_article_row():
@@ -355,29 +482,51 @@ def test_index_never_renders_highlight_box():
     assert "확인이 필요한 항목" not in html
 
 
-def test_download_serves_hwpx_file(tmp_path, monkeypatch):
-    monkeypatch.setattr(webapp_module, "REPORTS_DIR", tmp_path)
-    hwpx = tmp_path / "weekly_contract_2026-07-19_b.hwpx"
-    hwpx.write_bytes(b"fake-hwpx-bytes")
+def test_download_builds_report_from_the_week_rows(tmp_path):
+    """주간 리포트 다운로드는 미리 만들어 둔 파일을 찾아 주는 게 아니라,
+    화면에 보이는 그 행들로 그 자리에서 만듦 — 한 주에 여러 배치가
+    걸쳐도 화면과 파일이 어긋나지 않게 하려는 것."""
+    from lawtrack.week import last_full_week
 
-    app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=[_law_row()]))
+    hwpx = tmp_path / "week.hwpx"
+    hwpx.write_bytes(b"fake-hwpx-bytes")
+    seen: list[tuple] = []
+
+    def fake_builder(laws, week_from, week_to):
+        seen.append((laws, week_from, week_to))
+        return hwpx
+
+    app = create_app(
+        repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=[_law_row()]),
+        week_report_builder=fake_builder,
+    )
     resp = app.test_client().get("/download")
 
     assert resp.status_code == 200
     assert resp.data == b"fake-hwpx-bytes"
+    assert len(seen) == 1
+    assert (seen[0][1], seen[0][2]) == last_full_week()
 
 
-def test_download_404_when_hwpx_missing(tmp_path, monkeypatch):
-    monkeypatch.setattr(webapp_module, "REPORTS_DIR", tmp_path)
-
-    app = create_app(repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=[_law_row()]))
+def test_download_404_when_report_build_fails(tmp_path):
+    app = create_app(
+        repo=_FakeRepo(batch_date=date(2026, 7, 20), laws=[_law_row()]),
+        week_report_builder=lambda laws, f, t: None,
+    )
     resp = app.test_client().get("/download")
 
     assert resp.status_code == 404
 
 
-def test_download_404_when_no_batch():
-    app = create_app(repo=_FakeRepo(batch_date=None))
+def test_download_404_when_week_is_empty():
+    """개정이 없는 주에는 만들 보고서 자체가 없음 — 빈 파일을 만들지
+    않고 404 로 끝냄."""
+    def fail_if_called(laws, week_from, week_to):
+        raise AssertionError("빈 주에는 보고서를 만들면 안 됨")
+
+    app = create_app(
+        repo=_FakeRepo(batch_date=None), week_report_builder=fail_if_called,
+    )
     resp = app.test_client().get("/download")
 
     assert resp.status_code == 404

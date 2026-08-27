@@ -824,34 +824,81 @@ class LawSummaryRepo:
             )
             return [_decode_summary_row(row) for row in cur.fetchall()]
 
-    def fetch_by_period(self, from_date: str | date, to_date: str | date) -> list[dict]:
-        """이 개정분을 처음 감지·처리한 날(created_at)이
-        기간 안에 드는 요약 전체.
+    def fetch_by_enforce_period(
+        self, from_date: str | date, to_date: str | date,
+    ) -> list[dict]:
+        """시행일(enforce_date)이 기간 안에 드는 요약 전체.
 
-        설계: 처음엔 enforce_date(실제 법
-        시행일)로 걸렀는데, 실측해보니 "이번 주" 배치(batch_date 기준)와
-        "최근 N일"(당시 enforce_date 기준)이 서로 다른 개념을 세고 있어
-        숫자가 안 맞았음("이번 주 69건인데 최근 1개월엔 1건" — 시행일은
-        공포 시점과 몇 달씩 어긋나는 게 흔해서 당연히 안 맞을 수밖에
-        없었음). 이 도구의 본질은 "개정 감지" 서비스라, 사용자가 실제로
-        알고 싶은 건 "법이 언제부터 시행되는가"가 아니라 "시스템이 언제
-        개정 사실을 발견했는가"다 — batch_date와 같은 개념으로 전부
-        통일함. created_at은 이 (law_id, new_serial_no) 조합이 처음
-        law_summary에 들어온 시각으로, ON CONFLICT DO UPDATE가 건드리지
-        않아 재처리해도 안 바뀜 — "처음 발견한 날"이라는 의미가 유지됨.
+        화면의 네 탭이 전부 이 조회 하나를 씀 — "주간 리포트"(지난 달력 주
+        월~일, lawtrack.week.last_full_week)와 "최근 5일/2주/1개월"이
+        창 길이만 다르고 기준 날짜는 같음. 그래야 창이 겹치는 만큼
+        결과도 겹침.
+
+        기준이 시행일이어야 하는 이유는 둘 다 실측으로 드러났음.
+
+        batch_date 로 고르면: 주간 리포트 탭이 마지막 배치를 통째로
+        보여주게 되어, 배치를 언제 돌렸느냐에 따라 창이 끌려다님(3일 전
+        배치가 계속 그 주로 남음).
+
+        created_at(우리가 처음 감지한 날)으로 고르면 두 가지가 깨짐 —
+            1. 갓 구축한 DB 는 전문 101건을 한꺼번에 받으므로 created_at
+               이 전부 설치일 하나로 몰림. 그 다음 주 화면에 101건이
+               통째로 뜸("이번 주 개정 요약에 법이 너무 많이 뜬다").
+            2. 시행이 창 밖인 개정이 딸려 들어옴. 감지일은 우리 쪽
+               사정일 뿐이라, 뒤늦게 처음 본 개정은 시행이 아무리
+               오래됐어도 "최근"이 됨(실측: 최근 5일 탭에 시행일 7일
+               전인 개인정보 보호법 시행령, 최근 1개월 탭에 시행일
+               217일 전인 지능정보화 기본법).
+        시행일은 설치 시점과도 배치 시각과도 무관한 값이라 둘 다 없음.
+
+        한때 created_at 을 쓴 적이 있는데, 그건 당시 "이번 주"가
+        batch_date 기준이라 시행일과 개념이 안 맞아 숫자가 어긋났기
+        때문이었음("이번 주 69건인데 최근 1개월엔 1건"). 그 원인이
+        사라진 지금은 맞출 대상 자체가 시행일임.
+
+        batch_date 를 안 보므로 배치가 만든 행이든 즉석 조회가 만든
+        행이든 시행일만 맞으면 함께 걸림 — 같은 창을 두 경로가 나눠
+        요약해도 화면에는 하나로 모임.
+
+        enforce_date 가 NULL 인 행은 정의상 어느 창에도 속하지 않아
+        빠짐(BETWEEN 이 NULL 을 걸러냄). 실측상 law_summary 82행 중
+        NULL 은 0건 — 행정규칙도 발령일을 시행일 대용으로 채움.
         """
         with self._db.cursor() as (_, cur):
             cur.execute(
-                "SELECT * FROM law_summary WHERE created_at::date BETWEEN %s AND %s ORDER BY law_name",
+                "SELECT * FROM law_summary WHERE enforce_date BETWEEN %s AND %s "
+                "ORDER BY law_name",
                 (_parse_iso_date(from_date), _parse_iso_date(to_date)),
             )
             return [_decode_summary_row(row) for row in cur.fetchall()]
 
+    def count_by_enforce_period(
+        self, from_date: str | date, to_date: str | date,
+    ) -> int:
+        """같은 창의 건수만. 목록은 안 만듦.
+
+        "주간 리포트 창 뒤에 시행된 개정이 몇 건 더 있는지" 한 줄 안내에만
+        쓰는 값이라 행을 가져올 이유가 없음 — law_summary 행 하나에는
+        조문 요약 전체(JSONB)가 들어 있어, 두 자릿수만 필요한 자리에서
+        fetch 를 부르면 수백 KB 를 헛되이 읽음(실측: 법령 2건짜리
+        요약 화면 한 장이 290KB).
+        """
+        with self._db.cursor() as (_, cur):
+            cur.execute(
+                "SELECT count(*) AS n FROM law_summary WHERE enforce_date BETWEEN %s AND %s",
+                (_parse_iso_date(from_date), _parse_iso_date(to_date)),
+            )
+            row = cur.fetchone()
+            return row["n"] if row else 0
+
     def latest_batch_date(self) -> date | None:
         """가장 최근 배치의 batch_date. 요약이 하나도 없으면 None.
 
-        웹페이지가 "이번 주 배치"를 찾는 진입점 — batch_date에 이미
-        인덱스(idx_law_summary_batch)가 있어 가벼움.
+        화면에 무엇을 보여줄지 고르는 데는 더 이상 쓰지 않음 — 그건
+        fetch_by_enforce_period(달력 주)가 함. 지금 쓰임새는 "그 주가
+        비었는데 개정이 없었던 것인가, 배치를 거른 것인가"를 갈라
+        안내하는 것 하나임. batch_date에 이미 인덱스
+        (idx_law_summary_batch)가 있어 가벼움.
         """
         with self._db.cursor() as (_, cur):
             cur.execute("SELECT MAX(batch_date) AS d FROM law_summary")

@@ -45,9 +45,17 @@ EXCLUDE_DIRS = {"__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache",
 EXCLUDE_SUFFIX = {".pyc", ".pyo", ".log", ".hwpx", ".pdf", ".pptx", ".xlsx"}
 EXCLUDE_NAMES = {".env", "Thumbs.db", ".DS_Store"}
 
+#: 이름이 고정되지 않아 EXCLUDE_DIRS 로는 못 거르는 것. pip install -e 가
+#: src/ 밑에 만드는 <패키지명>.egg-info 는 이 PC 에서의 설치 흔적일 뿐이라
+#: 받는 쪽에는 쓸모가 없고, SOURCES.txt 에 이 PC 의 파일 목록이 그대로
+#: 남아 있어 넘길 이유가 없음(실측: 배포 꾸러미 검사에서 발견).
+EXCLUDE_DIR_SUFFIX = (".egg-info",)
+
 
 def wanted(path: Path) -> bool:
     if any(part in EXCLUDE_DIRS for part in path.parts):
+        return False
+    if any(part.endswith(EXCLUDE_DIR_SUFFIX) for part in path.parts):
         return False
     if path.name in EXCLUDE_NAMES:
         return False
@@ -86,6 +94,56 @@ def version() -> str:
     return "0.0.0"
 
 
+#: .env 에서 이 이름으로 들어 있는 값이 소스·문서에 그대로 박혀 있으면
+#: 배포를 중단시킴. 나머지(POSTGRES_HOST 등)는 127.0.0.1 처럼 짧고 흔한
+#: 값이라 부분일치 오탐만 냄 — 진짜 비밀인 것만 봄.
+SECRET_ENV_KEYS = (
+    "LAW_API_OC", "POSTGRES_PASSWORD", "OPENROUTER_API_KEY", "OPENAI_API_KEY",
+)
+
+#: 이보다 짧은 값은 우연히 겹칠 수 있어 검사에서 뺌.
+MIN_SECRET_LEN = 5
+
+
+def scan_for_secrets(files: list[Path]) -> list[tuple[Path, str]]:
+    """.env 의 실제 값이 넘길 파일 안에 박혀 있으면 (파일, 키이름)으로 알림.
+
+    파일 이름만 보고 거르는 것으로는 못 막는 새어나감이 실제로 있었음:
+    contract/export.py 의 독스트링이 "OC 인증키를 산출물에 넣지 말 것"을
+    설명하면서 실측한 URL 을 그대로 붙여 놔, 그 안에 진짜 OC 값이 들어
+    있었음(배포 꾸러미를 풀어 훑다가 발견). 설명하려고 붙인 예시가 가장
+    걸러지지 않는 자리라, 값 자체로 한 번 더 훑음.
+
+    .env 가 없으면(받는 쪽에서 이 스크립트를 돌리는 경우) 검사할 기준이
+    없으므로 조용히 넘어감.
+    """
+    env_path = ROOT / ".env"
+    if not env_path.exists():
+        return []
+
+    secrets: dict[str, str] = {}
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("#") or "=" not in line:
+            continue
+        name, _, value = line.partition("=")
+        name, value = name.strip(), value.strip()
+        if name in SECRET_ENV_KEYS and len(value) >= MIN_SECRET_LEN:
+            secrets[name] = value
+    if not secrets:
+        return []
+
+    hits: list[tuple[Path, str]] = []
+    for path in files:
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue  # 이미지·폰트 같은 바이너리는 검사 대상이 아님
+        for name, value in secrets.items():
+            if value in text:
+                hits.append((path, name))
+    return hits
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="배포용 zip 만들기")
     ap.add_argument("--out-dir", default=str(ROOT / "dist"))
@@ -106,6 +164,14 @@ def main() -> int:
     leaked = [f for f in files if f.name == ".env"]
     if leaked:
         raise SystemExit(f"중단: .env 가 목록에 있습니다 — {leaked}")
+
+    embedded = scan_for_secrets(files)
+    if embedded:
+        for path, key in embedded:
+            print(f"중단: {path.relative_to(ROOT)} 안에 .env 의 {key} 값이 그대로 있습니다.")
+        raise SystemExit(
+            "  자리표시자로 바꾼 뒤 다시 실행하세요. 이미 커밋했다면 키를 새로 발급받을 것."
+        )
 
     if args.dry_run:
         print("\n--dry-run 이라 파일을 만들지 않았습니다.")
